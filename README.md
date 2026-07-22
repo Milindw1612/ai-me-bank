@@ -18,7 +18,19 @@ then visit `http://localhost:8000`.
 
 ## Structure
 
-- `index.html` — the entire site (single page, tabbed use-case sections, hand-authored CSS in a page-scoped `<style>` block — no framework, no Tailwind)
+```
+ai-me-bank/
+├── index.html          the site (GitHub Pages serves this)
+├── README.md
+└── agentic-ai/          Python backend — see agentic-ai/README.md
+    ├── main.py
+    ├── a1_msme_credit/
+    ├── a2_fraud_detection/
+    ├── a3_collections_recovery/
+    └── shared/
+```
+
+`agentic-ai/` is source code only — a FastAPI + LangGraph implementation of the 3 use cases, browsable on GitHub but not served by Pages (which only serves static files). See [`agentic-ai/README.md`](agentic-ai/README.md) for how to run it.
 
 ## Deploying
 
