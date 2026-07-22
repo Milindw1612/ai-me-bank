@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROI — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 32px; display: flex; align-items: center; height: 64px; }
+  .nav-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.6), 0 0 26px rgba(57,255,20,0.35); flex-shrink: 0; text-decoration: none; }
+  .nav-links { display: flex; gap: 18px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); font-weight: 700; }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
+
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 680px; line-height: 1.7; }
+
+  main { padding: 36px 48px 60px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+  .payback-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 36px; }
+  .payback-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; transition: border-color .2s; }
+  .payback-card:hover { border-color: rgba(217,119,6,0.25); }
+  .payback-card .uc-name { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 14px; }
+  .payback-card .row { display: flex; justify-content: space-between; font-size: 12px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .payback-card .row:last-child { border-bottom: none; }
+  .payback-card .row-label { color: var(--muted); }
+  .payback-card .row-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  .table-scroll { overflow-x: auto; margin-bottom: 28px; border-radius: 10px; border: 1px solid var(--border2); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  thead th { background: rgba(255,255,255,0.04); padding: 11px 16px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-align: left; white-space: nowrap; border-bottom: 1px solid var(--border2); }
+  thead th.right { text-align: right; }
+  tbody td { padding: 11px 16px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(255,255,255,0.02); }
+  td.right { text-align: right; font-variant-numeric: tabular-nums; }
+  td.muted { color: var(--muted); font-size: 11.5px; }
+  .total-row td { background: rgba(217,119,6,0.06); font-weight: 700; font-size: 13.5px; color: var(--gold); border-top: 2px solid rgba(217,119,6,0.3); }
+
+  .pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .pill-gold { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .pill-blue { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
+  .pill-green { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+
+  .note-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 6px; padding: 14px 18px; font-size: 12.5px; color: var(--mid); margin-bottom: 24px; line-height: 1.75; }
+  .note-box strong { color: var(--text); }
+  .note-box.accent-green { border-left-color: var(--green); background: rgba(52,211,153,0.04); }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; transition: color .2s; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .page-header, main { padding-left: 20px; padding-right: 20px; }
+    .payback-grid { grid-template-columns: 1fr; }
+    footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="index.html#usecases">Use Cases</a>
+      <a href="blueprints.html">Blueprints</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="roi.html" class="active">ROI</a>
+      <a href="cost.html">Cost Analysis</a>
+      <a href="helicopter.html">Helicopter View</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source Code</a>
+      <a href="deploy-guide.html">Deploy Guide</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">Business Case</div>
+  <h1>ROI — Return on Investment at a Glance</h1>
+  <p>Headline value for each of the 3 use cases, a side-by-side comparison, and the recommended pitch order for presenting this to the board.</p>
+</div>
+
+<main>
+
+  <div class="section-label">ROI by Use Case</div>
+  <div class="payback-grid">
+    <div class="payback-card">
+      <div class="uc-name" style="color:var(--amber)">MSME Credit CAM Prep</div>
+      <div class="row"><span class="row-label">Turnaround time</span><span class="row-val" style="color:var(--gold)">&lt; 4 hrs</span></div>
+      <div class="row"><span class="row-label">Origination capacity</span><span class="row-val" style="color:var(--green)">+25–35%</span></div>
+      <div class="row"><span class="row-label">Annual saving</span><span class="row-val" style="color:var(--green)">₹45–60 Cr</span></div>
+      <div class="row"><span class="row-label">Payback period</span><span class="row-val" style="color:var(--amber)">3–4 months</span></div>
+    </div>
+    <div class="payback-card">
+      <div class="uc-name" style="color:#5B8DEF">Fraud Detection</div>
+      <div class="row"><span class="row-label">Investigation time</span><span class="row-val" style="color:var(--gold)">&lt; 1 min</span></div>
+      <div class="row"><span class="row-label">False positives</span><span class="row-val" style="color:var(--green)">−30–40%</span></div>
+      <div class="row"><span class="row-label">Avoided fraud loss</span><span class="row-val" style="color:var(--green)">₹100–150 Cr</span></div>
+      <div class="row"><span class="row-label">Payback period</span><span class="row-val" style="color:var(--amber)">&lt; 3 months</span></div>
+    </div>
+    <div class="payback-card">
+      <div class="uc-name" style="color:var(--green)">Collections Recovery</div>
+      <div class="row"><span class="row-label">Portfolio coverage</span><span class="row-val" style="color:var(--gold)">100% daily</span></div>
+      <div class="row"><span class="row-label">Recovery uplift</span><span class="row-val" style="color:var(--green)">+15–25%</span></div>
+      <div class="row"><span class="row-label">ROI profile</span><span class="row-val" style="color:var(--green)">Very High</span></div>
+      <div class="row"><span class="row-label">Payback period</span><span class="row-val" style="color:var(--amber)">&lt; 3 months</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Comparative Summary</div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Use Case</th><th>Frequency Signal</th><th class="right">ROI</th><th class="right">Payback</th><th>Risk</th><th>Primary CXO Sponsor</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="pill pill-gold">MSME Credit CAM Prep</span></td>
+          <td class="muted">5/5 LLMs</td>
+          <td class="right">₹45–60 Cr/yr</td>
+          <td class="right">3–4 months</td>
+          <td class="muted">Low–Medium</td>
+          <td class="muted">Head Commercial / CFO</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-blue">Fraud Detection &amp; Investigation</span></td>
+          <td class="muted">4/5 LLMs</td>
+          <td class="right">₹100–150 Cr/yr</td>
+          <td class="right">&lt; 3 months</td>
+          <td class="muted">Low–Medium</td>
+          <td class="muted">CRO / CCO</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-green">Collections &amp; Delinquency Recovery</span></td>
+          <td class="muted">2/5 LLMs</td>
+          <td class="right">Very High (NPA-linked)</td>
+          <td class="right">&lt; 3 months</td>
+          <td class="muted">Low</td>
+          <td class="muted">CRO / CFO</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="6"><strong>Pitch Order — (1) MSME Credit CAM Prep &nbsp;→&nbsp; (2) Fraud Detection &nbsp;→&nbsp; (3) Collections Recovery</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label">Final Recommendation</div>
+  <div class="note-box">
+    <strong>Pitch Order:</strong> (1) MSME Credit CAM Prep — universal consensus across every LLM consulted, largest strategic upside, directly grows a stated bank priority segment. (2) Fraud Detection — near-universal consensus, fastest payback, protects existing revenue. (3) Collections Recovery — narrower consensus but strongest per-use-case numbers; excellent complementary "quick win" alongside the other two.
+  </div>
+  <div class="note-box accent-green">
+    <strong>To the CEO:</strong> Every AI model consulted independently converged on MSME credit automation and fraud detection as the top two opportunities — that convergence is itself a strong signal of low execution risk and broad organizational fit. Start with MSME CAM Prep: it is the single most-recommended use case, ties directly to <span class="neon-brand">Ai-ME BANK</span>'s stated MSME growth strategy, and shows measurable TAT and revenue impact within one quarter. Fraud Detection should follow immediately after as a parallel low-risk track, with Collections Recovery as the fast-follow "prove it, then scale" initiative.
+  </div>
+
+  <p style="font-size:11.5px;color:var(--muted);margin-top:8px">For the full cost/build breakdown behind these numbers, see <a href="cost.html" style="color:var(--gold)">Cost Analysis</a>.</p>
+</main>
+
+<footer>
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+</body>
+</html>
