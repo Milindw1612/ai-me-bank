@@ -285,6 +285,14 @@ function showTab(id, btn) {
   document.getElementById('tab-' + id).classList.add('active');
   btn.classList.add('active');
 }
+
+// Deep-linking: governance.html#audit activates the matching tab on load
+window.addEventListener('DOMContentLoaded', () => {
+  const id = location.hash.replace('#', '');
+  const panel = document.getElementById('tab-' + id);
+  const btn = [...document.querySelectorAll('.tab-btn')].find(b => b.getAttribute('onclick').includes("'" + id + "'"));
+  if (panel && btn) showTab(id, btn);
+});
 </script>
 </body>
 </html>

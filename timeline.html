@@ -33,6 +33,15 @@
   .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
   .page-header p { font-size: 13px; color: var(--muted); max-width: 660px; line-height: 1.7; }
 
+  /* ── Scenario toggle ── */
+  .scenario-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 48px; background: var(--surface); border-bottom: 1px solid var(--border2); flex-wrap: wrap; gap: 10px; position: sticky; top: 64px; z-index: 90; }
+  .sc-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+  .sc-toggle { display: flex; gap: 0; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: 3px; }
+  .sc-btn { padding: 7px 18px; border-radius: 6px; border: none; background: none; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; white-space: nowrap; }
+  .sc-btn.active { background: linear-gradient(135deg,var(--gold-dim),var(--gold)); color: #000; }
+  .ai-note { display: none; font-size: 11.5px; color: var(--green); }
+  .ai-note.show { display: inline; }
+
   main { padding: 36px 48px 60px; }
   .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
 
@@ -40,10 +49,11 @@
   .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; margin-bottom: 40px; }
   .sum-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; }
   .sum-card .lbl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-  .sum-card .val { font-family: Georgia, serif; font-size: 20px; font-weight: 700; }
+  .sum-card .val { font-family: Georgia, serif; font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
 
   /* ── Timeline / phase bars ── */
   .gantt-wrap { background: rgba(255,255,255,0.02); border: 1px solid var(--border2); border-radius: 12px; padding: 20px; margin-bottom: 24px; overflow-x: auto; }
+  .gantt-wrap.hidden { display: none; }
   .week-ruler { display: flex; padding-left: 168px; margin-bottom: 12px; min-width: 640px; }
   .week-ruler span { flex: 1; font-size: 10px; color: var(--muted); text-align: left; }
   .gantt-row { display: flex; align-items: center; margin-bottom: 10px; min-width: 640px; }
@@ -57,9 +67,24 @@
   .phase-uat { background: rgba(255,255,255,0.12); color: var(--mid); }
   .phase-golive { background: rgba(52,211,153,0.35); color: var(--green); border: 1px solid rgba(52,211,153,0.5); }
 
-  .legend { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 32px; }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 20px; }
   .li { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--mid); }
   .lb { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+
+  /* ── Resource plan table ── */
+  .table-scroll { overflow-x: auto; margin-bottom: 32px; border-radius: 10px; border: 1px solid var(--border2); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  thead th { background: rgba(255,255,255,0.04); padding: 11px 16px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-align: left; white-space: nowrap; border-bottom: 1px solid var(--border2); }
+  tbody td { padding: 10px 16px; font-size: 12.5px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(255,255,255,0.02); }
+  td.muted { color: var(--muted); font-size: 11.5px; }
+  .group-header td { background: rgba(255,255,255,0.025); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--mid); padding: 8px 16px; }
+  .pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .pill-shared { background: rgba(56,189,248,0.10); color: #38BDF8; border: 1px solid rgba(56,189,248,0.3); }
+  .pill-teal   { background: rgba(13,148,136,0.12); color: var(--teal); border: 1px solid rgba(13,148,136,0.3); }
+  .pill-blue   { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
+  .pill-green  { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
 
   .milestone-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 14px; margin-bottom: 20px; }
   .milestone-card { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 8px; padding: 14px 16px; }
@@ -74,6 +99,7 @@
   @media (max-width: 768px) {
     nav { padding: 0 20px; }
     .page-header, main { padding-left: 20px; padding-right: 20px; }
+    .scenario-bar { padding: 12px 20px; }
     footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
   }
 </style>
@@ -102,19 +128,28 @@
 <div class="page-header">
   <div class="eyebrow">Build Timeline Analysis</div>
   <h1>Delivery Roadmap — All 3 Use Cases</h1>
-  <p>Shared platform is built once (3 weeks), then MSME Credit CAM Prep, Fraud Detection, and Collections Recovery build in sequence — each reusing the platform, so incremental use cases take roughly a third less time than the first.</p>
+  <p>Shared platform is built once, then MSME Credit CAM Prep, Fraud Detection, and Collections Recovery build in sequence, each reusing the platform. Toggle below to compare a traditional delivery baseline against an AI-tool-accelerated plan (Claude Code, Cursor/Copilot for IaC and test generation).</p>
+</div>
+
+<div class="scenario-bar">
+  <span class="sc-label">Scenario</span>
+  <div class="sc-toggle" id="scToggle">
+    <button class="sc-btn" onclick="setScenario('traditional',this)">📋 Traditional (Baseline)</button>
+    <button class="sc-btn active" onclick="setScenario('ai',this)">⚡ AI-Accelerated</button>
+  </div>
+  <span class="ai-note show" id="aiNote">⚡ 31% faster: 37 weeks vs. 54 weeks traditional — Claude Code/Cursor compress agent-build and test-generation phases</span>
 </div>
 
 <main>
 
   <div class="summary-grid">
-    <div class="sum-card"><div class="lbl">Shared Platform</div><div class="val" style="color:#38BDF8">3 wks</div></div>
-    <div class="sum-card"><div class="lbl">MSME Credit CAM Prep</div><div class="val" style="color:var(--amber)">14 wks</div></div>
-    <div class="sum-card"><div class="lbl">Fraud Detection</div><div class="val" style="color:#5B8DEF">10 wks</div></div>
-    <div class="sum-card"><div class="lbl">Collections Recovery</div><div class="val" style="color:var(--green)">10 wks</div></div>
+    <div class="sum-card"><div class="lbl">Shared Platform</div><div class="val" style="color:#38BDF8" data-traditional="4 wks" data-ai="3 wks">3 wks</div></div>
+    <div class="sum-card"><div class="lbl">MSME Credit CAM Prep</div><div class="val" style="color:var(--amber)" data-traditional="20 wks" data-ai="14 wks ⚡">14 wks ⚡</div></div>
+    <div class="sum-card"><div class="lbl">Fraud Detection</div><div class="val" style="color:#5B8DEF" data-traditional="15 wks" data-ai="10 wks ⚡">10 wks ⚡</div></div>
+    <div class="sum-card"><div class="lbl">Collections Recovery</div><div class="val" style="color:var(--green)" data-traditional="15 wks" data-ai="10 wks ⚡">10 wks ⚡</div></div>
   </div>
 
-  <div class="section-label">Phase Timeline</div>
+  <div class="section-label">Phase Timeline — <span data-traditional="Total: 54 weeks" data-ai="Total: 37 weeks">Total: 37 weeks</span></div>
   <div class="legend">
     <div class="li"><div class="lb phase-shared"></div>Shared Platform</div>
     <div class="li"><div class="lb phase-msme"></div>MSME Credit CAM Prep</div>
@@ -124,56 +159,127 @@
     <div class="li"><div class="lb phase-golive"></div>Go-Live / Hypercare</div>
   </div>
 
-  <div class="gantt-wrap">
-    <div class="week-ruler"><span>Wk 1–3</span><span>Wk 4–6</span><span>Wk 7–9</span><span>Wk 10–12</span><span>Wk 13–14</span></div>
+  <!-- AI-ACCELERATED GANTT (default view) -->
+  <div class="gantt-wrap" id="gantt-ai">
+    <div class="week-ruler"><span>Wk 1–3</span><span>Wk 4–12</span><span>Wk 13–17</span><span>Wk 18–27</span><span>Wk 28–37</span></div>
 
     <div class="gantt-row">
       <div class="gantt-label">Shared Platform</div>
       <div class="gantt-track">
         <div class="phase-block phase-shared" style="flex-grow:3">Setup</div>
-        <div class="phase-block" style="flex-grow:11"></div>
+        <div class="phase-block" style="flex-grow:34"></div>
       </div>
     </div>
-
     <div class="gantt-row">
       <div class="gantt-label">MSME Credit CAM Prep</div>
       <div class="gantt-track">
         <div class="phase-block" style="flex-grow:3"></div>
-        <div class="phase-block phase-msme" style="flex-grow:7">Agent Build</div>
-        <div class="phase-block phase-uat" style="flex-grow:2">UAT</div>
+        <div class="phase-block phase-msme" style="flex-grow:9">Agent Build</div>
+        <div class="phase-block phase-uat" style="flex-grow:3">UAT</div>
         <div class="phase-block phase-golive" style="flex-grow:2">Live</div>
+        <div class="phase-block" style="flex-grow:20"></div>
       </div>
     </div>
-
     <div class="gantt-row">
       <div class="gantt-label">Fraud Detection</div>
       <div class="gantt-track">
-        <div class="phase-block" style="flex-grow:3"></div>
-        <div class="phase-block phase-fraud" style="flex-grow:5">Agent Build</div>
-        <div class="phase-block phase-uat" style="flex-grow:3">Shadow Mode</div>
-        <div class="phase-block phase-golive" style="flex-grow:3">Live</div>
+        <div class="phase-block" style="flex-grow:17"></div>
+        <div class="phase-block phase-fraud" style="flex-grow:6">Agent Build</div>
+        <div class="phase-block phase-uat" style="flex-grow:2">Shadow Mode</div>
+        <div class="phase-block phase-golive" style="flex-grow:2">Live</div>
+        <div class="phase-block" style="flex-grow:10"></div>
       </div>
     </div>
-
     <div class="gantt-row">
       <div class="gantt-label">Collections Recovery</div>
       <div class="gantt-track">
-        <div class="phase-block" style="flex-grow:3"></div>
-        <div class="phase-block phase-collections" style="flex-grow:5">Agent Build</div>
+        <div class="phase-block" style="flex-grow:27"></div>
+        <div class="phase-block phase-collections" style="flex-grow:6">Agent Build</div>
         <div class="phase-block phase-uat" style="flex-grow:2">Pilot</div>
-        <div class="phase-block phase-golive" style="flex-grow:4">Full Rollout</div>
+        <div class="phase-block phase-golive" style="flex-grow:2">Full Rollout</div>
       </div>
     </div>
   </div>
 
-  <div class="section-label" style="margin-top:32px">Key Milestones</div>
+  <!-- TRADITIONAL GANTT -->
+  <div class="gantt-wrap hidden" id="gantt-traditional">
+    <div class="week-ruler"><span>Wk 1–4</span><span>Wk 5–17</span><span>Wk 18–24</span><span>Wk 25–39</span><span>Wk 40–54</span></div>
+
+    <div class="gantt-row">
+      <div class="gantt-label">Shared Platform</div>
+      <div class="gantt-track">
+        <div class="phase-block phase-shared" style="flex-grow:4">Setup</div>
+        <div class="phase-block" style="flex-grow:50"></div>
+      </div>
+    </div>
+    <div class="gantt-row">
+      <div class="gantt-label">MSME Credit CAM Prep</div>
+      <div class="gantt-track">
+        <div class="phase-block" style="flex-grow:4"></div>
+        <div class="phase-block phase-msme" style="flex-grow:13">Agent Build</div>
+        <div class="phase-block phase-uat" style="flex-grow:4">UAT</div>
+        <div class="phase-block phase-golive" style="flex-grow:3">Live</div>
+        <div class="phase-block" style="flex-grow:30"></div>
+      </div>
+    </div>
+    <div class="gantt-row">
+      <div class="gantt-label">Fraud Detection</div>
+      <div class="gantt-track">
+        <div class="phase-block" style="flex-grow:24"></div>
+        <div class="phase-block phase-fraud" style="flex-grow:9">Agent Build</div>
+        <div class="phase-block phase-uat" style="flex-grow:3">Shadow Mode</div>
+        <div class="phase-block phase-golive" style="flex-grow:3">Live</div>
+        <div class="phase-block" style="flex-grow:15"></div>
+      </div>
+    </div>
+    <div class="gantt-row">
+      <div class="gantt-label">Collections Recovery</div>
+      <div class="gantt-track">
+        <div class="phase-block" style="flex-grow:39"></div>
+        <div class="phase-block phase-collections" style="flex-grow:9">Agent Build</div>
+        <div class="phase-block phase-uat" style="flex-grow:3">Pilot</div>
+        <div class="phase-block phase-golive" style="flex-grow:3">Full Rollout</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:36px">Resource Deployment Plan</div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Role</th><th>Use Case</th><th>FTE</th><th>Engagement Window</th></tr></thead>
+      <tbody>
+        <tr class="group-header"><td colspan="4">Shared Platform</td></tr>
+        <tr><td>Solution Architect</td><td><span class="pill pill-shared">Shared</span></td><td class="muted">1</td><td data-traditional="Week 1–4" data-ai="Week 1–3">Week 1–3</td></tr>
+        <tr><td>DevOps Engineer</td><td><span class="pill pill-shared">Shared</span></td><td class="muted">1, then 0.25 ongoing</td><td data-traditional="Week 1–4, then 0.25 FTE through Week 54" data-ai="Week 1–3, then 0.25 FTE through Week 37">Week 1–3, then 0.25 FTE through Week 37</td></tr>
+        <tr><td>Program Manager</td><td><span class="pill pill-shared">All (part-time)</span></td><td class="muted">0.5</td><td data-traditional="Week 1–54" data-ai="Week 1–37">Week 1–37</td></tr>
+
+        <tr class="group-header"><td colspan="4">MSME Credit CAM Prep</td></tr>
+        <tr><td>AI/ML Engineers ×2</td><td><span class="pill pill-teal">MSME</span></td><td class="muted">2</td><td data-traditional="Week 5–17" data-ai="Week 4–12">Week 4–12</td></tr>
+        <tr><td>Backend Engineers ×2</td><td><span class="pill pill-teal">MSME</span></td><td class="muted">2</td><td data-traditional="Week 5–20 (entry on API contracts, exits before hypercare)" data-ai="Week 4–14 (entry on API contracts, exits before hypercare)">Week 4–14 (entry on API contracts, exits before hypercare)</td></tr>
+        <tr><td>QA Engineer</td><td><span class="pill pill-teal">MSME</span></td><td class="muted">1</td><td data-traditional="Week 17–24" data-ai="Week 12–17">Week 12–17</td></tr>
+
+        <tr class="group-header"><td colspan="4">Fraud Detection</td></tr>
+        <tr><td>AI/ML Engineers ×2</td><td><span class="pill pill-blue">Fraud</span></td><td class="muted">2</td><td data-traditional="Week 25–33" data-ai="Week 18–23">Week 18–23</td></tr>
+        <tr><td>Backend Engineer</td><td><span class="pill pill-blue">Fraud</span></td><td class="muted">1</td><td data-traditional="Week 25–35" data-ai="Week 18–25">Week 18–25</td></tr>
+        <tr><td>QA Engineer</td><td><span class="pill pill-blue">Fraud</span></td><td class="muted">1</td><td data-traditional="Week 33–39" data-ai="Week 23–27">Week 23–27</td></tr>
+
+        <tr class="group-header"><td colspan="4">Collections Recovery</td></tr>
+        <tr><td>AI/ML Engineers ×2</td><td><span class="pill pill-green">Collections</span></td><td class="muted">2</td><td data-traditional="Week 40–48" data-ai="Week 28–33">Week 28–33</td></tr>
+        <tr><td>Backend Engineer</td><td><span class="pill pill-green">Collections</span></td><td class="muted">1</td><td data-traditional="Week 40–50" data-ai="Week 28–35">Week 28–35</td></tr>
+        <tr><td>QA Engineer</td><td><span class="pill pill-green">Collections</span></td><td class="muted">1</td><td data-traditional="Week 48–54" data-ai="Week 33–37">Week 33–37</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11.5px;color:var(--muted);margin-bottom:32px">Peak concurrent headcount: <strong style="color:var(--text)" data-traditional="~7 people (Weeks 5–17, MSME build overlapping shared-platform support)" data-ai="~7 people (Weeks 4–12, MSME build overlapping shared-platform support)">~7 people (Weeks 4–12, MSME build overlapping shared-platform support)</strong>. Backend and AI/ML roles roll off one use case and onto the next rather than sitting idle — the same 2 AI/ML engineers carry all 3 use cases in sequence.</p>
+
+  <div class="section-label">Key Milestones</div>
   <div class="milestone-grid">
-    <div class="milestone-card"><div class="wk">Week 3</div><p>Shared platform live — AWS EKS, LangGraph, PII middleware, Core Banking adapter all provisioned</p></div>
-    <div class="milestone-card"><div class="wk">Week 10</div><p>MSME agent build complete — credit officer UAT begins on pilot cohort</p></div>
-    <div class="milestone-card"><div class="wk">Week 14</div><p>MSME Credit CAM Prep live — first use case in production</p></div>
-    <div class="milestone-card"><div class="wk">Week 19</div><p>Fraud Detection agents complete — shadow-mode run alongside existing rules engine</p></div>
-    <div class="milestone-card"><div class="wk">Week 24</div><p>Fraud Detection live; Collections Recovery pilot begins on one DPD bucket</p></div>
-    <div class="milestone-card"><div class="wk">Week 27</div><p>All 3 use cases live — full program in production</p></div>
+    <div class="milestone-card"><div class="wk" data-traditional="Week 4" data-ai="Week 3">Week 3</div><p>Shared platform live — AWS EKS, LangGraph, PII middleware, Core Banking adapter all provisioned</p></div>
+    <div class="milestone-card"><div class="wk" data-traditional="Week 17" data-ai="Week 12">Week 12</div><p>MSME agent build complete — credit officer UAT begins on pilot cohort</p></div>
+    <div class="milestone-card"><div class="wk" data-traditional="Week 24" data-ai="Week 17">Week 17</div><p>MSME Credit CAM Prep live — first use case in production</p></div>
+    <div class="milestone-card"><div class="wk" data-traditional="Week 33" data-ai="Week 23">Week 23</div><p>Fraud Detection agents complete — shadow-mode run alongside existing rules engine</p></div>
+    <div class="milestone-card"><div class="wk" data-traditional="Week 39" data-ai="Week 27">Week 27</div><p>Fraud Detection live; Collections Recovery pilot begins on one DPD bucket</p></div>
+    <div class="milestone-card"><div class="wk" data-traditional="Week 54" data-ai="Week 37">Week 37</div><p>All 3 use cases live — full program in production</p></div>
   </div>
 
 </main>
@@ -183,5 +289,19 @@
   <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
 </footer>
 
+<script>
+function setScenario(mode, btn) {
+  document.querySelectorAll('#scToggle .sc-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  document.querySelectorAll('[data-traditional]').forEach(el => {
+    el.textContent = mode === 'ai' ? el.dataset.ai : el.dataset.traditional;
+  });
+
+  document.getElementById('gantt-ai').classList.toggle('hidden', mode !== 'ai');
+  document.getElementById('gantt-traditional').classList.toggle('hidden', mode !== 'traditional');
+  document.getElementById('aiNote').classList.toggle('show', mode === 'ai');
+}
+</script>
 </body>
 </html>
