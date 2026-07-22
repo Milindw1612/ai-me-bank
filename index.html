@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ai-ME BANK — Agentic AI Use Cases</title>
+<style>
+  :root {
+    --navy: #4A1420;
+    --bg:   #3B0F1A;
+    --surface: #4A1420;
+    --surface2: #551729;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0;
+    --muted: #64748B;
+    --mid: #94A3B8;
+    --gold: #F59E0B;
+    --gold-dim: #D97706;
+    --teal: #0D9488;
+    --purple: #A78BFA;
+    --green: #34D399;
+    --red: #F87171;
+    --amber: #FBBF24;
+    --blue: #2D6BE4;
+    --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  /* ── Nav ── */
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 48px; display: flex; align-items: center; height: 64px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.6), 0 0 26px rgba(57,255,20,0.35); }
+
+  /* ── Page header ── */
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 30px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 660px; line-height: 1.7; }
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
+
+  /* ── Summary strip ── */
+  .summary-strip { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--border); background: var(--surface); }
+  .sum-cell { padding: 20px 28px; border-right: 1px solid var(--border); }
+  .sum-cell:last-child { border-right: none; }
+  .sum-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .sum-val { font-family: Georgia, serif; font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+  .sum-note { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* ── Tabs ── */
+  .tabs-bar { display: flex; background: var(--surface); border-bottom: 1px solid var(--border2); padding: 0 24px; overflow-x: auto; }
+  .tab-btn { padding: 14px 22px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; white-space: nowrap; letter-spacing: 0.3px; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* ── Tab content ── */
+  .tab-panel { display: none; padding: 32px 48px 8px; }
+  .tab-panel.active { display: block; }
+  .page-body { padding: 0 0 56px; }
+
+  /* ── Section labels ── */
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+  /* ── Tables ── */
+  .table-scroll { overflow-x: auto; margin-bottom: 32px; border-radius: 10px; border: 1px solid var(--border2); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  thead th { background: rgba(255,255,255,0.04); padding: 11px 16px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-align: left; white-space: nowrap; border-bottom: 1px solid var(--border2); }
+  thead th.right { text-align: right; }
+  tbody td { padding: 11px 16px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(255,255,255,0.02); }
+  td.right { text-align: right; font-variant-numeric: tabular-nums; }
+  td.muted { color: var(--muted); font-size: 11.5px; }
+  td.label-col { color: var(--mid); font-size: 12px; font-weight: 700; white-space: nowrap; width: 200px; }
+  .total-row td { background: rgba(217,119,6,0.06); font-weight: 700; font-size: 13.5px; color: var(--gold); border-top: 2px solid rgba(217,119,6,0.3); }
+
+  /* ── Pills ── */
+  .pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-bottom: 2px; white-space: nowrap; }
+  .pill-teal   { background: rgba(13,148,136,0.12); color: var(--teal); border: 1px solid rgba(13,148,136,0.3); }
+  .pill-blue   { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
+  .pill-green  { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .pill-gold   { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .pill-muted  { background: rgba(148,163,184,0.10); color: var(--mid); border: 1px solid rgba(148,163,184,0.25); }
+
+  /* ── Note box ── */
+  .note-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 6px; padding: 14px 18px; font-size: 12.5px; color: var(--mid); margin-bottom: 24px; line-height: 1.75; }
+  .note-box strong { color: var(--text); }
+  .note-box.accent-green { border-left-color: var(--green); background: rgba(52,211,153,0.04); }
+
+  /* ── Stat / payback cards ── */
+  .payback-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 32px; }
+  .payback-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; transition: border-color .2s; }
+  .payback-card:hover { border-color: rgba(217,119,6,0.25); }
+  .payback-card .auto-name { font-size: 10.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 10px; color: var(--mid); }
+  .payback-card .big-num { font-family: Georgia, serif; font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.15; margin-bottom: 4px; }
+  .payback-card .sub-note { font-size: 11px; color: var(--muted); }
+
+  /* ── Agent architecture tree ── */
+  .agent-tree { display: flex; flex-direction: column; align-items: center; margin: 4px 0 32px; }
+  .agent-node { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.09); border-radius: 10px; padding: 14px 20px; text-align: center; transition: transform .2s, border-color .2s; }
+  .agent-node:hover { transform: translateY(-2px); }
+  .agent-node .an-title { font-size: 13px; font-weight: 700; color: #fff; }
+  .agent-node .an-sub { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+  .agent-node.coordinator { min-width: 260px; border-color: rgba(217,119,6,0.3); background: rgba(245,158,11,0.05); }
+  .agent-node.coordinator .an-title { color: var(--gold); }
+  .tree-line { width: 1px; height: 22px; background: rgba(255,255,255,0.15); }
+  .agent-row { display: flex; gap: 16px; position: relative; padding-top: 22px; flex-wrap: wrap; justify-content: center; }
+  .agent-row::before { content: ''; position: absolute; top: 0; left: 12%; right: 12%; height: 1px; background: rgba(255,255,255,0.15); }
+  .agent-row .agent-node { flex: 1 1 180px; max-width: 220px; position: relative; }
+  .agent-row .agent-node::before { content: ''; position: absolute; top: -22px; left: 50%; width: 1px; height: 22px; background: rgba(255,255,255,0.15); }
+  .agent-node.human { margin-top: 22px; border-color: rgba(52,211,153,0.35); background: rgba(52,211,153,0.05); }
+  .agent-node.human .an-title { color: var(--green); }
+
+  /* ── Footer ── */
+  .page-footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  .page-footer p { font-size: 12px; color: #94765B; }
+  .page-footer a { color: #94765B; text-decoration: none; transition: color .2s; }
+  .page-footer a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .page-header { padding: 24px 20px; }
+    .tab-panel { padding: 20px; }
+    .summary-strip { grid-template-columns: 1fr 1fr; }
+    .payback-grid { grid-template-columns: 1fr 1fr; }
+    .sum-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .agent-row { flex-direction: column; align-items: center; }
+    .agent-row .agent-node { flex: none; width: 100%; max-width: 320px; }
+    .agent-row .agent-node::before { display: none; }
+    .agent-row::before { display: none; }
+    .page-footer { flex-direction: column; gap: 6px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo">Ai-ME BANK</div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <div class="eyebrow">CXO Strategy Brief · <span class="neon-brand">Ai-ME BANK</span></div>
+  <h1>Agentic AI Use Cases for <span class="neon-brand">Ai-ME BANK</span></h1>
+  <p>Consolidated from 5 independent LLM analyses of Agentic AI opportunities for <span class="neon-brand">Ai-ME BANK</span>. Use cases ranked by how many models independently converged on them, then consolidated by theme — retaining the most quantified, best-written version of each recurring idea.</p>
+</div>
+
+<!-- ── SUMMARY STRIP ── -->
+<div class="summary-strip">
+  <div class="sum-cell">
+    <div class="sum-label">Peak Convergence</div>
+    <div class="sum-val" style="color:var(--gold)">5/5 LLMs</div>
+    <div class="sum-note">MSME Credit CAM Prep — universal consensus pick</div>
+  </div>
+  <div class="sum-cell">
+    <div class="sum-label">Highest ROI</div>
+    <div class="sum-val" style="color:var(--green)">₹100–150 Cr/yr</div>
+    <div class="sum-note">Fraud Detection — avoided annual fraud losses</div>
+  </div>
+  <div class="sum-cell">
+    <div class="sum-label">Fastest Payback</div>
+    <div class="sum-val" style="color:var(--amber)">&lt; 3 months</div>
+    <div class="sum-note">Fraud Detection &amp; Collections Recovery tie</div>
+  </div>
+  <div class="sum-cell">
+    <div class="sum-label">Consensus Picks</div>
+    <div class="sum-val" style="color:#5B8DEF">3 Use Cases</div>
+    <div class="sum-note">MSME + Fraud + Collections recommended</div>
+  </div>
+</div>
+
+<div class="page-body">
+  <div style="padding:32px 48px 0">
+    <div class="section-label">Frequency Tally Across 5 LLM Outputs</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Theme</th><th>Appeared In</th><th>Frequency</th></tr></thead>
+        <tbody>
+          <tr><td><strong>MSME/Retail Loan Underwriting &amp; CAM Prep</strong></td><td class="muted">Docs 6, 7, 8, 9, 10</td><td><span class="pill pill-gold">5/5 — universal</span></td></tr>
+          <tr><td><strong>Fraud Detection &amp; Investigation</strong></td><td class="muted">Docs 6, 8, 9, 10</td><td><span class="pill pill-blue">4/5 — very strong</span></td></tr>
+          <tr><td><strong>Collections &amp; Early Delinquency Recovery</strong></td><td class="muted">Docs 6, 9</td><td><span class="pill pill-green">2/5</span></td></tr>
+          <tr><td>RBI Compliance / Regulatory Audit</td><td class="muted">Doc 7</td><td><span class="pill pill-muted">1/5</span></td></tr>
+          <tr><td>Trade Finance / LC Discrepancy</td><td class="muted">Doc 7</td><td><span class="pill pill-muted">1/5</span></td></tr>
+          <tr><td>RM Next-Best-Action</td><td class="muted">Doc 8</td><td><span class="pill pill-muted">1/5</span></td></tr>
+          <tr><td>Customer Engagement / Hyper-personalization</td><td class="muted">Doc 10</td><td><span class="pill pill-muted">1/5</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box">
+      <strong>Verdict:</strong> MSME Underwriting and Fraud Detection are near-unanimous consensus picks. Collections is the strongest third choice — highest-conviction niche pick with the most aggressive ROI/payback numbers, and adds retail/NPA portfolio diversity.
+    </div>
+  </div>
+
+  <!-- ── TABS ── -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="switchTab('msme',this)">1. MSME Credit CAM Prep</button>
+    <button class="tab-btn" onclick="switchTab('fraud',this)">2. Fraud Detection</button>
+    <button class="tab-btn" onclick="switchTab('collections',this)">3. Collections Recovery</button>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       TAB 1 — MSME CREDIT CAM PREP
+  ════════════════════════════════════ -->
+  <div id="tab-msme" class="tab-panel active">
+
+    <div class="note-box">
+      <strong>Consensus pick — appeared in 5/5 LLM outputs.</strong> MSME loan file assembly (GST returns, AA bank feeds, ITRs, CIBIL, financials) takes 5–7 days per application against a ~₹1.02 lakh crore MSME book (~20% of lending portfolio), capping origination velocity.
+    </div>
+
+    <div class="section-label">Agent Architecture — Credit Orchestrator Agent</div>
+    <div class="agent-tree">
+      <div class="agent-node coordinator"><div class="an-title">Credit Orchestrator Agent</div><div class="an-sub">Merges cash-flow reconciliation &amp; risk flags into a pre-populated CAM</div></div>
+      <div class="tree-line"></div>
+      <div class="agent-row">
+        <div class="agent-node"><div class="an-title">Financial Ingestion Agent</div><div class="an-sub">OCR: ITRs, P&amp;L, balance sheets</div></div>
+        <div class="agent-node"><div class="an-title">Bureau &amp; Tax Verification Agent</div><div class="an-sub">CIBIL, AA feeds, GSTR-1/3B</div></div>
+        <div class="agent-node"><div class="an-title">Risk &amp; Cash-Flow Agent</div><div class="an-sub">Anomaly / stress checks</div></div>
+        <div class="agent-node"><div class="an-title">CAM Drafting Agent</div><div class="an-sub">Recommended pricing, pre-filled memo</div></div>
+      </div>
+      <div class="tree-line"></div>
+      <div class="agent-node human"><div class="an-title">Human Credit Officer Sign-off</div></div>
+    </div>
+
+    <div class="section-label">Business Value &amp; ROI</div>
+    <div class="payback-grid">
+      <div class="payback-card"><div class="auto-name">Turnaround Time</div><div class="big-num" style="color:var(--gold)">&lt; 4 hrs</div><div class="sub-note">Down from 5–7 days</div></div>
+      <div class="payback-card"><div class="auto-name">Origination Capacity</div><div class="big-num" style="color:var(--green)">+25–35%</div><div class="sub-note">No added headcount</div></div>
+      <div class="payback-card"><div class="auto-name">Annual Saving</div><div class="big-num" style="color:var(--green)">₹45–60 Cr</div><div class="sub-note">Processing cost reduction</div></div>
+      <div class="payback-card"><div class="auto-name">Payback Period</div><div class="big-num" style="color:var(--amber)">3–4 months</div><div class="sub-note">From go-live</div></div>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <tbody>
+          <tr><td class="label-col">Staffing Estimate</td><td>Approx. 1,200–1,800 MSME credit analysts and underwriting staff nationally (range across LLM estimates: 600–5,000; midpoint used for realism).</td></tr>
+          <tr><td class="label-col">Implementation Risk</td><td><span class="pill pill-teal">Low–Medium</span> &nbsp;Read-only AA/bureau integration; final lending authority stays human.</td></tr>
+          <tr><td class="label-col">CXO Sponsor</td><td>Head of Commercial Banking / CFO — expands MSME yield, NIM, and loan book revenue.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       TAB 2 — FRAUD DETECTION
+  ════════════════════════════════════ -->
+  <div id="tab-fraud" class="tab-panel">
+
+    <div class="note-box">
+      <strong>Consensus pick — appeared in 4/5 LLM outputs.</strong> Fraud teams triage thousands of daily alerts across cards/UPI/IMPS; most are false positives. Manual investigation (device, IP, behavior, merchant checks) takes 20–40 minutes per case, delaying genuine fraud response.
+    </div>
+
+    <div class="section-label">Agent Architecture — Coordinator Agent</div>
+    <div class="agent-tree">
+      <div class="agent-node coordinator"><div class="an-title">Coordinator Agent</div><div class="an-sub">Produces a fraud-probability score with reasons in under 60 seconds</div></div>
+      <div class="tree-line"></div>
+      <div class="agent-row">
+        <div class="agent-node"><div class="an-title">Device/IP &amp; Network Agent</div><div class="an-sub">Device fingerprint, IP reputation</div></div>
+        <div class="agent-node"><div class="an-title">Behavior Pattern Agent</div><div class="an-sub">Spend/velocity anomaly detection</div></div>
+        <div class="agent-node"><div class="an-title">Merchant/Beneficiary &amp; AML Agent</div><div class="an-sub">Merchant risk, AML watchlists</div></div>
+        <div class="agent-node"><div class="an-title">Recommendation Agent</div><div class="an-sub">Freeze / clear / escalate call</div></div>
+      </div>
+      <div class="tree-line"></div>
+      <div class="agent-node human"><div class="an-title">Fraud Analyst / Level-2 Sign-off</div></div>
+    </div>
+
+    <div class="section-label">Business Value &amp; ROI</div>
+    <div class="payback-grid">
+      <div class="payback-card"><div class="auto-name">Investigation Time</div><div class="big-num" style="color:var(--gold)">&lt; 1 min</div><div class="sub-note">Down from 20–40 min</div></div>
+      <div class="payback-card"><div class="auto-name">False Positives</div><div class="big-num" style="color:var(--green)">−30–40%</div><div class="sub-note">Cut from current alert volume</div></div>
+      <div class="payback-card"><div class="auto-name">Avoided Fraud Loss</div><div class="big-num" style="color:var(--green)">₹100–150 Cr</div><div class="sub-note">Loss rate 0.05–0.10% → 0.02–0.04%</div></div>
+      <div class="payback-card"><div class="auto-name">Payback Period</div><div class="big-num" style="color:var(--amber)">&lt; 3 months</div><div class="sub-note">Fastest of all 3 use cases</div></div>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <tbody>
+          <tr><td class="label-col">Staffing Estimate</td><td>Approx. 250–600 fraud ops, AML, and investigation staff nationally.</td></tr>
+          <tr><td class="label-col">Implementation Risk</td><td><span class="pill pill-teal">Low–Medium</span> &nbsp;Read-only monitoring layer; auto-freeze thresholds need governance.</td></tr>
+          <tr><td class="label-col">CXO Sponsor</td><td>CRO / CCO — reduces fraud loss, strengthens regulatory posture and customer trust.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       TAB 3 — COLLECTIONS RECOVERY
+  ════════════════════════════════════ -->
+  <div id="tab-collections" class="tab-panel">
+
+    <div class="note-box">
+      <strong>Strong niche pick — best payback numbers of any use case across all runs.</strong> 1–90 DPD retail/card accounts number in lakhs monthly; human collections teams reach only 20–30% via manual calls/generic SMS, letting recoverable accounts roll into higher NPA buckets.
+    </div>
+
+    <div class="section-label">Agent Architecture — Coordinator Agent</div>
+    <div class="agent-tree">
+      <div class="agent-node coordinator"><div class="an-title">Coordinator Agent</div><div class="an-sub">Sequences outreach, negotiates within pre-approved bands</div></div>
+      <div class="tree-line"></div>
+      <div class="agent-row">
+        <div class="agent-node"><div class="an-title">Risk/Behavior Agent</div><div class="an-sub">Payment history scoring</div></div>
+        <div class="agent-node"><div class="an-title">Channel Agent</div><div class="an-sub">SMS / WhatsApp / voice selection</div></div>
+        <div class="agent-node"><div class="an-title">Negotiation Agent</div><div class="an-sub">Settlement / EMI within policy</div></div>
+        <div class="agent-node"><div class="an-title">Escalation Agent</div><div class="an-sub">Flags complex/aggressive cases</div></div>
+      </div>
+      <div class="tree-line"></div>
+      <div class="agent-node human"><div class="an-title">Human Collections Officer</div></div>
+    </div>
+
+    <div class="section-label">Business Value &amp; ROI</div>
+    <div class="payback-grid">
+      <div class="payback-card"><div class="auto-name">Portfolio Coverage</div><div class="big-num" style="color:var(--gold)">100% daily</div><div class="sub-note">Up from 20–30% via manual calls</div></div>
+      <div class="payback-card"><div class="auto-name">Recovery Uplift</div><div class="big-num" style="color:var(--green)">+15–25%</div><div class="sub-note">In the 1–30 DPD bucket</div></div>
+      <div class="payback-card"><div class="auto-name">ROI Profile</div><div class="big-num" style="color:var(--green)">Very High</div><div class="sub-note">NPA-linked, board-tracked KPI</div></div>
+      <div class="payback-card"><div class="auto-name">Payback Period</div><div class="big-num" style="color:var(--amber)">&lt; 3 months</div><div class="sub-note">Ties for fastest breakeven</div></div>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <tbody>
+          <tr><td class="label-col">Staffing Estimate</td><td>Approx. 3,000–6,000 employees across collections, call centers, recovery ops.</td></tr>
+          <tr><td class="label-col">Implementation Risk</td><td><span class="pill pill-green">Low</span> &nbsp;Advisory + negotiation within pre-set limits, human sign-off on exceptions.</td></tr>
+          <tr><td class="label-col">CXO Sponsor</td><td>CRO / CFO — directly moves NPA ratio and provisioning cost, board-tracked KPIs.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── COMPARATIVE SUMMARY ── -->
+  <div style="padding:8px 48px 0">
+    <div class="section-label" style="margin-top:8px">Comparative Summary</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Use Case</th><th>Frequency Signal</th><th class="right">ROI</th><th class="right">Payback</th><th>Risk</th><th>Primary CXO Sponsor</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="pill pill-gold">MSME Credit CAM Prep</span></td>
+            <td class="muted">5/5 LLMs</td>
+            <td class="right">₹45–60 Cr/yr</td>
+            <td class="right">3–4 months</td>
+            <td class="muted">Low–Medium</td>
+            <td class="muted">Head Commercial / CFO</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-blue">Fraud Detection &amp; Investigation</span></td>
+            <td class="muted">4/5 LLMs</td>
+            <td class="right">₹100–150 Cr/yr</td>
+            <td class="right">&lt; 3 months</td>
+            <td class="muted">Low–Medium</td>
+            <td class="muted">CRO / CCO</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-green">Collections &amp; Delinquency Recovery</span></td>
+            <td class="muted">2/5 LLMs</td>
+            <td class="right">Very High (NPA-linked)</td>
+            <td class="right">&lt; 3 months</td>
+            <td class="muted">Low</td>
+            <td class="muted">CRO / CFO</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="6"><strong>Pitch Order — (1) MSME Credit CAM Prep &nbsp;→&nbsp; (2) Fraud Detection &nbsp;→&nbsp; (3) Collections Recovery</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── FINAL RECOMMENDATION ── -->
+    <div class="section-label" style="margin-top:8px">Final Recommendation</div>
+    <div class="note-box">
+      <strong>Pitch Order:</strong> (1) MSME Credit CAM Prep — universal consensus across every LLM consulted, largest strategic upside, directly grows a stated bank priority segment. (2) Fraud Detection — near-universal consensus, fastest payback, protects existing revenue. (3) Collections Recovery — narrower consensus but strongest per-use-case numbers; excellent complementary "quick win" alongside the other two.
+    </div>
+    <div class="note-box accent-green">
+      <strong>To the CEO:</strong> Every AI model consulted independently converged on MSME credit automation and fraud detection as the top two opportunities — that convergence is itself a strong signal of low execution risk and broad organizational fit. Start with MSME CAM Prep: it is the single most-recommended use case, ties directly to <span class="neon-brand">Ai-ME BANK</span>'s stated MSME growth strategy, and shows measurable TAT and revenue impact within one quarter. Fraud Detection should follow immediately after as a parallel low-risk track, with Collections Recovery as the fast-follow "prove it, then scale" initiative.
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<div class="page-footer">
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</div>
+
+<script>
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>
