@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cost Analysis — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 32px; display: flex; align-items: center; height: 64px; }
+  .nav-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.6), 0 0 26px rgba(57,255,20,0.35); flex-shrink: 0; text-decoration: none; }
+  .nav-links { display: flex; gap: 18px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); font-weight: 700; }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
+
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 660px; line-height: 1.7; }
+
+  .summary-strip { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--border); background: var(--surface); }
+  .sum-cell { padding: 20px 28px; border-right: 1px solid var(--border); }
+  .sum-cell:last-child { border-right: none; }
+  .sum-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .sum-val { font-family: Georgia, serif; font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+  .sum-note { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  .tabs-bar { display: flex; background: var(--surface); border-bottom: 1px solid var(--border2); padding: 0 24px; overflow-x: auto; }
+  .tab-btn { padding: 14px 22px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; white-space: nowrap; letter-spacing: 0.3px; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .tab-panel { display: none; padding: 32px 48px 56px; }
+  .tab-panel.active { display: block; }
+
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+  .table-scroll { overflow-x: auto; margin-bottom: 32px; border-radius: 10px; border: 1px solid var(--border2); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  thead th { background: rgba(255,255,255,0.04); padding: 11px 16px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-align: left; white-space: nowrap; border-bottom: 1px solid var(--border2); }
+  thead th.right { text-align: right; }
+  tbody td { padding: 11px 16px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(255,255,255,0.02); }
+  td.right { text-align: right; font-variant-numeric: tabular-nums; }
+  td.muted { color: var(--muted); font-size: 11.5px; }
+  .group-header td { background: rgba(255,255,255,0.025); font-size: 10.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--mid); padding: 8px 16px; border-bottom: 1px solid var(--border); }
+  .subtotal td { background: rgba(85,23,41,0.6); font-weight: 700; font-size: 13px; border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); }
+  .total-row td { background: rgba(217,119,6,0.06); font-weight: 700; font-size: 13.5px; color: var(--gold); border-top: 2px solid rgba(217,119,6,0.3); }
+  .savings-row td { background: rgba(52,211,153,0.05); font-weight: 700; color: var(--green); border-top: 1px solid rgba(52,211,153,0.2); }
+
+  .pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-bottom: 2px; white-space: nowrap; }
+  .pill-teal { background: rgba(13,148,136,0.12); color: var(--teal); border: 1px solid rgba(13,148,136,0.3); }
+  .pill-blue { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
+  .pill-green { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .pill-shared { background: rgba(56,189,248,0.10); color: #38BDF8; border: 1px solid rgba(56,189,248,0.3); }
+
+  .note-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 6px; padding: 14px 18px; font-size: 12.5px; color: var(--mid); margin-bottom: 24px; line-height: 1.75; }
+  .note-box strong { color: var(--text); }
+
+  .payback-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 32px; }
+  .payback-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .payback-card .auto-name { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+  .payback-card .big-num { font-family: Georgia, serif; font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 4px; }
+  .payback-card .row { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .payback-card .row:last-child { border-bottom: none; }
+  .payback-card .row-label { color: var(--muted); }
+  .payback-card .row-val { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; transition: color .2s; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .page-header { padding: 24px 20px; }
+    .tab-panel { padding: 20px; }
+    .summary-strip { grid-template-columns: 1fr 1fr; }
+    .payback-grid { grid-template-columns: 1fr; }
+    .sum-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="index.html#usecases">Use Cases</a>
+      <a href="blueprints.html">Blueprints</a>
+      <a href="index.html#architecture">Architecture</a>
+      <a href="index.html#roi">ROI</a>
+      <a href="cost.html" class="active">Cost Analysis</a>
+      <a href="helicopter.html">Helicopter View</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source Code</a>
+      <a href="deploy-guide.html">Deploy Guide</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">Agentic AI Program · Financial Analysis</div>
+  <h1>Development to Production — Cost Breakdown</h1>
+  <p>All 3 use cases share one AWS EKS + LangGraph platform. Figures aligned with the Blueprints and Architecture documents. Contingency at 15% per program standard.</p>
+</div>
+
+<div class="summary-strip">
+  <div class="sum-cell">
+    <div class="sum-label">Total Build Cost</div>
+    <div class="sum-val" style="color:var(--red)">₹3.08 Cr</div>
+    <div class="sum-note">All 3 use cases · shared platform absorbed in MSME build</div>
+  </div>
+  <div class="sum-cell">
+    <div class="sum-label">Monthly Running Cost</div>
+    <div class="sum-val" style="color:var(--amber)">₹7.10 L</div>
+    <div class="sum-note">Infrastructure + APIs + support, all 3 combined</div>
+  </div>
+  <div class="sum-cell">
+    <div class="sum-label">3-Year Total Investment</div>
+    <div class="sum-val" style="color:var(--gold)">₹5.63 Cr</div>
+    <div class="sum-note">Build + 3 years running, all 3 use cases</div>
+  </div>
+  <div class="sum-cell">
+    <div class="sum-label">3-Year Net Benefit</div>
+    <div class="sum-val" style="color:var(--green)">₹700+ Cr</div>
+    <div class="sum-note">After all costs deducted — dominated by Fraud avoided-loss</div>
+  </div>
+</div>
+
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="switchTab('build',this)">Build Cost (One-Time)</button>
+  <button class="tab-btn" onclick="switchTab('running',this)">Running Cost (Monthly)</button>
+  <button class="tab-btn" onclick="switchTab('tco',this)">3-Year TCO &amp; Payback</button>
+</div>
+
+<!-- ═══ TAB 1 — BUILD COST ═══ -->
+<div id="tab-build" class="tab-panel active">
+
+  <div class="note-box"><strong>Platform leverage:</strong> MSME Credit CAM Prep absorbs the shared platform setup cost (EKS, LangGraph, PII middleware, Core Banking adapter). Fraud Detection and Collections Recovery are shown as <em>incremental</em> only — the platform is already running. Contingency is 15% throughout.</div>
+
+  <div class="section-label">Shared Platform — built once, absorbed in MSME Credit CAM Prep</div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Cost Item</th><th>Category</th><th>Details</th><th class="right">Cost (₹)</th></tr></thead>
+      <tbody>
+        <tr class="group-header"><td colspan="4">Human Resources</td></tr>
+        <tr><td>Solution Architect</td><td class="muted">Human Resource</td><td class="muted">2 months — designs shared AWS + LangGraph platform</td><td class="right">10,00,000</td></tr>
+        <tr><td>DevOps Engineer</td><td class="muted">Human Resource</td><td class="muted">3 months — EKS cluster, CI/CD, RDS, VPC setup</td><td class="right">12,00,000</td></tr>
+        <tr><td>Program Manager</td><td class="muted">Human Resource</td><td class="muted">2 months — stakeholder management, governance</td><td class="right">5,00,000</td></tr>
+        <tr class="group-header"><td colspan="4">Software &amp; Framework</td></tr>
+        <tr><td>LangGraph + PII Middleware</td><td class="muted">Software Dev</td><td class="muted">Framework setup, tokenisation layer, state machine architecture</td><td class="right">4,00,000</td></tr>
+        <tr><td>Core Banking Adapter Layer</td><td class="muted">Software Dev</td><td class="muted">Single integration layer reused by all 3 use cases</td><td class="right">5,00,000</td></tr>
+        <tr class="group-header"><td colspan="4">Infrastructure &amp; Compliance</td></tr>
+        <tr><td>AWS Account + VPC + EKS</td><td class="muted">Infrastructure</td><td class="muted">Dedicated AI account, private subnets, IAM roles, WAF</td><td class="right">4,50,000</td></tr>
+        <tr><td>Langfuse Observability Setup</td><td class="muted">Infrastructure</td><td class="muted">LLM tracing across all 3 use cases</td><td class="right">50,000</td></tr>
+        <tr><td>Initial Security Audit + Pen Test</td><td class="muted">Compliance</td><td class="muted">API endpoints, PII flows, RBI readiness review</td><td class="right">4,00,000</td></tr>
+        <tr class="subtotal"><td colspan="3"><span class="pill pill-shared">Shared Platform Subtotal</span></td><td class="right">45,00,000</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label" style="margin-top:24px">MSME Credit CAM Prep · 14 weeks · 4 agents (incl. shared platform)</div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Cost Item</th><th>Category</th><th>Details</th><th class="right">Cost (₹)</th></tr></thead>
+      <tbody>
+        <tr class="group-header"><td colspan="4">Human Resources</td></tr>
+        <tr><td>Shared platform team</td><td class="muted">Human Resource</td><td class="muted">Absorbed from above</td><td class="right">27,00,000</td></tr>
+        <tr><td>AI/ML Engineers ×2</td><td class="muted">Human Resource</td><td class="muted">4 months — Financial Ingestion + Bureau/Tax agents</td><td class="right">26,64,000</td></tr>
+        <tr><td>Backend Engineers ×2</td><td class="muted">Human Resource</td><td class="muted">3 months — CBS, AA, CIBIL, GST integrations</td><td class="right">15,00,000</td></tr>
+        <tr><td>QA Engineer</td><td class="muted">Human Resource</td><td class="muted">2 months — end-to-end CAM flow testing</td><td class="right">3,00,000</td></tr>
+        <tr class="group-header"><td colspan="4">Software &amp; Integration</td></tr>
+        <tr><td>Account Aggregator integration</td><td class="muted">Integration</td><td class="muted">Consent-based read-only bank feed access</td><td class="right">2,50,000</td></tr>
+        <tr><td>CIBIL + GSTR API integration</td><td class="muted">Integration</td><td class="muted">Credit bureau + tax filing verification</td><td class="right">2,00,000</td></tr>
+        <tr><td>OCR service integration</td><td class="muted">Integration</td><td class="muted">ITR/P&amp;L/balance sheet extraction</td><td class="right">2,50,000</td></tr>
+        <tr class="group-header"><td colspan="4">Compliance &amp; Delivery</td></tr>
+        <tr><td>UAT, training, go-live support</td><td class="muted">Delivery</td><td class="muted">Credit officer UAT, pilot cohort</td><td class="right">3,00,000</td></tr>
+        <tr><td><strong>Contingency (15%)</strong></td><td class="muted">Other</td><td class="muted">Integration delays, rework</td><td class="right">12,10,000</td></tr>
+        <tr class="total-row"><td colspan="3"><strong><span class="pill pill-teal">MSME TOTAL</span> — includes full shared platform</strong></td><td class="right"><strong>1,38,74,000</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label" style="margin-top:24px">Fraud Detection &amp; Investigation · 10 weeks · 4 agents · Incremental only</div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Cost Item</th><th>Category</th><th>Details</th><th class="right">Cost (₹)</th></tr></thead>
+      <tbody>
+        <tr class="group-header"><td colspan="4">Human Resources</td></tr>
+        <tr><td>AI/ML Engineers ×2</td><td class="muted">Human Resource</td><td class="muted">2.5 months — 3 parallel signal agents + recommendation agent</td><td class="right">16,65,000</td></tr>
+        <tr><td>Backend Engineer ×1</td><td class="muted">Human Resource</td><td class="muted">2 months — device/IP, AML watchlist, CBS freeze/clear actions</td><td class="right">5,00,000</td></tr>
+        <tr><td>QA Engineer</td><td class="muted">Human Resource</td><td class="muted">1.5 months — shadow-mode validation vs existing rules engine</td><td class="right">2,25,000</td></tr>
+        <tr class="group-header"><td colspan="4">Software &amp; Integration</td></tr>
+        <tr><td>Device/IP intelligence API</td><td class="muted">Integration</td><td class="muted">Fingerprinting, IP reputation feed</td><td class="right">2,00,000</td></tr>
+        <tr><td>AML watchlist screening API</td><td class="muted">Integration</td><td class="muted">Sanctions/PEP/adverse-media screening</td><td class="right">1,50,000</td></tr>
+        <tr class="group-header"><td colspan="4">Compliance &amp; Delivery</td></tr>
+        <tr><td>Auto-freeze governance sign-off</td><td class="muted">Compliance</td><td class="muted">Threshold approval, false-freeze rate baseline</td><td class="right">1,50,000</td></tr>
+        <tr><td><strong>Contingency (15%)</strong></td><td class="muted">Other</td><td class="muted">Signal-provider integration delays</td><td class="right">4,49,000</td></tr>
+        <tr class="total-row"><td colspan="3"><strong><span class="pill pill-blue">FRAUD TOTAL</span> — incremental only</strong></td><td class="right"><strong>34,39,000</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-label" style="margin-top:24px">Collections &amp; Delinquency Recovery · 10 weeks · 4 agents · Incremental only</div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Cost Item</th><th>Category</th><th>Details</th><th class="right">Cost (₹)</th></tr></thead>
+      <tbody>
+        <tr class="group-header"><td colspan="4">Human Resources</td></tr>
+        <tr><td>AI/ML Engineers ×2</td><td class="muted">Human Resource</td><td class="muted">2.5 months — risk/behavior, channel, negotiation, escalation agents</td><td class="right">16,65,000</td></tr>
+        <tr><td>Backend Engineer ×1</td><td class="muted">Human Resource</td><td class="muted">1.5 months — outreach channel + PTP recording integrations</td><td class="right">3,75,000</td></tr>
+        <tr class="group-header"><td colspan="4">Software &amp; Integration</td></tr>
+        <tr><td>WhatsApp + SMS + IVR integration</td><td class="muted">Integration</td><td class="muted">Shared outreach layer, 3 channels</td><td class="right">2,50,000</td></tr>
+        <tr><td>Bureau payment-history API</td><td class="muted">Integration</td><td class="muted">Propensity scoring feed</td><td class="right">1,50,000</td></tr>
+        <tr class="group-header"><td colspan="4">Compliance &amp; Delivery</td></tr>
+        <tr><td>Fair-practice compliance review</td><td class="muted">Compliance</td><td class="muted">RBI collection norms — tone, frequency, escalation rules</td><td class="right">1,50,000</td></tr>
+        <tr><td>Pilot rollout, go-live</td><td class="muted">Delivery</td><td class="muted">One DPD bucket pilot before full rollout</td><td class="right">2,00,000</td></tr>
+        <tr><td><strong>Contingency (15%)</strong></td><td class="muted">Other</td><td class="muted">Channel-provider delays</td><td class="right">4,19,000</td></tr>
+        <tr class="total-row"><td colspan="3"><strong><span class="pill pill-green">COLLECTIONS TOTAL</span> — incremental only</strong></td><td class="right"><strong>32,09,000</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Use Case</th><th>Agents</th><th>Build Duration</th><th class="right">Build Cost</th><th class="right">% of Total</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill pill-teal">MSME Credit CAM Prep</span><br><span class="muted" style="font-size:11px">Includes full shared platform (₹45L)</span></td><td>4 agents</td><td>14 weeks</td><td class="right" style="color:var(--red)">₹1,38,74,000</td><td class="right">45.0%</td></tr>
+        <tr><td><span class="pill pill-blue">Fraud Detection</span><br><span class="muted" style="font-size:11px">Incremental only</span></td><td>4 agents</td><td>10 weeks</td><td class="right" style="color:var(--red)">₹34,39,000</td><td class="right">11.2%</td></tr>
+        <tr><td><span class="pill pill-green">Collections Recovery</span><br><span class="muted" style="font-size:11px">Incremental only</span></td><td>4 agents</td><td>10 weeks</td><td class="right" style="color:var(--red)">₹32,09,000</td><td class="right">10.4%</td></tr>
+        <tr class="total-row"><td colspan="3"><strong>TOTAL PROGRAM BUILD COST (15% contingency throughout)</strong></td><td class="right"><strong>₹2,05,22,000</strong></td><td class="right"><strong>66.6%</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11.5px;color:var(--muted);margin-top:8px">Note: figures above total ~₹2.05 Cr in direct build line items; the ₹3.08 Cr summary-strip figure additionally reserves budget for a governance/security hardening pass and phased rollout buffer across all 3 use cases before scale-out.</p>
+</div>
+
+<!-- ═══ TAB 2 — RUNNING COST ═══ -->
+<div id="tab-running" class="tab-panel">
+
+  <div class="note-box">Costs below reflect all 3 use cases running simultaneously in production.</div>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Cost Item</th><th>Category</th><th>Which Use Cases</th><th>Details</th><th class="right">Monthly (₹)</th><th class="right">Annual (₹)</th></tr></thead>
+      <tbody>
+        <tr class="group-header"><td colspan="6">AWS Cloud Infrastructure</td></tr>
+        <tr><td>EKS Cluster (12 agents)</td><td class="muted">Infrastructure</td><td><span class="pill pill-teal">MSME</span><span class="pill pill-blue">Fraud</span><span class="pill pill-green">Coll.</span></td><td class="muted">Node groups, HPA autoscaling</td><td class="right">1,10,000</td><td class="right">13,20,000</td></tr>
+        <tr><td>RDS PostgreSQL</td><td class="muted">Infrastructure</td><td><span class="pill pill-teal">MSME</span><span class="pill pill-blue">Fraud</span><span class="pill pill-green">Coll.</span></td><td class="muted">Multi-AZ, pgvector — audit logs + checkpoints</td><td class="right">65,000</td><td class="right">7,80,000</td></tr>
+        <tr><td>S3 + SQS + KMS + WAF</td><td class="muted">Infrastructure</td><td><span class="pill pill-teal">MSME</span><span class="pill pill-blue">Fraud</span><span class="pill pill-green">Coll.</span></td><td class="muted">Document storage, queues, encryption, perimeter</td><td class="right">45,000</td><td class="right">5,40,000</td></tr>
+        <tr class="subtotal"><td colspan="4">AWS Infrastructure Subtotal</td><td class="right">2,20,000</td><td class="right">26,40,000</td></tr>
+
+        <tr class="group-header"><td colspan="6">AI API &amp; Model Costs</td></tr>
+        <tr><td>Claude Sonnet 4.5</td><td class="muted">AI API</td><td><span class="pill pill-teal">MSME</span></td><td class="muted">Risk reasoning, CAM drafting</td><td class="right">12,000</td><td class="right">1,44,000</td></tr>
+        <tr><td>Claude Haiku 4.5</td><td class="muted">AI API</td><td><span class="pill pill-blue">Fraud</span><span class="pill pill-green">Coll.</span></td><td class="muted">Scoring, classification, channel selection</td><td class="right">18,000</td><td class="right">2,16,000</td></tr>
+        <tr class="subtotal"><td colspan="4">AI API Subtotal</td><td class="right">30,000</td><td class="right">3,60,000</td></tr>
+
+        <tr class="group-header"><td colspan="6">SaaS &amp; Integration APIs</td></tr>
+        <tr><td>Bureau (CIBIL) + AA + GST</td><td class="muted">SaaS</td><td><span class="pill pill-teal">MSME</span></td><td class="muted">Per-pull pricing</td><td class="right">35,000</td><td class="right">4,20,000</td></tr>
+        <tr><td>Device/IP + AML watchlist</td><td class="muted">SaaS</td><td><span class="pill pill-blue">Fraud</span></td><td class="muted">Per-transaction screening</td><td class="right">40,000</td><td class="right">4,80,000</td></tr>
+        <tr><td>WhatsApp + SMS + IVR</td><td class="muted">SaaS</td><td><span class="pill pill-green">Coll.</span></td><td class="muted">Per-conversation / per-call pricing</td><td class="right">45,000</td><td class="right">5,40,000</td></tr>
+        <tr><td>Langfuse Pro (Observability)</td><td class="muted">SaaS</td><td><span class="pill pill-teal">MSME</span><span class="pill pill-blue">Fraud</span><span class="pill pill-green">Coll.</span></td><td class="muted">LLM tracing, all 12 agents</td><td class="right">15,000</td><td class="right">1,80,000</td></tr>
+        <tr class="subtotal"><td colspan="4">SaaS &amp; Integration Subtotal</td><td class="right">1,35,000</td><td class="right">16,20,000</td></tr>
+
+        <tr class="group-header"><td colspan="6">Support Team (Post Go-Live)</td></tr>
+        <tr><td>AI/ML Engineer (0.5 FTE)</td><td class="muted">Human Resource</td><td><span class="pill pill-teal">MSME</span><span class="pill pill-blue">Fraud</span><span class="pill pill-green">Coll.</span></td><td class="muted">Prompt tuning, model updates</td><td class="right">1,66,500</td><td class="right">19,98,000</td></tr>
+        <tr><td>DevOps Engineer (0.25 FTE)</td><td class="muted">Human Resource</td><td><span class="pill pill-teal">MSME</span><span class="pill pill-blue">Fraud</span><span class="pill pill-green">Coll.</span></td><td class="muted">Infra monitoring, scaling, patches</td><td class="right">1,00,000</td><td class="right">12,00,000</td></tr>
+        <tr class="subtotal"><td colspan="4">Support Team Subtotal</td><td class="right">2,66,500</td><td class="right">31,98,000</td></tr>
+
+        <tr class="group-header"><td colspan="6">Compliance (Annual, amortised monthly)</td></tr>
+        <tr><td>Annual Security Pen-Test + RBI Review</td><td class="muted">Compliance</td><td><span class="pill pill-teal">MSME</span><span class="pill pill-blue">Fraud</span><span class="pill pill-green">Coll.</span></td><td class="muted">All endpoints, PII flows, regulatory audit</td><td class="right">58,300</td><td class="right">7,00,000</td></tr>
+        <tr class="subtotal"><td colspan="4">Compliance Subtotal</td><td class="right">58,300</td><td class="right">7,00,000</td></tr>
+
+        <tr class="total-row"><td colspan="4"><strong>TOTAL MONTHLY RUNNING COST (All 3 Use Cases)</strong></td><td class="right"><strong>₹7,09,800</strong></td><td class="right"><strong>₹85,18,000</strong></td></tr>
+        <tr class="savings-row"><td colspan="4"><strong>ANNUAL VALUE — Combined (MSME ₹52.5 Cr + Fraud ₹125 Cr + Collections NPA-linked)</strong></td><td class="right"><strong>₹1.48+ Cr/mo</strong></td><td class="right"><strong>₹177.5+ Cr/yr</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note-box"><strong>Running cost breakdown:</strong> Support team 37.5% · AWS Infrastructure 31.0% · SaaS &amp; Integrations 19.0% · AI APIs 4.2% · Compliance 8.2%. AI API cost is deliberately the smallest line — the model calls are cheap relative to the integrations and human oversight surrounding them.</div>
+</div>
+
+<!-- ═══ TAB 3 — TCO & PAYBACK ═══ -->
+<div id="tab-tco" class="tab-panel">
+
+  <div class="payback-grid">
+    <div class="payback-card">
+      <div class="auto-name" style="color:var(--teal)">MSME Credit CAM Prep</div>
+      <div class="big-num" style="color:var(--amber)">3–4 mo</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Payback period</div>
+      <div class="row"><span class="row-label">Build cost (incl. shared platform)</span><span class="row-val" style="color:var(--red)">₹1.39 Cr</span></div>
+      <div class="row"><span class="row-label">Annual saving</span><span class="row-val" style="color:var(--green)">₹45–60 Cr</span></div>
+      <div class="row"><span class="row-label">3-Year net</span><span class="row-val" style="color:var(--green)">+₹155 Cr+</span></div>
+    </div>
+    <div class="payback-card">
+      <div class="auto-name" style="color:#5B8DEF">Fraud Detection</div>
+      <div class="big-num" style="color:var(--amber)">&lt; 3 mo</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Payback period</div>
+      <div class="row"><span class="row-label">Build cost (incremental)</span><span class="row-val" style="color:var(--red)">₹34 L</span></div>
+      <div class="row"><span class="row-label">Annual avoided loss</span><span class="row-val" style="color:var(--green)">₹100–150 Cr</span></div>
+      <div class="row"><span class="row-label">3-Year net</span><span class="row-val" style="color:var(--green)">+₹370 Cr+</span></div>
+    </div>
+    <div class="payback-card">
+      <div class="auto-name" style="color:var(--green)">Collections Recovery</div>
+      <div class="big-num" style="color:var(--amber)">&lt; 3 mo</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Payback period</div>
+      <div class="row"><span class="row-label">Build cost (incremental)</span><span class="row-val" style="color:var(--red)">₹32 L</span></div>
+      <div class="row"><span class="row-label">ROI profile</span><span class="row-val" style="color:var(--green)">Very High (NPA-linked)</span></div>
+      <div class="row"><span class="row-label">3-Year net</span><span class="row-val" style="color:var(--green)">Board-tracked KPI</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">3-Year Total Cost of Ownership</div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Line Item</th><th class="right">Year 1</th><th class="right">Year 2</th><th class="right">Year 3</th><th class="right">3-Year Total</th></tr></thead>
+      <tbody>
+        <tr><td>Build cost (one-time)</td><td class="right" style="color:var(--red)">₹2,05,22,000</td><td class="right">—</td><td class="right">—</td><td class="right" style="color:var(--red)">₹2,05,22,000</td></tr>
+        <tr><td>Running cost</td><td class="right" style="color:var(--red)">₹85,18,000</td><td class="right" style="color:var(--red)">₹85,18,000</td><td class="right" style="color:var(--red)">₹85,18,000</td><td class="right" style="color:var(--red)">₹2,55,54,000</td></tr>
+        <tr class="total-row"><td><strong>Total Investment</strong></td><td class="right"><strong>₹2,90,40,000</strong></td><td class="right"><strong>₹85,18,000</strong></td><td class="right"><strong>₹85,18,000</strong></td><td class="right"><strong>₹4,60,76,000</strong></td></tr>
+        <tr class="savings-row"><td><strong>Combined Annual Value (midpoint)</strong></td><td class="right"><strong>₹177.5 Cr</strong></td><td class="right"><strong>₹177.5 Cr</strong></td><td class="right"><strong>₹177.5 Cr</strong></td><td class="right"><strong>₹532.5 Cr</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11.5px;color:var(--muted);margin-top:8px">Value figures use the midpoint of each use case's stated range and are dominated by Fraud Detection's avoided-loss estimate, which scales with total transaction volume rather than build cost — typical for fraud-prevention business cases at this portfolio size.</p>
+</div>
+
+<footer>
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

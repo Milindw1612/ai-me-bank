@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Helicopter View — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 32px; display: flex; align-items: center; height: 64px; }
+  .nav-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.6), 0 0 26px rgba(57,255,20,0.35); flex-shrink: 0; text-decoration: none; }
+  .nav-links { display: flex; gap: 18px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); font-weight: 700; }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
+
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 680px; line-height: 1.7; }
+
+  main { padding: 40px 48px 60px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; padding-bottom: 8px; border-bottom: 1px solid var(--border); text-align: center; }
+
+  /* ── Flow diagram ── */
+  .flow-diagram { display: flex; flex-direction: column; align-items: center; }
+  .layer-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; text-align: center; }
+  .chip-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 8px; max-width: 900px; }
+  .src-chip { background: rgba(255,255,255,0.03); border: 1px solid var(--border2); border-radius: 20px; padding: 7px 16px; font-size: 11.5px; color: var(--mid); }
+  .flow-arrow-down { color: var(--gold); font-size: 20px; margin: 6px 0; }
+
+  .platform-band { display: flex; gap: 14px; background: rgba(255,255,255,0.025); border: 1px solid var(--border2); border-radius: 12px; padding: 18px 22px; margin-bottom: 8px; }
+  .platform-node { text-align: center; padding: 8px 18px; }
+  .platform-node .pn-title { font-size: 12.5px; font-weight: 700; color: #fff; }
+  .platform-node .pn-sub { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+  .platform-sep { width: 1px; background: var(--border2); }
+
+  .usecase-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px; width: 100%; max-width: 980px; }
+  .usecase-col { flex: 1 1 260px; max-width: 320px; display: flex; flex-direction: column; align-items: center; }
+  .uc-coordinator { width: 100%; border-radius: 10px; padding: 12px 16px; text-align: center; margin-bottom: 8px; }
+  .uc-coordinator .uc-title { font-size: 13px; font-weight: 700; }
+  .uc-coordinator .uc-sub { font-size: 10.5px; color: var(--mid); margin-top: 3px; }
+  .uc-msme { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); }
+  .uc-msme .uc-title { color: var(--amber); }
+  .uc-fraud { background: rgba(45,107,228,0.1); border: 1px solid rgba(45,107,228,0.3); }
+  .uc-fraud .uc-title { color: #5B8DEF; }
+  .uc-collections { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); }
+  .uc-collections .uc-title { color: var(--green); }
+  .uc-agents { font-size: 10.5px; color: var(--muted); text-align: center; line-height: 1.7; }
+
+  .human-band { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 8px; }
+  .human-node { background: rgba(52,211,153,0.05); border: 1px solid rgba(52,211,153,0.35); border-radius: 20px; padding: 8px 18px; font-size: 11.5px; font-weight: 700; color: var(--green); }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; transition: color .2s; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .page-header, main { padding-left: 20px; padding-right: 20px; }
+    .platform-band { flex-direction: column; }
+    .platform-sep { width: 100%; height: 1px; }
+    footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="index.html#usecases">Use Cases</a>
+      <a href="blueprints.html">Blueprints</a>
+      <a href="index.html#architecture">Architecture</a>
+      <a href="index.html#roi">ROI</a>
+      <a href="cost.html">Cost Analysis</a>
+      <a href="helicopter.html" class="active">Helicopter View</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source Code</a>
+      <a href="deploy-guide.html">Deploy Guide</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">Architecture Flowchart</div>
+  <h1>Helicopter View — Data Flow Across the Program</h1>
+  <p>One bird's-eye view of how data moves from external sources, through the shared agent platform, into each use case's agent cluster, to a human decision-maker, and back to the core banking system of record.</p>
+</div>
+
+<main>
+  <div class="section-label">End-to-End Data Flow</div>
+  <div class="flow-diagram">
+
+    <div class="layer-label">External Data Sources</div>
+    <div class="chip-row">
+      <div class="src-chip">Core Banking System</div>
+      <div class="src-chip">Credit Bureau (CIBIL)</div>
+      <div class="src-chip">Account Aggregator</div>
+      <div class="src-chip">GST / Tax Portal</div>
+      <div class="src-chip">Device/IP Intelligence</div>
+      <div class="src-chip">AML Watchlist</div>
+      <div class="src-chip">Payment History</div>
+    </div>
+    <div class="flow-arrow-down">↓</div>
+
+    <div class="layer-label">Shared Agent Platform</div>
+    <div class="platform-band">
+      <div class="platform-node"><div class="pn-title">PII Middleware</div><div class="pn-sub">Tokenise at the boundary</div></div>
+      <div class="platform-sep"></div>
+      <div class="platform-node"><div class="pn-title">LangGraph Orchestration</div><div class="pn-sub">Fan-out / fan-in state graphs</div></div>
+      <div class="platform-sep"></div>
+      <div class="platform-node"><div class="pn-title">Langfuse Observability</div><div class="pn-sub">Every LLM call traced</div></div>
+    </div>
+    <div class="flow-arrow-down">↓</div>
+
+    <div class="layer-label">Use Case Agent Clusters</div>
+    <div class="usecase-row">
+      <div class="usecase-col">
+        <div class="uc-coordinator uc-msme"><div class="uc-title">MSME Credit CAM Prep</div><div class="uc-sub">Credit Orchestrator Agent</div></div>
+        <div class="uc-agents">Financial Ingestion · Bureau/Tax Verification<br>Risk &amp; Cash-Flow · CAM Drafting</div>
+      </div>
+      <div class="usecase-col">
+        <div class="uc-coordinator uc-fraud"><div class="uc-title">Fraud Detection</div><div class="uc-sub">Coordinator Agent</div></div>
+        <div class="uc-agents">Device/IP &amp; Network · Behavior Pattern<br>Merchant/Beneficiary &amp; AML · Recommendation</div>
+      </div>
+      <div class="usecase-col">
+        <div class="uc-coordinator uc-collections"><div class="uc-title">Collections Recovery</div><div class="uc-sub">Coordinator Agent</div></div>
+        <div class="uc-agents">Risk/Behavior · Channel<br>Negotiation · Escalation</div>
+      </div>
+    </div>
+    <div class="flow-arrow-down">↓</div>
+
+    <div class="layer-label">Human Decision Layer</div>
+    <div class="human-band">
+      <div class="human-node">Credit Officer Sign-off</div>
+      <div class="human-node">Fraud Analyst / Level-2 Review</div>
+      <div class="human-node">Collections Officer (exceptions only)</div>
+    </div>
+    <div class="flow-arrow-down">↓</div>
+
+    <div class="layer-label">System of Record</div>
+    <div class="chip-row">
+      <div class="src-chip" style="border-color:rgba(245,158,11,.35);color:var(--amber)">Core Banking System — Write-Back</div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blueprints &amp; Documents — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 32px; display: flex; align-items: center; height: 64px; }
+  .nav-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.6), 0 0 26px rgba(57,255,20,0.35); flex-shrink: 0; text-decoration: none; }
+  .nav-links { display: flex; gap: 18px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); font-weight: 700; }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
+
+  /* ── Page header ── */
+  .page-header { padding: 44px 48px 32px; background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(190,30,60,0.18) 0%, transparent 70%), var(--bg); border-bottom: 1px solid var(--border2); }
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--muted); margin-bottom: 16px; }
+  .breadcrumb a { color: var(--muted); text-decoration: none; transition: color .2s; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .page-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-title { font-family: Georgia, 'Times New Roman', serif; font-size: 32px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 10px; }
+  .page-desc { font-size: 13px; color: var(--muted); line-height: 1.75; max-width: 640px; margin-bottom: 22px; }
+  .page-stats { display: flex; gap: 28px; flex-wrap: wrap; }
+  .pstat-val { font-family: Georgia, serif; font-size: 20px; font-weight: 700; color: var(--gold); }
+  .pstat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* ── Filter bar ── */
+  .filter-bar { padding: 20px 48px; background: var(--surface); border-bottom: 1px solid var(--border2); position: sticky; top: 64px; z-index: 90; }
+  .filter-inner { display: flex; align-items: center; gap: 10px; overflow-x: auto; }
+  .filter-btn { font-size: 12px; font-weight: 600; padding: 7px 16px; border-radius: 8px; border: 1px solid var(--border2); color: var(--muted); background: transparent; cursor: pointer; transition: all .2s; white-space: nowrap; }
+  .filter-btn.active, .filter-btn:hover { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: var(--gold); }
+
+  main { padding: 40px 48px 60px; }
+
+  /* ── Doc cards ── */
+  .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 16px; margin-bottom: 56px; }
+  .doc-card { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: transform .2s, box-shadow .2s; display: flex; flex-direction: column; }
+  .doc-card:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,0,0,.3); }
+  .doc-card-top { padding: 20px 20px 16px; flex: 1; }
+  .doc-type-badge { font-size: 9.5px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; border: 1px solid; margin-bottom: 10px; display: inline-block; }
+  .doc-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.35; }
+  .doc-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+  .doc-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .chip { font-size: 10px; color: var(--mid); background: rgba(255,255,255,0.04); border: 1px solid var(--border); padding: 3px 9px; border-radius: 5px; }
+  .doc-card-bottom { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.1); }
+  .doc-metric { font-size: 11px; color: var(--muted); }
+  .doc-metric strong { color: var(--mid); }
+  .doc-action { font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 7px; text-decoration: none; }
+
+  /* ── Section label / note-box / pill (shared vocabulary) ── */
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .note-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 6px; padding: 14px 18px; font-size: 12.5px; color: var(--mid); margin-bottom: 24px; line-height: 1.75; }
+  .note-box strong { color: var(--text); }
+  .pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .pill-teal { background: rgba(13,148,136,0.12); color: var(--teal); border: 1px solid rgba(13,148,136,0.3); }
+  .pill-blue { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
+  .pill-green { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .pill-gold { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+
+  /* ── Blueprint sections ── */
+  .blueprint-section { margin-bottom: 64px; padding-top: 8px; scroll-margin-top: 76px; }
+  .blueprint-hdr { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border2); }
+  .blueprint-hdr h2 { font-family: Georgia, serif; font-size: 22px; font-weight: 700; color: #fff; }
+  .bp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 20px; }
+  .bp-col h3 { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .bp-col p, .bp-col li { font-size: 12.5px; color: var(--mid); line-height: 1.75; }
+  .bp-col ul { padding-left: 18px; margin-top: 4px; }
+  .roadmap { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .roadmap-step { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 11.5px; color: var(--mid); flex: 1 1 140px; }
+  .roadmap-step strong { display: block; color: #fff; font-size: 12px; margin-bottom: 3px; }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; transition: color .2s; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav, .page-header, .filter-bar, main, footer { padding-left: 20px; padding-right: 20px; }
+    .bp-grid { grid-template-columns: 1fr; }
+    .doc-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="index.html#usecases">Use Cases</a>
+      <a href="blueprints.html" class="active">Blueprints</a>
+      <a href="index.html#architecture">Architecture</a>
+      <a href="index.html#roi">ROI</a>
+      <a href="cost.html">Cost Analysis</a>
+      <a href="helicopter.html">Helicopter View</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source Code</a>
+      <a href="deploy-guide.html">Deploy Guide</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a><span>›</span><span style="color:var(--mid)">Blueprints &amp; Documents</span></div>
+  <div class="page-eyebrow">Execution Repository</div>
+  <h1 class="page-title">Blueprints &amp; Technical Documents</h1>
+  <p class="page-desc">Full execution blueprints for all 3 <span class="neon-brand">Ai-ME BANK</span> use cases — problem statement, agent architecture, tech stack, budget/ROI, risk register, and delivery roadmap.</p>
+  <div class="page-stats">
+    <div><div class="pstat-val">3</div><div class="pstat-lbl">Use case blueprints</div></div>
+    <div><div class="pstat-val">1</div><div class="pstat-lbl">Shared platform architecture</div></div>
+    <div><div class="pstat-val">₹245–360 Cr</div><div class="pstat-lbl">Combined annual value</div></div>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-inner">
+    <button class="filter-btn active" onclick="filterDocs('all',this)">All Documents</button>
+    <button class="filter-btn" onclick="filterDocs('msme',this)">MSME Credit CAM Prep</button>
+    <button class="filter-btn" onclick="filterDocs('fraud',this)">Fraud Detection</button>
+    <button class="filter-btn" onclick="filterDocs('collections',this)">Collections Recovery</button>
+    <button class="filter-btn" onclick="filterDocs('architecture',this)">Shared Architecture</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- ── DOC GALLERY ── -->
+  <div class="doc-grid">
+    <div class="doc-card" data-tags="msme">
+      <div class="doc-card-top">
+        <span class="doc-type-badge" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.3);color:var(--amber)">Use Case #1</span>
+        <div class="doc-title">MSME Credit CAM Prep — Full Execution Blueprint</div>
+        <div class="doc-desc">Compresses 5–7 day loan file assembly to under 4 hours. Financial Ingestion + Bureau/Tax Verification agents run in parallel, join into Risk &amp; Cash-Flow, then CAM Drafting — final lending authority stays with a human credit officer.</div>
+        <div class="doc-chips"><span class="chip">LangGraph</span><span class="chip">Claude Sonnet 4.5</span><span class="chip">Account Aggregator</span><span class="chip">CIBIL API</span><span class="chip">GSTR API</span></div>
+      </div>
+      <div class="doc-card-bottom">
+        <div class="doc-metric"><strong>₹45–60 Cr</strong> annual saving</div>
+        <a href="#msme-blueprint" class="doc-action" style="background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.25)">Open ↓</a>
+      </div>
+    </div>
+
+    <div class="doc-card" data-tags="fraud">
+      <div class="doc-card-top">
+        <span class="doc-type-badge" style="background:rgba(45,107,228,.1);border-color:rgba(45,107,228,.3);color:#5B8DEF">Use Case #2</span>
+        <div class="doc-title">Fraud Detection &amp; Investigation — Full Execution Blueprint</div>
+        <div class="doc-desc">Device/IP, Behavior Pattern, and Merchant/AML agents run in parallel and join into a Recommendation Agent producing a fraud-probability score with reasons in under 60 seconds — auto-action or analyst escalation.</div>
+        <div class="doc-chips"><span class="chip">LangGraph</span><span class="chip">Claude Haiku 4.5</span><span class="chip">Device/IP Intel</span><span class="chip">AML Watchlist</span><span class="chip">Core Banking API</span></div>
+      </div>
+      <div class="doc-card-bottom">
+        <div class="doc-metric"><strong>₹100–150 Cr</strong> avoided loss</div>
+        <a href="#fraud-blueprint" class="doc-action" style="background:rgba(45,107,228,.15);color:#5B8DEF;border:1px solid rgba(45,107,228,.25)">Open ↓</a>
+      </div>
+    </div>
+
+    <div class="doc-card" data-tags="collections">
+      <div class="doc-card-top">
+        <span class="doc-type-badge" style="background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.3);color:var(--green)">Use Case #3</span>
+        <div class="doc-title">Collections &amp; Delinquency Recovery — Full Execution Blueprint</div>
+        <div class="doc-desc">Risk/Behavior scoring routes each account to the right channel (SMS/WhatsApp/voice), negotiates settlement within pre-approved policy bands, and escalates only complex or aggressive cases to a human officer.</div>
+        <div class="doc-chips"><span class="chip">LangGraph</span><span class="chip">Claude Haiku 4.5</span><span class="chip">WhatsApp API</span><span class="chip">IVR</span><span class="chip">Bureau Payment History</span></div>
+      </div>
+      <div class="doc-card-bottom">
+        <div class="doc-metric"><strong>Very High ROI</strong> · NPA-linked</div>
+        <a href="#collections-blueprint" class="doc-action" style="background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.25)">Open ↓</a>
+      </div>
+    </div>
+
+    <div class="doc-card" data-tags="architecture">
+      <div class="doc-card-top">
+        <span class="doc-type-badge" style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.3);color:var(--purple)">Combined Program</span>
+        <div class="doc-title">Shared Platform Architecture — All 3 Use Cases</div>
+        <div class="doc-desc">One AWS EKS + LangGraph platform reused across all 3 use cases. PII tokenisation, human-in-loop gates, and Langfuse observability designed once, inherited by every use case.</div>
+        <div class="doc-chips"><span class="chip">AWS EKS</span><span class="chip">PII Middleware</span><span class="chip">Langfuse</span><span class="chip">Shared Platform</span></div>
+      </div>
+      <div class="doc-card-bottom">
+        <div class="doc-metric"><strong>All 3</strong> use cases</div>
+        <a href="index.html#architecture" class="doc-action" style="background:rgba(167,139,250,.15);color:var(--purple);border:1px solid rgba(167,139,250,.25)">Open →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       BLUEPRINT 1 — MSME CREDIT CAM PREP
+  ════════════════════════════════════ -->
+  <div class="blueprint-section" id="msme-blueprint">
+    <div class="blueprint-hdr"><span class="pill pill-gold">Use Case #1</span><h2>MSME Credit CAM Prep</h2></div>
+
+    <div class="note-box"><strong>Problem:</strong> MSME loan file assembly (GST returns, AA bank feeds, ITRs, CIBIL, financials) takes 5–7 days per application against a ~₹1.02 lakh crore MSME book (~20% of lending portfolio), capping origination velocity.</div>
+
+    <div class="bp-grid">
+      <div class="bp-col">
+        <h3>Agent Architecture</h3>
+        <ul>
+          <li><strong style="color:#fff">Financial Ingestion Agent</strong> — OCR: ITRs, P&amp;L, balance sheets</li>
+          <li><strong style="color:#fff">Bureau &amp; Tax Verification Agent</strong> — CIBIL, AA feeds, GSTR-1/3B (runs in parallel with Financial Ingestion)</li>
+          <li><strong style="color:#fff">Risk &amp; Cash-Flow Agent</strong> — joins both, flags anomalies</li>
+          <li><strong style="color:#fff">CAM Drafting Agent</strong> — recommended pricing, pre-filled memo</li>
+          <li><strong style="color:#fff">Human Credit Officer</strong> — final sign-off, always</li>
+        </ul>
+      </div>
+      <div class="bp-col">
+        <h3>Tech Stack</h3>
+        <div class="doc-chips">
+          <span class="chip">LangGraph</span><span class="chip">Claude Sonnet 4.5</span><span class="chip">Claude Haiku 4.5</span><span class="chip">Account Aggregator API</span>
+          <span class="chip">CIBIL API</span><span class="chip">GST API</span><span class="chip">OCR Service</span><span class="chip">AWS RDS + pgvector</span><span class="chip">Langfuse</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bp-grid">
+      <div class="bp-col">
+        <h3>Budget &amp; ROI</h3>
+        <p>Turnaround time drops from 5–7 days to under 4 hours. Origination capacity increases 25–35% with no added headcount. <strong style="color:var(--green)">₹45–60 Cr/yr</strong> processing-cost saving, payback in <strong style="color:var(--amber)">3–4 months</strong>.</p>
+      </div>
+      <div class="bp-col">
+        <h3>Risk Register</h3>
+        <p><span class="pill pill-teal">Low–Medium</span> Read-only AA/bureau integration; final lending authority stays human. Primary risk is data-quality drift in OCR extraction — mitigated by a confidence-threshold fallback to manual review.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">Delivery Roadmap</h3>
+    <div class="roadmap">
+      <div class="roadmap-step"><strong>Wk 1–3</strong>Platform setup, AA/bureau API contracts signed</div>
+      <div class="roadmap-step"><strong>Wk 4–7</strong>Financial Ingestion + Bureau/Tax agents built</div>
+      <div class="roadmap-step"><strong>Wk 8–10</strong>Risk &amp; Cash-Flow + CAM Drafting agents built</div>
+      <div class="roadmap-step"><strong>Wk 11–12</strong>UAT with credit officers, pilot cohort</div>
+      <div class="roadmap-step"><strong>Wk 13–14</strong>Go-live, hypercare</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       BLUEPRINT 2 — FRAUD DETECTION
+  ════════════════════════════════════ -->
+  <div class="blueprint-section" id="fraud-blueprint">
+    <div class="blueprint-hdr"><span class="pill pill-blue">Use Case #2</span><h2>Fraud Detection &amp; Investigation</h2></div>
+
+    <div class="note-box"><strong>Problem:</strong> Fraud teams triage thousands of daily alerts across cards/UPI/IMPS; most are false positives. Manual investigation (device, IP, behavior, merchant checks) takes 20–40 minutes per case, delaying genuine fraud response.</div>
+
+    <div class="bp-grid">
+      <div class="bp-col">
+        <h3>Agent Architecture</h3>
+        <ul>
+          <li><strong style="color:#fff">Device/IP &amp; Network Agent</strong> — device fingerprint, IP reputation</li>
+          <li><strong style="color:#fff">Behavior Pattern Agent</strong> — spend/velocity anomaly detection (parallel with Device/IP)</li>
+          <li><strong style="color:#fff">Merchant/Beneficiary &amp; AML Agent</strong> — merchant risk, AML watchlists (parallel)</li>
+          <li><strong style="color:#fff">Recommendation Agent</strong> — joins all 3, scores fraud probability</li>
+          <li><strong style="color:#fff">Fraud Analyst</strong> — reviews only escalated cases (0.3–0.7 probability band)</li>
+        </ul>
+      </div>
+      <div class="bp-col">
+        <h3>Tech Stack</h3>
+        <div class="doc-chips">
+          <span class="chip">LangGraph</span><span class="chip">Claude Haiku 4.5</span><span class="chip">Device/IP Intelligence API</span><span class="chip">AML Watchlist API</span>
+          <span class="chip">Core Banking API</span><span class="chip">AWS RDS</span><span class="chip">Langfuse</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bp-grid">
+      <div class="bp-col">
+        <h3>Budget &amp; ROI</h3>
+        <p>Investigation time drops from 20–40 minutes to under 1 minute. False positives cut 30–40%. Fraud loss rate falls from ~0.05–0.10% to 0.02–0.04% — <strong style="color:var(--green)">₹100–150 Cr/yr</strong> avoided losses, payback <strong style="color:var(--amber)">under 3 months</strong>.</p>
+      </div>
+      <div class="bp-col">
+        <h3>Risk Register</h3>
+        <p><span class="pill pill-teal">Low–Medium</span> Read-only monitoring layer; auto-freeze thresholds need governance sign-off before going live — false-freeze rate is tracked as a customer-experience KPI, not just a fraud KPI.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">Delivery Roadmap</h3>
+    <div class="roadmap">
+      <div class="roadmap-step"><strong>Wk 1–2</strong>Signal-provider API contracts (device/IP, AML)</div>
+      <div class="roadmap-step"><strong>Wk 3–5</strong>3 parallel signal agents built</div>
+      <div class="roadmap-step"><strong>Wk 6–7</strong>Recommendation agent + auto-action thresholds</div>
+      <div class="roadmap-step"><strong>Wk 8–9</strong>Shadow-mode run alongside existing rules engine</div>
+      <div class="roadmap-step"><strong>Wk 10</strong>Go-live, analyst hypercare</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       BLUEPRINT 3 — COLLECTIONS RECOVERY
+  ════════════════════════════════════ -->
+  <div class="blueprint-section" id="collections-blueprint">
+    <div class="blueprint-hdr"><span class="pill pill-green">Use Case #3</span><h2>Collections &amp; Delinquency Recovery</h2></div>
+
+    <div class="note-box"><strong>Problem:</strong> 1–90 DPD retail/card accounts number in lakhs monthly; human collections teams reach only 20–30% via manual calls/generic SMS, letting recoverable accounts roll into higher NPA buckets.</div>
+
+    <div class="bp-grid">
+      <div class="bp-col">
+        <h3>Agent Architecture</h3>
+        <ul>
+          <li><strong style="color:#fff">Risk/Behavior Agent</strong> — payment history scoring</li>
+          <li><strong style="color:#fff">Channel Agent</strong> — SMS/WhatsApp/voice selection</li>
+          <li><strong style="color:#fff">Negotiation Agent</strong> — settlement/EMI within pre-approved policy bands</li>
+          <li><strong style="color:#fff">Escalation Agent</strong> — flags complex/aggressive cases with full context</li>
+          <li><strong style="color:#fff">Human Collections Officer</strong> — handles escalations only</li>
+        </ul>
+      </div>
+      <div class="bp-col">
+        <h3>Tech Stack</h3>
+        <div class="doc-chips">
+          <span class="chip">LangGraph</span><span class="chip">Claude Haiku 4.5</span><span class="chip">WhatsApp API</span><span class="chip">SMS Gateway</span>
+          <span class="chip">IVR</span><span class="chip">Bureau Payment History API</span><span class="chip">Langfuse</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bp-grid">
+      <div class="bp-col">
+        <h3>Budget &amp; ROI</h3>
+        <p>Portfolio coverage jumps from 20–30% to 100% daily. Recovery uplift of 15–25% in the 1–30 DPD bucket. <span style="color:var(--green);font-weight:700">Very High ROI</span>, NPA-linked and board-tracked, payback <strong style="color:var(--amber)">under 3 months</strong>.</p>
+      </div>
+      <div class="bp-col">
+        <h3>Risk Register</h3>
+        <p><span class="pill pill-green">Low</span> Advisory + negotiation strictly within pre-set policy bands; human sign-off required on every exception. Tone/compliance of automated outreach is monitored against RBI fair-practice collection norms.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">Delivery Roadmap</h3>
+    <div class="roadmap">
+      <div class="roadmap-step"><strong>Wk 1–2</strong>Channel provider integration (WhatsApp/SMS/IVR)</div>
+      <div class="roadmap-step"><strong>Wk 3–5</strong>Risk/Behavior + Channel agents built</div>
+      <div class="roadmap-step"><strong>Wk 6–8</strong>Negotiation + Escalation agents, policy bands encoded</div>
+      <div class="roadmap-step"><strong>Wk 9</strong>Pilot on one DPD bucket</div>
+      <div class="roadmap-step"><strong>Wk 10</strong>Full rollout across all buckets</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+<script>
+function filterDocs(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.doc-card').forEach(card => {
+    const tags = card.getAttribute('data-tags') || '';
+    card.style.display = (cat === 'all' || tags.includes(cat)) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

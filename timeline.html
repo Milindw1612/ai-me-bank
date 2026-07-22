@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Timeline — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 32px; display: flex; align-items: center; height: 64px; }
+  .nav-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.6), 0 0 26px rgba(57,255,20,0.35); flex-shrink: 0; text-decoration: none; }
+  .nav-links { display: flex; gap: 18px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); font-weight: 700; }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
+
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 660px; line-height: 1.7; }
+
+  main { padding: 36px 48px 60px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+  /* ── Summary cards ── */
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; margin-bottom: 40px; }
+  .sum-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; }
+  .sum-card .lbl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .sum-card .val { font-family: Georgia, serif; font-size: 20px; font-weight: 700; }
+
+  /* ── Timeline / phase bars ── */
+  .gantt-wrap { background: rgba(255,255,255,0.02); border: 1px solid var(--border2); border-radius: 12px; padding: 20px; margin-bottom: 24px; overflow-x: auto; }
+  .week-ruler { display: flex; padding-left: 168px; margin-bottom: 12px; min-width: 640px; }
+  .week-ruler span { flex: 1; font-size: 10px; color: var(--muted); text-align: left; }
+  .gantt-row { display: flex; align-items: center; margin-bottom: 10px; min-width: 640px; }
+  .gantt-label { width: 160px; flex-shrink: 0; font-size: 12px; font-weight: 700; color: #fff; padding-right: 8px; }
+  .gantt-track { display: flex; flex: 1; height: 30px; gap: 2px; }
+  .phase-block { display: flex; align-items: center; justify-content: center; border-radius: 5px; font-size: 10px; font-weight: 700; color: #000; white-space: nowrap; overflow: hidden; padding: 0 6px; }
+  .phase-shared { background: rgba(56,189,248,0.75); color: #05202b; }
+  .phase-msme { background: rgba(245,158,11,0.8); }
+  .phase-fraud { background: rgba(45,107,228,0.65); color: #fff; }
+  .phase-collections { background: rgba(52,211,153,0.75); }
+  .phase-uat { background: rgba(255,255,255,0.12); color: var(--mid); }
+  .phase-golive { background: rgba(52,211,153,0.35); color: var(--green); border: 1px solid rgba(52,211,153,0.5); }
+
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 32px; }
+  .li { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--mid); }
+  .lb { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+
+  .milestone-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 14px; margin-bottom: 20px; }
+  .milestone-card { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 8px; padding: 14px 16px; }
+  .milestone-card .wk { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+  .milestone-card p { font-size: 12.5px; color: var(--mid); }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; transition: color .2s; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .page-header, main { padding-left: 20px; padding-right: 20px; }
+    footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="index.html#usecases">Use Cases</a>
+      <a href="blueprints.html">Blueprints</a>
+      <a href="index.html#architecture">Architecture</a>
+      <a href="index.html#roi">ROI</a>
+      <a href="cost.html">Cost Analysis</a>
+      <a href="helicopter.html">Helicopter View</a>
+      <a href="timeline.html" class="active">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source Code</a>
+      <a href="deploy-guide.html">Deploy Guide</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">Build Timeline Analysis</div>
+  <h1>Delivery Roadmap — All 3 Use Cases</h1>
+  <p>Shared platform is built once (3 weeks), then MSME Credit CAM Prep, Fraud Detection, and Collections Recovery build in sequence — each reusing the platform, so incremental use cases take roughly a third less time than the first.</p>
+</div>
+
+<main>
+
+  <div class="summary-grid">
+    <div class="sum-card"><div class="lbl">Shared Platform</div><div class="val" style="color:#38BDF8">3 wks</div></div>
+    <div class="sum-card"><div class="lbl">MSME Credit CAM Prep</div><div class="val" style="color:var(--amber)">14 wks</div></div>
+    <div class="sum-card"><div class="lbl">Fraud Detection</div><div class="val" style="color:#5B8DEF">10 wks</div></div>
+    <div class="sum-card"><div class="lbl">Collections Recovery</div><div class="val" style="color:var(--green)">10 wks</div></div>
+  </div>
+
+  <div class="section-label">Phase Timeline</div>
+  <div class="legend">
+    <div class="li"><div class="lb phase-shared"></div>Shared Platform</div>
+    <div class="li"><div class="lb phase-msme"></div>MSME Credit CAM Prep</div>
+    <div class="li"><div class="lb phase-fraud"></div>Fraud Detection</div>
+    <div class="li"><div class="lb phase-collections"></div>Collections Recovery</div>
+    <div class="li"><div class="lb phase-uat"></div>UAT / Pilot</div>
+    <div class="li"><div class="lb phase-golive"></div>Go-Live / Hypercare</div>
+  </div>
+
+  <div class="gantt-wrap">
+    <div class="week-ruler"><span>Wk 1–3</span><span>Wk 4–6</span><span>Wk 7–9</span><span>Wk 10–12</span><span>Wk 13–14</span></div>
+
+    <div class="gantt-row">
+      <div class="gantt-label">Shared Platform</div>
+      <div class="gantt-track">
+        <div class="phase-block phase-shared" style="flex-grow:3">Setup</div>
+        <div class="phase-block" style="flex-grow:11"></div>
+      </div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="gantt-label">MSME Credit CAM Prep</div>
+      <div class="gantt-track">
+        <div class="phase-block" style="flex-grow:3"></div>
+        <div class="phase-block phase-msme" style="flex-grow:7">Agent Build</div>
+        <div class="phase-block phase-uat" style="flex-grow:2">UAT</div>
+        <div class="phase-block phase-golive" style="flex-grow:2">Live</div>
+      </div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="gantt-label">Fraud Detection</div>
+      <div class="gantt-track">
+        <div class="phase-block" style="flex-grow:3"></div>
+        <div class="phase-block phase-fraud" style="flex-grow:5">Agent Build</div>
+        <div class="phase-block phase-uat" style="flex-grow:3">Shadow Mode</div>
+        <div class="phase-block phase-golive" style="flex-grow:3">Live</div>
+      </div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="gantt-label">Collections Recovery</div>
+      <div class="gantt-track">
+        <div class="phase-block" style="flex-grow:3"></div>
+        <div class="phase-block phase-collections" style="flex-grow:5">Agent Build</div>
+        <div class="phase-block phase-uat" style="flex-grow:2">Pilot</div>
+        <div class="phase-block phase-golive" style="flex-grow:4">Full Rollout</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:32px">Key Milestones</div>
+  <div class="milestone-grid">
+    <div class="milestone-card"><div class="wk">Week 3</div><p>Shared platform live — AWS EKS, LangGraph, PII middleware, Core Banking adapter all provisioned</p></div>
+    <div class="milestone-card"><div class="wk">Week 10</div><p>MSME agent build complete — credit officer UAT begins on pilot cohort</p></div>
+    <div class="milestone-card"><div class="wk">Week 14</div><p>MSME Credit CAM Prep live — first use case in production</p></div>
+    <div class="milestone-card"><div class="wk">Week 19</div><p>Fraud Detection agents complete — shadow-mode run alongside existing rules engine</p></div>
+    <div class="milestone-card"><div class="wk">Week 24</div><p>Fraud Detection live; Collections Recovery pilot begins on one DPD bucket</p></div>
+    <div class="milestone-card"><div class="wk">Week 27</div><p>All 3 use cases live — full program in production</p></div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+</body>
+</html>

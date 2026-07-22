@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glossary — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 32px; display: flex; align-items: center; height: 64px; }
+  .nav-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.6), 0 0 26px rgba(57,255,20,0.35); flex-shrink: 0; text-decoration: none; }
+  .nav-links { display: flex; gap: 18px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); font-weight: 700; }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
+
+  .page-header { background: linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 8px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 680px; line-height: 1.7; }
+  .count-badge { display: inline-block; margin-top: 12px; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); color: var(--gold); font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 20px; letter-spacing: 0.5px; }
+
+  .controls { padding: 24px 48px 0; }
+  .search-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+  .search-wrap { position: relative; flex: 1; min-width: 240px; }
+  .search-wrap input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border2); border-radius: 8px; padding: 10px 16px 10px 38px; font-size: 13px; color: var(--text); outline: none; transition: border-color .2s; }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .search-wrap input:focus { border-color: rgba(245,158,11,0.4); background: rgba(255,255,255,0.07); }
+  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 14px; }
+  .filter-row { display: flex; gap: 8px; flex-wrap: wrap; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .filter-btn { font-size: 11px; font-weight: 600; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border2); background: rgba(255,255,255,0.03); color: var(--muted); cursor: pointer; transition: all .15s; }
+  .filter-btn:hover { color: var(--text); border-color: var(--border2); }
+  .filter-btn.active { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.35); color: var(--gold); }
+  .result-count { font-size: 11px; color: var(--muted); margin-left: auto; align-self: center; white-space: nowrap; }
+
+  .table-container { padding: 0 48px 60px; }
+  .category-block { margin-bottom: 36px; }
+  .cat-heading { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); padding: 14px 0 10px; border-bottom: 2px solid rgba(245,158,11,0.2); display: flex; align-items: center; gap: 10px; }
+  .cat-heading .cat-count { font-size: 10px; font-weight: 600; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); color: var(--gold-dim); padding: 2px 8px; border-radius: 10px; }
+  .tbl-wrap { overflow-x: auto; border-radius: 0 0 10px 10px; border: 1px solid var(--border2); border-top: none; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  thead th { background: rgba(255,255,255,0.03); padding: 10px 14px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-align: left; white-space: nowrap; border-bottom: 1px solid var(--border2); }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.025); }
+  tbody tr.hidden { display: none; }
+  td { padding: 10px 14px; font-size: 13px; vertical-align: top; }
+  td.abbr { font-family: 'Courier New', monospace; font-weight: 700; font-size: 12.5px; color: var(--gold); white-space: nowrap; }
+  td.fullform { color: var(--text); font-weight: 500; }
+  td.desc { color: var(--mid); font-size: 12.5px; line-height: 1.5; }
+
+  .cat-uc td.abbr { color: var(--amber); } .cat-uc .cat-heading { color: var(--amber); border-color: rgba(245,158,11,.2); }
+  .cat-bank td.abbr { color: #38BDF8; } .cat-bank .cat-heading { color: #38BDF8; border-color: rgba(56,189,248,.2); }
+  .cat-ai td.abbr { color: var(--purple); } .cat-ai .cat-heading { color: var(--purple); border-color: rgba(167,139,250,.2); }
+  .cat-comp td.abbr { color: var(--red); } .cat-comp .cat-heading { color: var(--red); border-color: rgba(248,113,113,.2); }
+  .cat-infra td.abbr { color: #FB923C; } .cat-infra .cat-heading { color: #FB923C; border-color: rgba(251,146,60,.2); }
+
+  .no-results { text-align: center; padding: 50px 20px; color: var(--muted); font-size: 14px; display: none; }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; transition: color .2s; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 900px) {
+    thead th:nth-child(3), td:nth-child(3) { display: none; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .page-header, .controls, .table-container, footer { padding-left: 20px; padding-right: 20px; }
+    footer { flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="index.html#usecases">Use Cases</a>
+      <a href="blueprints.html">Blueprints</a>
+      <a href="index.html#architecture">Architecture</a>
+      <a href="index.html#roi">ROI</a>
+      <a href="cost.html">Cost Analysis</a>
+      <a href="helicopter.html">Helicopter View</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="glossary.html" class="active">Glossary</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source Code</a>
+      <a href="deploy-guide.html">Deploy Guide</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">Agentic AI Program · Reference</div>
+  <h1>Glossary of Terms</h1>
+  <p>Every abbreviation and term used across the use case briefs, blueprints, architecture, and cost analysis — with full form and a plain-language description.</p>
+  <div class="count-badge" id="totalCount">35 terms across 5 categories</div>
+</div>
+
+<div class="controls">
+  <div class="search-row">
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="Search abbreviation, full form, or description…" oninput="filterAll()">
+    </div>
+    <div class="result-count" id="resultCount"></div>
+  </div>
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterCat('all',this)">All</button>
+    <button class="filter-btn" onclick="filterCat('uc',this)">Use Cases</button>
+    <button class="filter-btn" onclick="filterCat('bank',this)">Banking &amp; Credit</button>
+    <button class="filter-btn" onclick="filterCat('ai',this)">AI &amp; Agents</button>
+    <button class="filter-btn" onclick="filterCat('comp',this)">Compliance &amp; Risk</button>
+    <button class="filter-btn" onclick="filterCat('infra',this)">Infra &amp; Cloud</button>
+  </div>
+</div>
+
+<div class="table-container">
+<div class="no-results" id="noResults">No matches found. Try a different term.</div>
+
+<div class="category-block cat-uc" data-cat="uc">
+  <div class="cat-heading">Use Case References <span class="cat-count">3</span></div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Term</th><th>Full Form</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td class="abbr">UC1</td><td class="fullform">MSME Credit CAM Prep</td><td class="desc">Compresses 5–7 day loan file assembly to under 4 hours</td></tr>
+      <tr><td class="abbr">UC2</td><td class="fullform">Fraud Detection &amp; Investigation</td><td class="desc">Sub-60-second fraud-probability scoring across 3 signal agents</td></tr>
+      <tr><td class="abbr">UC3</td><td class="fullform">Collections &amp; Delinquency Recovery</td><td class="desc">100% daily portfolio outreach vs. 20–30% manual reach</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="category-block cat-bank" data-cat="bank">
+  <div class="cat-heading">Banking &amp; Credit <span class="cat-count">12</span></div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Term</th><th>Full Form</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td class="abbr">CAM</td><td class="fullform">Credit Appraisal Memo</td><td class="desc">The document a credit officer signs off on to approve a loan</td></tr>
+      <tr><td class="abbr">MSME</td><td class="fullform">Micro, Small &amp; Medium Enterprises</td><td class="desc">The business segment being underwritten in Use Case #1</td></tr>
+      <tr><td class="abbr">DPD</td><td class="fullform">Days Past Due</td><td class="desc">How overdue a loan/card payment is — buckets like 1–30, 31–60</td></tr>
+      <tr><td class="abbr">NPA</td><td class="fullform">Non-Performing Asset</td><td class="desc">A loan that has stopped generating income for the bank</td></tr>
+      <tr><td class="abbr">CIBIL</td><td class="fullform">Credit Information Bureau (India) Limited</td><td class="desc">India's primary credit bureau — source of the credit score</td></tr>
+      <tr><td class="abbr">GSTR</td><td class="fullform">Goods &amp; Services Tax Return</td><td class="desc">Monthly/quarterly tax filings used to verify MSME turnover</td></tr>
+      <tr><td class="abbr">MCLR</td><td class="fullform">Marginal Cost of Funds-based Lending Rate</td><td class="desc">The benchmark rate loan pricing is quoted against</td></tr>
+      <tr><td class="abbr">PTP</td><td class="fullform">Promise to Pay</td><td class="desc">A customer commitment to pay by a specific date, recorded in the core banking system</td></tr>
+      <tr><td class="abbr">KYC</td><td class="fullform">Know Your Customer</td><td class="desc">Identity verification requirement for all banking relationships</td></tr>
+      <tr><td class="abbr">IFSC</td><td class="fullform">Indian Financial System Code</td><td class="desc">Bank branch identifier used to validate transfer destinations</td></tr>
+      <tr><td class="abbr">NEFT/IMPS</td><td class="fullform">National Electronic Funds Transfer / Immediate Payment Service</td><td class="desc">Bank transfer rails referenced in the fraud-channel signal</td></tr>
+      <tr><td class="abbr">UPI</td><td class="fullform">Unified Payments Interface</td><td class="desc">Real-time payment rail — one of the 3 channels scored in fraud detection</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="category-block cat-ai" data-cat="ai">
+  <div class="cat-heading">AI &amp; Agents <span class="cat-count">9</span></div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Term</th><th>Full Form</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td class="abbr">LLM</td><td class="fullform">Large Language Model</td><td class="desc">The AI model class powering every agent (Claude)</td></tr>
+      <tr><td class="abbr">LangGraph</td><td class="fullform">LangGraph (framework)</td><td class="desc">Orchestration framework used to build each use case's agent state machine</td></tr>
+      <tr><td class="abbr">Coordinator</td><td class="fullform">Coordinator / Orchestrator Agent</td><td class="desc">The top-level agent that fans out to sub-agents and merges their results</td></tr>
+      <tr><td class="abbr">Fan-out/in</td><td class="fullform">Fan-out / Fan-in</td><td class="desc">Pattern where multiple sub-agents run in parallel, then join into one step</td></tr>
+      <tr><td class="abbr">Sonnet</td><td class="fullform">Claude Sonnet 4.5</td><td class="desc">Used for complex reasoning — credit risk, CAM drafting</td></tr>
+      <tr><td class="abbr">Haiku</td><td class="fullform">Claude Haiku 4.5</td><td class="desc">Used for fast classification/scoring — fraud scoring, channel selection</td></tr>
+      <tr><td class="abbr">RAG</td><td class="fullform">Retrieval-Augmented Generation</td><td class="desc">Technique for grounding an LLM's answer in retrieved reference documents</td></tr>
+      <tr><td class="abbr">Langfuse</td><td class="fullform">Langfuse (observability platform)</td><td class="desc">Traces every LLM call — tokens, latency, cost, errors</td></tr>
+      <tr><td class="abbr">Token</td><td class="fullform">Token (LLM usage unit)</td><td class="desc">Unit of text an LLM processes — basis for API cost</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="category-block cat-comp" data-cat="comp">
+  <div class="cat-heading">Compliance &amp; Risk <span class="cat-count">7</span></div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Term</th><th>Full Form</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td class="abbr">PII</td><td class="fullform">Personally Identifiable Information</td><td class="desc">Customer name, PAN, Aadhaar, account/card number — tokenised before any LLM sees it</td></tr>
+      <tr><td class="abbr">AML</td><td class="fullform">Anti-Money Laundering</td><td class="desc">Screening beneficiaries against sanctions/watchlists in fraud detection</td></tr>
+      <tr><td class="abbr">PEP</td><td class="fullform">Politically Exposed Person</td><td class="desc">A watchlist category screened during AML checks</td></tr>
+      <tr><td class="abbr">AA</td><td class="fullform">Account Aggregator</td><td class="desc">RBI-regulated consent framework for read-only bank-feed access</td></tr>
+      <tr><td class="abbr">RBI</td><td class="fullform">Reserve Bank of India</td><td class="desc">India's banking regulator — governs digital lending, AA, fair practices</td></tr>
+      <tr><td class="abbr">FPC</td><td class="fullform">Fair Practices Code</td><td class="desc">RBI rules governing tone, frequency, and conduct of collections outreach</td></tr>
+      <tr><td class="abbr">DLG</td><td class="fullform">Digital Lending Guidelines</td><td class="desc">RBI framework requiring disclosure of algorithmic involvement in lending decisions</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="category-block cat-infra" data-cat="infra">
+  <div class="cat-heading">Infrastructure &amp; Cloud <span class="cat-count">4</span></div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Term</th><th>Full Form</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td class="abbr">AWS</td><td class="fullform">Amazon Web Services</td><td class="desc">Cloud platform hosting the shared agent platform</td></tr>
+      <tr><td class="abbr">EKS</td><td class="fullform">Elastic Kubernetes Service</td><td class="desc">Managed container orchestration running the agent pods</td></tr>
+      <tr><td class="abbr">RDS</td><td class="fullform">Relational Database Service</td><td class="desc">Managed PostgreSQL storing audit logs and LangGraph checkpoints</td></tr>
+      <tr><td class="abbr">pgvector</td><td class="fullform">pgvector (PostgreSQL extension)</td><td class="desc">Vector similarity search extension, available for future RAG use</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+<script>
+let currentCat = 'all';
+
+function filterCat(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterAll();
+}
+
+function filterAll() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  let visibleCount = 0;
+
+  document.querySelectorAll('.category-block').forEach(block => {
+    const cat = block.getAttribute('data-cat');
+    const catMatches = (currentCat === 'all' || currentCat === cat);
+    let blockHasVisible = false;
+
+    block.querySelectorAll('tbody tr').forEach(row => {
+      const text = row.textContent.toLowerCase();
+      const textMatches = !q || text.includes(q);
+      const show = catMatches && textMatches;
+      row.classList.toggle('hidden', !show);
+      if (show) { blockHasVisible = true; visibleCount++; }
+    });
+
+    block.style.display = blockHasVisible ? '' : 'none';
+  });
+
+  document.getElementById('resultCount').textContent = visibleCount + ' terms shown';
+  document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+}
+
+filterAll();
+</script>
+</body>
+</html>
