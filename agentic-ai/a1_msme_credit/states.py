@@ -25,6 +25,7 @@ class CreditState(TypedDict, total=False):
     risk_flags: list[str]
     anomaly_detected: bool
     risk_notes: str
+    policy_refs: list[str]     # RBI/internal credit policy sources cited by the RAG
 
     # CAM Drafting Agent output
     recommended_pricing: str

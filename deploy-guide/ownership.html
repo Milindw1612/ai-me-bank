@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task Ownership & Team Deliverables — Ai-ME BANK Deploy Guide</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 13.5px; }
+
+  /* ── Sub-nav (deploy guide local) ── */
+  .site-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 999; background: rgba(59,15,26,0.97); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border2); height: 50px; display: flex; align-items: center; padding: 0 20px; gap: 0; }
+  .site-nav .nav-logo { font-size: 15px; font-weight: 800; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.7); margin-right: 12px; white-space: nowrap; text-decoration: none; }
+  .site-nav .nav-sep { width: 1px; height: 20px; background: var(--border2); margin: 0 10px; flex-shrink: 0; }
+  .site-nav .nav-links { display: flex; gap: 2px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .site-nav .nav-links::-webkit-scrollbar { display: none; }
+  .site-nav .nav-links a { font-size: 11.5px; font-weight: 500; color: var(--muted); text-decoration: none; padding: 5px 9px; border-radius: 5px; white-space: nowrap; transition: color .15s, background .15s; }
+  .site-nav .nav-links a:hover { color: var(--gold); background: rgba(245,158,11,0.08); }
+  .site-nav .nav-links a.active { color: var(--gold); font-weight: 700; background: rgba(245,158,11,0.12); }
+  .site-nav .nav-cta { margin-left: auto; flex-shrink: 0; background: linear-gradient(135deg,var(--gold-dim),var(--gold)); color: #000; font-weight: 700; font-size: 11px; padding: 5px 13px; border-radius: 6px; text-decoration: none; white-space: nowrap; }
+
+  .hero { background: linear-gradient(135deg, var(--surface) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(245,158,11,0.2); padding: 70px 32px 22px; }
+  .hero-badge { display: inline-block; background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); color: var(--gold); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; padding: 4px 12px; border-radius: 20px; margin-bottom: 12px; text-transform: uppercase; }
+  .hero h1 { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+  .hero p { color: var(--muted); font-size: 13px; max-width: 820px; margin-top: 8px; }
+
+  .content { max-width: 1300px; margin: 0 auto; padding: 24px 32px 60px; }
+  h2 { font-size: 15px; font-weight: 700; color: var(--gold); margin: 32px 0 10px; border-left: 3px solid var(--gold); padding-left: 10px; }
+  h2:first-child { margin-top: 0; }
+
+  /* ── Role legend ── */
+  .role-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin: 16px 0 24px; }
+  .role-card { border-radius: 8px; padding: 12px 14px; border: 1px solid var(--border2); background: rgba(255,255,255,0.02); }
+  .role-card .abbr { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .role-card .name { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; color: #fff; }
+  .role-card .desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .raci-legend { display: flex; gap: 16px; margin: 8px 0 20px; flex-wrap: wrap; }
+  .raci-item { font-size: 11.5px; color: var(--mid); }
+  .raci-item strong { color: var(--text); }
+
+  /* ── Part header ── */
+  .part-hdr { background: var(--surface); border: 1px solid rgba(245,158,11,0.2); border-radius: 8px; padding: 12px 16px; margin: 24px 0 4px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .part-hdr .part-num { background: var(--gold); color: #000; font-size: 13px; font-weight: 900; padding: 3px 10px; border-radius: 5px; }
+  .part-hdr .part-title { font-size: 14px; font-weight: 700; color: #fff; }
+  .part-hdr .part-steps { font-size: 11px; color: var(--muted); margin-left: auto; }
+  .part-hdr a { color: var(--gold); font-size: 11.5px; text-decoration: none; }
+
+  /* ── Table ── */
+  table { width: 100%; border-collapse: collapse; margin: 10px 0 20px; font-size: 12px; }
+  .table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border2); }
+  thead tr { background: var(--surface2); }
+  th { padding: 8px 10px; text-align: left; color: var(--muted); font-weight: 700; font-size: 10px; letter-spacing: .5px; text-transform: uppercase; border-bottom: 1px solid var(--border2); white-space: nowrap; }
+  td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .step-num-cell { font-weight: 700; color: var(--gold); font-size: 12.5px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .step-name { font-weight: 600; color: var(--text); font-size: 12px; }
+  .step-del { color: var(--mid); font-size: 11.5px; line-height: 1.45; }
+  .week-cell { color: var(--text); font-size: 11.5px; white-space: nowrap; }
+  .risk-cell { font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 8px; white-space: nowrap; display: inline-block; }
+  .risk-H { background: rgba(239,68,68,0.18); color: #FCA5A5; border: 1px solid rgba(239,68,68,0.3); }
+  .risk-M { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .risk-L { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+
+  .rb { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 8px; margin: 2px 2px 2px 0; letter-spacing: .3px; }
+  .r-DO { background: rgba(99,102,241,0.2); color: #A5B4FC; border: 1px solid rgba(99,102,241,0.35); }
+  .r-BE { background: rgba(14,165,233,0.2); color: #7DD3FC; border: 1px solid rgba(14,165,233,0.35); }
+  .r-AI { background: rgba(139,92,246,0.2); color: #C4B5FD; border: 1px solid rgba(139,92,246,0.35); }
+  .r-SE { background: rgba(239,68,68,0.18); color: #FCA5A5; border: 1px solid rgba(239,68,68,0.3); }
+  .r-PM { background: rgba(245,158,11,0.18); color: #FCD34D; border: 1px solid rgba(245,158,11,0.35); }
+  .r-CR { background: rgba(16,185,129,0.15); color: #6EE7B7; border: 1px solid rgba(16,185,129,0.3); }
+  .r-CO { background: rgba(236,72,153,0.15); color: #F9A8D4; border: 1px solid rgba(236,72,153,0.3); }
+
+  /* ── Team load summary ── */
+  .load-table td.role-name { font-weight: 700; color: #fff; font-size: 12.5px; white-space: nowrap; }
+  .bar-cell { min-width: 200px; }
+  .bar-bg { background: #080D1A; border-radius: 4px; overflow: hidden; height: 16px; }
+  .bar-fill { height: 16px; border-radius: 4px; display: flex; align-items: center; padding-left: 6px; font-size: 10px; font-weight: 700; color: #000; white-space: nowrap; }
+
+  /* ── Note boxes ── */
+  .note { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: 7px; padding: 12px 14px; font-size: 12px; color: #93C5FD; margin: 12px 0; }
+  .warn { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); border-radius: 7px; padding: 12px 14px; font-size: 12px; color: var(--amber); margin: 12px 0; }
+
+  footer { background: #2A0A12; padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 900px) {
+    .role-grid { grid-template-columns: repeat(2,1fr); }
+  }
+  @media (max-width: 600px) {
+    .hero { padding: 60px 16px 18px; }
+    .content { padding: 16px; }
+    .role-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">Ai-ME BANK</a>
+  <div class="nav-sep"></div>
+  <div class="nav-links">
+    <a href="../index.html#usecases">Use Cases</a>
+    <a href="../blueprints.html">Blueprints</a>
+    <a href="../architecture.html">Architecture</a>
+    <a href="../roi.html">ROI</a>
+    <a href="../cost.html">Cost</a>
+    <a href="../helicopter.html">Helicopter View</a>
+    <a href="../timeline.html">Timeline</a>
+    <a href="../governance.html">Governance</a>
+    <a href="../glossary.html">Glossary</a>
+    <div class="nav-sep"></div>
+    <a href="index.html">Deploy Guide</a>
+    <a href="ownership.html" class="active">RACI</a>
+    <a href="part1.html">Part 1</a>
+    <a href="part2.html">Part 2</a>
+    <a href="part3.html">Part 3</a>
+    <a href="part4.html">Part 4</a>
+    <a href="part5.html">Part 5</a>
+  </div>
+  <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank" class="nav-cta">Source Code</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Ai-ME BANK · Deployment Ownership</div>
+  <h1>Task Ownership &amp; Team Deliverables — All 50 Steps</h1>
+  <p>Complete RACI across all 5 deployment parts. Every step has a named owner, clear deliverable, week target, and risk flag. Use this as the single source of truth for sprint planning, status reviews, and go/no-go gates.</p>
+</div>
+
+<div class="content">
+
+<h2>Team Role Legend</h2>
+<div class="role-grid">
+  <div class="role-card"><div class="abbr r-DO" style="color:#A5B4FC">DO</div><div class="name">DevOps Engineer</div><div class="desc">AWS infra provisioning, EKS cluster, CI/CD pipelines, Helm charts, monitoring</div></div>
+  <div class="role-card"><div class="abbr" style="color:#7DD3FC">BE</div><div class="name">Backend Engineer</div><div class="desc">FastAPI routers, SQLAlchemy models, external API clients (CBS, Bureau, AA, AML)</div></div>
+  <div class="role-card"><div class="abbr" style="color:#C4B5FD">AI</div><div class="name">AI/ML Engineer</div><div class="desc">LangGraph agents, credit policy RAG, Langfuse tracing, prompt engineering</div></div>
+  <div class="role-card"><div class="abbr" style="color:#FCA5A5">SE</div><div class="name">Security Engineer</div><div class="desc">WAF, KMS, IAM policies, PII boundary review, VAPT, pen testing</div></div>
+  <div class="role-card"><div class="abbr" style="color:#FCD34D">PM</div><div class="name">AI Project Manager</div><div class="desc">Vendor coordination (AA, Bureau, AML, CBS), timeline tracking, stakeholder comms</div></div>
+  <div class="role-card"><div class="abbr" style="color:#6EE7B7">CR</div><div class="name">Credit Risk Analyst</div><div class="desc">Policy content, UAT coordination, agent decision quality scoring in Langfuse</div></div>
+  <div class="role-card"><div class="abbr" style="color:#F9A8D4">CO</div><div class="name">Compliance Officer</div><div class="desc">RBI alignment, UAT sign-off, rollout approval, regulatory reporting oversight</div></div>
+</div>
+<div class="raci-legend">
+  <div class="raci-item"><strong>Owner</strong> — delivers the work, accountable for the step completing on time</div>
+  <div class="raci-item"><strong>Reviewer</strong> — reviews and approves before step is marked done</div>
+  <div class="raci-item"><strong>Consulted</strong> — provides input or access (e.g. credentials, data)</div>
+</div>
+
+<!-- ═══════════════════ PART 1 ═══════════════════ -->
+<div class="part-hdr"><div class="part-num">Part 1</div><div class="part-title">AWS Foundation — Infrastructure Setup</div><div class="part-steps">Steps 1–12 · Target: Weeks 1–2</div><a href="part1.html">Open Part 1 →</a></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Step</th><th>Task Name</th><th>Owner</th><th>Reviewer</th><th>Consulted</th><th>Deliverable</th><th>Week</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td class="step-num-cell">01</td><td class="step-name">AWS Account + IAM Baseline</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-SE">SE</span></td><td><span class="rb r-PM">PM</span></td><td class="step-del">Staging + Prod accounts created, MFA on root, billing alerts set</td><td class="week-cell">Wk 1</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">02</td><td class="step-name">VPC + Networking</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-SE">SE</span></td><td>—</td><td class="step-del">VPC, 3 public + 3 private subnets, NAT gateway, route tables in ap-south-1</td><td class="week-cell">Wk 1</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">03</td><td class="step-name">Security Groups</td><td><span class="rb r-DO">DO</span><span class="rb r-SE">SE</span></td><td><span class="rb r-SE">SE</span></td><td>—</td><td class="step-del">ALB SG (443 public), API SG (8000 from ALB), RDS SG (5432 from API), Redis SG (6379)</td><td class="week-cell">Wk 1</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">04</td><td class="step-name">EKS Cluster Provision</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-DO">DO</span></td><td>—</td><td class="step-del">EKS 1.30 cluster, managed node group (t3.large ×3), IRSA enabled</td><td class="week-cell">Wk 1</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">05</td><td class="step-name">KMS Encryption Keys</td><td><span class="rb r-SE">SE</span></td><td><span class="rb r-SE">SE</span></td><td>—</td><td class="step-del">Separate KMS keys for RDS, S3 audit, S3 CAM docs; annual auto-rotation</td><td class="week-cell">Wk 1</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">06</td><td class="step-name">AWS Secrets Manager — Seed All Secrets</td><td><span class="rb r-DO">DO</span><span class="rb r-BE">BE</span></td><td><span class="rb r-SE">SE</span></td><td><span class="rb r-PM">PM</span><span class="rb r-AI">AI</span></td><td class="step-del">All API keys stored: Anthropic, WhatsApp, Bureau, AA, AML, CBS, PII key, Langfuse</td><td class="week-cell">Wk 1</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">07</td><td class="step-name">WAF v2 Setup</td><td><span class="rb r-SE">SE</span></td><td><span class="rb r-DO">DO</span></td><td>—</td><td class="step-del">WAF ACL with AWS managed rules + rate limit 2,000 req/IP; tested with OWASP payloads</td><td class="week-cell">Wk 1</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">08</td><td class="step-name">ECR Repository + Image Build</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-BE">BE</span></td><td>—</td><td class="step-del">ECR repo created, Docker image built from Dockerfile, pushed with git SHA tag</td><td class="week-cell">Wk 2</td><td><span class="risk-cell risk-L">LOW</span></td></tr>
+<tr><td class="step-num-cell">09</td><td class="step-name">ACM SSL Certificate</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-PM">PM</span></td><td>—</td><td class="step-del">SSL cert issued for ai-me-bank.yourdomain.com, DNS CNAME validation complete</td><td class="week-cell">Wk 2</td><td><span class="risk-cell risk-L">LOW</span></td></tr>
+<tr><td class="step-num-cell">10</td><td class="step-name">IAM Roles for EKS (IRSA)</td><td><span class="rb r-DO">DO</span><span class="rb r-SE">SE</span></td><td><span class="rb r-SE">SE</span></td><td>—</td><td class="step-del">ai-me-bank-app-role: least-privilege Secrets Manager read, S3 read/write (scoped), Bedrock invoke</td><td class="week-cell">Wk 2</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">11</td><td class="step-name">AWS Load Balancer Controller</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-DO">DO</span></td><td>—</td><td class="step-del">ALB controller installed on EKS via Helm, IAM policy attached, test ingress verified</td><td class="week-cell">Wk 2</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">12</td><td class="step-name">deployment-vars.env File</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-DO">DO</span></td><td>—</td><td class="step-del">All resource ARNs, IDs, endpoints captured in deployment-vars.env for later steps</td><td class="week-cell">Wk 2</td><td><span class="risk-cell risk-L">LOW</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════════════ PART 2 ═══════════════════ -->
+<div class="part-hdr"><div class="part-num">Part 2</div><div class="part-title">Databases, Core Banking Adapter &amp; Policy RAG</div><div class="part-steps">Steps 13–22 · Target: Weeks 2–4</div><a href="part2.html">Open Part 2 →</a></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Step</th><th>Task Name</th><th>Owner</th><th>Reviewer</th><th>Consulted</th><th>Deliverable</th><th>Week</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td class="step-num-cell">13</td><td class="step-name">RDS PostgreSQL + pgvector</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-BE">BE</span></td><td>—</td><td class="step-del">RDS PostgreSQL 15, pgvector extension enabled, parameter group tuned, Multi-AZ</td><td class="week-cell">Wk 2</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">14</td><td class="step-name">DB Schema Migrations</td><td><span class="rb r-BE">BE</span></td><td><span class="rb r-AI">AI</span></td><td>—</td><td class="step-del">CreditApplication, FraudCase, CollectionsAccount, AuditLog tables applied via init_db()</td><td class="week-cell">Wk 2</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">15</td><td class="step-name">pgvector Schema (Credit Policy RAG)</td><td><span class="rb r-AI">AI</span></td><td><span class="rb r-BE">BE</span></td><td>—</td><td class="step-del">credit_policy_chunks table, HNSW index (cosine), tsvector index for hybrid search</td><td class="week-cell">Wk 3</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">16</td><td class="step-name">S3 Buckets (3 buckets)</td><td><span class="rb r-DO">DO</span><span class="rb r-SE">SE</span></td><td><span class="rb r-SE">SE</span></td><td>—</td><td class="step-del">CAM/KYC docs bucket, audit exports bucket (7yr → Glacier), bank-file bucket (strictest IAM)</td><td class="week-cell">Wk 3</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">17</td><td class="step-name">ElastiCache Redis</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-BE">BE</span></td><td>—</td><td class="step-del">Redis 7 cluster mode, TLS enabled, LangGraph state cache + Celery broker</td><td class="week-cell">Wk 3</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">18</td><td class="step-name">Bedrock Titan Embeddings</td><td><span class="rb r-AI">AI</span></td><td><span class="rb r-DO">DO</span></td><td>—</td><td class="step-del">shared/rag.py embed_query() — async Bedrock client, 1536-dim Titan V2 embeddings</td><td class="week-cell">Wk 3</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">19</td><td class="step-name">Credit &amp; Compliance Policy Ingestion</td><td><span class="rb r-AI">AI</span></td><td><span class="rb r-CR">CR</span></td><td><span class="rb r-CO">CO</span></td><td class="step-del">RBI Master Directions, internal credit policy manual, KYC/AML guidelines chunked + embedded into pgvector</td><td class="week-cell">Wk 3</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">20</td><td class="step-name">Hybrid RAG System</td><td><span class="rb r-AI">AI</span></td><td><span class="rb r-AI">AI</span></td><td>—</td><td class="step-del">shared/rag.py — dense HNSW + sparse tsvector searches in parallel, RRF fusion, policy_qa()</td><td class="week-cell">Wk 3</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">21</td><td class="step-name">RAG Validation Test Suite</td><td><span class="rb r-AI">AI</span></td><td><span class="rb r-CR">CR</span></td><td><span class="rb r-CO">CO</span></td><td class="step-del">20 credit/compliance Q&amp;As run — must score ≥ 18/20 before proceeding. CR reviews answers.</td><td class="week-cell">Wk 4</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">22</td><td class="step-name">Core Banking Adapter Layer Build</td><td><span class="rb r-BE">BE</span></td><td><span class="rb r-AI">AI</span></td><td><span class="rb r-PM">PM</span></td><td class="step-del">Single adapter module reused by all 3 use cases — read-only by default, write actions gated per use case</td><td class="week-cell">Wk 4</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════════════ PART 3 ═══════════════════ -->
+<div class="part-hdr"><div class="part-num">Part 3</div><div class="part-title">Application Deployment to EKS</div><div class="part-steps">Steps 23–32 · Target: Weeks 4–6</div><a href="part3.html">Open Part 3 →</a></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Step</th><th>Task Name</th><th>Owner</th><th>Reviewer</th><th>Consulted</th><th>Deliverable</th><th>Week</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td class="step-num-cell">23</td><td class="step-name">K8s Namespace + RBAC</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-SE">SE</span></td><td>—</td><td class="step-del">ai-me-bank namespace, service account with IRSA annotation, Role + RoleBinding applied</td><td class="week-cell">Wk 4</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">24</td><td class="step-name">External Secrets Operator</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-SE">SE</span></td><td>—</td><td class="step-del">ESO installed via Helm, SecretStore + ExternalSecret syncing AWS Secrets Manager → K8s</td><td class="week-cell">Wk 4</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">25</td><td class="step-name">ConfigMap</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-BE">BE</span></td><td>—</td><td class="step-del">ai-me-bank-config with DATABASE_URL, REDIS_URL, bucket names, APP_ENV, LOG_LEVEL</td><td class="week-cell">Wk 4</td><td><span class="risk-cell risk-L">LOW</span></td></tr>
+<tr><td class="step-num-cell">26</td><td class="step-name">FastAPI Deployment</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-BE">BE</span><span class="rb r-AI">AI</span></td><td>—</td><td class="step-del">ai-me-bank-api Deployment (2 replicas), zero-downtime rolling update, readiness/liveness probes passing</td><td class="week-cell">Wk 4</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">27</td><td class="step-name">Celery Worker + Beat</td><td><span class="rb r-DO">DO</span><span class="rb r-BE">BE</span></td><td><span class="rb r-AI">AI</span></td><td>—</td><td class="step-del">celery-worker and celery-beat live; beat schedule includes nightly Langfuse export, AML re-screen cron</td><td class="week-cell">Wk 4</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">28</td><td class="step-name">Horizontal Pod Autoscaler</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-DO">DO</span></td><td>—</td><td class="step-del">HPA on ai-me-bank-api: min=2, max=6, CPU trigger 60%, memory trigger 75%</td><td class="week-cell">Wk 5</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">29</td><td class="step-name">Service + ALB Ingress + SSL</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-SE">SE</span></td><td><span class="rb r-PM">PM</span></td><td class="step-del">ClusterIP Service, ALB Ingress with HTTPS, WAF ACL wired; /health returns 200</td><td class="week-cell">Wk 5</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">30</td><td class="step-name">GitHub Actions CI/CD Pipeline</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-AI">AI</span><span class="rb r-BE">BE</span></td><td>—</td><td class="step-del">deploy.yml: lint → unit tests → ECR build + scan → kubectl rolling deploy → smoke test</td><td class="week-cell">Wk 5</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">31</td><td class="step-name">E2E Smoke Tests</td><td><span class="rb r-AI">AI</span><span class="rb r-BE">BE</span></td><td><span class="rb r-CR">CR</span></td><td>—</td><td class="step-del">/msme-credit/apply, /fraud/score, /collections/process all return expected responses</td><td class="week-cell">Wk 5</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">32</td><td class="step-name">CloudWatch Alarms + SNS</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-PM">PM</span></td><td>—</td><td class="step-del">CPU, memory, RDS connections, free storage alarms set; AI Lead on-call added to PagerDuty</td><td class="week-cell">Wk 5</td><td><span class="risk-cell risk-L">LOW</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════════════ PART 4 ═══════════════════ -->
+<div class="part-hdr"><div class="part-num">Part 4</div><div class="part-title">Integrations, PII Security &amp; Langfuse Audit</div><div class="part-steps">Steps 33–42 · Target: Weeks 3–8 (parallel with Parts 2–3)</div><a href="part4.html">Open Part 4 →</a></div>
+<div class="warn">⚠️ Steps 33 (Account Aggregator) and 35 (Core Banking System) must START on Week 1 due to external lead times. Run in parallel with infrastructure work.</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Step</th><th>Task Name</th><th>Owner</th><th>Reviewer</th><th>Consulted</th><th>Deliverable</th><th>Week</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td class="step-num-cell">33</td><td class="step-name">Account Aggregator (AA) TSP Integration</td><td><span class="rb r-PM">PM</span><span class="rb r-BE">BE</span></td><td><span class="rb r-SE">SE</span></td><td><span class="rb r-CO">CO</span></td><td class="step-del">Consent-flow tested end-to-end with a live AA (Sahamati-registered TSP), read-only bank feed confirmed</td><td class="week-cell">Wk 1→5</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">34</td><td class="step-name">Credit Bureau (CIBIL) API</td><td><span class="rb r-BE">BE</span><span class="rb r-AI">AI</span></td><td><span class="rb r-CR">CR</span></td><td>—</td><td class="step-del">bureau_pull_score() tested against CIBIL sandbox; score + report_ref returned correctly</td><td class="week-cell">Wk 3</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">35</td><td class="step-name">Core Banking System (CBS) OAuth2 Integration</td><td><span class="rb r-BE">BE</span></td><td><span class="rb r-CR">CR</span></td><td>CBS Admin</td><td class="step-del">Read-only account lookup + gated write actions (freeze/clear txn, PTP record) tested against CBS sandbox</td><td class="week-cell">Wk 1→6</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">36</td><td class="step-name">Device/IP Intelligence + AML Watchlist API</td><td><span class="rb r-BE">BE</span></td><td><span class="rb r-SE">SE</span></td><td><span class="rb r-CO">CO</span></td><td class="step-del">device_fingerprint_lookup(), aml_watchlist_check() tested against vendor sandbox with known-bad test records</td><td class="week-cell">Wk 4</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">37</td><td class="step-name">WhatsApp + SMS + IVR Channel Integration</td><td><span class="rb r-PM">PM</span><span class="rb r-BE">BE</span></td><td><span class="rb r-SE">SE</span></td><td>Collections Head</td><td class="step-del">Meta Business verified, WhatsApp template approved, SMS gateway + IVR script tested end-to-end</td><td class="week-cell">Wk 1→5</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">38</td><td class="step-name">PII Boundary Map Review</td><td><span class="rb r-SE">SE</span></td><td><span class="rb r-AI">AI</span></td><td><span class="rb r-BE">BE</span></td><td class="step-del">Written sign-off: every PII field mapped to its lifecycle (tokenise/encrypt/decrypt boundary)</td><td class="week-cell">Wk 5</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">39</td><td class="step-name">PII Middleware Wiring</td><td><span class="rb r-BE">BE</span></td><td><span class="rb r-SE">SE</span><span class="rb r-AI">AI</span></td><td>—</td><td class="step-del">All 3 routers: tokenise() + encrypt_pii() applied at entry; PII unit tests passing; Security sign-off</td><td class="week-cell">Wk 5</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">40</td><td class="step-name">Langfuse Cloud Setup</td><td><span class="rb r-AI">AI</span></td><td><span class="rb r-AI">AI</span></td><td>—</td><td class="step-del">Langfuse project created, API keys in Secrets Manager, daily cost alert set</td><td class="week-cell">Wk 4</td><td><span class="risk-cell risk-L">LOW</span></td></tr>
+<tr><td class="step-num-cell">41</td><td class="step-name">Trace All LangGraph Nodes</td><td><span class="rb r-AI">AI</span></td><td><span class="rb r-CR">CR</span></td><td>—</td><td class="step-del">@trace_node on all nodes across all 3 use cases; errors visible in Langfuse with scrubbed state</td><td class="week-cell">Wk 5</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">42</td><td class="step-name">Langfuse Audit Export to S3</td><td><span class="rb r-AI">AI</span><span class="rb r-DO">DO</span></td><td><span class="rb r-SE">SE</span></td><td>—</td><td class="step-del">Nightly Celery task exports previous-day traces to audit S3 bucket (gzip, KMS) — feeds Governance audit trail</td><td class="week-cell">Wk 6</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════════════ PART 5 ═══════════════════ -->
+<div class="part-hdr"><div class="part-num">Part 5</div><div class="part-title">Officer Portal, Go-Live &amp; Operations</div><div class="part-steps">Steps 43–50 · Target: Weeks 7–12</div><a href="part5.html">Open Part 5 →</a></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Step</th><th>Task Name</th><th>Owner</th><th>Reviewer</th><th>Consulted</th><th>Deliverable</th><th>Week</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td class="step-num-cell">43</td><td class="step-name">Officer Portal (Credit / Fraud / Collections)</td><td><span class="rb r-BE">BE</span></td><td><span class="rb r-CR">CR</span><span class="rb r-CO">CO</span></td><td>—</td><td class="step-del">Dashboard at /portal — CAM review queue, fraud escalation queue, collections exception queue — JWT auth</td><td class="week-cell">Wk 7</td><td><span class="risk-cell risk-L">LOW</span></td></tr>
+<tr><td class="step-num-cell">44</td><td class="step-name">Monitoring Dashboards</td><td><span class="rb r-DO">DO</span></td><td><span class="rb r-PM">PM</span></td><td><span class="rb r-AI">AI</span></td><td class="step-del">CloudWatch dashboard (EKS/RDS/Redis/ALB); Langfuse cost dashboard reviewed weekly</td><td class="week-cell">Wk 7</td><td><span class="risk-cell risk-L">LOW</span></td></tr>
+<tr><td class="step-num-cell">45</td><td class="step-name">Go-Live Checklist Sign-Off</td><td><span class="rb r-PM">PM</span></td><td><span class="rb r-SE">SE</span><span class="rb r-CO">CO</span></td><td>All teams</td><td class="step-del">All checklist items signed: VAPT report, UAT sign-off (all 3 use cases), observability, Compliance sign-off</td><td class="week-cell">Wk 8</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">46</td><td class="step-name">Phased Rollout Execution</td><td><span class="rb r-PM">PM</span><span class="rb r-CO">CO</span></td><td><span class="rb r-AI">AI</span></td><td><span class="rb r-DO">DO</span></td><td class="step-del">Phase 1: 1 branch cluster live; Phase 2: 1 region; Phase 3: national rollout — each gated on error rate</td><td class="week-cell">Wk 9–11</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">47</td><td class="step-name">MSME Credit Parallel-Run Validation</td><td><span class="rb r-CR">CR</span></td><td><span class="rb r-CO">CO</span></td><td>CFO</td><td class="step-del">2 consecutive cycles: CAM recommendations vs manual underwriting — variance &lt; 2%. Compliance + CFO sign parallel-run report.</td><td class="week-cell">Wk 7–9</td><td><span class="risk-cell risk-H">HIGH</span></td></tr>
+<tr><td class="step-num-cell">48</td><td class="step-name">Hypercare Plan Execution</td><td><span class="rb r-PM">PM</span><span class="rb r-AI">AI</span></td><td><span class="rb r-CO">CO</span></td><td>All teams</td><td class="step-del">4-week daily Langfuse review; every P1/P2 error resolved within SLA; edge cases documented</td><td class="week-cell">Wk 9–12</td><td><span class="risk-cell risk-M">MED</span></td></tr>
+<tr><td class="step-num-cell">49</td><td class="step-name">Ops Runbook</td><td><span class="rb r-AI">AI</span></td><td><span class="rb r-DO">DO</span><span class="rb r-BE">BE</span></td><td>—</td><td class="step-del">Written runbook: failure scenarios with fix procedures, monthly rotation steps, policy update steps</td><td class="week-cell">Wk 10</td><td><span class="risk-cell risk-L">LOW</span></td></tr>
+<tr><td class="step-num-cell">50</td><td class="step-name">Cost Tracking + ROI Dashboard</td><td><span class="rb r-PM">PM</span></td><td><span class="rb r-CO">CO</span></td><td>Finance</td><td class="step-del">Monthly ROI Celery task live; first report emailed to CRO/CFO by end of Week 12; AWS cost tagging verified</td><td class="week-cell">Wk 12</td><td><span class="risk-cell risk-L">LOW</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════════════ TEAM LOAD SUMMARY ═══════════════════ -->
+<h2>Team Load Summary — Steps Per Role</h2>
+<div class="table-wrap">
+<table class="load-table">
+<thead><tr><th>Role</th><th>Steps Owned (Primary)</th><th>Steps Reviewed / Consulted</th><th>Load Bar</th></tr></thead>
+<tbody>
+<tr><td class="role-name">DO DevOps Engineer</td><td class="step-del">1,2,3,4,6,8,9,10,11,12,13,16,17,23,24,25,26,27,28,29,30,32,42,44</td><td class="step-del">Steps 4,7,11,12,18,28,49 (Reviewer)</td><td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:100%;background:#A5B4FC">24 steps</div></div></td></tr>
+<tr><td class="role-name">AI AI/ML Engineer</td><td class="step-del">15,18,19,20,21,31,34,40,41,42,48,49</td><td class="step-del">Steps 14,20,22,26,27,30,38,39,40,46 (Reviewer)</td><td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:50%;background:#C4B5FD">12 steps</div></div></td></tr>
+<tr><td class="role-name">BE Backend Engineer</td><td class="step-del">6,14,22,27,31,33,34,35,36,37,39,43</td><td class="step-del">Steps 8,13,15,17,25,26,30,49 (Reviewer)</td><td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:50%;background:#7DD3FC">12 steps</div></div></td></tr>
+<tr><td class="role-name">SE Security Engineer</td><td class="step-del">3,5,7,10,16,38</td><td class="step-del">Steps 1,2,3,5,6,10,16,23,24,29,33,36,37,39,42,45 (Reviewer)</td><td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:25%;background:#FCA5A5">6 steps</div></div></td></tr>
+<tr><td class="role-name">PM AI Project Manager</td><td class="step-del">33,37,45,46,48,50</td><td class="step-del">Steps 9,32,44 (Reviewer)</td><td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:25%;background:#FCD34D">6 steps</div></div></td></tr>
+<tr><td class="role-name">CR Credit Risk Analyst</td><td class="step-del">47</td><td class="step-del">Steps 19,21,31,34,35,41,43 (UAT + Reviewer)</td><td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:4%;background:#6EE7B7">1 step</div></div></td></tr>
+<tr><td class="role-name">CO Compliance Officer</td><td class="step-del">46 (co-own rollout)</td><td class="step-del">Steps 43,45,47,48,50 (Reviewer/Approver)</td><td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:14%;background:#F9A8D4">Sign-off role</div></div></td></tr>
+</tbody>
+</table>
+</div>
+<div class="note">DevOps carries the heaviest primary load (24 steps) because Part 1 and most of Part 3 are infrastructure-only work with no banking-specific logic — this is identical to the pattern in the original HR deployment guide. AI/ML and Backend are evenly balanced (12 steps each) since every use case needs both an agent build and an integration build. Credit Risk Analyst and Compliance Officer carry few <em>primary</em> steps by design — their leverage is concentrated in review/sign-off authority at the highest-risk gates.</div>
+
+<!-- ═══════════════════ EXTERNAL DEPENDENCIES ═══════════════════ -->
+<h2>External Dependencies — Must Start Week 1</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Dependency</th><th>Step</th><th>Owner</th><th>Lead Time</th><th>Risk If Delayed</th></tr></thead>
+<tbody>
+<tr><td>Core Banking System API Access</td><td>35</td><td>PM + BE</td><td>6–8 weeks</td><td>All 3 use cases blocked — no account lookup, no write-back actions</td></tr>
+<tr><td>Account Aggregator TSP Onboarding</td><td>33</td><td>PM</td><td>3–6 weeks</td><td>MSME Credit blocked — no consent-based bank feed</td></tr>
+<tr><td>Credit Bureau (CIBIL) Commercial Contract</td><td>34</td><td>PM</td><td>2–4 weeks</td><td>MSME Credit blocked — no bureau score pull</td></tr>
+<tr><td>AML Watchlist Vendor Contract</td><td>36</td><td>PM</td><td>2–3 weeks</td><td>Fraud Detection blocked — no sanctions/PEP screening</td></tr>
+<tr><td>Anthropic Claude Enterprise Contract</td><td>06</td><td>PM</td><td>1–2 weeks</td><td>All use cases blocked — no LLM</td></tr>
+<tr><td>WhatsApp Business API (Meta) Verification</td><td>37</td><td>PM</td><td>2–3 weeks</td><td>Collections Recovery outreach blocked</td></tr>
+<tr><td>Compliance Sign-Off on Digital Lending Disclosure</td><td>45</td><td>PM + Legal</td><td>2–4 weeks</td><td>MSME Credit go-live blocked — RBI disclosure requirement</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════════════ GO/NO-GO GATES ═══════════════════ -->
+<h2>Go / No-Go Gates — Must Pass Before Proceeding</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Gate</th><th>Criteria</th><th>Approver</th><th>Blocks</th></tr></thead>
+<tbody>
+<tr><td><strong>Gate 1</strong><br>After Step 21</td><td class="step-del">Credit &amp; compliance policy RAG test score ≥ 18/20</td><td>CR Credit Risk Analyst</td><td>App deployment (Parts 3–5)</td></tr>
+<tr><td><strong>Gate 2</strong><br>After Step 32</td><td class="step-del">/health returns 200; all 3 smoke tests pass; Langfuse traces visible</td><td>AI AI Lead</td><td>Integration wiring (Part 4)</td></tr>
+<tr><td><strong>Gate 3</strong><br>After Step 39</td><td class="step-del">PII boundary map signed off; PII unit tests passing; VAPT report clean</td><td>SE Security Engineer</td><td>Go-live approval</td></tr>
+<tr><td><strong>Gate 4</strong><br>After Step 45</td><td class="step-del">All go-live checklist items ✓; Compliance sign-off; CR UAT sign-off on all 3 use cases</td><td>PM + Compliance Officer</td><td>Phase 1 rollout</td></tr>
+<tr><td><strong>Gate 5</strong><br>After Step 47</td><td class="step-del">2 parallel-run cycles: CAM variance &lt; 2% vs manual underwriting; Compliance + CFO sign</td><td>CR + Compliance Officer</td><td>MSME live credit decisioning</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="note" style="margin-top:20px"><strong>How to use this document:</strong> In sprint planning, filter this table by Owner role to assign work. Use the Week column for timeline commitments. Present the Gate rows in every steering committee review — no gate can be bypassed. External dependency rows (above) should be the first action items in Week 1.</div>
+
+</div>
+
+<footer>
+  <p>© 2026 Ai-ME BANK · Global Delivery Head &amp; Agentic AI Builder</p>
+  <p>Aligned with the <a href="../cost.html">Cost Analysis</a> + individual use-case blueprints &nbsp;·&nbsp; <a href="../index.html">← Back to Portfolio</a></p>
+</footer>
+
+</body>
+</html>

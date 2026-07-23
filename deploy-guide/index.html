@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deployment Guide — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 32px; display: flex; align-items: center; height: 64px; }
+  .nav-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85); flex-shrink: 0; text-decoration: none; }
+  .nav-links { display: flex; gap: 18px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); font-weight: 700; }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65); }
+
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 680px; line-height: 1.7; }
+  .page-stats { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 18px; }
+  .pstat-val { font-family: Georgia, serif; font-size: 20px; font-weight: 700; color: var(--gold); }
+  .pstat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  main { padding: 40px 48px 60px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+  .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px; margin-bottom: 40px; }
+  .doc-card { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: transform .2s, box-shadow .2s; display: flex; flex-direction: column; }
+  .doc-card:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,0,0,.3); }
+  .doc-card-top { padding: 18px 20px 14px; flex: 1; }
+  .part-num { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 1px; padding: 3px 10px; border-radius: 20px; background: rgba(245,158,11,.12); color: var(--amber); border: 1px solid rgba(245,158,11,.3); margin-bottom: 10px; }
+  .doc-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .doc-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 8px; }
+  .steps-line { font-size: 10.5px; color: var(--mid); text-transform: uppercase; letter-spacing: .5px; }
+  .doc-card-bottom { padding: 12px 20px; border-top: 1px solid var(--border); background: rgba(0,0,0,0.1); }
+  .doc-action { font-size: 12px; font-weight: 700; color: var(--gold); text-decoration: none; }
+
+  .ownership-card { border-color: rgba(167,139,250,0.3); }
+  .ownership-card .part-num { background: rgba(167,139,250,.12); color: var(--purple); border-color: rgba(167,139,250,.3); }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .page-header, main { padding-left: 20px; padding-right: 20px; }
+    footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="../index.html#usecases">Use Cases</a>
+      <a href="../blueprints.html">Blueprints</a>
+      <a href="../architecture.html">Architecture</a>
+      <a href="../roi.html">ROI</a>
+      <a href="../cost.html">Cost Analysis</a>
+      <a href="../helicopter.html">Helicopter View</a>
+      <a href="../timeline.html">Timeline</a>
+      <a href="../governance.html">Governance</a>
+      <a href="../glossary.html">Glossary</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source Code</a>
+      <a href="index.html" class="active">Deploy Guide</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">Zero to Production</div>
+  <h1>Deployment Guide — All 50 Steps</h1>
+  <p>Complete deployment runbook for the shared platform and all 3 <span class="neon-brand">Ai-ME BANK</span> use cases — real AWS CLI commands, IAM policies, and Kubernetes manifests, organized into 5 parts with a full RACI ownership matrix.</p>
+  <div class="page-stats">
+    <div><div class="pstat-val">50</div><div class="pstat-lbl">Total steps</div></div>
+    <div><div class="pstat-val">5</div><div class="pstat-lbl">Deployment parts</div></div>
+    <div><div class="pstat-val">7</div><div class="pstat-lbl">Team roles</div></div>
+    <div><div class="pstat-val">5</div><div class="pstat-lbl">Go/no-go gates</div></div>
+    <div><div class="pstat-val">12</div><div class="pstat-lbl">Weeks to national rollout</div></div>
+  </div>
+</div>
+
+<main>
+  <div class="section-label">Ownership &amp; Team Deliverables</div>
+  <div class="doc-grid">
+    <div class="doc-card ownership-card">
+      <div class="doc-card-top">
+        <span class="part-num">RACI</span>
+        <div class="doc-title">Task Ownership &amp; Team Deliverables</div>
+        <div class="doc-desc">Every step's owner, reviewer, and consulted party. Team Load Summary with verified per-role step counts. External dependencies with lead times. All 5 go/no-go gates.</div>
+        <div class="steps-line">All 50 steps · 7 roles</div>
+      </div>
+      <div class="doc-card-bottom"><a href="ownership.html" class="doc-action">Open RACI →</a></div>
+    </div>
+  </div>
+
+  <div class="section-label">Deployment Parts</div>
+  <div class="doc-grid">
+    <div class="doc-card">
+      <div class="doc-card-top">
+        <span class="part-num">Part 1</span>
+        <div class="doc-title">AWS Foundation</div>
+        <div class="doc-desc">AWS accounts, IAM, VPC, security groups, Secrets Manager, KMS, ECR, EKS cluster, WAF &amp; SSL.</div>
+        <div class="steps-line">Steps 1–12 · Weeks 1–2</div>
+      </div>
+      <div class="doc-card-bottom"><a href="part1.html" class="doc-action">Open Part 1 →</a></div>
+    </div>
+    <div class="doc-card">
+      <div class="doc-card-top">
+        <span class="part-num">Part 2</span>
+        <div class="doc-title">Databases, Adapter &amp; Policy RAG</div>
+        <div class="doc-desc">RDS + pgvector, S3, Redis, the shared Core Banking Adapter, and the Credit &amp; Compliance Policy RAG.</div>
+        <div class="steps-line">Steps 13–22 · Weeks 2–4</div>
+      </div>
+      <div class="doc-card-bottom"><a href="part2.html" class="doc-action">Open Part 2 →</a></div>
+    </div>
+    <div class="doc-card">
+      <div class="doc-card-top">
+        <span class="part-num">Part 3</span>
+        <div class="doc-title">Application Deployment to EKS</div>
+        <div class="doc-desc">Namespace, secrets sync, FastAPI deployment for all 3 use-case routers, autoscaling, CI/CD, smoke tests.</div>
+        <div class="steps-line">Steps 23–32 · Weeks 4–6</div>
+      </div>
+      <div class="doc-card-bottom"><a href="part3.html" class="doc-action">Open Part 3 →</a></div>
+    </div>
+    <div class="doc-card">
+      <div class="doc-card-top">
+        <span class="part-num">Part 4</span>
+        <div class="doc-title">Integrations, PII Security &amp; Langfuse Audit</div>
+        <div class="doc-desc">Account Aggregator, Bureau, Core Banking, AML, WhatsApp/SMS/IVR — plus the PII boundary and audit trail.</div>
+        <div class="steps-line">Steps 33–42 · Weeks 3–8 (parallel)</div>
+      </div>
+      <div class="doc-card-bottom"><a href="part4.html" class="doc-action">Open Part 4 →</a></div>
+    </div>
+    <div class="doc-card">
+      <div class="doc-card-top">
+        <span class="part-num">Part 5</span>
+        <div class="doc-title">Officer Portal, Go-Live &amp; Operations</div>
+        <div class="doc-desc">Officer portal, monitoring, go-live checklist, phased rollout, parallel-run validation, hypercare, ops runbook.</div>
+        <div class="steps-line">Steps 43–50 · Weeks 7–12</div>
+      </div>
+      <div class="doc-card-bottom"><a href="part5.html" class="doc-action">Open Part 5 →</a></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a> &nbsp;·&nbsp; <a href="../index.html">← Back to Portfolio</a></p>
+</footer>
+
+</body>
+</html>

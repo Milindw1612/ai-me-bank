@@ -1,0 +1,641 @@
+<meta charset="UTF-8">
+<title>Ai-ME BANK — Deployment Guide Part 1: AWS Foundation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#3B0F1A;color:#CBD5E1;line-height:1.6;font-size:14px}
+a{color:#F59E0B;text-decoration:none}
+h1{font-size:26px;font-weight:800;color:#fff;margin-bottom:6px}
+h2{font-size:17px;font-weight:700;color:#F59E0B;margin:32px 0 12px;border-left:3px solid #F59E0B;padding-left:12px}
+h3{font-size:13px;font-weight:700;color:#E2E8F0;margin:14px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+.hero{background:linear-gradient(135deg,#4A1420,#3B0F1A);border-bottom:1px solid rgba(245,158,11,0.2);padding:28px 32px 22px}
+.hero-badge{display:inline-block;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);color:#F59E0B;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;margin-bottom:12px;text-transform:uppercase}
+.hero p{color:#94A3B8;font-size:13px;max-width:800px;margin-top:8px}
+.part-nav{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.part-pill{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#94A3B8;font-size:11px;padding:4px 12px;border-radius:20px}
+.part-pill.active{background:rgba(245,158,11,0.2);border-color:rgba(245,158,11,0.5);color:#F59E0B}
+.body{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 160px)}
+.toc{background:#26131A;border-right:1px solid rgba(255,255,255,0.06);padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.toc-title{font-size:10px;font-weight:700;color:#94765B;letter-spacing:2px;text-transform:uppercase;padding:0 16px 10px}
+.toc a{display:block;padding:5px 16px;font-size:12px;color:#64748B;border-left:2px solid transparent;transition:all .15s}
+.toc a:hover{color:#F59E0B;border-left-color:#F59E0B;background:rgba(245,158,11,0.06)}
+.toc-section{font-size:10px;font-weight:700;color:#94765B;letter-spacing:1.5px;text-transform:uppercase;padding:12px 16px 4px}
+.content{padding:28px 36px;max-width:920px}
+.step{background:#4A1420;border:1px solid rgba(255,255,255,0.07);border-radius:10px;margin-bottom:20px;overflow:hidden}
+.step-hdr{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.step-num{background:#F59E0B;color:#000;font-size:12px;font-weight:800;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-title{font-size:15px;font-weight:700;color:#fff}
+.step-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.5px}
+.badge-pre{background:rgba(99,102,241,0.2);color:#A5B4FC;border:1px solid rgba(99,102,241,0.3)}
+.badge-next{background:rgba(16,185,129,0.15);color:#6EE7B7;border:1px solid rgba(16,185,129,0.3)}
+.badge-time{background:rgba(245,158,11,0.15);color:#FCD34D;border:1px solid rgba(245,158,11,0.3)}
+.badge-role{background:rgba(236,72,153,0.15);color:#F9A8D4;border:1px solid rgba(236,72,153,0.3)}
+.step-body{padding:16px 18px}
+.step-body p{color:#94A3B8;font-size:13px;margin-bottom:10px}
+pre,code{font-family:'Cascadia Code','Fira Code',Consolas,monospace}
+pre{background:#1A0A0F;border:1px solid rgba(255,255,255,0.08);border-radius:7px;padding:14px 16px;font-size:12px;overflow-x:auto;margin:10px 0;line-height:1.75;color:#E2E8F0}
+.pre-label{font-size:9px;font-weight:700;color:#94765B;letter-spacing:1.5px;text-transform:uppercase;background:#26131A;padding:4px 10px;border-radius:4px 4px 0 0;display:inline-block;margin-bottom:-1px;border:1px solid rgba(255,255,255,0.06);border-bottom:none}
+code{background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:3px;font-size:12px;color:#FCD34D}
+.cmd-label{font-size:10px;font-weight:700;color:#94765B;letter-spacing:1.5px;text-transform:uppercase;margin:14px 0 4px}
+.warn{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:7px;padding:12px 14px;font-size:12.5px;color:#FCD34D;margin:10px 0}
+.info{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:7px;padding:12px 14px;font-size:12.5px;color:#93C5FD;margin:10px 0}
+.ok{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:7px;padding:12px 14px;font-size:12.5px;color:#6EE7B7;margin:10px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12.5px}
+th{background:#26131A;color:#94765B;font-weight:700;padding:8px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.08);font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#CBD5E1;vertical-align:top}
+tr:hover td{background:rgba(255,255,255,0.02)}
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0;font-size:12px}
+.flow-box{background:#4A1420;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:5px 10px;color:#CBD5E1;font-size:11px}
+.flow-arrow{color:#F59E0B;font-weight:700}
+.checklist{list-style:none;padding:0}
+.checklist li{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;color:#CBD5E1}
+.checklist li:last-child{border-bottom:none}
+.check-list li::before{content:'✓';color:#10B981;font-weight:700;flex-shrink:0;margin-right:8px}
+.req-list li::before{content:'→';color:#F59E0B;font-weight:700;flex-shrink:0;margin-right:8px}
+.chk{width:18px;height:18px;border:2px solid rgba(245,158,11,0.5);border-radius:4px;flex-shrink:0;margin-top:2px}
+/* ── Sub-nav ── */
+.site-nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(59,15,26,0.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07);height:50px;display:flex;align-items:center;padding:0 20px;gap:0}
+.site-nav .nav-logo{font-size:15px;font-weight:800;color:#39FF14;margin-right:12px;white-space:nowrap;text-shadow:0 0 6px rgba(57,255,20,.7)}
+.site-nav .nav-sep{width:1px;height:20px;background:rgba(255,255,255,0.1);margin:0 10px;flex-shrink:0}
+.site-nav .nav-links{display:flex;gap:2px;align-items:center;overflow-x:auto;scrollbar-width:none}
+.site-nav .nav-links::-webkit-scrollbar{display:none}
+.site-nav .nav-links a{font-size:11.5px;font-weight:500;color:#64748B;text-decoration:none;padding:5px 9px;border-radius:5px;white-space:nowrap;transition:color .15s,background .15s}
+.site-nav .nav-links a:hover{color:#F59E0B;background:rgba(245,158,11,0.08)}
+.site-nav .nav-links a.active{color:#F59E0B;font-weight:700;background:rgba(245,158,11,0.12)}
+.site-nav .nav-cta{margin-left:auto;flex-shrink:0;background:linear-gradient(135deg,#D97706,#F59E0B);color:#000!important;font-weight:700;font-size:11px;padding:5px 13px;border-radius:6px;text-decoration:none;white-space:nowrap}
+.hero{padding-top:70px!important}
+@media(max-width:900px){.body{grid-template-columns:1fr}.toc{display:none}}
+</style>
+
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">Ai-ME BANK</a>
+  <div class="nav-sep"></div>
+  <div class="nav-links">
+    <a href="../index.html#usecases">Use Cases</a>
+    <a href="../blueprints.html">Blueprints</a>
+    <a href="../architecture.html">Architecture</a>
+    <a href="../roi.html">ROI</a>
+    <a href="../cost.html">Cost</a>
+    <a href="../helicopter.html">Helicopter View</a>
+    <a href="../timeline.html">Timeline</a>
+    <a href="../governance.html">Governance</a>
+    <a href="../glossary.html">Glossary</a>
+    <div class="nav-sep"></div>
+    <a href="index.html">Deploy Guide</a>
+    <a href="ownership.html">RACI</a>
+    <a href="part1.html" class="active">Part 1</a>
+    <a href="part2.html">Part 2</a>
+    <a href="part3.html">Part 3</a>
+    <a href="part4.html">Part 4</a>
+    <a href="part5.html">Part 5</a>
+  </div>
+  <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank" class="nav-cta">Source Code</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Ai-ME BANK · Deployment Guide</div>
+  <h1>Part 1 — AWS Foundation &amp; Infrastructure Setup</h1>
+  <p>Steps 1–12 · From zero AWS accounts to a fully provisioned cloud foundation ready to receive the application code. Follow every step in order. Each step lists its predecessor and successor.</p>
+  <div class="part-nav">
+    <span class="part-pill active">Part 1: AWS Foundation (Steps 1–12)</span>
+    <span class="part-pill">Part 2: Databases &amp; Policy RAG (Steps 13–22)</span>
+    <span class="part-pill">Part 3: App Deployment (Steps 23–32)</span>
+    <span class="part-pill">Part 4: Integrations &amp; PII (Steps 33–42)</span>
+    <span class="part-pill">Part 5: Go-Live &amp; Ops (Steps 43–50)</span>
+  </div>
+</div>
+
+<div class="body">
+<nav class="toc">
+  <div class="toc-title">Contents</div>
+  <div class="toc-section">Prerequisites</div>
+  <a href="#s0">Step 0 — What You Need Before You Begin</a>
+  <div class="toc-section">AWS Accounts</div>
+  <a href="#s1">Step 1 — Create AWS Accounts</a>
+  <a href="#s2">Step 2 — Enable MFA &amp; Root Security</a>
+  <a href="#s3">Step 3 — IAM Admin User + Roles</a>
+  <a href="#s4">Step 4 — AWS CLI Configuration</a>
+  <div class="toc-section">Networking</div>
+  <a href="#s5">Step 5 — VPC &amp; Subnets</a>
+  <a href="#s6">Step 6 — Security Groups</a>
+  <a href="#s7">Step 7 — NAT &amp; Internet Gateway</a>
+  <div class="toc-section">Secrets &amp; Keys</div>
+  <a href="#s8">Step 8 — AWS Secrets Manager</a>
+  <a href="#s9">Step 9 — KMS Encryption Keys</a>
+  <div class="toc-section">Container Platform</div>
+  <a href="#s10">Step 10 — ECR Repository</a>
+  <a href="#s11">Step 11 — EKS Cluster</a>
+  <a href="#s12">Step 12 — WAF &amp; ACM SSL</a>
+</nav>
+
+<div class="content">
+
+<div class="step" id="s0">
+  <div class="step-hdr">
+    <div class="step-num">0</div>
+    <div>
+      <div class="step-title">What You Need Before You Begin</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: None — this is the start</span>
+        <span class="badge badge-next">Successor: Step 1</span>
+        <span class="badge badge-role">Owner: AI Program Manager + IT Head</span>
+        <span class="badge badge-time">Time: 1–2 weeks (procurement bound)</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>This is the prerequisite checklist. Do NOT start Step 1 until every item below is in hand. Missing any one of these will cause a blocker mid-deployment.</p>
+
+    <h3>People</h3>
+    <ul class="checklist check-list">
+      <li>AI/ML Engineer (Lead) — designated, available full-time from Day 1</li>
+      <li>DevOps/Platform Engineer — designated, AWS certified preferred</li>
+      <li>Credit Risk Analyst — available for credit policy document collection</li>
+      <li>Core Banking System Admin — can request CBS API sandbox credentials</li>
+      <li>Security/Compliance rep — available for RBI/DPDPA review</li>
+    </ul>
+
+    <h3>Accounts &amp; Credentials to Collect</h3>
+    <table>
+      <tr><th>Item</th><th>Where to Get</th><th>Lead Time</th></tr>
+      <tr><td>Anthropic API Key (Claude)</td><td>console.anthropic.com → API Keys</td><td>1–2 days</td></tr>
+      <tr><td>Core Banking System (CBS) sandbox API credentials</td><td>CBS Admin → API Management</td><td>6–8 weeks — START DAY 1</td></tr>
+      <tr><td>Account Aggregator TSP onboarding</td><td>Sahamati-registered TSP → partner onboarding</td><td>3–6 weeks</td></tr>
+      <tr><td>Credit Bureau (CIBIL) commercial API key</td><td>CIBIL account manager</td><td>2–4 weeks</td></tr>
+      <tr><td>AML watchlist screening API key</td><td>AML vendor account manager</td><td>2–3 weeks</td></tr>
+      <tr><td>Device/IP intelligence API key</td><td>Fraud-signals vendor account</td><td>1–2 weeks</td></tr>
+      <tr><td>WhatsApp Business API token</td><td>Meta Business Manager → WhatsApp → API Setup</td><td>2–3 weeks</td></tr>
+      <tr><td>SMS gateway + IVR provider credentials</td><td>Telecom/CPaaS vendor account manager</td><td>1–2 weeks</td></tr>
+      <tr><td>Langfuse account</td><td>cloud.langfuse.com → Sign up → Get keys</td><td>Same day</td></tr>
+    </table>
+
+    <h3>Software on Your Local Machine (DevOps workstation)</h3>
+    <ul class="checklist check-list">
+      <li>AWS CLI v2 — <code>aws --version</code> should return 2.x</li>
+      <li>kubectl — <code>kubectl version --client</code></li>
+      <li>eksctl — <code>eksctl version</code></li>
+      <li>Helm 3 — <code>helm version</code></li>
+      <li>Docker Desktop — <code>docker --version</code></li>
+      <li>Python 3.11 — <code>python3 --version</code></li>
+      <li>Git — <code>git --version</code></li>
+      <li>psql (PostgreSQL client) — <code>psql --version</code></li>
+    </ul>
+
+    <h3>Credit &amp; Compliance Policy Documents (for RAG)</h3>
+    <ul class="checklist req-list">
+      <li>RBI Master Direction on MSME lending (PDF)</li>
+      <li>Internal credit policy manual (PDF)</li>
+      <li>KYC/AML guideline documents (PDF)</li>
+      <li>RBI Digital Lending Guidelines (PDF)</li>
+      <li>Fair Practices Code for collections (PDF)</li>
+    </ul>
+
+    <div class="warn">⚠ Core Banking System (CBS) API access is the single highest-risk item. Sandbox provisioning takes 6–8 weeks. Raise the request on Day 1 of the project — do not wait. All 3 use cases depend on it for account lookup and write-back actions.</div>
+  </div>
+</div>
+
+<h2>AWS Accounts</h2>
+
+<div class="step" id="s1">
+  <div class="step-hdr">
+    <div class="step-num">1</div>
+    <div>
+      <div class="step-title">Create Two Separate AWS Accounts (Prod + Staging)</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 0 (prerequisites collected)</span>
+        <span class="badge badge-next">Successor: Step 2</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 2–4 hours</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Separate AWS accounts for prod and staging is not optional. It prevents accidental prod deployments and allows billing separation.</p>
+
+    <div class="cmd-label">Action — Create Staging Account</div>
+    <pre>1. Go to https://aws.amazon.com → Create an AWS Account
+2. Email:   ai-me-bank-staging@yourbank.com
+3. Account name: ai-me-bank-staging
+4. Choose "Business" account
+5. Add billing details (corporate card)
+6. Select Support Plan: Business (recommended for production systems)
+7. Note down Account ID (12-digit number shown after creation)</pre>
+
+    <div class="cmd-label">Action — Create Prod Account</div>
+    <pre>1. Open new browser incognito window
+2. Go to https://aws.amazon.com → Create an AWS Account
+3. Email:   ai-me-bank-prod@yourbank.com
+4. Account name: ai-me-bank-prod
+5. Same billing details
+6. Note down Account ID</pre>
+
+    <div class="cmd-label">Choose a Region — Use This Throughout</div>
+    <pre># Recommended: ap-south-1 (Mumbai) — data residency, lowest latency to core banking DC
+export AWS_REGION=ap-south-1
+export STAGING_ACCOUNT_ID=xxxxxxxxxxxx
+export PROD_ACCOUNT_ID=yyyyyyyyyyyy</pre>
+
+    <div class="ok">✓ After this step you have two isolated AWS accounts. All subsequent steps are performed in BOTH accounts (staging first, then prod).</div>
+  </div>
+</div>
+
+<div class="step" id="s2">
+  <div class="step-hdr">
+    <div class="step-num">2</div>
+    <div>
+      <div class="step-title">Secure Root Account — MFA + Billing Alerts</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 1</span>
+        <span class="badge badge-next">Successor: Step 3</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 30 minutes per account</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Do this in BOTH accounts immediately after creation. Root account compromise is irreversible.</p>
+    <ul class="checklist req-list">
+      <li>Sign in to AWS Console as root → My Account → Multi-Factor Authentication (MFA) → Activate MFA → Virtual MFA device → scan QR with Authy/Google Authenticator</li>
+      <li>Billing → Billing Preferences → Enable PDF invoices, Free Tier alerts, CloudWatch billing alerts</li>
+      <li>Create a billing alert: CloudWatch → Alarms → Create Alarm → Billing → EstimatedCharges → threshold ₹50,000 → SNS email alert to DevOps lead</li>
+    </ul>
+    <div class="warn">⚠ Never use root account for daily operations. After Step 3, lock the root credentials in a password manager and only use the IAM admin user.</div>
+  </div>
+</div>
+
+<div class="step" id="s3">
+  <div class="step-hdr">
+    <div class="step-num">3</div>
+    <div>
+      <div class="step-title">IAM Admin User + Least-Privilege Service Roles</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 2</span>
+        <span class="badge badge-next">Successor: Step 4</span>
+        <span class="badge badge-role">Owner: DevOps + Security Engineer</span>
+        <span class="badge badge-time">Time: 1 hour</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Do in both accounts. Create one admin user for DevOps, then least-privilege service roles for the application.</p>
+
+    <div class="cmd-label">Console: IAM → Users → Create User</div>
+    <pre>Username: ai-me-bank-devops
+Access type: ✓ Programmatic access + ✓ AWS Console access
+Attach policy: AdministratorAccess (for DevOps lead only)
+Enable MFA on this user too</pre>
+
+    <div class="cmd-label">Create Application Service Roles (IAM → Roles)</div>
+    <pre># Role 1: EKS Node Role
+Name: ai-me-bank-eks-node-role
+Trusted entity: EC2
+Policies:
+  - AmazonEKSWorkerNodePolicy
+  - AmazonEC2ContainerRegistryReadOnly
+  - AmazonEKS_CNI_Policy
+  - AmazonSSMManagedInstanceCore
+
+# Role 2: Application Pod Role (IRSA)
+Name: ai-me-bank-app-role
+Trusted entity: Web identity (EKS OIDC)
+Custom policy (inline):
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {"Effect":"Allow","Action":["s3:GetObject","s3:PutObject","s3:ListBucket"],
+     "Resource":["arn:aws:s3:::ai-me-bank-cam-docs/*","arn:aws:s3:::ai-me-bank-cam-docs"]},
+    {"Effect":"Allow","Action":["secretsmanager:GetSecretValue"],
+     "Resource":"arn:aws:secretsmanager:ap-south-1:*:secret:ai-me-bank-*"},
+    {"Effect":"Allow","Action":["kms:Decrypt","kms:GenerateDataKey"],"Resource":"*"}
+  ]
+}
+
+# Role 3: RDS Enhanced Monitoring
+Name: ai-me-bank-rds-monitoring
+Trusted entity: monitoring.rds.amazonaws.com
+Policy: AmazonRDSEnhancedMonitoringRole</pre>
+  </div>
+</div>
+
+<div class="step" id="s4">
+  <div class="step-hdr">
+    <div class="step-num">4</div>
+    <div>
+      <div class="step-title">Configure AWS CLI with Named Profiles</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 3 (IAM user access keys created)</span>
+        <span class="badge badge-next">Successor: Step 5</span>
+        <span class="badge badge-role">Owner: DevOps Engineer (local machine)</span>
+        <span class="badge badge-time">Time: 20 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <div class="cmd-label">Terminal — Configure Profiles</div>
+    <pre># Configure staging profile
+aws configure --profile ai-me-bank-staging
+# AWS Access Key ID: [paste from IAM user creation]
+# AWS Secret Access Key: [paste secret]
+# Default region: ap-south-1
+# Default output: json
+
+# Configure prod profile
+aws configure --profile ai-me-bank-prod
+# Same as above with prod account credentials
+
+# Verify both profiles work
+aws sts get-caller-identity --profile ai-me-bank-staging
+aws sts get-caller-identity --profile ai-me-bank-prod</pre>
+
+    <div class="cmd-label">Set Environment Variables (add to ~/.bashrc or ~/.zshrc)</div>
+    <pre>export AWS_PROFILE=ai-me-bank-staging   # default to staging
+export AWS_REGION=ap-south-1
+export PROJECT=ai-me-bank
+export ENV=staging    # change to prod when deploying prod</pre>
+
+    <div class="ok">✓ From this point, all CLI commands use --profile ai-me-bank-staging or --profile ai-me-bank-prod. Always double-check your profile before running any command.</div>
+  </div>
+</div>
+
+<h2>Networking</h2>
+
+<div class="step" id="s5">
+  <div class="step-hdr">
+    <div class="step-num">5</div>
+    <div>
+      <div class="step-title">Create VPC, Subnets, Route Tables</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 4</span>
+        <span class="badge badge-next">Successor: Step 6</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 45 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Create this network layout in BOTH accounts. Public subnets (ALB), private subnets (EKS pods, RDS).</p>
+
+    <div class="cmd-label">AWS CLI — Reproducible</div>
+    <pre># Create VPC
+VPC_ID=$(aws ec2 create-vpc --cidr-block 10.0.0.0/16 \
+  --profile ai-me-bank-staging --query 'Vpc.VpcId' --output text)
+aws ec2 create-tags --resources $VPC_ID \
+  --tags Key=Name,Value=ai-me-bank-vpc Key=Project,Value=ai-me-bank \
+  --profile ai-me-bank-staging
+
+aws ec2 modify-vpc-attribute --vpc-id $VPC_ID --enable-dns-hostnames --profile ai-me-bank-staging
+aws ec2 modify-vpc-attribute --vpc-id $VPC_ID --enable-dns-support --profile ai-me-bank-staging
+
+# Public Subnet AZ-a (for ALB)
+PUB_A=$(aws ec2 create-subnet --vpc-id $VPC_ID \
+  --cidr-block 10.0.1.0/24 --availability-zone ap-south-1a \
+  --profile ai-me-bank-staging --query 'Subnet.SubnetId' --output text)
+aws ec2 create-tags --resources $PUB_A \
+  --tags Key=Name,Value=ai-me-bank-public-1a Key=kubernetes.io/role/elb,Value=1 \
+  --profile ai-me-bank-staging
+
+# Public Subnet AZ-b
+PUB_B=$(aws ec2 create-subnet --vpc-id $VPC_ID \
+  --cidr-block 10.0.2.0/24 --availability-zone ap-south-1b \
+  --profile ai-me-bank-staging --query 'Subnet.SubnetId' --output text)
+
+# Private Subnet AZ-a (EKS pods)
+PRIV_A=$(aws ec2 create-subnet --vpc-id $VPC_ID \
+  --cidr-block 10.0.11.0/24 --availability-zone ap-south-1a \
+  --profile ai-me-bank-staging --query 'Subnet.SubnetId' --output text)
+aws ec2 create-tags --resources $PRIV_A \
+  --tags Key=Name,Value=ai-me-bank-private-1a Key=kubernetes.io/role/internal-elb,Value=1 \
+  --profile ai-me-bank-staging
+
+# Private Subnet AZ-b (RDS standby)
+PRIV_B=$(aws ec2 create-subnet --vpc-id $VPC_ID \
+  --cidr-block 10.0.12.0/24 --availability-zone ap-south-1b \
+  --profile ai-me-bank-staging --query 'Subnet.SubnetId' --output text)
+
+echo "VPC: $VPC_ID"
+echo "Public:  $PUB_A  $PUB_B"
+echo "Private: $PRIV_A $PRIV_B"
+# Save these values — you'll need them in every subsequent step</pre>
+  </div>
+</div>
+
+<div class="step" id="s6">
+  <div class="step-hdr">
+    <div class="step-num">6</div>
+    <div>
+      <div class="step-title">Security Groups</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 5</span>
+        <span class="badge badge-next">Successor: Step 7</span>
+        <span class="badge badge-role">Owner: DevOps + Security Engineer</span>
+        <span class="badge badge-time">Time: 30 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <div class="cmd-label">Create 4 Security Groups</div>
+    <pre># ALB SG — public 443 only
+aws ec2 create-security-group --group-name ai-me-bank-alb-sg \
+  --description "ALB - public HTTPS" --vpc-id $VPC_ID --profile ai-me-bank-staging
+aws ec2 authorize-security-group-ingress --group-id $ALB_SG \
+  --protocol tcp --port 443 --cidr 0.0.0.0/0 --profile ai-me-bank-staging
+
+# API SG — only from ALB, port 8000
+aws ec2 create-security-group --group-name ai-me-bank-api-sg \
+  --description "API pods - from ALB only" --vpc-id $VPC_ID --profile ai-me-bank-staging
+aws ec2 authorize-security-group-ingress --group-id $API_SG \
+  --protocol tcp --port 8000 --source-group $ALB_SG --profile ai-me-bank-staging
+
+# RDS SG — only from API, port 5432
+# Redis SG — only from API, port 6379</pre>
+    <div class="info">💡 No security group should ever allow inbound from 0.0.0.0/0 except the ALB SG on port 443. This is checked in Step 38's PII boundary review.</div>
+  </div>
+</div>
+
+<div class="step" id="s7">
+  <div class="step-hdr">
+    <div class="step-num">7</div>
+    <div>
+      <div class="step-title">NAT Gateway &amp; Internet Gateway</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 6</span>
+        <span class="badge badge-next">Successor: Step 8</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 20 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <div class="cmd-label">Internet Gateway + Route Tables</div>
+    <pre>IGW=$(aws ec2 create-internet-gateway --profile ai-me-bank-staging \
+  --query 'InternetGateway.InternetGatewayId' --output text)
+aws ec2 attach-internet-gateway --internet-gateway-id $IGW --vpc-id $VPC_ID \
+  --profile ai-me-bank-staging
+
+# Public route table → IGW
+PUB_RT=$(aws ec2 create-route-table --vpc-id $VPC_ID --profile ai-me-bank-staging \
+  --query 'RouteTable.RouteTableId' --output text)
+aws ec2 create-route --route-table-id $PUB_RT \
+  --destination-cidr-block 0.0.0.0/0 --gateway-id $IGW --profile ai-me-bank-staging
+
+# NAT Gateway (1 per AZ for staging cost savings, 2 for prod HA)
+EIP=$(aws ec2 allocate-address --domain vpc --profile ai-me-bank-staging --query 'AllocationId' --output text)
+NAT=$(aws ec2 create-nat-gateway --subnet-id $PUB_A --allocation-id $EIP \
+  --profile ai-me-bank-staging --query 'NatGateway.NatGatewayId' --output text)</pre>
+  </div>
+</div>
+
+<h2>Secrets &amp; Keys</h2>
+
+<div class="step" id="s8">
+  <div class="step-hdr">
+    <div class="step-num">8</div>
+    <div>
+      <div class="step-title">AWS Secrets Manager — Seed All Secrets</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 7</span>
+        <span class="badge badge-next">Successor: Step 9</span>
+        <span class="badge badge-role">Owner: DevOps + Backend Engineer</span>
+        <span class="badge badge-time">Time: 45 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <div class="cmd-label">Seed Every External Credential</div>
+    <pre>aws secretsmanager create-secret --name ai-me-bank-anthropic-key --secret-string "sk-ant-..." --profile ai-me-bank-staging
+aws secretsmanager create-secret --name ai-me-bank-cbs-client-secret --secret-string "..." --profile ai-me-bank-staging
+aws secretsmanager create-secret --name ai-me-bank-aa-client-secret --secret-string "..." --profile ai-me-bank-staging
+aws secretsmanager create-secret --name ai-me-bank-bureau-api-key --secret-string "..." --profile ai-me-bank-staging
+aws secretsmanager create-secret --name ai-me-bank-aml-api-key --secret-string "..." --profile ai-me-bank-staging
+aws secretsmanager create-secret --name ai-me-bank-whatsapp-token --secret-string "..." --profile ai-me-bank-staging
+aws secretsmanager create-secret --name ai-me-bank-pii-encryption-key --secret-string "$(openssl rand -hex 32)" --profile ai-me-bank-staging
+aws secretsmanager create-secret --name ai-me-bank-langfuse-keys --secret-string '{"public":"pk-lf-...","secret":"sk-lf-..."}' --profile ai-me-bank-staging</pre>
+    <div class="warn">⚠ The PII encryption key (Step 8) is the single most sensitive value in the entire system — every tokenised customer field depends on it. Rotate annually; never log it; never commit it.</div>
+  </div>
+</div>
+
+<div class="step" id="s9">
+  <div class="step-hdr">
+    <div class="step-num">9</div>
+    <div>
+      <div class="step-title">KMS Encryption Keys</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 8</span>
+        <span class="badge badge-next">Successor: Step 10</span>
+        <span class="badge badge-role">Owner: Security Engineer</span>
+        <span class="badge badge-time">Time: 30 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <div class="cmd-label">Create 3 Separate KMS Keys</div>
+    <pre>aws kms create-key --description "ai-me-bank RDS encryption" --profile ai-me-bank-staging
+aws kms create-key --description "ai-me-bank S3 audit exports" --profile ai-me-bank-staging
+aws kms create-key --description "ai-me-bank S3 CAM/KYC documents" --profile ai-me-bank-staging
+
+# Enable annual auto-rotation on all 3
+aws kms enable-key-rotation --key-id $KMS_KEY_RDS --profile ai-me-bank-staging</pre>
+    <div class="ok">✓ Separate keys per data class means a compromise of one key doesn't expose the others — audit logs stay recoverable even if the CAM-document key were ever rotated out.</div>
+  </div>
+</div>
+
+<h2>Container Platform</h2>
+
+<div class="step" id="s10">
+  <div class="step-hdr">
+    <div class="step-num">10</div>
+    <div>
+      <div class="step-title">ECR Repository + Image Build</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 9</span>
+        <span class="badge badge-next">Successor: Step 11</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 1 hour</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre>aws ecr create-repository --repository-name ai-me-bank-api --profile ai-me-bank-staging
+
+# Build and push (from agentic-ai/ repo root)
+cd agentic-ai
+docker build -t ai-me-bank-api:$(git rev-parse --short HEAD) .
+aws ecr get-login-password --profile ai-me-bank-staging | docker login --username AWS --password-stdin $ECR_URI
+docker tag ai-me-bank-api:$(git rev-parse --short HEAD) $ECR_URI:$(git rev-parse --short HEAD)
+docker push $ECR_URI:$(git rev-parse --short HEAD)</pre>
+  </div>
+</div>
+
+<div class="step" id="s11">
+  <div class="step-hdr">
+    <div class="step-num">11</div>
+    <div>
+      <div class="step-title">EKS Cluster Provision</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 10</span>
+        <span class="badge badge-next">Successor: Step 12</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 30–45 minutes (cluster provisioning)</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre>eksctl create cluster \
+  --name ai-me-bank-eks \
+  --region ap-south-1 \
+  --version 1.30 \
+  --vpc-private-subnets=$PRIV_A,$PRIV_B \
+  --vpc-public-subnets=$PUB_A,$PUB_B \
+  --nodegroup-name ai-me-bank-nodes \
+  --node-type t3.large \
+  --nodes 3 \
+  --nodes-min 2 \
+  --nodes-max 6 \
+  --managed \
+  --with-oidc \
+  --profile ai-me-bank-staging
+
+aws eks update-kubeconfig --name ai-me-bank-eks --region ap-south-1 --profile ai-me-bank-staging
+kubectl get nodes</pre>
+    <div class="ok">✓ 3 nodes Ready confirms the cluster is live. IRSA (--with-oidc) is required for Step 3's Application Pod Role to work.</div>
+  </div>
+</div>
+
+<div class="step" id="s12">
+  <div class="step-hdr">
+    <div class="step-num">12</div>
+    <div>
+      <div class="step-title">WAF v2 + ACM SSL Certificate</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 11</span>
+        <span class="badge badge-next">Successor: Step 13 (Part 2)</span>
+        <span class="badge badge-role">Owner: Security Engineer + DevOps</span>
+        <span class="badge badge-time">Time: 45 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre># WAF ACL with AWS managed rules + rate limiting
+aws wafv2 create-web-acl --name ai-me-bank-waf --scope REGIONAL \
+  --default-action Allow={} \
+  --rules file://waf-rules.json \
+  --profile ai-me-bank-staging
+
+# ACM SSL cert (DNS-validated)
+aws acm request-certificate --domain-name ai-me-bank.yourdomain.com \
+  --validation-method DNS --profile ai-me-bank-staging</pre>
+    <div class="info">💡 Test the WAF with OWASP payloads before Step 29 (ALB Ingress) wires it in — a misconfigured rate limit here blocks legitimate credit officer traffic in production.</div>
+
+    <h3>Part 1 Complete</h3>
+    <div class="flow">
+      <div class="flow-box">✓ AWS Accounts</div><div class="flow-arrow">→</div>
+      <div class="flow-box">✓ VPC + Networking</div><div class="flow-arrow">→</div>
+      <div class="flow-box">✓ Secrets + KMS</div><div class="flow-arrow">→</div>
+      <div class="flow-box">✓ EKS Cluster</div><div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#F59E0B;color:#F59E0B">Next: Part 2 → Databases, Adapter &amp; Policy RAG</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>

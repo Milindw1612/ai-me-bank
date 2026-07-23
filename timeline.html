@@ -31,7 +31,7 @@
   .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
   .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
   .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
-  .page-header p { font-size: 13px; color: var(--muted); max-width: 660px; line-height: 1.7; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 700px; line-height: 1.7; }
 
   /* ── Scenario toggle ── */
   .scenario-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 48px; background: var(--surface); border-bottom: 1px solid var(--border2); flex-wrap: wrap; gap: 10px; position: sticky; top: 64px; z-index: 90; }
@@ -39,40 +39,91 @@
   .sc-toggle { display: flex; gap: 0; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: 3px; }
   .sc-btn { padding: 7px 18px; border-radius: 6px; border: none; background: none; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; white-space: nowrap; }
   .sc-btn.active { background: linear-gradient(135deg,var(--gold-dim),var(--gold)); color: #000; }
-  .ai-note { display: none; font-size: 11.5px; color: var(--green); }
-  .ai-note.show { display: inline; }
+  .ai-note { font-size: 11.5px; color: var(--green); }
 
   main { padding: 36px 48px 60px; }
   .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
 
   /* ── Summary cards ── */
-  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; margin-bottom: 40px; }
-  .sum-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; }
-  .sum-card .lbl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-  .sum-card .val { font-family: Georgia, serif; font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; margin-bottom: 36px; }
+  .sum-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 15px 18px; transition: border-color .2s; }
+  .sum-card:hover { border-color: var(--border2); }
+  .sum-card .lbl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .sum-vals { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .sum-trad { font-family: Georgia, serif; font-size: 17px; font-weight: 700; color: var(--muted); }
+  .sum-arrow { font-size: 13px; color: var(--muted); }
+  .sum-ai { font-family: Georgia, serif; font-size: 19px; font-weight: 700; color: var(--gold); }
+  .sum-save { font-size: 10px; font-weight: 700; color: var(--green); background: rgba(52,211,153,0.1); padding: 2px 7px; border-radius: 5px; }
+  .sum-sub { font-size: 10.5px; color: var(--muted); margin-top: 7px; line-height: 1.5; }
 
-  /* ── Timeline / phase bars ── */
-  .gantt-wrap { background: rgba(255,255,255,0.02); border: 1px solid var(--border2); border-radius: 12px; padding: 20px; margin-bottom: 24px; overflow-x: auto; }
-  .gantt-wrap.hidden { display: none; }
-  .week-ruler { display: flex; padding-left: 168px; margin-bottom: 12px; min-width: 640px; }
-  .week-ruler span { flex: 1; font-size: 10px; color: var(--muted); text-align: left; }
-  .gantt-row { display: flex; align-items: center; margin-bottom: 10px; min-width: 640px; }
-  .gantt-label { width: 160px; flex-shrink: 0; font-size: 12px; font-weight: 700; color: #fff; padding-right: 8px; }
-  .gantt-track { display: flex; flex: 1; height: 30px; gap: 2px; }
-  .phase-block { display: flex; align-items: center; justify-content: center; border-radius: 5px; font-size: 10px; font-weight: 700; color: #000; white-space: nowrap; overflow: hidden; padding: 0 6px; }
-  .phase-shared { background: rgba(56,189,248,0.75); color: #05202b; }
-  .phase-msme { background: rgba(245,158,11,0.8); }
-  .phase-fraud { background: rgba(45,107,228,0.65); color: #fff; }
-  .phase-collections { background: rgba(52,211,153,0.75); }
-  .phase-uat { background: rgba(255,255,255,0.12); color: var(--mid); }
-  .phase-golive { background: rgba(52,211,153,0.35); color: var(--green); border: 1px solid rgba(52,211,153,0.5); }
+  /* ── AI Tools grid ── */
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 10px; margin-bottom: 36px; }
+  .tool-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
+  .tool-icon { font-size: 19px; flex-shrink: 0; margin-top: 1px; }
+  .tool-name { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+  .tool-phase { font-size: 10px; color: var(--gold); font-weight: 600; margin-bottom: 4px; }
+  .tool-desc { font-size: 10.5px; color: var(--mid); line-height: 1.55; }
+  .tool-save { font-size: 10px; font-weight: 700; color: var(--green); margin-top: 5px; }
 
-  .legend { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 20px; }
-  .li { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--mid); }
-  .lb { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+  /* ── Gantt ── */
+  .gantt-section { margin-bottom: 36px; }
+  .gantt-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding-bottom: 9px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .gantt-title { font-size: 15px; font-weight: 800; color: #fff; }
+  .gantt-subtitle { font-size: 11px; color: var(--muted); }
+  .gantt-badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 5px; background: rgba(255,255,255,0.06); color: var(--mid); }
+
+  .gantt-wrap { background: rgba(255,255,255,0.02); border: 1px solid var(--border2); border-radius: 12px; overflow: hidden; overflow-x: auto; }
+  .gantt-inner { min-width: 640px; }
+
+  .week-header { display: flex; border-bottom: 1px solid var(--border2); padding: 8px 0; position: sticky; top: 0; background: #2A0A12; z-index: 10; }
+  .week-label-col { width: 200px; flex-shrink: 0; padding: 0 14px; font-size: 9px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; }
+  .week-cells { flex: 1; display: flex; }
+  .week-cell { flex: 1; text-align: center; font-size: 8.5px; color: var(--muted); font-weight: 600; border-left: 1px solid rgba(255,255,255,0.04); }
+
+  .gantt-row { display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.04); min-height: 42px; transition: background .15s; }
+  .gantt-row:hover { background: rgba(255,255,255,0.02); }
+  .gantt-row:last-child { border-bottom: none; }
+  .row-label { width: 200px; flex-shrink: 0; padding: 7px 14px; }
+  .row-name { font-size: 11px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .row-role { font-size: 9.5px; color: var(--muted); margin-top: 2px; }
+  .row-bars { flex: 1; position: relative; height: 42px; display: flex; align-items: center; }
+
+  .bar { position: absolute; height: 24px; border-radius: 5px; display: flex; align-items: center; padding: 0 8px; font-size: 8.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; transition: opacity .2s; top: 50%; transform: translateY(-50%); }
+  .bar:hover { opacity: .85; }
+
+  .milestone { position: absolute; top: 50%; transform: translate(-50%,-50%) rotate(45deg); width: 9px; height: 9px; background: var(--gold); z-index: 5; cursor: pointer; }
+  .milestone-label { position: absolute; top: 1px; font-size: 7.5px; font-weight: 700; color: var(--gold); white-space: nowrap; transform: translateX(-50%); z-index: 6; pointer-events: none; }
+
+  .tooltip { position: fixed; background: #2A0A12; border: 1px solid var(--border2); border-radius: 8px; padding: 10px 14px; font-size: 11px; color: var(--text); z-index: 1000; pointer-events: none; max-width: 260px; line-height: 1.6; display: none; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+  .tt-title { font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .tt-row { display: flex; gap: 8px; margin-top: 2px; }
+  .tt-key { color: var(--muted); min-width: 62px; flex-shrink: 0; }
+  .tt-val { color: var(--text); }
+  .tt-ai-save { color: var(--green); font-weight: 700; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; padding: 13px 18px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 36px; align-items: center; }
+  .li { display: flex; align-items: center; gap: 7px; font-size: 10.5px; color: var(--mid); }
+  .lb { width: 24px; height: 11px; border-radius: 3px; flex-shrink: 0; }
+  .ld { width: 9px; height: 9px; transform: rotate(45deg); flex-shrink: 0; }
+
+  .pc-infra { background: rgba(148,163,184,0.55); }
+  .pc-p1 { background: rgba(45,107,228,0.7); }
+  .pc-p2 { background: rgba(52,211,153,0.75); }
+  .pc-p3 { background: rgba(251,191,36,0.75); }
+  .pc-p4 { background: rgba(248,113,113,0.65); }
+
+  /* ── Callout boxes ── */
+  .callout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 32px; }
+  @media (max-width: 900px) { .callout-grid { grid-template-columns: 1fr; } }
+  .callout { background: rgba(45,107,228,0.07); border: 1px solid rgba(45,107,228,0.25); border-left: 4px solid var(--blue); border-radius: 8px; padding: 14px 18px; }
+  .callout-title { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #5B8DEF; margin-bottom: 6px; }
+  .callout p { font-size: 12px; color: var(--mid); line-height: 1.65; }
+  .callout p strong { color: var(--text); }
+
+  .print-hint { text-align: center; font-size: 11px; color: var(--muted); margin-top: -20px; margin-bottom: 36px; }
 
   /* ── Resource plan table ── */
-  .table-scroll { overflow-x: auto; margin-bottom: 32px; border-radius: 10px; border: 1px solid var(--border2); }
+  .table-scroll { overflow-x: auto; margin-bottom: 16px; border-radius: 10px; border: 1px solid var(--border2); }
   table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
   thead th { background: rgba(255,255,255,0.04); padding: 11px 16px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-align: left; white-space: nowrap; border-bottom: 1px solid var(--border2); }
   tbody td { padding: 10px 16px; font-size: 12.5px; border-bottom: 1px solid var(--border); vertical-align: top; }
@@ -86,7 +137,10 @@
   .pill-blue   { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
   .pill-green  { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
 
-  .milestone-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 14px; margin-bottom: 20px; }
+  .note-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 6px; padding: 13px 17px; font-size: 12px; color: var(--mid); margin-bottom: 32px; line-height: 1.7; }
+  .note-box strong { color: var(--text); }
+
+  .milestone-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 14px; margin-bottom: 8px; }
   .milestone-card { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 8px; padding: 14px 16px; }
   .milestone-card .wk { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
   .milestone-card p { font-size: 12.5px; color: var(--mid); }
@@ -100,6 +154,7 @@
     nav { padding: 0 20px; }
     .page-header, main { padding-left: 20px; padding-right: 20px; }
     .scenario-bar { padding: 12px 20px; }
+    .row-label, .week-label-col { width: 140px; }
     footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
   }
 </style>
@@ -120,165 +175,253 @@
       <a href="governance.html">Governance</a>
       <a href="glossary.html">Glossary</a>
       <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source Code</a>
-      <a href="deploy-guide.html">Deploy Guide</a>
+      <a href="deploy-guide/index.html">Deploy Guide</a>
     </div>
   </div>
 </nav>
 
+<div class="tooltip" id="tooltip"></div>
+
 <div class="page-header">
   <div class="eyebrow">Build Timeline Analysis</div>
-  <h1>Delivery Roadmap — All 3 Use Cases</h1>
-  <p>Shared platform is built once, then MSME Credit CAM Prep, Fraud Detection, and Collections Recovery build in sequence, each reusing the platform. Toggle below to compare a traditional delivery baseline against an AI-tool-accelerated plan (Claude Code, Cursor/Copilot for IaC and test generation).</p>
+  <h1>Traditional vs <span style="color:var(--gold)">AI-Accelerated</span> Delivery</h1>
+  <p>How Claude Code, Cursor/GitHub Copilot, AI-generated test suites and CI/CD AI tools compress the build schedule — task-by-task breakdown with roles, milestones and dependencies for the shared platform + all 3 use cases.</p>
 </div>
 
 <div class="scenario-bar">
   <span class="sc-label">Scenario</span>
   <div class="sc-toggle" id="scToggle">
-    <button class="sc-btn" onclick="setScenario('traditional',this)">📋 Traditional (Baseline)</button>
-    <button class="sc-btn active" onclick="setScenario('ai',this)">⚡ AI-Accelerated</button>
+    <button class="sc-btn active" id="btn-trad" onclick="setScenario('trad')">📋 Traditional (Baseline)</button>
+    <button class="sc-btn" id="btn-ai" onclick="setScenario('ai')">⚡ AI-Accelerated</button>
   </div>
-  <span class="ai-note show" id="aiNote">⚡ 31% faster: 37 weeks vs. 54 weeks traditional — Claude Code/Cursor compress agent-build and test-generation phases</span>
+  <span class="ai-note">37 weeks (AI-Accelerated) vs. 54 weeks (Traditional) — 31% faster to full production</span>
 </div>
 
 <main>
 
+  <div class="section-label">Timeline Comparison at a Glance</div>
   <div class="summary-grid">
-    <div class="sum-card"><div class="lbl">Shared Platform</div><div class="val" style="color:#38BDF8" data-traditional="4 wks" data-ai="3 wks">3 wks</div></div>
-    <div class="sum-card"><div class="lbl">MSME Credit CAM Prep</div><div class="val" style="color:var(--amber)" data-traditional="20 wks" data-ai="14 wks ⚡">14 wks ⚡</div></div>
-    <div class="sum-card"><div class="lbl">Fraud Detection</div><div class="val" style="color:#5B8DEF" data-traditional="15 wks" data-ai="10 wks ⚡">10 wks ⚡</div></div>
-    <div class="sum-card"><div class="lbl">Collections Recovery</div><div class="val" style="color:var(--green)" data-traditional="15 wks" data-ai="10 wks ⚡">10 wks ⚡</div></div>
+    <div class="sum-card">
+      <div class="lbl" style="color:#38BDF8">🏗️ Shared Platform</div>
+      <div class="sum-vals">
+        <div class="sum-trad" id="s-infra-trad">4 wks</div>
+        <div class="sum-arrow">→</div>
+        <div class="sum-ai" id="s-infra-ai">3 wks</div>
+        <div class="sum-save" id="s-infra-save">-1 wk</div>
+      </div>
+      <div class="sum-sub">Terraform AI + Copilot IaC compress infra; Core Banking API contract is vendor-bound either way</div>
+    </div>
+    <div class="sum-card">
+      <div class="lbl" style="color:var(--teal)">🏦 MSME Credit CAM Prep</div>
+      <div class="sum-vals">
+        <div class="sum-trad" id="s-msme-trad">20 wks</div>
+        <div class="sum-arrow">→</div>
+        <div class="sum-ai" id="s-msme-ai">14 wks</div>
+        <div class="sum-save" id="s-msme-save">-6 wks</div>
+      </div>
+      <div class="sum-sub">Claude Code scaffolds all 4 agents; AI test suites cut UAT</div>
+    </div>
+    <div class="sum-card">
+      <div class="lbl" style="color:#5B8DEF">🕵️ Fraud Detection</div>
+      <div class="sum-vals">
+        <div class="sum-trad" id="s-fraud-trad">15 wks</div>
+        <div class="sum-arrow">→</div>
+        <div class="sum-ai" id="s-fraud-ai">10 wks</div>
+        <div class="sum-save" id="s-fraud-save">-5 wks</div>
+      </div>
+      <div class="sum-sub">3 parallel signal agents built faster with code gen</div>
+    </div>
+    <div class="sum-card">
+      <div class="lbl" style="color:var(--green)">📞 Collections Recovery</div>
+      <div class="sum-vals">
+        <div class="sum-trad" id="s-coll-trad">15 wks</div>
+        <div class="sum-arrow">→</div>
+        <div class="sum-ai" id="s-coll-ai">10 wks</div>
+        <div class="sum-save" id="s-coll-save">-5 wks</div>
+      </div>
+      <div class="sum-sub">Smallest team; AI tools = biggest proportional gain</div>
+    </div>
+    <div class="sum-card" style="border-color:rgba(245,158,11,0.4)">
+      <div class="lbl" style="color:var(--gold)">📅 Total Program (Sequential)</div>
+      <div class="sum-vals">
+        <div class="sum-trad" id="s-tot-trad">54 wks</div>
+        <div class="sum-arrow">→</div>
+        <div class="sum-ai" id="s-tot-ai">37 wks</div>
+        <div class="sum-save" id="s-tot-save">-17 wks</div>
+      </div>
+      <div class="sum-sub">Shared Platform → MSME → Fraud → Collections, built in sequence by one core team reused across all 3</div>
+    </div>
+    <div class="sum-card">
+      <div class="lbl" style="color:#F87171">🔧 Maintenance (per issue, post go-live)</div>
+      <div class="sum-vals">
+        <div class="sum-trad" id="s-maint-trad">4 hrs</div>
+        <div class="sum-arrow">→</div>
+        <div class="sum-ai" id="s-maint-ai">1.5 hrs</div>
+        <div class="sum-save" id="s-maint-save">-62%</div>
+      </div>
+      <div class="sum-sub">Claude Code debug + Langfuse trace replay + AI PR review cut steady-state fix time (est.)</div>
+    </div>
   </div>
 
-  <div class="section-label">Phase Timeline — <span data-traditional="Total: 54 weeks" data-ai="Total: 37 weeks">Total: 37 weeks</span></div>
+  <div class="section-label">AI Tools That Compress the Timeline</div>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-icon">🤖</div>
+      <div>
+        <div class="tool-name">Claude Code</div>
+        <div class="tool-phase">Development Phase — All Use Cases</div>
+        <div class="tool-desc">Generates LangGraph agent scaffolding (Financial Ingestion, Risk/Cash-Flow, Fraud signal agents, Collections negotiation agent), Core Banking/AA/CIBIL/AML adapters, and the hybrid RAG policy-QA pipeline. Handles refactoring and debugging.</div>
+        <div class="tool-save">↓ Core dev effort compressed ~30–35%</div>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">💻</div>
+      <div>
+        <div class="tool-name">Cursor IDE + GitHub Copilot</div>
+        <div class="tool-phase">Development Phase — All Engineers</div>
+        <div class="tool-desc">Inline autocomplete for Python/FastAPI/LangGraph boilerplate and Terraform HCL. Every engineer gets faster typing throughput on repetitive integration code.</div>
+        <div class="tool-save">↓ Reduces per-engineer coding time ~35%</div>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🧪</div>
+      <div>
+        <div class="tool-name">AI Test Suite Generation</div>
+        <div class="tool-phase">Testing / UAT / Shadow-Mode — QA Engineer</div>
+        <div class="tool-desc">Claude generates Pytest suites from API contracts and credit/fraud/collections policy edge-case libraries — including the PII-boundary test suite validating the tokenise/encrypt/scrub map.</div>
+        <div class="tool-save">↓ UAT / shadow-mode window compressed ~30–40%</div>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🚀</div>
+      <div>
+        <div class="tool-name">GitHub Actions + CodeRabbit AI</div>
+        <div class="tool-phase">CI/CD &amp; PR Review — DevOps Engineer</div>
+        <div class="tool-desc">Automates the dev → staging → prod pipeline (EKS deploy workflow). CodeRabbit reviews every PR for bugs and security issues before a human reviewer looks at it.</div>
+        <div class="tool-save">↓ CI/CD setup + review cycles ~50% faster</div>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📊</div>
+      <div>
+        <div class="tool-name">Langfuse (LLM Observability)</div>
+        <div class="tool-phase">Testing + Production — AI/ML Engineer</div>
+        <div class="tool-desc">Traces token cost, latency and prompt quality per agent run from Week 1 of dev, not just post go-live — catching prompt regressions before they reach UAT. Feeds the nightly audit export.</div>
+        <div class="tool-save">↓ Catches issues earlier; reduces UAT rework</div>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🏗️</div>
+      <div>
+        <div class="tool-name">Terraform + Copilot IaC</div>
+        <div class="tool-phase">Infrastructure Phase — DevOps Engineer</div>
+        <div class="tool-desc">Copilot autocompletes Terraform HCL for EKS, RDS+pgvector, VPC, IAM, KMS and WAF. AI-generated IaC templates for the standard AWS stack compress infra setup.</div>
+        <div class="tool-save">↓ Infra setup: 4 wks → 3 wks</div>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🔍</div>
+      <div>
+        <div class="tool-name">Claude for PR Code Review</div>
+        <div class="tool-phase">Development + Integration — All Engineers</div>
+        <div class="tool-desc">Reviews every PR for logic errors, PII leakage patterns, and prompt-injection risk — a first-pass reviewer before the AI/ML lead and, later, the Security Engineer's formal audit.</div>
+        <div class="tool-save">↓ Catches 60–70% of bugs before human review</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GANTT CHARTS -->
+
+  <div class="gantt-section" id="gs-shared">
+    <div class="gantt-header">
+      <div>
+        <div class="gantt-title">🏗️ Shared Platform Readiness</div>
+        <div class="gantt-subtitle">Foundation layer — must complete before any use-case build begins</div>
+      </div>
+      <div class="gantt-badge" id="gb-shared">4 Weeks (Traditional)</div>
+    </div>
+    <div class="gantt-wrap"><div class="gantt-inner" id="gantt-shared"></div></div>
+  </div>
+
+  <div class="callout-grid">
+    <div class="callout">
+      <div class="callout-title">📋 Core Banking System API Access &amp; OAuth Contract (Wk 1–4)</div>
+      <p><strong>Why 3–4 weeks?</strong> Core Banking System access is IT-security-review-bound — role scoping, OAuth credential issuance, and a change-advisory sign-off before any sandbox integration begins. Flagged as the highest-risk external dependency in the <a href="deploy-guide/part1.html" style="color:var(--gold)">Deploy Guide</a> (typical SLA 6–8 weeks; 3–4 achievable with senior sponsor escalation).<br><br>
+      <strong>No AI tool compresses this</strong> — it's vendor governance, not engineering effort. Backend Engineers cannot start Core Banking integration until credentials are secured, so this fires Day 1 in parallel with infra provisioning.</p>
+    </div>
+    <div class="callout">
+      <div class="callout-title">📋 Account Aggregator + CIBIL Bureau Contracts (MSME Wk 1–4)</div>
+      <p><strong>Why 3–4 weeks?</strong> Account Aggregator consent-architecture onboarding and the CIBIL commercial bureau agreement are RBI-regulated data-sharing frameworks with fixed legal and compliance review cycles.<br><br>
+      <strong>Runs in parallel with the shared platform build</strong> — both are pure vendor/regulatory tasks with no technical dependency on the AWS/LangGraph setup. Fire on Day 1 of MSME build to avoid wasting weeks.</p>
+    </div>
+  </div>
+
+  <div class="gantt-section" id="gs-msme">
+    <div class="gantt-header">
+      <div>
+        <div class="gantt-title" style="color:var(--teal)">🏦 MSME Credit CAM Prep</div>
+        <div class="gantt-subtitle">Team: AI/ML Eng ×2, Backend ×2, DevOps ×1 (shared), Security ×0.5, QA ×1 | Starts after Shared Platform live</div>
+      </div>
+      <div class="gantt-badge" id="gb-msme">20 Weeks (Traditional)</div>
+    </div>
+    <div class="gantt-wrap"><div class="gantt-inner" id="gantt-msme"></div></div>
+  </div>
+
+  <div class="gantt-section" id="gs-fraud">
+    <div class="gantt-header">
+      <div>
+        <div class="gantt-title" style="color:#5B8DEF">🕵️ Fraud Detection &amp; Investigation</div>
+        <div class="gantt-subtitle">Team: AI/ML Eng ×2, Backend ×1, Security ×0.5, QA ×1 | Starts after MSME Credit CAM Prep is live</div>
+      </div>
+      <div class="gantt-badge" id="gb-fraud">15 Weeks (Traditional)</div>
+    </div>
+    <div class="gantt-wrap"><div class="gantt-inner" id="gantt-fraud"></div></div>
+  </div>
+
+  <div class="gantt-section" id="gs-coll">
+    <div class="gantt-header">
+      <div>
+        <div class="gantt-title" style="color:var(--green)">📞 Collections &amp; Delinquency Recovery</div>
+        <div class="gantt-subtitle">Team: AI/ML Eng ×2, Backend ×1, Security ×0.5 | Starts after Fraud Detection is live</div>
+      </div>
+      <div class="gantt-badge" id="gb-coll">15 Weeks (Traditional)</div>
+    </div>
+    <div class="gantt-wrap"><div class="gantt-inner" id="gantt-coll"></div></div>
+  </div>
+
+  <div class="section-label">Legend</div>
   <div class="legend">
-    <div class="li"><div class="lb phase-shared"></div>Shared Platform</div>
-    <div class="li"><div class="lb phase-msme"></div>MSME Credit CAM Prep</div>
-    <div class="li"><div class="lb phase-fraud"></div>Fraud Detection</div>
-    <div class="li"><div class="lb phase-collections"></div>Collections Recovery</div>
-    <div class="li"><div class="lb phase-uat"></div>UAT / Pilot</div>
-    <div class="li"><div class="lb phase-golive"></div>Go-Live / Hypercare</div>
+    <div class="li"><div class="lb pc-infra"></div>Infra / DevOps task</div>
+    <div class="li"><div class="lb pc-p1"></div>Vendor / Regulatory Access</div>
+    <div class="li"><div class="lb pc-p2"></div>Agent Build</div>
+    <div class="li"><div class="lb pc-p3"></div>Integration, UAT &amp; Shadow-Mode</div>
+    <div class="li"><div class="lb pc-p4"></div>Security Audit &amp; Go-Live</div>
+    <div class="li"><div class="ld" style="background:var(--gold)"></div>Milestone</div>
+    <div class="li">Hover any bar for role, duration and AI-tool detail</div>
   </div>
 
-  <!-- AI-ACCELERATED GANTT (default view) -->
-  <div class="gantt-wrap" id="gantt-ai">
-    <div class="week-ruler"><span>Wk 1–3</span><span>Wk 4–12</span><span>Wk 13–17</span><span>Wk 18–27</span><span>Wk 28–37</span></div>
+  <div class="print-hint">Tip: Use browser print → Save as PDF to export these charts for a CXO handout</div>
 
-    <div class="gantt-row">
-      <div class="gantt-label">Shared Platform</div>
-      <div class="gantt-track">
-        <div class="phase-block phase-shared" style="flex-grow:3">Setup</div>
-        <div class="phase-block" style="flex-grow:34"></div>
-      </div>
-    </div>
-    <div class="gantt-row">
-      <div class="gantt-label">MSME Credit CAM Prep</div>
-      <div class="gantt-track">
-        <div class="phase-block" style="flex-grow:3"></div>
-        <div class="phase-block phase-msme" style="flex-grow:9">Agent Build</div>
-        <div class="phase-block phase-uat" style="flex-grow:3">UAT</div>
-        <div class="phase-block phase-golive" style="flex-grow:2">Live</div>
-        <div class="phase-block" style="flex-grow:20"></div>
-      </div>
-    </div>
-    <div class="gantt-row">
-      <div class="gantt-label">Fraud Detection</div>
-      <div class="gantt-track">
-        <div class="phase-block" style="flex-grow:17"></div>
-        <div class="phase-block phase-fraud" style="flex-grow:6">Agent Build</div>
-        <div class="phase-block phase-uat" style="flex-grow:2">Shadow Mode</div>
-        <div class="phase-block phase-golive" style="flex-grow:2">Live</div>
-        <div class="phase-block" style="flex-grow:10"></div>
-      </div>
-    </div>
-    <div class="gantt-row">
-      <div class="gantt-label">Collections Recovery</div>
-      <div class="gantt-track">
-        <div class="phase-block" style="flex-grow:27"></div>
-        <div class="phase-block phase-collections" style="flex-grow:6">Agent Build</div>
-        <div class="phase-block phase-uat" style="flex-grow:2">Pilot</div>
-        <div class="phase-block phase-golive" style="flex-grow:2">Full Rollout</div>
-      </div>
+  <div style="margin-top:4px">
+    <div class="section-label">Resource Deployment Plan</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.65">
+      The same 2 AI/ML Engineers and 1–2 Backend Engineers roll off one use case and onto the next rather than sitting idle — cost.html's per-role duration figures already reflect this staggered entry (a role is only costed for the weeks it's actually engaged, not from the program's Day 1), so there's no separate "Day-1 loading" baseline in this program's cost model to compare against.
+    </p>
+    <div class="table-scroll">
+      <table id="rpTable">
+        <thead><tr><th>Role</th><th>Use Case</th><th>FTE</th><th>Engagement Window</th><th>Note</th></tr></thead>
+        <tbody id="rpBody"></tbody>
+      </table>
     </div>
   </div>
 
-  <!-- TRADITIONAL GANTT -->
-  <div class="gantt-wrap hidden" id="gantt-traditional">
-    <div class="week-ruler"><span>Wk 1–4</span><span>Wk 5–17</span><span>Wk 18–24</span><span>Wk 25–39</span><span>Wk 40–54</span></div>
-
-    <div class="gantt-row">
-      <div class="gantt-label">Shared Platform</div>
-      <div class="gantt-track">
-        <div class="phase-block phase-shared" style="flex-grow:4">Setup</div>
-        <div class="phase-block" style="flex-grow:50"></div>
-      </div>
-    </div>
-    <div class="gantt-row">
-      <div class="gantt-label">MSME Credit CAM Prep</div>
-      <div class="gantt-track">
-        <div class="phase-block" style="flex-grow:4"></div>
-        <div class="phase-block phase-msme" style="flex-grow:13">Agent Build</div>
-        <div class="phase-block phase-uat" style="flex-grow:4">UAT</div>
-        <div class="phase-block phase-golive" style="flex-grow:3">Live</div>
-        <div class="phase-block" style="flex-grow:30"></div>
-      </div>
-    </div>
-    <div class="gantt-row">
-      <div class="gantt-label">Fraud Detection</div>
-      <div class="gantt-track">
-        <div class="phase-block" style="flex-grow:24"></div>
-        <div class="phase-block phase-fraud" style="flex-grow:9">Agent Build</div>
-        <div class="phase-block phase-uat" style="flex-grow:3">Shadow Mode</div>
-        <div class="phase-block phase-golive" style="flex-grow:3">Live</div>
-        <div class="phase-block" style="flex-grow:15"></div>
-      </div>
-    </div>
-    <div class="gantt-row">
-      <div class="gantt-label">Collections Recovery</div>
-      <div class="gantt-track">
-        <div class="phase-block" style="flex-grow:39"></div>
-        <div class="phase-block phase-collections" style="flex-grow:9">Agent Build</div>
-        <div class="phase-block phase-uat" style="flex-grow:3">Pilot</div>
-        <div class="phase-block phase-golive" style="flex-grow:3">Full Rollout</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-label" style="margin-top:36px">Resource Deployment Plan</div>
-  <div class="table-scroll">
-    <table>
-      <thead><tr><th>Role</th><th>Use Case</th><th>FTE</th><th>Engagement Window</th></tr></thead>
-      <tbody>
-        <tr class="group-header"><td colspan="4">Shared Platform</td></tr>
-        <tr><td>Solution Architect</td><td><span class="pill pill-shared">Shared</span></td><td class="muted">1</td><td data-traditional="Week 1–4" data-ai="Week 1–3">Week 1–3</td></tr>
-        <tr><td>DevOps Engineer</td><td><span class="pill pill-shared">Shared</span></td><td class="muted">1, then 0.25 ongoing</td><td data-traditional="Week 1–4, then 0.25 FTE through Week 54" data-ai="Week 1–3, then 0.25 FTE through Week 37">Week 1–3, then 0.25 FTE through Week 37</td></tr>
-        <tr><td>Program Manager</td><td><span class="pill pill-shared">All (part-time)</span></td><td class="muted">0.5</td><td data-traditional="Week 1–54" data-ai="Week 1–37">Week 1–37</td></tr>
-
-        <tr class="group-header"><td colspan="4">MSME Credit CAM Prep</td></tr>
-        <tr><td>AI/ML Engineers ×2</td><td><span class="pill pill-teal">MSME</span></td><td class="muted">2</td><td data-traditional="Week 5–17" data-ai="Week 4–12">Week 4–12</td></tr>
-        <tr><td>Backend Engineers ×2</td><td><span class="pill pill-teal">MSME</span></td><td class="muted">2</td><td data-traditional="Week 5–20 (entry on API contracts, exits before hypercare)" data-ai="Week 4–14 (entry on API contracts, exits before hypercare)">Week 4–14 (entry on API contracts, exits before hypercare)</td></tr>
-        <tr><td>QA Engineer</td><td><span class="pill pill-teal">MSME</span></td><td class="muted">1</td><td data-traditional="Week 17–24" data-ai="Week 12–17">Week 12–17</td></tr>
-
-        <tr class="group-header"><td colspan="4">Fraud Detection</td></tr>
-        <tr><td>AI/ML Engineers ×2</td><td><span class="pill pill-blue">Fraud</span></td><td class="muted">2</td><td data-traditional="Week 25–33" data-ai="Week 18–23">Week 18–23</td></tr>
-        <tr><td>Backend Engineer</td><td><span class="pill pill-blue">Fraud</span></td><td class="muted">1</td><td data-traditional="Week 25–35" data-ai="Week 18–25">Week 18–25</td></tr>
-        <tr><td>QA Engineer</td><td><span class="pill pill-blue">Fraud</span></td><td class="muted">1</td><td data-traditional="Week 33–39" data-ai="Week 23–27">Week 23–27</td></tr>
-
-        <tr class="group-header"><td colspan="4">Collections Recovery</td></tr>
-        <tr><td>AI/ML Engineers ×2</td><td><span class="pill pill-green">Collections</span></td><td class="muted">2</td><td data-traditional="Week 40–48" data-ai="Week 28–33">Week 28–33</td></tr>
-        <tr><td>Backend Engineer</td><td><span class="pill pill-green">Collections</span></td><td class="muted">1</td><td data-traditional="Week 40–50" data-ai="Week 28–35">Week 28–35</td></tr>
-        <tr><td>QA Engineer</td><td><span class="pill pill-green">Collections</span></td><td class="muted">1</td><td data-traditional="Week 48–54" data-ai="Week 33–37">Week 33–37</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p style="font-size:11.5px;color:var(--muted);margin-bottom:32px">Peak concurrent headcount: <strong style="color:var(--text)" data-traditional="~7 people (Weeks 5–17, MSME build overlapping shared-platform support)" data-ai="~7 people (Weeks 4–12, MSME build overlapping shared-platform support)">~7 people (Weeks 4–12, MSME build overlapping shared-platform support)</strong>. Backend and AI/ML roles roll off one use case and onto the next rather than sitting idle — the same 2 AI/ML engineers carry all 3 use cases in sequence.</p>
-
-  <div class="section-label">Key Milestones</div>
+  <div class="section-label" style="margin-top:36px">Key Milestones</div>
   <div class="milestone-grid">
     <div class="milestone-card"><div class="wk" data-traditional="Week 4" data-ai="Week 3">Week 3</div><p>Shared platform live — AWS EKS, LangGraph, PII middleware, Core Banking adapter all provisioned</p></div>
-    <div class="milestone-card"><div class="wk" data-traditional="Week 17" data-ai="Week 12">Week 12</div><p>MSME agent build complete — credit officer UAT begins on pilot cohort</p></div>
+    <div class="milestone-card"><div class="wk" data-traditional="Week 14" data-ai="Week 10">Week 10</div><p>MSME agents in staging — credit officer UAT begins on pilot cohort</p></div>
     <div class="milestone-card"><div class="wk" data-traditional="Week 24" data-ai="Week 17">Week 17</div><p>MSME Credit CAM Prep live — first use case in production</p></div>
-    <div class="milestone-card"><div class="wk" data-traditional="Week 33" data-ai="Week 23">Week 23</div><p>Fraud Detection agents complete — shadow-mode run alongside existing rules engine</p></div>
-    <div class="milestone-card"><div class="wk" data-traditional="Week 39" data-ai="Week 27">Week 27</div><p>Fraud Detection live; Collections Recovery pilot begins on one DPD bucket</p></div>
+    <div class="milestone-card"><div class="wk" data-traditional="Week 32" data-ai="Week 23">Week 23</div><p>Fraud Detection agent in staging — shadow-mode run alongside existing rules engine</p></div>
+    <div class="milestone-card"><div class="wk" data-traditional="Week 39" data-ai="Week 27">Week 27</div><p>Fraud Detection live; Collections Recovery build begins</p></div>
     <div class="milestone-card"><div class="wk" data-traditional="Week 54" data-ai="Week 37">Week 37</div><p>All 3 use cases live — full program in production</p></div>
   </div>
 
@@ -290,18 +433,300 @@
 </footer>
 
 <script>
-function setScenario(mode, btn) {
-  document.querySelectorAll('#scToggle .sc-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+// ─────────────────────────────────────────────
+// DATA MODEL — startT/durT = traditional weeks, startAI/durAI = AI-accelerated
+// ─────────────────────────────────────────────
+
+const sharedTasks = [
+  { name:'AWS VPC + EKS Cluster Provision', role:'DevOps Engineer', color:'infra',
+    startT:1, durT:1, startAI:1, durAI:1,
+    tip:'Terraform scripts, VPC, EKS cluster, IAM roles. AI: Copilot autocompletes the HCL — no procurement delay, pure config.' },
+  { name:'RDS PostgreSQL + pgvector Setup', role:'DevOps Engineer', color:'infra',
+    startT:1, durT:0.5, startAI:1, durAI:0.5,
+    tip:'RDS multi-AZ, pgvector extension, initial schema for audit logs and the credit_policy_chunks RAG table.' },
+  { name:'PII Middleware + KMS + WAF', role:'DevOps + Security Eng', color:'infra',
+    startT:1.5, durT:0.5, startAI:1.5, durAI:0.5,
+    tip:'Tokenise/encrypt/scrub boundary (shared/middleware.py), Secrets Manager for Core Banking + Bureau credentials, WAF rules.' },
+  { name:'GitHub Actions CI/CD Pipeline', role:'DevOps Engineer', color:'infra',
+    startT:1, durT:1, startAI:1, durAI:0.5,
+    tip:'Dev → staging → prod pipeline. AI: Copilot writes the workflow YAML; CodeRabbit reviews it.',
+    aiSave:'Copilot writes pipeline YAML → saves 0.5 wk' },
+  { name:'Langfuse Observability Setup', role:'DevOps Engineer', color:'infra',
+    startT:2, durT:0.5, startAI:2, durAI:0.5,
+    tip:'Self-hosted Langfuse on EKS, dashboard config, API key integration — traces all 12 agents across the 3 use cases.' },
+  { name:'Core Banking System API Access & OAuth Contract', role:'AI Program Manager + Bank IT', color:'p1',
+    startT:1, durT:3, startAI:1, durAI:3,
+    tip:'IT-security review, role scoping, OAuth credential issuance. Vendor governance — no AI tool accelerates this. Start Day 1.',
+    milestone:4, milLabel:'Platform Live ✓' },
+];
+
+const msmeTasks = [
+  { name:'Policy & Credit-Norm RAG Indexing', role:'AI/ML Engineer', color:'p1',
+    startT:1, durT:3, startAI:1, durAI:2,
+    tip:'Chunk RBI Master Directions + internal credit policy into pgvector (credit_policy_chunks), HNSW + tsvector hybrid search. AI: Claude Code writes the ingestion pipeline.',
+    aiSave:'Claude Code generates the hybrid RAG pipeline (shared/rag.py)' },
+  { name:'Financial Ingestion Agent (OCR: ITR/P&L/Balance Sheet)', role:'AI/ML Engineer', color:'p2',
+    startT:3, durT:4, startAI:2, durAI:3,
+    tip:'OCR extraction + LangGraph node for ITRs, P&L, balance sheets. AI: Claude Code scaffolds the extraction pipeline.',
+    aiSave:'Claude Code scaffolds OCR extraction + LangGraph node' },
+  { name:'Bureau & Tax Verification Agent (CIBIL/AA/GSTR)', role:'AI/ML Engineer', color:'p2',
+    startT:3, durT:4, startAI:2, durAI:3,
+    tip:'CIBIL, Account Aggregator feeds, GSTR-1/3B — runs in parallel with Financial Ingestion. AI: Claude Code generates the bureau/tax adapters from API specs.',
+    aiSave:'Claude Code generates CIBIL/AA/GST adapters from spec' },
+  { name:'Core Banking System Read Integration', role:'Backend Engineer', color:'p2',
+    startT:4, durT:3, startAI:3, durAI:2,
+    tip:'CBS REST adapter — read applicant record, existing exposure, collateral. AI: Claude Code generates the adapter from the API contract.',
+    aiSave:'Claude Code generates CBS adapter from spec' },
+  { name:'Risk & Cash-Flow Agent (joins Financial + Bureau)', role:'AI/ML Engineer', color:'p2',
+    startT:7, durT:3, startAI:5, durAI:2,
+    tip:'Joins Financial Ingestion + Bureau/Tax outputs, flags cash-flow anomalies. Claude Sonnet reasoning chain scaffolded by Claude Code.',
+    aiSave:'Claude Code scaffolds the Sonnet reasoning chain' },
+  { name:'CAM Drafting Agent + Officer Review UI', role:'AI/ML + Backend Eng', color:'p2',
+    startT:10, durT:4, startAI:7, durAI:3,
+    tip:'Recommended pricing, pre-filled CAM memo, Slack/portal review card for the credit officer. AI: Claude Code generates the review UI + memo template.',
+    aiSave:'Claude Code generates officer review UI + CAM template', milestone:10, milLabel:'Agents in Staging ✓' },
+  { name:'Core Banking Write-Back (sanction terms)', role:'Backend Engineer', color:'p3',
+    startT:14, durT:2, startAI:10, durAI:1,
+    tip:'Writes approved sanction terms and limit back to the Core Banking System. AI: Claude Code generates the write-back service.',
+    aiSave:'Claude Code generates the write-back service' },
+  { name:'UAT with Credit Officers (pilot cohort)', role:'QA Engineer', color:'p3',
+    startT:16, durT:3, startAI:11, durAI:2,
+    tip:'Pilot cohort of credit officers runs real CAM cases through the system. AI: AI-generated test cases pre-cover edge cases; UAT focuses on exceptions.',
+    aiSave:'AI test suites pre-cover edge cases → shorter UAT' },
+  { name:'Security Audit + RBI Readiness Review', role:'Security Engineer (0.5 FTE)', color:'p4',
+    startT:18, durT:2, startAI:13, durAI:1,
+    tip:'PII masking validation, API pen-test, RBI readiness review. AI: Claude reviews PRs for PII leakage patterns pre-audit — fewer issues reach pen-test.',
+    aiSave:'Claude PR review catches PII issues early', milestone:20, milLabel:'MSME Live ✓' },
+];
+
+const fraudTasks = [
+  { name:'Device/IP & Network Agent', role:'AI/ML Engineer', color:'p2',
+    startT:1, durT:4, startAI:1, durAI:3,
+    tip:'Device fingerprinting, IP reputation scoring. AI: Claude Code scaffolds the signal-agent LangGraph node.',
+    aiSave:'Claude Code scaffolds the signal agent' },
+  { name:'Behavior Pattern Agent', role:'AI/ML Engineer', color:'p2',
+    startT:1, durT:4, startAI:1, durAI:3,
+    tip:'Spend/velocity anomaly detection — runs in parallel with Device/IP & Network Agent.' },
+  { name:'Merchant/Beneficiary & AML Agent', role:'AI/ML Engineer', color:'p2',
+    startT:1, durT:4, startAI:1, durAI:3,
+    tip:'Merchant risk scoring, AML/sanctions watchlist checks — runs in parallel. AI: Claude Code generates the watchlist screening integration.',
+    aiSave:'Claude Code generates AML watchlist integration' },
+  { name:'Device/IP + AML Watchlist API Integration', role:'Backend Engineer', color:'p2',
+    startT:2, durT:3, startAI:2, durAI:2,
+    tip:'Vendor adapters for device/IP intelligence and AML/sanctions/PEP screening APIs. AI: Claude Code generates both adapters from spec.',
+    aiSave:'Claude Code generates both vendor adapters' },
+  { name:'Recommendation Agent (joins all 3 signal agents)', role:'AI/ML Engineer', color:'p2',
+    startT:5, durT:3, startAI:4, durAI:2,
+    tip:'Joins Device/IP, Behavior, and Merchant/AML agents; produces a fraud-probability score with reasons in under 60 seconds.',
+    milestone:8, milLabel:'Agent in Staging ✓' },
+  { name:'Auto-Freeze Governance + Investigation UI', role:'Backend + Compliance', color:'p3',
+    startT:8, durT:3, startAI:6, durAI:2,
+    tip:'Auto-freeze threshold sign-off, false-freeze rate baseline, fraud analyst investigation case UI. AI: Claude Code generates the investigator case UI.',
+    aiSave:'Claude Code generates investigator case UI' },
+  { name:'Shadow-Mode Validation vs Existing Rules Engine', role:'QA Engineer', color:'p3',
+    startT:11, durT:3, startAI:8, durAI:1.5,
+    tip:'New agent runs alongside the existing rules engine without taking action, comparing outcomes. AI: AI-generated test suites cut the validation window.',
+    aiSave:'AI test suites cut shadow-mode validation window' },
+  { name:'Security Audit + Go-Live', role:'Security Engineer (0.5 FTE)', color:'p4',
+    startT:13, durT:2, startAI:9, durAI:1,
+    tip:'Pen-test of fraud-scoring endpoints and PII flows before go-live.', milestone:15, milLabel:'Fraud Detection Live ✓' },
+];
+
+const collectionsTasks = [
+  { name:'DPD Segmentation & Risk/Behavior Agent', role:'AI/ML Engineer', color:'p2',
+    startT:1, durT:4, startAI:1, durAI:3,
+    tip:'Payment-history scoring, DPD-bucket segmentation. AI: Claude Code generates the bureau payment-history integration.',
+    aiSave:'Claude Code generates payment-history integration' },
+  { name:'Channel Agent (WhatsApp/SMS/IVR selection)', role:'AI/ML + Backend Eng', color:'p2',
+    startT:1, durT:4, startAI:1, durAI:3,
+    tip:'Selects outreach channel and timing per account — runs in parallel with the Risk/Behavior Agent. AI: Claude Code builds the multi-channel selection logic.',
+    aiSave:'Claude Code builds multi-channel selection logic' },
+  { name:'WhatsApp + SMS + IVR Integration', role:'Backend Engineer', color:'p2',
+    startT:2, durT:3, startAI:2, durAI:2,
+    tip:'Shared outreach layer across all 3 channels, reused from the Channel Agent design.' },
+  { name:'Negotiation Agent (settlement/EMI within policy bands)', role:'AI/ML Engineer', color:'p2',
+    startT:5, durT:3, startAI:4, durAI:2,
+    tip:'Proposes settlement or EMI restructuring within pre-approved policy bands. Claude Sonnet is the negotiation reasoning engine; Claude Code wires the policy-band guardrails.',
+    aiSave:'Claude Code wires policy-band guardrails around Sonnet' },
+  { name:'Escalation Agent (flags complex/aggressive cases)', role:'AI/ML Engineer', color:'p2',
+    startT:8, durT:2, startAI:6, durAI:1.5,
+    tip:'Flags cases needing human collections-officer judgment, with full context attached.', milestone:10, milLabel:'Agents in Staging ✓' },
+  { name:'Fair-Practice Compliance Review', role:'Compliance Officer', color:'p3',
+    startT:10, durT:2, startAI:8, durAI:1.5,
+    tip:'RBI Fair Practice Code review — outreach tone, frequency caps, escalation rules for the negotiation and channel agents.' },
+  { name:'Pilot Rollout — One DPD Bucket', role:'Backend + PM', color:'p3',
+    startT:12, durT:2, startAI:9, durAI:1,
+    tip:'Full agent stack piloted on a single DPD bucket before wider rollout. AI: GitHub Actions + AI-assisted monitoring means faster, safer hotfix deploys.',
+    aiSave:'GitHub Actions + AI monitoring: faster deploys' },
+  { name:'Security Audit + Full Rollout', role:'Security Engineer (0.5 FTE)', color:'p4',
+    startT:13, durT:2, startAI:9, durAI:1,
+    tip:'Pen-test of the negotiation/settlement endpoints and PII flows, then full-book rollout.', milestone:15, milLabel:'Collections Live ✓' },
+];
+
+// ─────────────────────────────────────────────
+// RENDER ENGINE
+// ─────────────────────────────────────────────
+let scenario = 'trad';
+
+function setScenario(s) {
+  scenario = s;
+  document.getElementById('btn-trad').classList.toggle('active', s === 'trad');
+  document.getElementById('btn-ai').classList.toggle('active', s === 'ai');
 
   document.querySelectorAll('[data-traditional]').forEach(el => {
-    el.textContent = mode === 'ai' ? el.dataset.ai : el.dataset.traditional;
+    el.textContent = s === 'ai' ? el.dataset.ai : el.dataset.traditional;
   });
 
-  document.getElementById('gantt-ai').classList.toggle('hidden', mode !== 'ai');
-  document.getElementById('gantt-traditional').classList.toggle('hidden', mode !== 'traditional');
-  document.getElementById('aiNote').classList.toggle('show', mode === 'ai');
+  renderAll();
 }
+
+function getTotalWeeks(tasks) {
+  let max = 0;
+  tasks.forEach(t => { const end = t.startT + t.durT; if (end > max) max = end; });
+  return Math.ceil(max);
+}
+
+function renderGantt(containerId, tasks, badgeId, tradLabel, aiLabel) {
+  const s = scenario;
+  const displayWks = Math.max(getTotalWeeks(tasks), 4);
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const badge = document.getElementById(badgeId);
+  if (badge) {
+    badge.textContent = s === 'trad' ? tradLabel : aiLabel;
+    badge.style.color = s === 'ai' ? 'var(--gold)' : 'var(--mid)';
+  }
+
+  let html = '<div class="week-header"><div class="week-label-col">Task / Role</div><div class="week-cells">';
+  for (let w = 1; w <= displayWks; w++) html += `<div class="week-cell">W${w}</div>`;
+  html += '</div></div>';
+
+  tasks.forEach(t => {
+    const start = s === 'trad' ? t.startT : t.startAI;
+    const dur = s === 'trad' ? t.durT : t.durAI;
+    const leftPct = ((start - 1) / displayWks) * 100;
+    const widthPct = (dur / displayWks) * 100;
+
+    let mileHtml = '';
+    if (t.milestone) {
+      const mWk = s === 'trad' ? t.milestone : Math.min(t.milestone, Math.ceil(t.startAI + t.durAI));
+      const mPct = ((mWk - 0.5) / displayWks) * 100;
+      mileHtml = `<div class="milestone" style="left:${mPct}%"></div><div class="milestone-label" style="left:${mPct}%">${t.milLabel || '★'}</div>`;
+    }
+
+    const barLabel = dur >= 1.5 ? t.name : '';
+    const tip = {
+      name: t.name, role: t.role,
+      trad: `${t.startT}–${t.startT + t.durT} wk (${t.durT}w)`,
+      ai: `${t.startAI}–${t.startAI + t.durAI} wk (${t.durAI}w)`,
+      tip: t.tip, aiSave: t.aiSave || null
+    };
+
+    html += `<div class="gantt-row" data-tip='${JSON.stringify(tip).replace(/'/g,"&#39;")}'>
+      <div class="row-label"><div class="row-name">${t.name}</div><div class="row-role">${t.role}</div></div>
+      <div class="row-bars">
+        <div class="bar pc-${t.color}" style="left:${leftPct}%;width:${widthPct}%"
+             onmouseenter="showTip(event,this.closest('.gantt-row'))" onmouseleave="hideTip()">
+          ${barLabel ? `<span style="color:#05202b;text-shadow:0 1px 1px rgba(255,255,255,.2)">${barLabel}</span>` : ''}
+        </div>
+        ${mileHtml}
+      </div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function renderAll() {
+  renderGantt('gantt-shared', sharedTasks, 'gb-shared', '4 Weeks (Traditional)', '3 Weeks (AI-Accelerated)');
+  renderGantt('gantt-msme', msmeTasks, 'gb-msme', '20 Weeks (Traditional)', '14 Weeks (AI-Accelerated)');
+  renderGantt('gantt-fraud', fraudTasks, 'gb-fraud', '15 Weeks (Traditional)', '10 Weeks (AI-Accelerated)');
+  renderGantt('gantt-coll', collectionsTasks, 'gb-coll', '15 Weeks (Traditional)', '10 Weeks (AI-Accelerated)');
+}
+
+const tt = document.getElementById('tooltip');
+function showTip(e, row) {
+  const raw = row.getAttribute('data-tip');
+  if (!raw) return;
+  const d = JSON.parse(raw.replace(/&#39;/g, "'"));
+  let html = `<div class="tt-title">${d.name}</div>`;
+  html += `<div class="tt-row"><span class="tt-key">Role:</span><span class="tt-val">${d.role}</span></div>`;
+  html += `<div class="tt-row"><span class="tt-key">Traditional:</span><span class="tt-val">${d.trad}</span></div>`;
+  html += `<div class="tt-row"><span class="tt-key">AI-Accel:</span><span class="tt-val tt-ai-save">${d.ai}</span></div>`;
+  if (d.aiSave) html += `<div class="tt-row"><span class="tt-key">AI tool:</span><span class="tt-ai-save">${d.aiSave}</span></div>`;
+  html += `<div style="margin-top:7px;font-size:10px;color:var(--muted);line-height:1.5">${d.tip}</div>`;
+  tt.innerHTML = html;
+  tt.style.display = 'block';
+  moveTip(e);
+}
+function moveTip(e) {
+  const x = e.clientX + 16, y = e.clientY - 10;
+  tt.style.left = Math.min(x, window.innerWidth - 280) + 'px';
+  tt.style.top = Math.max(10, Math.min(y, window.innerHeight - 200)) + 'px';
+}
+function hideTip() { tt.style.display = 'none'; }
+document.addEventListener('mousemove', e => { if (tt.style.display === 'block') moveTip(e); });
+
+renderAll();
+
+// ── Resource Plan Table ──
+const rpData = [
+  { group:'Shared Platform', role:'Solution Architect', pill:'pill-shared', usecase:'Shared', fte:'1',
+    trad:'Week 1–4', ai:'Week 1–3', note:'Designs the shared AWS + LangGraph platform once, up front' },
+  { group:'Shared Platform', role:'DevOps Engineer', pill:'pill-shared', usecase:'Shared, then 0.25 ongoing', fte:'1, then 0.25',
+    trad:'Week 1–4, then 0.25 FTE through Week 54', ai:'Week 1–3, then 0.25 FTE through Week 37', note:'Infra, CI/CD, deployments — present throughout the program' },
+  { group:'Shared Platform', role:'AI Program Manager', pill:'pill-shared', usecase:'All (part-time)', fte:'0.5',
+    trad:'Week 1–54', ai:'Week 1–37', note:'Vendor coordination (Core Banking, Bureau, AA), stakeholder comms' },
+
+  { group:'MSME Credit CAM Prep', role:'AI/ML Engineers ×2', pill:'pill-teal', usecase:'MSME', fte:'2',
+    trad:'Week 1–20', ai:'Week 1–14', note:'Builds all 4 agents — present for the full MSME build' },
+  { group:'MSME Credit CAM Prep', role:'Backend Engineers ×2', pill:'pill-teal', usecase:'MSME', fte:'2',
+    trad:'Week 4–20', ai:'Week 3–14', note:'Enters once Core Banking API contract is secured (Week 3–4)' },
+  { group:'MSME Credit CAM Prep', role:'QA Engineer', pill:'pill-teal', usecase:'MSME', fte:'1',
+    trad:'Week 16–20', ai:'Week 11–14', note:'Enters once agents are in staging — nothing to test before that' },
+  { group:'MSME Credit CAM Prep', role:'Security Engineer', pill:'pill-teal', usecase:'MSME', fte:'0.5',
+    trad:'Week 18–20', ai:'Week 13–14', note:'Pen-test &amp; RBI readiness review ahead of go-live' },
+
+  { group:'Fraud Detection', role:'AI/ML Engineers ×2', pill:'pill-blue', usecase:'Fraud', fte:'2',
+    trad:'Week 21–33', ai:'Week 15–23', note:'Rolls off MSME onto the 3 parallel signal agents + Recommendation Agent' },
+  { group:'Fraud Detection', role:'Backend Engineer', pill:'pill-blue', usecase:'Fraud', fte:'1',
+    trad:'Week 22–36', ai:'Week 16–25', note:'Device/IP + AML watchlist integration, investigation UI' },
+  { group:'Fraud Detection', role:'QA Engineer', pill:'pill-blue', usecase:'Fraud', fte:'1',
+    trad:'Week 31–39', ai:'Week 22–27', note:'Shadow-mode validation vs the existing rules engine' },
+  { group:'Fraud Detection', role:'Security Engineer', pill:'pill-blue', usecase:'Fraud', fte:'0.5',
+    trad:'Week 33–39', ai:'Week 23–27', note:'Pen-test ahead of go-live' },
+
+  { group:'Collections Recovery', role:'AI/ML Engineers ×2', pill:'pill-green', usecase:'Collections', fte:'2',
+    trad:'Week 36–48', ai:'Week 25–33', note:'Rolls off Fraud onto the Risk/Behavior, Channel, Negotiation and Escalation agents' },
+  { group:'Collections Recovery', role:'Backend Engineer', pill:'pill-green', usecase:'Collections', fte:'1',
+    trad:'Week 37–49', ai:'Week 26–35', note:'Outreach channel integration, pilot rollout support' },
+  { group:'Collections Recovery', role:'Compliance Officer', pill:'pill-green', usecase:'Collections', fte:'0.25',
+    trad:'Week 46–48', ai:'Week 33–34.5', note:'RBI Fair Practice Code review of outreach tone/frequency' },
+  { group:'Collections Recovery', role:'Security Engineer', pill:'pill-green', usecase:'Collections', fte:'0.5',
+    trad:'Week 47–49', ai:'Week 33–34', note:'Pen-test ahead of full rollout' },
+];
+
+function renderRpTable() {
+  const body = document.getElementById('rpBody');
+  let lastGroup = null;
+  let html = '';
+  rpData.forEach(r => {
+    if (r.group !== lastGroup) {
+      html += `<tr class="group-header"><td colspan="5">${r.group}</td></tr>`;
+      lastGroup = r.group;
+    }
+    html += `<tr>
+      <td style="font-weight:600;color:var(--text)">${r.role}</td>
+      <td><span class="pill ${r.pill}">${r.usecase}</span></td>
+      <td class="muted">${r.fte}</td>
+      <td data-traditional="${r.trad}" data-ai="${r.ai}">${r.trad}</td>
+      <td class="muted">${r.note}</td>
+    </tr>`;
+  });
+  body.innerHTML = html;
+}
+renderRpTable();
 </script>
 </body>
 </html>

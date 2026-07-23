@@ -1,6 +1,8 @@
-"""Risk & Cash-Flow Agent — joins Financial Ingestion + Bureau/Tax, flags anomalies via Claude Sonnet."""
+"""Risk & Cash-Flow Agent — joins Financial Ingestion + Bureau/Tax, flags anomalies via Claude Sonnet.
+Grounds its risk assessment in RBI Master Directions + internal credit policy via the shared RAG."""
 from shared.llm import complete, SONNET
 from shared.middleware import safe_json
+from shared.rag import policy_qa
 from a1_msme_credit.states import CreditState
 
 
@@ -14,11 +16,16 @@ async def run(state: CreditState) -> CreditState:
         "business_vintage_years": state["business_vintage_years"],
     }
 
+    policy_answer, policy_refs = await policy_qa(
+        f"What RBI/internal credit policy limits apply to an MSME loan of this size and vintage: {safe_json(prompt_data)}"
+    )
+
     answer = await complete(
         messages=[{
             "role": "user",
             "content": (
                 f"Assess MSME credit risk from this data:\n{safe_json(prompt_data)}\n\n"
+                f"Relevant policy guidance:\n{policy_answer}\n\n"
                 "Return a JSON object with keys: cash_flow_score (0-100), risk_flags "
                 "(list of short strings), anomaly_detected (bool), notes (one paragraph)."
             ),
@@ -40,5 +47,6 @@ async def run(state: CreditState) -> CreditState:
         "risk_flags": parsed.get("risk_flags", []),
         "anomaly_detected": parsed.get("anomaly_detected", False),
         "risk_notes": parsed.get("notes", ""),
+        "policy_refs": policy_refs,
         "current_step": "risk_cashflow_review",
     }

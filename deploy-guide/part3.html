@@ -1,0 +1,422 @@
+<meta charset="UTF-8">
+<title>Ai-ME BANK — Deployment Guide Part 3: Application Deployment to EKS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#3B0F1A;color:#CBD5E1;line-height:1.6;font-size:14px}
+a{color:#F59E0B;text-decoration:none}
+h1{font-size:26px;font-weight:800;color:#fff;margin-bottom:6px}
+h2{font-size:17px;font-weight:700;color:#F59E0B;margin:32px 0 12px;border-left:3px solid #F59E0B;padding-left:12px}
+h3{font-size:13px;font-weight:700;color:#E2E8F0;margin:14px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+.hero{background:linear-gradient(135deg,#4A1420,#3B0F1A);border-bottom:1px solid rgba(245,158,11,0.2);padding:28px 32px 22px}
+.hero-badge{display:inline-block;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);color:#F59E0B;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;margin-bottom:12px;text-transform:uppercase}
+.hero p{color:#94A3B8;font-size:13px;max-width:800px;margin-top:8px}
+.part-nav{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.part-pill{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#94A3B8;font-size:11px;padding:4px 12px;border-radius:20px}
+.part-pill.done{background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.3);color:#6EE7B7}
+.part-pill.active{background:rgba(245,158,11,0.2);border-color:rgba(245,158,11,0.5);color:#F59E0B}
+.body{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 160px)}
+.toc{background:#26131A;border-right:1px solid rgba(255,255,255,0.06);padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.toc-title{font-size:10px;font-weight:700;color:#94765B;letter-spacing:2px;text-transform:uppercase;padding:0 16px 10px}
+.toc a{display:block;padding:5px 16px;font-size:12px;color:#64748B;border-left:2px solid transparent;transition:all .15s}
+.toc a:hover{color:#F59E0B;border-left-color:#F59E0B;background:rgba(245,158,11,0.06)}
+.toc-section{font-size:10px;font-weight:700;color:#94765B;letter-spacing:1.5px;text-transform:uppercase;padding:12px 16px 4px}
+.content{padding:28px 36px;max-width:920px}
+.step{background:#4A1420;border:1px solid rgba(255,255,255,0.07);border-radius:10px;margin-bottom:20px;overflow:hidden}
+.step-hdr{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.step-num{background:#F59E0B;color:#000;font-size:12px;font-weight:800;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-title{font-size:15px;font-weight:700;color:#fff}
+.step-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.5px}
+.badge-pre{background:rgba(99,102,241,0.2);color:#A5B4FC;border:1px solid rgba(99,102,241,0.3)}
+.badge-next{background:rgba(16,185,129,0.15);color:#6EE7B7;border:1px solid rgba(16,185,129,0.3)}
+.badge-time{background:rgba(245,158,11,0.15);color:#FCD34D;border:1px solid rgba(245,158,11,0.3)}
+.badge-role{background:rgba(236,72,153,0.15);color:#F9A8D4;border:1px solid rgba(236,72,153,0.3)}
+.step-body{padding:16px 18px}
+.step-body p{color:#94A3B8;font-size:13px;margin-bottom:10px}
+pre,code{font-family:'Cascadia Code','Fira Code',Consolas,monospace}
+pre{background:#1A0A0F;border:1px solid rgba(255,255,255,0.08);border-radius:7px;padding:14px 16px;font-size:12px;overflow-x:auto;margin:10px 0;line-height:1.75;color:#E2E8F0}
+code{background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:3px;font-size:12px;color:#FCD34D}
+.cmd-label{font-size:10px;font-weight:700;color:#94765B;letter-spacing:1.5px;text-transform:uppercase;margin:14px 0 4px}
+.warn{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:7px;padding:12px 14px;font-size:12.5px;color:#FCD34D;margin:10px 0}
+.info{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:7px;padding:12px 14px;font-size:12.5px;color:#93C5FD;margin:10px 0}
+.ok{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:7px;padding:12px 14px;font-size:12.5px;color:#6EE7B7;margin:10px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12.5px}
+th{background:#26131A;color:#94765B;font-weight:700;padding:8px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.08);font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#CBD5E1;vertical-align:top}
+tr:hover td{background:rgba(255,255,255,0.02)}
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0;font-size:12px}
+.flow-box{background:#4A1420;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:5px 10px;color:#CBD5E1;font-size:11px}
+.flow-arrow{color:#F59E0B;font-weight:700}
+.site-nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(59,15,26,0.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07);height:50px;display:flex;align-items:center;padding:0 20px;gap:0}
+.site-nav .nav-logo{font-size:15px;font-weight:800;color:#39FF14;margin-right:12px;white-space:nowrap;text-shadow:0 0 6px rgba(57,255,20,.7)}
+.site-nav .nav-sep{width:1px;height:20px;background:rgba(255,255,255,0.1);margin:0 10px;flex-shrink:0}
+.site-nav .nav-links{display:flex;gap:2px;align-items:center;overflow-x:auto;scrollbar-width:none}
+.site-nav .nav-links::-webkit-scrollbar{display:none}
+.site-nav .nav-links a{font-size:11.5px;font-weight:500;color:#64748B;text-decoration:none;padding:5px 9px;border-radius:5px;white-space:nowrap;transition:color .15s,background .15s}
+.site-nav .nav-links a:hover{color:#F59E0B;background:rgba(245,158,11,0.08)}
+.site-nav .nav-links a.active{color:#F59E0B;font-weight:700;background:rgba(245,158,11,0.12)}
+.site-nav .nav-cta{margin-left:auto;flex-shrink:0;background:linear-gradient(135deg,#D97706,#F59E0B);color:#000!important;font-weight:700;font-size:11px;padding:5px 13px;border-radius:6px;text-decoration:none;white-space:nowrap}
+.hero{padding-top:70px!important}
+@media(max-width:900px){.body{grid-template-columns:1fr}.toc{display:none}}
+</style>
+
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">Ai-ME BANK</a>
+  <div class="nav-sep"></div>
+  <div class="nav-links">
+    <a href="../index.html#usecases">Use Cases</a>
+    <a href="../blueprints.html">Blueprints</a>
+    <a href="../architecture.html">Architecture</a>
+    <a href="../roi.html">ROI</a>
+    <a href="../cost.html">Cost</a>
+    <a href="../helicopter.html">Helicopter View</a>
+    <a href="../timeline.html">Timeline</a>
+    <a href="../governance.html">Governance</a>
+    <a href="../glossary.html">Glossary</a>
+    <div class="nav-sep"></div>
+    <a href="index.html">Deploy Guide</a>
+    <a href="ownership.html">RACI</a>
+    <a href="part1.html">Part 1</a>
+    <a href="part2.html">Part 2</a>
+    <a href="part3.html" class="active">Part 3</a>
+    <a href="part4.html">Part 4</a>
+    <a href="part5.html">Part 5</a>
+  </div>
+  <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank" class="nav-cta">Source Code</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Ai-ME BANK · Deployment Guide</div>
+  <h1>Part 3 — Application Deployment to EKS</h1>
+  <p>Steps 23–32 · From an empty EKS cluster to all 3 use-case routers live, autoscaling, behind a CI/CD pipeline with automated smoke tests.</p>
+  <div class="part-nav">
+    <span class="part-pill done">✓ Part 1: AWS Foundation</span>
+    <span class="part-pill done">✓ Part 2: Databases &amp; Policy RAG</span>
+    <span class="part-pill active">Part 3: App Deployment (Steps 23–32)</span>
+    <span class="part-pill">Part 4: Integrations &amp; PII (Steps 33–42)</span>
+    <span class="part-pill">Part 5: Go-Live &amp; Ops (Steps 43–50)</span>
+  </div>
+</div>
+
+<div class="body">
+<nav class="toc">
+  <div class="toc-title">Contents</div>
+  <div class="toc-section">Kubernetes Setup</div>
+  <a href="#s23">Step 23 — Namespace + RBAC</a>
+  <a href="#s24">Step 24 — External Secrets Operator</a>
+  <a href="#s25">Step 25 — ConfigMap</a>
+  <div class="toc-section">Application</div>
+  <a href="#s26">Step 26 — FastAPI Deployment</a>
+  <a href="#s27">Step 27 — Celery Worker + Beat</a>
+  <a href="#s28">Step 28 — Horizontal Pod Autoscaler</a>
+  <div class="toc-section">Networking &amp; CI/CD</div>
+  <a href="#s29">Step 29 — Service + ALB + SSL</a>
+  <a href="#s30">Step 30 — CI/CD Pipeline</a>
+  <a href="#s31">Step 31 — E2E Smoke Tests</a>
+  <a href="#s32">Step 32 — CloudWatch Alarms</a>
+</nav>
+
+<div class="content">
+
+<h2>Kubernetes Setup</h2>
+
+<div class="step" id="s23">
+  <div class="step-hdr">
+    <div class="step-num">23</div>
+    <div>
+      <div class="step-title">K8s Namespace + RBAC</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 22 (Part 2 complete)</span>
+        <span class="badge badge-next">Successor: Step 24</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 30 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre>kubectl create namespace ai-me-bank
+
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ai-me-bank-sa
+  namespace: ai-me-bank
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::$PROD_ACCOUNT_ID:role/ai-me-bank-app-role
+EOF</pre>
+  </div>
+</div>
+
+<div class="step" id="s24">
+  <div class="step-hdr">
+    <div class="step-num">24</div>
+    <div>
+      <div class="step-title">External Secrets Operator</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 23</span>
+        <span class="badge badge-next">Successor: Step 25</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 45 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre>helm repo add external-secrets https://charts.external-secrets.io
+helm install external-secrets external-secrets/external-secrets \
+  -n external-secrets-system --create-namespace
+
+kubectl apply -f - <<EOF
+apiVersion: external-secrets.io/v1beta1
+kind: SecretStore
+metadata:
+  name: aws-secrets-store
+  namespace: ai-me-bank
+spec:
+  provider:
+    aws:
+      service: SecretsManager
+      region: ap-south-1
+      auth:
+        jwt:
+          serviceAccountRef:
+            name: ai-me-bank-sa
+EOF</pre>
+    <div class="ok">✓ Verify: <code>kubectl get externalsecret -n ai-me-bank</code> shows STATUS: SecretSynced for every secret seeded in Step 8.</div>
+  </div>
+</div>
+
+<div class="step" id="s25">
+  <div class="step-hdr">
+    <div class="step-num">25</div>
+    <div>
+      <div class="step-title">ConfigMap</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 24</span>
+        <span class="badge badge-next">Successor: Step 26</span>
+        <span class="badge badge-role">Owner: DevOps + Backend Engineer</span>
+        <span class="badge badge-time">Time: 15 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre>kubectl create configmap ai-me-bank-config -n ai-me-bank \
+  --from-literal=DATABASE_URL="postgresql+asyncpg://..." \
+  --from-literal=REDIS_URL="rediss://..." \
+  --from-literal=APP_ENV="production" \
+  --from-literal=LOG_LEVEL="INFO"</pre>
+  </div>
+</div>
+
+<h2>Application</h2>
+
+<div class="step" id="s26">
+  <div class="step-hdr">
+    <div class="step-num">26</div>
+    <div>
+      <div class="step-title">FastAPI Deployment</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 25</span>
+        <span class="badge badge-next">Successor: Step 27</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 1 hour</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Deploys <code>agentic-ai/main.py</code> — mounts all 3 routers (<code>a1_msme_credit</code>, <code>a2_fraud_detection</code>, <code>a3_collections_recovery</code>).</p>
+    <pre>kubectl apply -f - <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-me-bank-api
+  namespace: ai-me-bank
+spec:
+  replicas: 2
+  strategy: { type: RollingUpdate, rollingUpdate: { maxUnavailable: 0 } }
+  selector: { matchLabels: { app: ai-me-bank-api } }
+  template:
+    metadata: { labels: { app: ai-me-bank-api } }
+    spec:
+      serviceAccountName: ai-me-bank-sa
+      containers:
+      - name: api
+        image: $ECR_URI:$(git rev-parse --short HEAD)
+        envFrom:
+        - configMapRef: { name: ai-me-bank-config }
+        - secretRef: { name: ai-me-bank-secrets }
+        readinessProbe: { httpGet: { path: /health, port: 8000 }, initialDelaySeconds: 10 }
+        livenessProbe: { httpGet: { path: /health, port: 8000 }, initialDelaySeconds: 30 }
+EOF</pre>
+  </div>
+</div>
+
+<div class="step" id="s27">
+  <div class="step-hdr">
+    <div class="step-num">27</div>
+    <div>
+      <div class="step-title">Celery Worker + Beat</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 26</span>
+        <span class="badge badge-next">Successor: Step 28</span>
+        <span class="badge badge-role">Owner: DevOps + Backend Engineer</span>
+        <span class="badge badge-time">Time: 45 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Async/scheduled tasks: nightly Langfuse audit export (Step 42), periodic AML watchlist re-screening for open fraud cases, monthly ROI report generation (Step 50).</p>
+    <pre>kubectl apply -f celery-worker-deployment.yaml
+kubectl apply -f celery-beat-deployment.yaml
+kubectl logs -n ai-me-bank deploy/celery-beat --tail=20</pre>
+  </div>
+</div>
+
+<div class="step" id="s28">
+  <div class="step-hdr">
+    <div class="step-num">28</div>
+    <div>
+      <div class="step-title">Horizontal Pod Autoscaler</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 27</span>
+        <span class="badge badge-next">Successor: Step 29</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 20 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre>helm install metrics-server metrics-server/metrics-server -n kube-system
+
+kubectl autoscale deployment ai-me-bank-api -n ai-me-bank \
+  --min=2 --max=6 --cpu-percent=60</pre>
+    <div class="info">💡 Fraud Detection's traffic is spikier than MSME/Collections (real-time transaction scoring) — watch its pod count during the Part 5 phased rollout and consider a separate HPA if it saturates before the shared deployment does.</div>
+  </div>
+</div>
+
+<h2>Networking &amp; CI/CD</h2>
+
+<div class="step" id="s29">
+  <div class="step-hdr">
+    <div class="step-num">29</div>
+    <div>
+      <div class="step-title">Service + ALB Ingress + SSL</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 28</span>
+        <span class="badge badge-next">Successor: Step 30</span>
+        <span class="badge badge-role">Owner: DevOps + Security Engineer</span>
+        <span class="badge badge-time">Time: 45 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre>kubectl apply -f - <<EOF
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ai-me-bank-ingress
+  namespace: ai-me-bank
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/certificate-arn: $ACM_CERT_ARN
+    alb.ingress.kubernetes.io/wafv2-acl-arn: $WAF_ACL_ARN
+spec:
+  ingressClassName: alb
+  rules:
+  - host: ai-me-bank.yourdomain.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend: { service: { name: ai-me-bank-api, port: { number: 8000 } } }
+EOF
+
+curl -s https://ai-me-bank.yourdomain.com/health</pre>
+    <div class="ok">✓ <code>{"status":"ok","env":"production"}</code> confirms the WAF from Step 12 and the ALB are correctly wired end-to-end.</div>
+  </div>
+</div>
+
+<div class="step" id="s30">
+  <div class="step-hdr">
+    <div class="step-num">30</div>
+    <div>
+      <div class="step-title">GitHub Actions CI/CD Pipeline</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 29</span>
+        <span class="badge badge-next">Successor: Step 31</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 1 day</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre># .github/workflows/deploy.yml
+name: deploy
+on: { push: { branches: [main] } }
+jobs:
+  build-test-deploy:
+    steps:
+      - run: pip install -r requirements.txt && pytest
+      - run: docker build -t $ECR_URI:$GITHUB_SHA .
+      - run: aws ecr get-login-password | docker login ... && docker push $ECR_URI:$GITHUB_SHA
+      - run: kubectl set image deployment/ai-me-bank-api api=$ECR_URI:$GITHUB_SHA -n ai-me-bank
+      - run: kubectl rollout status deployment/ai-me-bank-api -n ai-me-bank
+      - run: ./scripts/smoke_test.sh   # Step 31
+    # Production deploys gated on a tagged release, not every main-branch push</pre>
+  </div>
+</div>
+
+<div class="step" id="s31">
+  <div class="step-hdr">
+    <div class="step-num">31</div>
+    <div>
+      <div class="step-title">E2E Smoke Tests</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 30</span>
+        <span class="badge badge-next">Successor: Step 32</span>
+        <span class="badge badge-role">Owner: AI/ML + Backend Engineer</span>
+        <span class="badge badge-time">Time: 1 day (test authoring)</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre>curl -X POST https://ai-me-bank.yourdomain.com/msme-credit/apply -d '{...}' | jq .status
+curl -X POST https://ai-me-bank.yourdomain.com/fraud/score -d '{...}' | jq .recommended_action
+curl -X POST https://ai-me-bank.yourdomain.com/collections/process -d '{...}' | jq .selected_channel</pre>
+    <div class="ok">✓ All 3 return their expected response shape against test/sandbox data before Gate 2 (see <a href="ownership.html">RACI</a>) can be signed off.</div>
+  </div>
+</div>
+
+<div class="step" id="s32">
+  <div class="step-hdr">
+    <div class="step-num">32</div>
+    <div>
+      <div class="step-title">CloudWatch Alarms + SNS</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 31 (Gate 2 passed)</span>
+        <span class="badge badge-next">Successor: Step 33 (Part 4)</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 1 hour</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre>aws cloudwatch put-metric-alarm --alarm-name ai-me-bank-high-cpu \
+  --metric-name CPUUtilization --namespace AWS/EKS --threshold 80 \
+  --comparison-operator GreaterThanThreshold --evaluation-periods 3 \
+  --alarm-actions $SNS_TOPIC_ARN --profile ai-me-bank-prod
+
+aws sns subscribe --topic-arn $SNS_TOPIC_ARN --protocol email --notification-endpoint devops-lead@yourbank.com</pre>
+
+    <h3>Part 3 Complete</h3>
+    <div class="flow">
+      <div class="flow-box">✓ Namespace + Secrets</div><div class="flow-arrow">→</div>
+      <div class="flow-box">✓ All 3 Routers Live</div><div class="flow-arrow">→</div>
+      <div class="flow-box">✓ CI/CD + Smoke Tests</div><div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#F59E0B;color:#F59E0B">Next: Part 4 → Integrations, PII &amp; Langfuse Audit</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>

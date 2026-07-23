@@ -10,6 +10,20 @@ from sqlalchemy.orm import Mapped, mapped_column
 from shared.database import Base
 
 
+# ── Credit & Compliance Policy RAG ─────────────────────────────────────────
+
+class CreditPolicyChunk(Base):
+    """RBI Master Directions, internal credit policy manual, and KYC/AML guideline chunks."""
+    __tablename__ = "credit_policy_chunks"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    chunk_text: Mapped[str] = mapped_column(Text)
+    source_ref: Mapped[str] = mapped_column(String(200))    # e.g. "RBI/2022-23/Master Direction MSME, para 4.2"
+    source_type: Mapped[str] = mapped_column(String(50))    # rbi_master_direction / internal_credit_policy / kyc_aml_guideline
+    # embedding: Mapped[list] = mapped_column(Vector(1536))  # pgvector column, added via raw migration
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+
 # ── Enums ──────────────────────────────────────────────────────────────────
 
 class CreditAppStatus(str, PyEnum):

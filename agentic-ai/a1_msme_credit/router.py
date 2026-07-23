@@ -5,8 +5,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from a1_msme_credit.coordinator import process_credit_application
 from shared.database import get_db
 from shared.middleware import tokenise
+from shared.rag import policy_qa
 
 router = APIRouter(prefix="/msme-credit", tags=["A1 — MSME Credit CAM Prep"])
+
+
+class PolicyQAIn(BaseModel):
+    question: str = Field(..., max_length=500)
 
 
 class CreditApplicationIn(BaseModel):
@@ -63,3 +68,10 @@ async def credit_officer_signoff(application_id: str, body: SignoffIn):
         "decision": body.decision,
         "signed_off_by": officer_token,
     }
+
+
+@router.post("/policy-qa")
+async def ask_credit_policy(body: PolicyQAIn):
+    """Ad-hoc RBI/internal credit policy lookup — used by credit officers reviewing a CAM."""
+    answer, refs = await policy_qa(body.question)
+    return {"answer": answer, "sources": refs}

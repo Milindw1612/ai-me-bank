@@ -1,0 +1,372 @@
+<meta charset="UTF-8">
+<title>Ai-ME BANK — Deployment Guide Part 4: Integrations, PII Security & Langfuse Audit</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#3B0F1A;color:#CBD5E1;line-height:1.6;font-size:14px}
+a{color:#F59E0B;text-decoration:none}
+h1{font-size:26px;font-weight:800;color:#fff;margin-bottom:6px}
+h2{font-size:17px;font-weight:700;color:#F59E0B;margin:32px 0 12px;border-left:3px solid #F59E0B;padding-left:12px}
+h3{font-size:13px;font-weight:700;color:#E2E8F0;margin:14px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+.hero{background:linear-gradient(135deg,#4A1420,#3B0F1A);border-bottom:1px solid rgba(245,158,11,0.2);padding:28px 32px 22px}
+.hero-badge{display:inline-block;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);color:#F59E0B;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;margin-bottom:12px;text-transform:uppercase}
+.hero p{color:#94A3B8;font-size:13px;max-width:800px;margin-top:8px}
+.part-nav{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.part-pill{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#94A3B8;font-size:11px;padding:4px 12px;border-radius:20px}
+.part-pill.done{background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.3);color:#6EE7B7}
+.part-pill.active{background:rgba(245,158,11,0.2);border-color:rgba(245,158,11,0.5);color:#F59E0B}
+.body{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 160px)}
+.toc{background:#26131A;border-right:1px solid rgba(255,255,255,0.06);padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.toc-title{font-size:10px;font-weight:700;color:#94765B;letter-spacing:2px;text-transform:uppercase;padding:0 16px 10px}
+.toc a{display:block;padding:5px 16px;font-size:12px;color:#64748B;border-left:2px solid transparent;transition:all .15s}
+.toc a:hover{color:#F59E0B;border-left-color:#F59E0B;background:rgba(245,158,11,0.06)}
+.toc-section{font-size:10px;font-weight:700;color:#94765B;letter-spacing:1.5px;text-transform:uppercase;padding:12px 16px 4px}
+.content{padding:28px 36px;max-width:920px}
+.step{background:#4A1420;border:1px solid rgba(255,255,255,0.07);border-radius:10px;margin-bottom:20px;overflow:hidden}
+.step-hdr{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.step-num{background:#F59E0B;color:#000;font-size:12px;font-weight:800;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-title{font-size:15px;font-weight:700;color:#fff}
+.step-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.5px}
+.badge-pre{background:rgba(99,102,241,0.2);color:#A5B4FC;border:1px solid rgba(99,102,241,0.3)}
+.badge-next{background:rgba(16,185,129,0.15);color:#6EE7B7;border:1px solid rgba(16,185,129,0.3)}
+.badge-time{background:rgba(245,158,11,0.15);color:#FCD34D;border:1px solid rgba(245,158,11,0.3)}
+.badge-role{background:rgba(236,72,153,0.15);color:#F9A8D4;border:1px solid rgba(236,72,153,0.3)}
+.step-body{padding:16px 18px}
+.step-body p{color:#94A3B8;font-size:13px;margin-bottom:10px}
+pre,code{font-family:'Cascadia Code','Fira Code',Consolas,monospace}
+pre{background:#1A0A0F;border:1px solid rgba(255,255,255,0.08);border-radius:7px;padding:14px 16px;font-size:12px;overflow-x:auto;margin:10px 0;line-height:1.75;color:#E2E8F0}
+code{background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:3px;font-size:12px;color:#FCD34D}
+.cmd-label{font-size:10px;font-weight:700;color:#94765B;letter-spacing:1.5px;text-transform:uppercase;margin:14px 0 4px}
+.warn{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:7px;padding:12px 14px;font-size:12.5px;color:#FCD34D;margin:10px 0}
+.info{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:7px;padding:12px 14px;font-size:12.5px;color:#93C5FD;margin:10px 0}
+.ok{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:7px;padding:12px 14px;font-size:12.5px;color:#6EE7B7;margin:10px 0}
+.err{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:7px;padding:12px 14px;font-size:12.5px;color:#FCA5A5;margin:10px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12.5px}
+th{background:#26131A;color:#94765B;font-weight:700;padding:8px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.08);font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#CBD5E1;vertical-align:top}
+tr:hover td{background:rgba(255,255,255,0.02)}
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0;font-size:12px}
+.flow-box{background:#4A1420;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:5px 10px;color:#CBD5E1;font-size:11px}
+.flow-arrow{color:#F59E0B;font-weight:700}
+.pii-box{background:#26131A;border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:14px 16px;margin:10px 0}
+.pii-box h4{color:#FCA5A5;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.pii-row{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12.5px}
+.pii-row:last-child{border-bottom:none}
+.pii-field{color:#F87171;font-family:monospace;min-width:170px;font-size:12px}
+.pii-action{color:#94A3B8}
+.site-nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(59,15,26,0.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07);height:50px;display:flex;align-items:center;padding:0 20px;gap:0}
+.site-nav .nav-logo{font-size:15px;font-weight:800;color:#39FF14;margin-right:12px;white-space:nowrap;text-shadow:0 0 6px rgba(57,255,20,.7)}
+.site-nav .nav-sep{width:1px;height:20px;background:rgba(255,255,255,0.1);margin:0 10px;flex-shrink:0}
+.site-nav .nav-links{display:flex;gap:2px;align-items:center;overflow-x:auto;scrollbar-width:none}
+.site-nav .nav-links::-webkit-scrollbar{display:none}
+.site-nav .nav-links a{font-size:11.5px;font-weight:500;color:#64748B;text-decoration:none;padding:5px 9px;border-radius:5px;white-space:nowrap;transition:color .15s,background .15s}
+.site-nav .nav-links a:hover{color:#F59E0B;background:rgba(245,158,11,0.08)}
+.site-nav .nav-links a.active{color:#F59E0B;font-weight:700;background:rgba(245,158,11,0.12)}
+.site-nav .nav-cta{margin-left:auto;flex-shrink:0;background:linear-gradient(135deg,#D97706,#F59E0B);color:#000!important;font-weight:700;font-size:11px;padding:5px 13px;border-radius:6px;text-decoration:none;white-space:nowrap}
+.hero{padding-top:70px!important}
+@media(max-width:900px){.body{grid-template-columns:1fr}.toc{display:none}}
+</style>
+
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">Ai-ME BANK</a>
+  <div class="nav-sep"></div>
+  <div class="nav-links">
+    <a href="../index.html#usecases">Use Cases</a>
+    <a href="../blueprints.html">Blueprints</a>
+    <a href="../architecture.html">Architecture</a>
+    <a href="../roi.html">ROI</a>
+    <a href="../cost.html">Cost</a>
+    <a href="../helicopter.html">Helicopter View</a>
+    <a href="../timeline.html">Timeline</a>
+    <a href="../governance.html">Governance</a>
+    <a href="../glossary.html">Glossary</a>
+    <div class="nav-sep"></div>
+    <a href="index.html">Deploy Guide</a>
+    <a href="ownership.html">RACI</a>
+    <a href="part1.html">Part 1</a>
+    <a href="part2.html">Part 2</a>
+    <a href="part3.html">Part 3</a>
+    <a href="part4.html" class="active">Part 4</a>
+    <a href="part5.html">Part 5</a>
+  </div>
+  <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank" class="nav-cta">Source Code</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Ai-ME BANK · Deployment Guide</div>
+  <h1>Part 4 — Integrations, PII Security &amp; Langfuse Audit</h1>
+  <p>Steps 33–42 · Every external system each use case talks to, the PII boundary that keeps customer data out of LLM prompts, and the Langfuse audit trail. Steps 33 and 35 must start Week 1 — see the external lead-time warning below.</p>
+  <div class="part-nav">
+    <span class="part-pill done">✓ Part 1: AWS Foundation</span>
+    <span class="part-pill done">✓ Part 2: Databases &amp; Policy RAG</span>
+    <span class="part-pill done">✓ Part 3: App Deployment</span>
+    <span class="part-pill active">Part 4: Integrations &amp; PII (Steps 33–42)</span>
+    <span class="part-pill">Part 5: Go-Live &amp; Ops (Steps 43–50)</span>
+  </div>
+</div>
+
+<div class="body">
+<nav class="toc">
+  <div class="toc-title">Contents</div>
+  <div class="toc-section">External Integrations</div>
+  <a href="#s33">Step 33 — Account Aggregator</a>
+  <a href="#s34">Step 34 — Credit Bureau (CIBIL)</a>
+  <a href="#s35">Step 35 — Core Banking System</a>
+  <a href="#s36">Step 36 — Device/IP + AML</a>
+  <a href="#s37">Step 37 — WhatsApp/SMS/IVR</a>
+  <div class="toc-section">PII Security</div>
+  <a href="#s38">Step 38 — PII Boundary Review</a>
+  <a href="#s39">Step 39 — PII Middleware Wiring</a>
+  <div class="toc-section">Langfuse Audit</div>
+  <a href="#s40">Step 40 — Langfuse Cloud Setup</a>
+  <a href="#s41">Step 41 — Trace All Nodes</a>
+  <a href="#s42">Step 42 — Audit Export to S3</a>
+</nav>
+
+<div class="content">
+
+<div class="warn">⚠️ Steps 33 (Account Aggregator) and 35 (Core Banking System) must START on Week 1 due to external lead times (3–8 weeks). Run in parallel with Parts 1–3 infrastructure work — do not wait for Part 3 to finish before starting vendor onboarding.</div>
+
+<h2>External Integrations</h2>
+
+<div class="step" id="s33">
+  <div class="step-hdr">
+    <div class="step-num">33</div>
+    <div>
+      <div class="step-title">Account Aggregator (AA) TSP Integration</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 32 (Part 3 complete)</span>
+        <span class="badge badge-next">Successor: Step 34</span>
+        <span class="badge badge-role">Owner: AI PM + Backend Engineer</span>
+        <span class="badge badge-time">Time: Week 1 → 5 (vendor-bound)</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Wires <code>a1_msme_credit/tools.py</code>'s <code>aa_fetch_bank_feed()</code> — consent-based, read-only bank transaction summary.</p>
+    <pre># Onboard with a Sahamati-registered TSP (e.g. Setu, Finvu, CAMS FinServ)
+# Test the consent flow end-to-end against their sandbox:
+curl -X POST $AA_BASE_URL/consent/create -d '{"applicant_token":"...","purpose":"credit_underwriting"}'
+# → returns a consent handle the applicant approves in their AA app
+curl -X GET $AA_BASE_URL/fi/data -H "Authorization: Bearer $(aa_token)" -d 'consent_token=...'</pre>
+    <div class="ok">✓ Confirm the FI data notification webhook fires correctly and <code>aa_fetch_bank_feed()</code> parses the response into the shape MSME's Risk &amp; Cash-Flow Agent expects.</div>
+  </div>
+</div>
+
+<div class="step" id="s34">
+  <div class="step-hdr">
+    <div class="step-num">34</div>
+    <div>
+      <div class="step-title">Credit Bureau (CIBIL) API</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 33</span>
+        <span class="badge badge-next">Successor: Step 35</span>
+        <span class="badge badge-role">Owner: Backend + AI/ML Engineer</span>
+        <span class="badge badge-time">Time: 2 days (post-contract)</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Wires <code>a1_msme_credit/tools.py</code>'s <code>bureau_pull_score()</code> and <code>a3_collections_recovery/tools.py</code>'s <code>bureau_payment_history()</code>.</p>
+    <pre>curl -X GET $BUREAU_API_URL/score -H "Authorization: Bearer $BUREAU_API_KEY" \
+  -d 'applicant_token=...'
+# Expected: {"score": 742, "report_ref": "...", "delinquencies": 0, "enquiries_6m": 2}</pre>
+  </div>
+</div>
+
+<div class="step" id="s35">
+  <div class="step-hdr">
+    <div class="step-num">35</div>
+    <div>
+      <div class="step-title">Core Banking System (CBS) OAuth2 Integration</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 34</span>
+        <span class="badge badge-next">Successor: Step 36</span>
+        <span class="badge badge-role">Owner: Backend Engineer</span>
+        <span class="badge badge-time">Time: Week 1 → 6 (vendor-bound, HIGH risk)</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>The single highest-risk external dependency (see <a href="ownership.html">RACI</a>). Feeds every use case's account lookup and gated write actions (freeze/clear, PTP recording).</p>
+    <pre># OAuth2 client-credentials grant against CBS sandbox
+curl -X POST $CBS_BASE_URL/oauth/token \
+  -d "grant_type=client_credentials&client_id=$CBS_CLIENT_ID&client_secret=$CBS_CLIENT_SECRET"
+
+# Test read-only account lookup
+curl -X GET $CBS_BASE_URL/accounts/lookup -H "Authorization: Bearer $token" -d 'account_token=...'
+
+# Test gated write action (fraud freeze) — SANDBOX ONLY until Step 45 governance sign-off
+curl -X POST $CBS_BASE_URL/transactions/$TXN_ID/freeze -H "Authorization: Bearer $token"</pre>
+    <div class="err">⛔ Do not point any write-action test at a production CBS account until Gate 3 (PII sign-off) and the Step 45 go-live checklist are both complete. Freeze/clear actions are irreversible without a manual CBS ops ticket.</div>
+  </div>
+</div>
+
+<div class="step" id="s36">
+  <div class="step-hdr">
+    <div class="step-num">36</div>
+    <div>
+      <div class="step-title">Device/IP Intelligence + AML Watchlist API</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 35</span>
+        <span class="badge badge-next">Successor: Step 37</span>
+        <span class="badge badge-role">Owner: Backend Engineer</span>
+        <span class="badge badge-time">Time: 3 days</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Wires <code>a2_fraud_detection/tools.py</code>'s <code>device_fingerprint_lookup()</code>, <code>ip_reputation_check()</code>, and <code>aml_watchlist_check()</code>.</p>
+    <pre>curl -X GET $TXN_FEED_API_URL/device-risk -d 'device_token=...'
+curl -X GET $AML_WATCHLIST_API_URL/screen -d 'beneficiary_token=...'
+# Test against the vendor's known-bad test records before trusting real scores</pre>
+    <div class="warn">⚠ AML watchlist screening must return a <code>hit=true</code> on every vendor-supplied test sanctions record before go-live — a false negative here is a regulatory finding, not just a bug.</div>
+  </div>
+</div>
+
+<div class="step" id="s37">
+  <div class="step-hdr">
+    <div class="step-num">37</div>
+    <div>
+      <div class="step-title">WhatsApp + SMS + IVR Channel Integration</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 36</span>
+        <span class="badge badge-next">Successor: Step 38</span>
+        <span class="badge badge-role">Owner: AI PM + Backend Engineer</span>
+        <span class="badge badge-time">Time: Week 1 → 5</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Wires <code>a3_collections_recovery/tools.py</code>'s <code>whatsapp_send_reminder()</code>, <code>sms_send_reminder()</code>, <code>ivr_trigger_call()</code>.</p>
+    <pre># Meta Business verification (WhatsApp) — 2-3 week lead time, start Week 1
+# Submit collections_reminder template for approval before go-live
+
+curl -X POST https://graph.facebook.com/v20.0/$PHONE_NUMBER_ID/messages \
+  -H "Authorization: Bearer $WHATSAPP_TOKEN" \
+  -d '{"messaging_product":"whatsapp","to":"...","type":"template","template":{"name":"collections_reminder",...}}'</pre>
+  </div>
+</div>
+
+<h2>PII Security</h2>
+
+<div class="step" id="s38">
+  <div class="step-hdr">
+    <div class="step-num">38</div>
+    <div>
+      <div class="step-title">PII Boundary Map Review</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 37</span>
+        <span class="badge badge-next">Successor: Step 39</span>
+        <span class="badge badge-role">Owner: Security Engineer</span>
+        <span class="badge badge-time">Time: 3 days</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Written sign-off: every PII field mapped to its lifecycle (tokenise / encrypt / decrypt boundary), reviewed against <code>shared/middleware.py</code>'s <code>_PII_FIELDS</code> set.</p>
+    <div class="pii-box">
+      <h4>PII Fields &amp; Their Boundary</h4>
+      <div class="pii-row"><div class="pii-field">customer_name, account_number</div><div class="pii-action">Tokenised (HMAC) at API entry — never reaches an agent in raw form</div></div>
+      <div class="pii-row"><div class="pii-field">pan, aadhaar, card_number</div><div class="pii-action">Encrypted (AES-256-GCM) at rest; decrypted only at the exact point of external API call</div></div>
+      <div class="pii-row"><div class="pii-field">outstanding_balance, loan_amount</div><div class="pii-action">Scrubbed by <code>safe_json()</code> before any LLM prompt — visible to humans via the Officer Portal only</div></div>
+      <div class="pii-row"><div class="pii-field">phone, mobile</div><div class="pii-action">Tokenised; decrypted only inside <code>whatsapp_send_reminder()</code> / <code>sms_send_reminder()</code> at send time</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="step" id="s39">
+  <div class="step-hdr">
+    <div class="step-num">39</div>
+    <div>
+      <div class="step-title">PII Middleware Wiring</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 38 (boundary map signed off)</span>
+        <span class="badge badge-next">Successor: Step 40</span>
+        <span class="badge badge-role">Owner: Backend Engineer</span>
+        <span class="badge badge-time">Time: 2 days</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>All 3 routers already call <code>tokenise()</code> at the API boundary (see <code>a1_msme_credit/router.py</code>, <code>a2_fraud_detection/router.py</code>, <code>a3_collections_recovery/router.py</code>). This step is the verification pass.</p>
+    <pre>pytest tests/test_pii_boundary.py -v
+# Asserts: no raw PAN/Aadhaar/account number ever appears in a captured LLM prompt
+# across all 3 use cases' full request→response cycle</pre>
+    <div class="ok">✓ Gate 3 (see <a href="ownership.html">RACI</a>): PII boundary map signed off + these tests all passing + a clean VAPT report is required before go-live approval.</div>
+  </div>
+</div>
+
+<h2>Langfuse Audit</h2>
+
+<div class="step" id="s40">
+  <div class="step-hdr">
+    <div class="step-num">40</div>
+    <div>
+      <div class="step-title">Langfuse Cloud Setup</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 39</span>
+        <span class="badge badge-next">Successor: Step 41</span>
+        <span class="badge badge-role">Owner: AI/ML Engineer</span>
+        <span class="badge badge-time">Time: 1 hour</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre># cloud.langfuse.com → create project "ai-me-bank-prod"
+aws secretsmanager put-secret-value --secret-id ai-me-bank-langfuse-keys \
+  --secret-string '{"public":"pk-lf-...","secret":"sk-lf-..."}'
+# Daily cost alert set at a threshold appropriate to production call volume</pre>
+    <p><code>shared/llm.py</code>'s <code>complete()</code> already wraps every Claude call in a Langfuse generation — this step just points it at the real project.</p>
+  </div>
+</div>
+
+<div class="step" id="s41">
+  <div class="step-hdr">
+    <div class="step-num">41</div>
+    <div>
+      <div class="step-title">Trace All LangGraph Nodes</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 40</span>
+        <span class="badge badge-next">Successor: Step 42</span>
+        <span class="badge badge-role">Owner: AI/ML Engineer</span>
+        <span class="badge badge-time">Time: 1 day</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Verify every node across all 3 coordinators (<code>a1_msme_credit/coordinator.py</code>, <code>a2_fraud_detection/coordinator.py</code>, <code>a3_collections_recovery/coordinator.py</code>) produces a Langfuse trace with scrubbed state — no PII in a trace payload.</p>
+    <div class="info">💡 This is exactly the visible-in-Helicopter-View audit trail — see <a href="../helicopter.html">Helicopter View</a> for how it feeds Governance.</div>
+  </div>
+</div>
+
+<div class="step" id="s42">
+  <div class="step-hdr">
+    <div class="step-num">42</div>
+    <div>
+      <div class="step-title">Langfuse Audit Export to S3</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 41 (Gate 3 passed)</span>
+        <span class="badge badge-next">Successor: Step 43 (Part 5)</span>
+        <span class="badge badge-role">Owner: AI/ML + DevOps Engineer</span>
+        <span class="badge badge-time">Time: 4 hours</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Nightly Celery Beat task (Step 27) exports the previous day's Langfuse traces to <code>s3://ai-me-bank-audit-exports/</code> (gzip, KMS-encrypted) — this is the 7-year retained audit trail referenced in <a href="../governance.html">Governance</a>.</p>
+    <pre>kubectl logs -n ai-me-bank deploy/celery-beat | grep langfuse_export
+aws s3 ls s3://ai-me-bank-audit-exports/$(date +%Y-%m-%d)/</pre>
+
+    <h3>Part 4 Complete</h3>
+    <div class="flow">
+      <div class="flow-box">✓ All External Integrations</div><div class="flow-arrow">→</div>
+      <div class="flow-box">✓ PII Boundary Signed Off</div><div class="flow-arrow">→</div>
+      <div class="flow-box">✓ Langfuse Audit Trail Live</div><div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#F59E0B;color:#F59E0B">Next: Part 5 → Officer Portal, Go-Live &amp; Ops</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>

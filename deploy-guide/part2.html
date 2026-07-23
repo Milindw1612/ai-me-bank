@@ -1,0 +1,418 @@
+<meta charset="UTF-8">
+<title>Ai-ME BANK — Deployment Guide Part 2: Databases, Adapter & Policy RAG</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#3B0F1A;color:#CBD5E1;line-height:1.6;font-size:14px}
+a{color:#F59E0B;text-decoration:none}
+h1{font-size:26px;font-weight:800;color:#fff;margin-bottom:6px}
+h2{font-size:17px;font-weight:700;color:#F59E0B;margin:32px 0 12px;border-left:3px solid #F59E0B;padding-left:12px}
+h3{font-size:13px;font-weight:700;color:#E2E8F0;margin:14px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+.hero{background:linear-gradient(135deg,#4A1420,#3B0F1A);border-bottom:1px solid rgba(245,158,11,0.2);padding:28px 32px 22px}
+.hero-badge{display:inline-block;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);color:#F59E0B;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;margin-bottom:12px;text-transform:uppercase}
+.hero p{color:#94A3B8;font-size:13px;max-width:800px;margin-top:8px}
+.part-nav{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.part-pill{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#94A3B8;font-size:11px;padding:4px 12px;border-radius:20px}
+.part-pill.done{background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.3);color:#6EE7B7}
+.part-pill.active{background:rgba(245,158,11,0.2);border-color:rgba(245,158,11,0.5);color:#F59E0B}
+.body{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 160px)}
+.toc{background:#26131A;border-right:1px solid rgba(255,255,255,0.06);padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.toc-title{font-size:10px;font-weight:700;color:#94765B;letter-spacing:2px;text-transform:uppercase;padding:0 16px 10px}
+.toc a{display:block;padding:5px 16px;font-size:12px;color:#64748B;border-left:2px solid transparent;transition:all .15s}
+.toc a:hover{color:#F59E0B;border-left-color:#F59E0B;background:rgba(245,158,11,0.06)}
+.toc-section{font-size:10px;font-weight:700;color:#94765B;letter-spacing:1.5px;text-transform:uppercase;padding:12px 16px 4px}
+.content{padding:28px 36px;max-width:920px}
+.step{background:#4A1420;border:1px solid rgba(255,255,255,0.07);border-radius:10px;margin-bottom:20px;overflow:hidden}
+.step-hdr{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.step-num{background:#F59E0B;color:#000;font-size:12px;font-weight:800;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-title{font-size:15px;font-weight:700;color:#fff}
+.step-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.5px}
+.badge-pre{background:rgba(99,102,241,0.2);color:#A5B4FC;border:1px solid rgba(99,102,241,0.3)}
+.badge-next{background:rgba(16,185,129,0.15);color:#6EE7B7;border:1px solid rgba(16,185,129,0.3)}
+.badge-time{background:rgba(245,158,11,0.15);color:#FCD34D;border:1px solid rgba(245,158,11,0.3)}
+.badge-role{background:rgba(236,72,153,0.15);color:#F9A8D4;border:1px solid rgba(236,72,153,0.3)}
+.step-body{padding:16px 18px}
+.step-body p{color:#94A3B8;font-size:13px;margin-bottom:10px}
+pre,code{font-family:'Cascadia Code','Fira Code',Consolas,monospace}
+pre{background:#1A0A0F;border:1px solid rgba(255,255,255,0.08);border-radius:7px;padding:14px 16px;font-size:12px;overflow-x:auto;margin:10px 0;line-height:1.75;color:#E2E8F0}
+code{background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:3px;font-size:12px;color:#FCD34D}
+.cmd-label{font-size:10px;font-weight:700;color:#94765B;letter-spacing:1.5px;text-transform:uppercase;margin:14px 0 4px}
+.warn{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:7px;padding:12px 14px;font-size:12.5px;color:#FCD34D;margin:10px 0}
+.info{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:7px;padding:12px 14px;font-size:12.5px;color:#93C5FD;margin:10px 0}
+.ok{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:7px;padding:12px 14px;font-size:12.5px;color:#6EE7B7;margin:10px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12.5px}
+th{background:#26131A;color:#94765B;font-weight:700;padding:8px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.08);font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#CBD5E1;vertical-align:top}
+tr:hover td{background:rgba(255,255,255,0.02)}
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0;font-size:12px}
+.flow-box{background:#4A1420;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:5px 10px;color:#CBD5E1;font-size:11px}
+.flow-arrow{color:#F59E0B;font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.mini-card{background:#26131A;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:12px}
+.mini-card .mc-title{font-size:11px;font-weight:700;color:#F59E0B;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.arch-box{background:#26131A;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px 16px;margin:10px 0}
+.arch-box .label{font-size:10px;font-weight:700;color:#F59E0B;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.site-nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(59,15,26,0.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07);height:50px;display:flex;align-items:center;padding:0 20px;gap:0}
+.site-nav .nav-logo{font-size:15px;font-weight:800;color:#39FF14;margin-right:12px;white-space:nowrap;text-shadow:0 0 6px rgba(57,255,20,.7)}
+.site-nav .nav-sep{width:1px;height:20px;background:rgba(255,255,255,0.1);margin:0 10px;flex-shrink:0}
+.site-nav .nav-links{display:flex;gap:2px;align-items:center;overflow-x:auto;scrollbar-width:none}
+.site-nav .nav-links::-webkit-scrollbar{display:none}
+.site-nav .nav-links a{font-size:11.5px;font-weight:500;color:#64748B;text-decoration:none;padding:5px 9px;border-radius:5px;white-space:nowrap;transition:color .15s,background .15s}
+.site-nav .nav-links a:hover{color:#F59E0B;background:rgba(245,158,11,0.08)}
+.site-nav .nav-links a.active{color:#F59E0B;font-weight:700;background:rgba(245,158,11,0.12)}
+.site-nav .nav-cta{margin-left:auto;flex-shrink:0;background:linear-gradient(135deg,#D97706,#F59E0B);color:#000!important;font-weight:700;font-size:11px;padding:5px 13px;border-radius:6px;text-decoration:none;white-space:nowrap}
+.hero{padding-top:70px!important}
+@media(max-width:900px){.body{grid-template-columns:1fr}.toc{display:none}.grid2{grid-template-columns:1fr}}
+</style>
+
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">Ai-ME BANK</a>
+  <div class="nav-sep"></div>
+  <div class="nav-links">
+    <a href="../index.html#usecases">Use Cases</a>
+    <a href="../blueprints.html">Blueprints</a>
+    <a href="../architecture.html">Architecture</a>
+    <a href="../roi.html">ROI</a>
+    <a href="../cost.html">Cost</a>
+    <a href="../helicopter.html">Helicopter View</a>
+    <a href="../timeline.html">Timeline</a>
+    <a href="../governance.html">Governance</a>
+    <a href="../glossary.html">Glossary</a>
+    <div class="nav-sep"></div>
+    <a href="index.html">Deploy Guide</a>
+    <a href="ownership.html">RACI</a>
+    <a href="part1.html">Part 1</a>
+    <a href="part2.html" class="active">Part 2</a>
+    <a href="part3.html">Part 3</a>
+    <a href="part4.html">Part 4</a>
+    <a href="part5.html">Part 5</a>
+  </div>
+  <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank" class="nav-cta">Source Code</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Ai-ME BANK · Deployment Guide</div>
+  <h1>Part 2 — Databases, Core Banking Adapter &amp; Policy RAG</h1>
+  <p>Steps 13–22 · Data layer, the shared Core Banking Adapter every use case depends on, and the Credit &amp; Compliance Policy RAG that grounds the MSME Risk &amp; Cash-Flow Agent in real RBI/internal policy text.</p>
+  <div class="part-nav">
+    <span class="part-pill done">✓ Part 1: AWS Foundation</span>
+    <span class="part-pill active">Part 2: Databases &amp; Policy RAG (Steps 13–22)</span>
+    <span class="part-pill">Part 3: App Deployment (Steps 23–32)</span>
+    <span class="part-pill">Part 4: Integrations &amp; PII (Steps 33–42)</span>
+    <span class="part-pill">Part 5: Go-Live &amp; Ops (Steps 43–50)</span>
+  </div>
+</div>
+
+<div class="body">
+<nav class="toc">
+  <div class="toc-title">Contents</div>
+  <div class="toc-section">Databases</div>
+  <a href="#s13">Step 13 — RDS + pgvector</a>
+  <a href="#s14">Step 14 — Schema Migrations</a>
+  <a href="#s15">Step 15 — RAG Vector Schema</a>
+  <a href="#s16">Step 16 — S3 Buckets</a>
+  <a href="#s17">Step 17 — ElastiCache Redis</a>
+  <div class="toc-section">Credit Policy RAG</div>
+  <a href="#s18">Step 18 — Bedrock Embeddings</a>
+  <a href="#s19">Step 19 — Policy Ingestion</a>
+  <a href="#s20">Step 20 — Hybrid RAG System</a>
+  <a href="#s21">Step 21 — RAG Validation Suite</a>
+  <div class="toc-section">Core Banking</div>
+  <a href="#s22">Step 22 — Adapter Layer Build</a>
+</nav>
+
+<div class="content">
+
+<h2>Databases</h2>
+
+<div class="step" id="s13">
+  <div class="step-hdr">
+    <div class="step-num">13</div>
+    <div>
+      <div class="step-title">RDS PostgreSQL + pgvector</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 12 (Part 1 complete)</span>
+        <span class="badge badge-next">Successor: Step 14</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 1 hour + 15 min provisioning</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre>aws rds create-db-instance \
+  --db-instance-identifier ai-me-bank-db \
+  --db-instance-class db.r6g.large \
+  --engine postgres --engine-version 15.4 \
+  --allocated-storage 100 \
+  --master-username aimebank_admin --master-user-password "$(openssl rand -base64 24)" \
+  --vpc-security-group-ids $RDS_SG \
+  --db-subnet-group-name ai-me-bank-subnet-group \
+  --multi-az \
+  --storage-encrypted --kms-key-id $KMS_KEY_RDS \
+  --profile ai-me-bank-staging
+
+# Once available, enable pgvector
+psql -h $RDS_ENDPOINT -U aimebank_admin -d postgres -c "CREATE EXTENSION IF NOT EXISTS vector;"</pre>
+    <div class="ok">✓ Multi-AZ + KMS encryption at rest is non-negotiable for a system that stores audit logs, CAM documents, and tokenised PII references.</div>
+  </div>
+</div>
+
+<div class="step" id="s14">
+  <div class="step-hdr">
+    <div class="step-num">14</div>
+    <div>
+      <div class="step-title">DB Schema Migrations</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 13</span>
+        <span class="badge badge-next">Successor: Step 15</span>
+        <span class="badge badge-role">Owner: Backend Engineer</span>
+        <span class="badge badge-time">Time: 30 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre># From agentic-ai/ — applies every SQLAlchemy model in shared/models.py
+python -c "
+import asyncio
+from shared.database import init_db
+asyncio.run(init_db())
+"
+# Creates: credit_applications, fraud_cases, collections_accounts, audit_logs</pre>
+    <div class="info">💡 <code>init_db()</code> is the same function called at FastAPI startup (see <code>agentic-ai/main.py</code> lifespan) — running it manually here just gets the schema in place before the app pods exist.</div>
+  </div>
+</div>
+
+<div class="step" id="s15">
+  <div class="step-hdr">
+    <div class="step-num">15</div>
+    <div>
+      <div class="step-title">pgvector Schema — Credit Policy RAG Tables</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 14</span>
+        <span class="badge badge-next">Successor: Step 16</span>
+        <span class="badge badge-role">Owner: AI/ML Engineer</span>
+        <span class="badge badge-time">Time: 45 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre>CREATE TABLE credit_policy_chunks (
+  id SERIAL PRIMARY KEY,
+  chunk_text TEXT NOT NULL,
+  source_ref VARCHAR(200) NOT NULL,
+  source_type VARCHAR(50) NOT NULL,       -- rbi_master_direction / internal_credit_policy / kyc_aml_guideline
+  embedding VECTOR(1536),
+  chunk_tsv TSVECTOR,
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- Dense vector index (HNSW, cosine distance)
+CREATE INDEX credit_policy_hnsw_idx ON credit_policy_chunks
+  USING hnsw (embedding vector_cosine_ops) WITH (m = 16, ef_construction = 64);
+
+-- Sparse text index (for hybrid search)
+CREATE INDEX credit_policy_tsv_idx ON credit_policy_chunks USING gin(chunk_tsv);
+
+-- Auto-update tsvector on insert/update
+CREATE FUNCTION credit_policy_tsv_trigger() RETURNS trigger AS $$
+BEGIN
+  NEW.chunk_tsv := to_tsvector('english', NEW.chunk_text);
+  RETURN NEW;
+END $$ LANGUAGE plpgsql;
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON credit_policy_chunks
+  FOR EACH ROW EXECUTE FUNCTION credit_policy_tsv_trigger();</pre>
+    <p>This is the table <code>shared/rag.py</code>'s <code>hybrid_search()</code> queries — see <a href="https://github.com/Milindw1612/ai-me-bank/blob/main/agentic-ai/shared/rag.py" target="_blank">shared/rag.py</a> in the source repo.</p>
+  </div>
+</div>
+
+<div class="step" id="s16">
+  <div class="step-hdr">
+    <div class="step-num">16</div>
+    <div>
+      <div class="step-title">S3 Buckets (3 buckets)</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 15</span>
+        <span class="badge badge-next">Successor: Step 17</span>
+        <span class="badge badge-role">Owner: DevOps + Security Engineer</span>
+        <span class="badge badge-time">Time: 45 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <div class="grid2">
+      <div class="mini-card"><div class="mc-title">ai-me-bank-cam-docs</div>CAM PDFs, ITR/P&amp;L/balance-sheet uploads. KMS key from Step 9. IRSA-scoped read/write.</div>
+      <div class="mini-card"><div class="mc-title">ai-me-bank-audit-exports</div>Nightly Langfuse trace exports (Step 42). 7-year retention → Glacier lifecycle after 90 days.</div>
+      <div class="mini-card"><div class="mc-title">ai-me-bank-kyc-docs</div>KYC documents, bank statements from AA. Strictest bucket policy — no public access block cannot be disabled.</div>
+    </div>
+    <pre>aws s3 mb s3://ai-me-bank-cam-docs --profile ai-me-bank-staging
+aws s3api put-bucket-encryption --bucket ai-me-bank-cam-docs \
+  --server-side-encryption-configuration '{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"aws:kms","KMSMasterKeyID":"'$KMS_KEY_CAM'"}}]}' \
+  --profile ai-me-bank-staging
+aws s3api put-public-access-block --bucket ai-me-bank-cam-docs \
+  --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true \
+  --profile ai-me-bank-staging</pre>
+  </div>
+</div>
+
+<div class="step" id="s17">
+  <div class="step-hdr">
+    <div class="step-num">17</div>
+    <div>
+      <div class="step-title">ElastiCache Redis</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 16</span>
+        <span class="badge badge-next">Successor: Step 18</span>
+        <span class="badge badge-role">Owner: DevOps Engineer</span>
+        <span class="badge badge-time">Time: 30 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <pre>aws elasticache create-replication-group \
+  --replication-group-id ai-me-bank-redis \
+  --replication-group-description "LangGraph state cache + Celery broker" \
+  --engine redis --engine-version 7.0 \
+  --cache-node-type cache.r6g.large \
+  --num-cache-clusters 2 \
+  --transit-encryption-enabled --auth-token "$(openssl rand -base64 32)" \
+  --profile ai-me-bank-staging</pre>
+  </div>
+</div>
+
+<h2>Credit &amp; Compliance Policy RAG</h2>
+
+<div class="step" id="s18">
+  <div class="step-hdr">
+    <div class="step-num">18</div>
+    <div>
+      <div class="step-title">Bedrock Titan Embeddings</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 17</span>
+        <span class="badge badge-next">Successor: Step 19</span>
+        <span class="badge badge-role">Owner: AI/ML Engineer</span>
+        <span class="badge badge-time">Time: 2 hours</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Wire up the async Bedrock client used by <code>shared/rag.py</code>'s <code>embed_query()</code> — replaces the hash-based placeholder with real 1536-dim Titan V2 embeddings.</p>
+    <pre>aws bedrock list-foundation-models --region ap-south-1 --profile ai-me-bank-staging | grep titan-embed
+
+# In shared/rag.py, embed_query() calls:
+#   bedrock_client.invoke_model(modelId="amazon.titan-embed-text-v2:0", body=...)
+# IAM role from Step 3 already grants bedrock:InvokeModel</pre>
+  </div>
+</div>
+
+<div class="step" id="s19">
+  <div class="step-hdr">
+    <div class="step-num">19</div>
+    <div>
+      <div class="step-title">Credit &amp; Compliance Policy Ingestion</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 18</span>
+        <span class="badge badge-next">Successor: Step 20</span>
+        <span class="badge badge-role">Owner: AI/ML Engineer</span>
+        <span class="badge badge-time">Time: 1 week (incl. document collection)</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>Ingest the policy documents collected in Step 0: RBI Master Direction on MSME lending, internal credit policy manual, KYC/AML guidelines, Digital Lending Guidelines, Fair Practices Code.</p>
+    <div class="cmd-label">Ingestion Pipeline</div>
+    <pre>1. Upload PDFs to s3://ai-me-bank-cam-docs/policy-source/
+2. Extract text (pdfplumber), chunk at 400 tokens / 80 token overlap
+3. For each chunk: embed_query(chunk_text) → insert into credit_policy_chunks
+   with source_ref (e.g. "RBI/2022-23/Master Direction MSME, para 4.2")
+   and source_type (rbi_master_direction / internal_credit_policy / kyc_aml_guideline)</pre>
+    <div class="warn">⚠ Credit Risk Analyst must review chunk boundaries for any policy paragraph that defines a hard numeric limit (e.g. loan-to-value caps) — a chunk split can silently separate a rule from its threshold value.</div>
+  </div>
+</div>
+
+<div class="step" id="s20">
+  <div class="step-hdr">
+    <div class="step-num">20</div>
+    <div>
+      <div class="step-title">Hybrid RAG System</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 19</span>
+        <span class="badge badge-next">Successor: Step 21</span>
+        <span class="badge badge-role">Owner: AI/ML Engineer</span>
+        <span class="badge badge-time">Time: 2 days</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <div class="arch-box">
+      <div class="label">shared/rag.py — already in the repo</div>
+      <table>
+        <tr><th>Function</th><th>What it does</th></tr>
+        <tr><td><code>embed_query()</code></td><td>Bedrock Titan V2 embedding for the incoming question</td></tr>
+        <tr><td><code>hybrid_search()</code></td><td>Dense (HNSW cosine) + sparse (tsvector) search run in parallel, combined via Reciprocal Rank Fusion</td></tr>
+        <tr><td><code>policy_qa()</code></td><td>Retrieves top chunks, asks Claude Sonnet to answer grounded only in that context, returns answer + source refs</td></tr>
+      </table>
+    </div>
+    <p>The MSME Risk &amp; Cash-Flow Agent (<code>a1_msme_credit/risk_cashflow_agent.py</code>) calls <code>policy_qa()</code> before scoring — see <a href="../architecture.html">Architecture</a> for how this fits the shared platform.</p>
+  </div>
+</div>
+
+<div class="step" id="s21">
+  <div class="step-hdr">
+    <div class="step-num">21</div>
+    <div>
+      <div class="step-title">RAG Validation Test Suite</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 20</span>
+        <span class="badge badge-next">Successor: Step 22</span>
+        <span class="badge badge-role">Owner: AI/ML Engineer</span>
+        <span class="badge badge-time">Time: 3 days</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>20 real credit/compliance Q&amp;As run via <code>test_rag.py</code> — must score ≥ 18/20 before proceeding. Credit Risk Analyst reviews every answer against actual policy text.</p>
+    <div class="cmd-label">Example Validation Questions</div>
+    <pre>Q: "What is the maximum loan-to-value ratio for an unsecured MSME working capital loan?"
+Q: "Does a first-time applicant with 18 months business vintage qualify under our credit policy?"
+Q: "What KYC documents are mandatory for a proprietorship MSME applicant?"</pre>
+    <div class="warn">⚠ Gate 1 (see <a href="ownership.html">RACI</a>): this score must reach ≥ 18/20 before app deployment (Part 3) begins. If below threshold, re-chunk, re-ingest, re-test — do not proceed on a failing score.</div>
+  </div>
+</div>
+
+<h2>Core Banking</h2>
+
+<div class="step" id="s22">
+  <div class="step-hdr">
+    <div class="step-num">22</div>
+    <div>
+      <div class="step-title">Core Banking Adapter Layer Build</div>
+      <div class="step-meta">
+        <span class="badge badge-pre">Predecessor: Step 21 (Gate 1 passed)</span>
+        <span class="badge badge-next">Successor: Step 23 (Part 3)</span>
+        <span class="badge badge-role">Owner: Backend Engineer</span>
+        <span class="badge badge-time">Time: 1 week</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-body">
+    <p>The single integration layer reused by all 3 use cases — read-only by default, with specific write actions gated per use case (see <a href="../governance.html">Governance</a> for exactly which actions are automated vs. always human).</p>
+    <table>
+      <tr><th>Capability</th><th>Used By</th><th>Access</th></tr>
+      <tr><td>Account/application lookup</td><td>All 3 use cases</td><td>Read-only</td></tr>
+      <tr><td>Transaction freeze/clear</td><td>Fraud Detection</td><td>Write — governance-gated (Step 45)</td></tr>
+      <tr><td>Promise-to-Pay recording</td><td>Collections Recovery</td><td>Write — bounded to policy bands</td></tr>
+      <tr><td>CAM disbursement flag</td><td>MSME Credit</td><td>Write — only after human sign-off</td></tr>
+    </table>
+
+    <h3>Part 2 Complete</h3>
+    <div class="flow">
+      <div class="flow-box">✓ RDS + pgvector</div><div class="flow-arrow">→</div>
+      <div class="flow-box">✓ Credit Policy RAG (≥18/20)</div><div class="flow-arrow">→</div>
+      <div class="flow-box">✓ Core Banking Adapter</div><div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:#F59E0B;color:#F59E0B">Next: Part 3 → Application Deployment to EKS</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
