@@ -193,8 +193,8 @@
 <div class="scenario-bar">
   <span class="sc-label">Scenario</span>
   <div class="sc-toggle" id="scToggle">
-    <button class="sc-btn active" id="btn-trad" onclick="setScenario('trad')">📋 Traditional (Baseline)</button>
-    <button class="sc-btn" id="btn-ai" onclick="setScenario('ai')">⚡ AI-Accelerated</button>
+    <button class="sc-btn" id="btn-trad" onclick="setScenario('trad')">📋 Traditional (Baseline)</button>
+    <button class="sc-btn active" id="btn-ai" onclick="setScenario('ai')">⚡ AI-Accelerated</button>
   </div>
   <span class="ai-note">37 weeks (AI-Accelerated) vs. 54 weeks (Traditional) — 31% faster to full production</span>
 </div>
@@ -420,7 +420,7 @@
   <div class="section-label" style="margin-top:36px">Key Milestones</div>
   <div class="milestone-grid">
     <div class="milestone-card"><div class="wk" data-traditional="Week 4" data-ai="Week 3">Week 3</div><p>Shared platform live — AWS EKS, LangGraph, PII middleware, Core Banking adapter all provisioned</p></div>
-    <div class="milestone-card"><div class="wk" data-traditional="Week 14" data-ai="Week 10">Week 10</div><p>MSME agents in staging — credit officer UAT begins on pilot cohort</p></div>
+    <div class="milestone-card"><div class="wk" data-traditional="Week 14" data-ai="Week 13">Week 13</div><p>MSME agents in staging — credit officer UAT begins on pilot cohort</p></div>
     <div class="milestone-card"><div class="wk" data-traditional="Week 24" data-ai="Week 17">Week 17</div><p>MSME Credit CAM Prep live — first use case in production</p></div>
     <div class="milestone-card"><div class="wk" data-traditional="Week 32" data-ai="Week 23">Week 23</div><p>Fraud Detection agent in staging — shadow-mode run alongside existing rules engine</p></div>
     <div class="milestone-card"><div class="wk" data-traditional="Week 39" data-ai="Week 27">Week 27</div><p>Fraud Detection live; Collections Recovery build begins</p></div>
@@ -568,7 +568,7 @@ const collectionsTasks = [
 // ─────────────────────────────────────────────
 // RENDER ENGINE
 // ─────────────────────────────────────────────
-let scenario = 'trad';
+let scenario = 'ai';
 
 function setScenario(s) {
   scenario = s;
@@ -722,7 +722,7 @@ function renderRpTable() {
       <td style="font-weight:600;color:var(--text)">${r.role}</td>
       <td><span class="pill ${r.pill}">${r.usecase}</span></td>
       <td class="muted">${r.fte}</td>
-      <td data-traditional="${r.trad}" data-ai="${r.ai}">${r.trad}</td>
+      <td data-traditional="${r.trad}" data-ai="${r.ai}">${scenario === 'ai' ? r.ai : r.trad}</td>
       <td class="muted">${r.note}</td>
     </tr>`;
   });
