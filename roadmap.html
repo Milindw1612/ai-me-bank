@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise AI Roadmap — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 32px; display: flex; align-items: center; height: 64px; }
+  .nav-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.6), 0 0 26px rgba(57,255,20,0.35); flex-shrink: 0; text-decoration: none; }
+  .nav-links { display: flex; gap: 18px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); font-weight: 700; }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
+
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 760px; line-height: 1.7; }
+
+  .tabs-bar { display: flex; background: var(--surface); border-bottom: 1px solid var(--border2); padding: 0 24px; overflow-x: auto; position: sticky; top: 64px; z-index: 90; }
+  .tab-btn { padding: 14px 18px; font-size: 11.5px; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; white-space: nowrap; letter-spacing: 0.3px; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  main { padding: 0; }
+  .tab-panel { display: none; padding: 32px 48px 56px; }
+  .tab-panel.active { display: block; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+  .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px,1fr)); gap: 14px; margin-bottom: 32px; }
+  .ov-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .ov-card h3 { font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
+  .ov-card p { font-size: 11.5px; color: var(--mid); line-height: 1.6; }
+
+  .table-scroll { overflow-x: auto; margin-bottom: 28px; border-radius: 10px; border: 1px solid var(--border2); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  thead th { background: rgba(255,255,255,0.04); padding: 11px 16px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-align: left; white-space: nowrap; border-bottom: 1px solid var(--border2); }
+  tbody td { padding: 11px 16px; font-size: 12.5px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(255,255,255,0.02); }
+  td.muted { color: var(--muted); font-size: 12px; }
+  .matrix-table td, .matrix-table th { min-width: 165px; }
+  .matrix-table td:first-child, .matrix-table th:first-child { min-width: 190px; position: sticky; left: 0; background: #2A0A12; z-index: 2; }
+  .matrix-table td:first-child { font-weight: 700; color: #fff; font-size: 12px; }
+
+  .pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .pill-teal { background: rgba(13,148,136,0.12); color: var(--teal); border: 1px solid rgba(13,148,136,0.3); }
+  .pill-blue { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
+  .pill-green { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .pill-gold { background: rgba(245,158,11,0.12); color: var(--gold); border: 1px solid rgba(245,158,11,0.3); }
+  .pill-purple { background: rgba(167,139,250,0.12); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+  .risk-low { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); padding:2px 9px; border-radius:12px; font-size:11px; font-weight:700; white-space:nowrap; }
+  .risk-med { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); padding:2px 9px; border-radius:12px; font-size:11px; font-weight:700; white-space:nowrap; }
+
+  .note-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 6px; padding: 14px 18px; font-size: 12.5px; color: var(--mid); margin-bottom: 24px; line-height: 1.75; }
+  .note-box strong { color: var(--text); }
+
+  .checklist { list-style: none; margin-bottom: 8px; }
+  .checklist li { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--mid); }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+
+  .horizon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; margin-bottom: 32px; }
+  .horizon-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; border-top: 3px solid var(--gold-dim); }
+  .horizon-card .hz { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .horizon-card h4 { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .horizon-card p { font-size: 11.5px; color: var(--mid); line-height: 1.6; }
+
+  .pillar-flow { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; flex-wrap: wrap; }
+  .pillar-state { flex: 1; min-width: 220px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .pillar-state .lbl { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .pillar-state p { font-size: 12.5px; color: var(--mid); line-height: 1.65; }
+  .pillar-arrow { font-size: 20px; color: var(--gold); flex-shrink: 0; }
+  @media (max-width: 700px) { .pillar-arrow { transform: rotate(90deg); } }
+
+  .capstone { background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(167,139,250,0.06)); border: 1px solid rgba(245,158,11,0.3); border-radius: 14px; padding: 28px 32px; margin-top: 8px; }
+  .capstone .eyebrow2 { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .capstone h3 { font-family: Georgia, serif; font-size: 20px; color: #fff; margin-bottom: 10px; }
+  .capstone p { font-size: 13px; color: var(--mid); line-height: 1.75; margin-bottom: 6px; }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; transition: color .2s; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .page-header { padding: 24px 20px; }
+    .tab-panel { padding: 20px; }
+    footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="index.html#usecases">Use Cases</a>
+      <a href="blueprints.html">Blueprints</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="roi.html">ROI</a>
+      <a href="cost.html">Cost Analysis</a>
+      <a href="helicopter.html">Helicopter View</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="roadmap.html" class="active">AI Roadmap</a>
+      <a href="compliance.html">Compliance Map</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source Code</a>
+      <a href="deploy-guide/index.html">Deploy Guide</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">Enterprise AI Strategy · Office of the Chief AI Officer</div>
+  <h1>Enterprise AI Roadmap — 0 to 36 Months</h1>
+  <p>How <span class="neon-brand">Ai-ME BANK</span> scales from 3 proven, fully-costed flagship pilots (MSME Credit CAM Prep, Fraud Detection, Collections Recovery — see <a href="index.html#usecases" style="color:var(--gold)">Use Cases</a>) into a bank-wide, governed AI operating model: governance, responsible AI, risk &amp; model validation, audit, data privacy, and security — mapped to RBI and international frameworks, phased across 90 days, 6 months, 12 months, and 3 years.</p>
+</div>
+
+<div class="tabs-bar" id="tabsBar">
+  <button class="tab-btn active" onclick="showTab('overview',this)">Overview &amp; Roadmap-at-a-Glance</button>
+  <button class="tab-btn" onclick="showTab('govop',this)">Governance &amp; Operating Model</button>
+  <button class="tab-btn" onclick="showTab('responsible',this)">Responsible AI &amp; Ethics</button>
+  <button class="tab-btn" onclick="showTab('risk',this)">Risk &amp; Model Validation</button>
+  <button class="tab-btn" onclick="showTab('audit',this)">Audit &amp; Assurance</button>
+  <button class="tab-btn" onclick="showTab('privacy',this)">Data Privacy (DPDP)</button>
+  <button class="tab-btn" onclick="showTab('security',this)">AI Security</button>
+  <button class="tab-btn" onclick="showTab('portfolio',this)">Use-Case Portfolio</button>
+  <button class="tab-btn" onclick="showTab('regmap',this)">RBI &amp; Regulatory Mapping</button>
+</div>
+
+<main>
+
+  <!-- ═══ OVERVIEW ═══ -->
+  <div id="tab-overview" class="tab-panel active">
+
+    <div class="note-box"><strong>How to read this page:</strong> the 3 use cases already built (MSME Credit CAM Prep, Fraud Detection, Collections Recovery) are the <em>proof points</em> — real architecture, cost, ROI and per-use-case governance already exist for them (see <a href="cost.html" style="color:var(--gold)">Cost Analysis</a>, <a href="timeline.html" style="color:var(--gold)">Timeline</a>, <a href="governance.html" style="color:var(--gold)">Governance</a>). This page is the layer above them: the enterprise operating model that lets a bank run <em>dozens</em> of agentic systems safely, not just 3.</div>
+
+    <div class="section-label">Roadmap at a Glance</div>
+    <div class="table-scroll">
+      <table class="matrix-table">
+        <thead><tr><th>Pillar</th><th>0–3 Months</th><th>3–6 Months</th><th>6–12 Months</th><th>Year 2</th><th>Year 3</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill pill-gold">Governance &amp; Operating Model</span></td>
+            <td>Charter Board AI Committee + CAIO mandate; publish enterprise AI Policy v1; adopt risk-tiering taxonomy</td>
+            <td>Model Risk Committee (2nd line) stood up; quarterly Board AI reporting begins</td>
+            <td>3-lines-of-defense AI operating model fully operational</td>
+            <td>AI CoE becomes self-serve platform with a formal intake/approval gate</td>
+            <td>Governance is BAU; maturity assessed vs. FREE-AI Framework &amp; ISO 42001</td></tr>
+          <tr><td><span class="pill pill-blue">Responsible AI &amp; Ethics</span></td>
+            <td>Human-in-the-loop standard (proven on 3 pilots) mandated enterprise-wide</td>
+            <td>Bias/fairness testing standard for credit &amp; lending models</td>
+            <td>Algorithmic Impact Assessment required pre-launch for every new use case</td>
+            <td>Explainability tiering standardised by risk tier, all business lines</td>
+            <td>Publish enterprise Responsible AI transparency report</td></tr>
+          <tr><td><span class="pill pill-purple">Risk &amp; Model Validation</span></td>
+            <td>Model inventory + risk register for the 3 pilots</td>
+            <td>Independent model validation function (2nd line) live</td>
+            <td>Drift monitoring + kill-switch/rollback standard on all production agents</td>
+            <td>Model risk framework extended to 2nd-wave use cases</td>
+            <td>Continuous validation is BAU; annual model risk deep-dive to Board</td></tr>
+          <tr><td><span class="pill pill-teal">Audit &amp; Assurance</span></td>
+            <td>Internal Audit AI-audit-universe scoping</td>
+            <td>First internal audit of the AI governance framework</td>
+            <td>Regulatory-readiness dry-run (RBI supervisory review simulation)</td>
+            <td>External assurance review of AI controls</td>
+            <td>Recurring external audit cadence; findings tracked closed-loop</td></tr>
+          <tr><td><span class="pill pill-green">Data Privacy (DPDP)</span></td>
+            <td>DPDP Act gap assessment; consent-architecture review (AA framework)</td>
+            <td>Full DPDP compliance certification for the 3 pilots</td>
+            <td>PII tokenise/encrypt/scrub standard mandated for every new AI system</td>
+            <td>Privacy-by-design gate added to the intake process</td>
+            <td>Enterprise data-fiduciary maturity audit</td></tr>
+          <tr><td><span class="pill" style="background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)">AI Security</span></td>
+            <td>Initial LLM threat model (prompt injection, data exfiltration)</td>
+            <td>First AI red-team exercise</td>
+            <td>AI-specific additions to the bank's Cyber Security Framework program</td>
+            <td>Secure LLMOps pipeline (model supply-chain checks) enterprise-wide</td>
+            <td>Continuous AI red-teaming; CERT-In-aligned AI incident response</td></tr>
+          <tr><td><span class="pill" style="background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)">Use-Case Portfolio &amp; Platform</span></td>
+            <td>3 flagship pilots in build on shared AWS EKS + LangGraph platform</td>
+            <td>MSME Credit CAM Prep live; Fraud Detection in build</td>
+            <td>All 3 flagship pilots live; 2nd-wave scoping (Retail Lending, AML, Contact Centre AI)</td>
+            <td>2nd-wave use cases live; platform serves 3+ business lines</td>
+            <td>Enterprise AI Factory: every major business line has ≥1 live agentic system</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:-16px;margin-bottom:32px">Weeks/milestones for the 3 flagship pilots are drawn directly from the already-built <a href="timeline.html" style="color:var(--gold)">Timeline</a> (AI-accelerated: Shared Platform live Wk 3, MSME live Wk 17, Fraud live Wk 27, Collections live Wk 37) — nothing here contradicts those figures.</p>
+
+    <div class="section-label">Horizon Themes</div>
+    <div class="horizon-grid">
+      <div class="horizon-card"><div class="hz">0–3 Months</div><h4>Foundation</h4><p>Governance chartered, policy published, 3 flagship pilots in build. The bank has a named AI accountability structure for the first time.</p></div>
+      <div class="horizon-card"><div class="hz">3–6 Months</div><h4>First Production, First Assurance</h4><p>MSME Credit CAM Prep live. Independent model validation and the first internal audit of AI governance both stand up in parallel.</p></div>
+      <div class="horizon-card"><div class="hz">6–12 Months</div><h4>Full Pilot Wave + Readiness</h4><p>All 3 flagship pilots in production. 3-lines-of-defense model operational. Regulatory-readiness dry-run completed before scaling further.</p></div>
+      <div class="horizon-card"><div class="hz">Year 2</div><h4>Enterprise Scale-Up</h4><p>2nd-wave use cases (Retail Lending, AML, Contact Centre, Treasury) live on the same governed platform. AI CoE becomes a self-serve capability, not a project team.</p></div>
+      <div class="horizon-card"><div class="hz">Year 3</div><h4>Enterprise AI Maturity</h4><p>Every major business line runs at least one governed agentic system. External certification (ISO/IEC 42001) targeted. Governance, audit and reporting are business-as-usual.</p></div>
+    </div>
+
+    <div class="capstone">
+      <div class="eyebrow2">Three-Year Vision</div>
+      <h3>From 3 pilots to an enterprise AI Factory</h3>
+      <p>By Month 36, <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> runs agentic AI across every major business line — MSME &amp; retail lending, fraud &amp; AML, collections, treasury, trade finance and customer service — on one governed platform, not a collection of one-off projects.</p>
+      <p>Every system carries a documented risk tier, an independent model validation record, a PII-safe data path, and a Langfuse-traceable audit trail from day one — not retrofitted after a regulator asks. Governance keeps pace with scale: a 3-lines-of-defense AI risk model, quarterly Board reporting, and an annual Responsible AI transparency report are BAU, not a one-time exercise.</p>
+      <p>The target external validation point is <strong style="color:#fff">ISO/IEC 42001 (AI Management System) certification</strong>, benchmarked internally against RBI's FREE-AI Framework — proof that the bank's AI program is governed to a standard a regulator, an auditor, and a customer can all independently verify.</p>
+    </div>
+  </div>
+
+  <!-- ═══ GOVERNANCE & OPERATING MODEL ═══ -->
+  <div id="tab-govop" class="tab-panel">
+    <div class="pillar-flow">
+      <div class="pillar-state"><div class="lbl">Current State</div><p>3 pilots governed individually — each has its own risk tier, HITL design and sponsor (see <a href="governance.html" style="color:var(--gold)">Governance</a>), but there is no bank-wide AI accountability structure above them yet.</p></div>
+      <div class="pillar-arrow">→</div>
+      <div class="pillar-state"><div class="lbl">Enterprise Target State</div><p>A standing Board AI &amp; Technology Committee, a CAIO-owned enterprise AI Policy, and a 3-lines-of-defense operating model that scales to dozens of use cases without re-inventing governance each time.</p></div>
+    </div>
+
+    <div class="section-label">Enterprise AI Operating Model — Roles &amp; Responsibilities</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Role</th><th>Line of Defense</th><th>Responsibility</th><th>Reporting Cadence</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#fff">Board AI &amp; Technology Committee</strong></td><td><span class="pill pill-gold">Oversight</span></td><td class="muted">Approves enterprise AI Policy, risk appetite, and major use-case launches above a risk threshold</td><td class="muted">Quarterly</td></tr>
+          <tr><td><strong style="color:#fff">Chief AI Officer (CAIO)</strong></td><td><span class="pill pill-blue">1st Line (owns program)</span></td><td class="muted">Owns the enterprise AI Policy, the shared platform roadmap, and business-line adoption; chairs the AI CoE</td><td class="muted">Monthly to Board Committee</td></tr>
+          <tr><td><strong style="color:#fff">Model Risk Committee</strong></td><td><span class="pill pill-purple">2nd Line</span></td><td class="muted">Independent model validation, risk-tiering sign-off, drift/performance monitoring standards</td><td class="muted">Monthly</td></tr>
+          <tr><td><strong style="color:#fff">CISO / Data Protection Officer</strong></td><td><span class="pill pill-purple">2nd Line</span></td><td class="muted">AI security standards, PII/DPDP compliance, incident response for AI systems</td><td class="muted">Monthly</td></tr>
+          <tr><td><strong style="color:#fff">Internal Audit</strong></td><td><span class="pill pill-teal">3rd Line</span></td><td class="muted">Independent audit of the AI governance framework and individual use cases</td><td class="muted">Per audit cycle + annual</td></tr>
+          <tr><td><strong style="color:#fff">Business-Unit AI Champions</strong></td><td><span class="pill pill-blue">1st Line (execution)</span></td><td class="muted">Surface new use cases, own business outcomes, escalate policy-band exceptions to a human</td><td class="muted">Ongoing</td></tr>
+          <tr><td><strong style="color:#fff">Legal &amp; Compliance</strong></td><td><span class="pill pill-purple">2nd Line</span></td><td class="muted">Regulatory interpretation (RBI, DPDP), disclosure requirements, grievance-redress design</td><td class="muted">Per release + annual</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label">Milestones by Horizon</div>
+    <ul class="checklist">
+      <li><strong style="color:#fff">0–3 Mo:</strong> Charter the Board AI Committee and CAIO mandate; publish enterprise AI Policy v1; adopt the risk-tiering taxonomy already used in <a href="governance.html#risk" style="color:var(--gold)">Governance → Risk Tiers</a> as the bank-wide standard</li>
+      <li><strong style="color:#fff">3–6 Mo:</strong> Stand up the Model Risk Committee (2nd line); begin quarterly Board AI reporting</li>
+      <li><strong style="color:#fff">6–12 Mo:</strong> 3-lines-of-defense model fully operational across all 3 live pilots</li>
+      <li><strong style="color:#fff">Year 2:</strong> AI CoE matures into a self-serve platform with a formal intake/approval gate for new use cases</li>
+      <li><strong style="color:#fff">Year 3:</strong> Governance is business-as-usual; independent maturity assessment against RBI's FREE-AI Framework and ISO/IEC 42001</li>
+    </ul>
+  </div>
+
+  <!-- ═══ RESPONSIBLE AI & ETHICS ═══ -->
+  <div id="tab-responsible" class="tab-panel">
+    <div class="pillar-flow">
+      <div class="pillar-state"><div class="lbl">Current State</div><p>All 3 pilots already draft-only, human-sign-off design — see <a href="governance.html#hitl" style="color:var(--gold)">Governance → Human-in-the-Loop</a>. No agent holds unilateral authority over money movement, a fraud confirmation, or a lending decision.</p></div>
+      <div class="pillar-arrow">→</div>
+      <div class="pillar-state"><div class="lbl">Enterprise Target State</div><p>That same design principle becomes a mandatory enterprise standard — with bias/fairness testing, disclosure, and an Algorithmic Impact Assessment gate applied before any business unit can launch a new agentic system.</p></div>
+    </div>
+
+    <div class="section-label">Milestones by Horizon</div>
+    <ul class="checklist">
+      <li><strong style="color:#fff">0–3 Mo:</strong> Mandate the proven human-in-the-loop pattern (draft/recommend, never unilateral action) as an enterprise standard for any new AI system</li>
+      <li><strong style="color:#fff">3–6 Mo:</strong> Publish a bias/fairness testing standard for credit and lending models, building on MSME Credit CAM Prep's disclosed-recommendation design</li>
+      <li><strong style="color:#fff">6–12 Mo:</strong> Require an Algorithmic Impact Assessment before any new use case goes live — covering fairness, explainability tier, and human-checkpoint design</li>
+      <li><strong style="color:#fff">Year 2:</strong> Standardise explainability tiering by risk tier across all business lines (Low/Medium/High risk tiers per <a href="governance.html#risk" style="color:var(--gold)">Governance</a>)</li>
+      <li><strong style="color:#fff">Year 3:</strong> Publish an annual enterprise Responsible AI transparency report — the FREE-AI Framework's accountability principle made public and recurring</li>
+    </ul>
+
+    <div class="note-box"><strong>Grounded in what's already built:</strong> Collections Recovery's negotiation is strictly bounded to pre-approved settlement bands, with any deviation or customer pushback escalated to a human officer — this policy-band pattern is the template for every future customer-facing negotiation or outreach agent, not a one-off design.</div>
+  </div>
+
+  <!-- ═══ RISK & MODEL VALIDATION ═══ -->
+  <div id="tab-risk" class="tab-panel">
+    <div class="pillar-flow">
+      <div class="pillar-state"><div class="lbl">Current State</div><p>Each pilot is individually risk-tiered (all 3 currently Low–Medium — see <a href="governance.html#risk" style="color:var(--gold)">Governance</a>), but there's no independent, enterprise-wide model validation function yet.</p></div>
+      <div class="pillar-arrow">→</div>
+      <div class="pillar-state"><div class="lbl">Enterprise Target State</div><p>A documented model inventory, an independent (2nd-line) validation function, and drift/kill-switch monitoring standards applied to every production agent — not just the first 3.</p></div>
+    </div>
+
+    <div class="section-label">Milestones by Horizon</div>
+    <ul class="checklist">
+      <li><strong style="color:#fff">0–3 Mo:</strong> Build the model inventory and risk register for the 3 flagship pilots (12 agent instances)</li>
+      <li><strong style="color:#fff">3–6 Mo:</strong> Independent model validation function live — separate from the build team, reporting to the Model Risk Committee</li>
+      <li><strong style="color:#fff">6–12 Mo:</strong> Drift monitoring and a kill-switch/rollback standard mandated on all production agents (extends the Langfuse tracing already live per pilot)</li>
+      <li><strong style="color:#fff">Year 2:</strong> Model risk framework extended to every 2nd-wave use case as it's scoped, not bolted on after launch</li>
+      <li><strong style="color:#fff">Year 3:</strong> Continuous validation is business-as-usual; an annual model-risk deep-dive goes to the Board AI Committee</li>
+    </ul>
+  </div>
+
+  <!-- ═══ AUDIT & ASSURANCE ═══ -->
+  <div id="tab-audit" class="tab-panel">
+    <div class="pillar-flow">
+      <div class="pillar-state"><div class="lbl">Current State</div><p>Every LLM call, agent state transition, human decision, and external API call is already logged via Langfuse and LangGraph checkpoints — see <a href="governance.html#audit" style="color:var(--gold)">Governance → Audit Trail</a>. What's missing is an independent audit function reviewing the framework itself.</p></div>
+      <div class="pillar-arrow">→</div>
+      <div class="pillar-state"><div class="lbl">Enterprise Target State</div><p>Internal Audit maintains a standing AI-audit universe; external assurance and a simulated RBI supervisory review confirm the bank could pass a real regulatory inspection at any time.</p></div>
+    </div>
+
+    <div class="section-label">Milestones by Horizon</div>
+    <ul class="checklist">
+      <li><strong style="color:#fff">0–3 Mo:</strong> Internal Audit scopes an AI-specific audit universe (governance framework, model inventory, PII controls)</li>
+      <li><strong style="color:#fff">3–6 Mo:</strong> First internal audit of the AI governance framework itself, not just individual use cases</li>
+      <li><strong style="color:#fff">6–12 Mo:</strong> Regulatory-readiness dry-run — simulate an RBI supervisory review of the AI program end-to-end</li>
+      <li><strong style="color:#fff">Year 2:</strong> First external assurance review of AI controls by an independent third party</li>
+      <li><strong style="color:#fff">Year 3:</strong> Recurring external audit cadence, with findings tracked closed-loop through the Model Risk Committee</li>
+    </ul>
+  </div>
+
+  <!-- ═══ DATA PRIVACY (DPDP) ═══ -->
+  <div id="tab-privacy" class="tab-panel">
+    <div class="pillar-flow">
+      <div class="pillar-state"><div class="lbl">Current State</div><p>PII tokenisation, AES-256-GCM encryption, and LLM prompt scrubbing are already proven in code across all 3 pilots — see <a href="governance.html#pii" style="color:var(--gold)">Governance → Data Protection &amp; PII</a> and <code style="color:var(--amber)">shared/middleware.py</code>.</p></div>
+      <div class="pillar-arrow">→</div>
+      <div class="pillar-state"><div class="lbl">Enterprise Target State</div><p>That middleware pattern becomes the mandatory enterprise standard for every new AI system, with formal DPDP Act certification and a privacy-by-design gate in the use-case intake process.</p></div>
+    </div>
+
+    <div class="section-label">Milestones by Horizon</div>
+    <ul class="checklist">
+      <li><strong style="color:#fff">0–3 Mo:</strong> DPDP Act gap assessment across the AI program; review the Account Aggregator consent architecture already used by MSME Credit CAM Prep</li>
+      <li><strong style="color:#fff">3–6 Mo:</strong> Formal DPDP compliance certification for the 3 flagship pilots</li>
+      <li><strong style="color:#fff">6–12 Mo:</strong> Mandate the tokenise/encrypt/scrub middleware pattern for every new AI system bank-wide, not just the original 3</li>
+      <li><strong style="color:#fff">Year 2:</strong> Add a privacy-by-design gate to the use-case intake process — no new agent reaches build without a data-flow and consent review</li>
+      <li><strong style="color:#fff">Year 3:</strong> Enterprise data-fiduciary maturity audit under the DPDP Act</li>
+    </ul>
+  </div>
+
+  <!-- ═══ AI SECURITY ═══ -->
+  <div id="tab-security" class="tab-panel">
+    <div class="pillar-flow">
+      <div class="pillar-state"><div class="lbl">Current State</div><p>Each pilot has a per-release security audit and pen-test scoped into its build (see <a href="cost.html" style="color:var(--gold)">Cost Analysis</a> and <a href="deploy-guide/index.html" style="color:var(--gold)">Deploy Guide</a>), but there's no AI-specific threat modelling (prompt injection, model extraction) standard yet.</p></div>
+      <div class="pillar-arrow">→</div>
+      <div class="pillar-state"><div class="lbl">Enterprise Target State</div><p>AI-specific threats folded into the bank's existing Cyber Security Framework program, with a recurring AI red-team exercise and a secure LLMOps supply chain.</p></div>
+    </div>
+
+    <div class="section-label">Milestones by Horizon</div>
+    <ul class="checklist">
+      <li><strong style="color:#fff">0–3 Mo:</strong> Build an initial LLM threat model — prompt injection, data exfiltration via agent tool calls, PII leakage in prompts</li>
+      <li><strong style="color:#fff">3–6 Mo:</strong> Run the first AI red-team exercise against the 3 live/in-build pilots</li>
+      <li><strong style="color:#fff">6–12 Mo:</strong> Fold AI-specific checks into the bank's existing Cyber Security Framework VAPT program, not a parallel process</li>
+      <li><strong style="color:#fff">Year 2:</strong> Secure LLMOps pipeline enterprise-wide — model/prompt version control, supply-chain checks on any third-party model or agent tool</li>
+      <li><strong style="color:#fff">Year 3:</strong> Continuous AI red-teaming; CERT-In-aligned incident response runbook specifically for AI systems</li>
+    </ul>
+  </div>
+
+  <!-- ═══ USE-CASE PORTFOLIO ═══ -->
+  <div id="tab-portfolio" class="tab-panel">
+    <div class="note-box"><strong>Wave 1 (already scoped and costed):</strong> MSME Credit CAM Prep, Fraud Detection &amp; Investigation, Collections Recovery — see <a href="index.html#usecases" style="color:var(--gold)">Use Cases</a>, <a href="blueprints.html" style="color:var(--gold)">Blueprints</a> and <a href="timeline.html" style="color:var(--gold)">Timeline</a> for full detail. Everything below is Wave 2 and 3 — the enterprise-scale expansion this roadmap unlocks.</div>
+
+    <div class="section-label">Wave 2 — Year 2 Candidates</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Business Line</th><th>Candidate Use Case</th><th>Why It's Next</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill pill-gold">Retail Lending</span></td><td>Retail loan underwriting &amp; document verification</td><td class="muted">Directly reuses the MSME Credit CAM Prep agent pattern (OCR, bureau verification, risk scoring) at higher volume, lower ticket size</td></tr>
+          <tr><td><span class="pill pill-blue">Risk &amp; Compliance</span></td><td>AML / Transaction Monitoring enhancement</td><td class="muted">Reuses the Fraud Detection signal-agent architecture (Device/IP, Behavior, AML watchlist) already built and governed</td></tr>
+          <tr><td><span class="pill pill-purple">Customer Service</span></td><td>Contact-centre conversational AI (tier-1 query deflection)</td><td class="muted">Reuses the WhatsApp/SMS/IVR channel layer already built for Collections Recovery</td></tr>
+          <tr><td><span class="pill pill-teal">Treasury</span></td><td>Liquidity &amp; cash-flow forecasting agent</td><td class="muted">New data domain, but reuses the shared AWS EKS + LangGraph platform and PII middleware as-is</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label">Wave 3 — Year 3 Candidates</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Business Line</th><th>Candidate Use Case</th><th>Why It's Next</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill" style="background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)">Trade Finance</span></td><td>LC/trade-document discrepancy checking</td><td class="muted">High manual-effort, document-heavy — same OCR/verification pattern as MSME Credit CAM Prep</td></tr>
+          <tr><td><span class="pill" style="background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)">Wealth &amp; Investment</span></td><td>Robo-advisory suitability &amp; portfolio review</td><td class="muted">Higher-risk-tier use case — deliberately sequenced last, after 2+ years of governance maturity</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label">Milestones by Horizon</div>
+    <ul class="checklist">
+      <li><strong style="color:#fff">0–3 Mo:</strong> 3 flagship pilots in build on the shared AWS EKS + LangGraph platform</li>
+      <li><strong style="color:#fff">3–6 Mo:</strong> MSME Credit CAM Prep live (Wk 17, AI-accelerated); Fraud Detection in build</li>
+      <li><strong style="color:#fff">6–12 Mo:</strong> All 3 flagship pilots live (Wk 37); Wave 2 scoping begins</li>
+      <li><strong style="color:#fff">Year 2:</strong> Wave 2 use cases live; platform serves 3+ business lines</li>
+      <li><strong style="color:#fff">Year 3:</strong> Wave 3 use cases live; every major business line has ≥1 governed agentic system</li>
+    </ul>
+  </div>
+
+  <!-- ═══ RBI & REGULATORY MAPPING ═══ -->
+  <div id="tab-regmap" class="tab-panel">
+    <div class="note-box">Directional alignment for CXO/Board discussion, not a substitute for formal legal/compliance sign-off — every framework below would go through the bank's own regulatory and legal review before being operationalised.</div>
+
+    <div class="section-label">Guideline / Framework → AI Plan Mapping</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Guideline / Framework</th><th>Core Requirement</th><th>How the AI Plan Addresses It</th><th>Pillar(s)</th><th>Target Horizon</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#fff">RBI FREE-AI Framework</strong><br><span class="muted" style="font-size:11px">Framework for Responsible &amp; Ethical Enablement of AI, 2025 committee report</span></td><td class="muted">Bank-wide responsible-AI adoption principles — trust, accountability, fairness, safety/resilience, human-centricity</td><td class="muted">Board AI Committee charter + enterprise AI Policy v1 operationalise the framework's principles as internal policy</td><td><span class="pill pill-gold">Governance</span> <span class="pill pill-blue">Responsible AI</span></td><td class="muted">0–3 Mo, ongoing</td></tr>
+          <tr><td><strong style="color:#fff">RBI Digital Lending Guidelines</strong><br><span class="muted" style="font-size:11px">2022</span></td><td class="muted">Algorithmic lending decisions disclosed to borrower; grievance redress; no dark patterns</td><td class="muted">MSME Credit CAM Prep already discloses the AI's role in the recommendation; disclosure standard extended enterprise-wide</td><td><span class="pill pill-blue">Responsible AI</span></td><td class="muted">Existing → 6 Mo mandate</td></tr>
+          <tr><td><strong style="color:#fff">RBI Master Direction on Outsourcing of IT Services</strong><br><span class="muted" style="font-size:11px">2023</span></td><td class="muted">IT/cloud vendor risk register, risk assessment of outsourced services, documented exit strategy</td><td class="muted">Anthropic (model) + AWS (infra) already logged per pilot; formal enterprise vendor risk register + exit-strategy documentation</td><td><span class="pill pill-gold">Governance</span></td><td class="muted">3–6 Mo</td></tr>
+          <tr><td><strong style="color:#fff">RBI Cyber Security Framework for Banks</strong></td><td class="muted">Board-approved cybersecurity policy, periodic VAPT, incident reporting</td><td class="muted">AI-specific VAPT addendum (prompt injection, model extraction), first AI red-team exercise, CERT-In-aligned AI incident response</td><td><span class="pill" style="background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)">AI Security</span></td><td class="muted">0–3 Mo → 3–6 Mo</td></tr>
+          <tr><td><strong style="color:#fff">Digital Personal Data Protection (DPDP) Act</strong><br><span class="muted" style="font-size:11px">2023</span></td><td class="muted">Consent-based processing, data-fiduciary obligations, breach notification, purpose limitation</td><td class="muted">PII tokenise/encrypt/scrub pattern already proven on 3 pilots, mandated as the enterprise standard; formal DPDP certification</td><td><span class="pill pill-green">Data Privacy</span></td><td class="muted">0–3 Mo → 6 Mo</td></tr>
+          <tr><td><strong style="color:#fff">RBI Fair Practices Code</strong></td><td class="muted">No coercive/unfair collection practices; transparent customer communication</td><td class="muted">Collections Recovery's policy-band + escalation design becomes the enterprise pattern for any customer-facing negotiation/outreach agent</td><td><span class="pill pill-blue">Responsible AI</span></td><td class="muted">Existing, ongoing</td></tr>
+          <tr><td><strong style="color:#fff">RBI Model Risk &amp; Outsourcing Risk Guidance</strong><br><span class="muted" style="font-size:11px">General model-risk-management expectations for regulated entities</span></td><td class="muted">Independent model validation, ongoing performance monitoring, documented model inventory</td><td class="muted">Model inventory + risk register (3 pilots first); independent validation function stood up at 3–6 Mo</td><td><span class="pill pill-purple">Risk &amp; Validation</span></td><td class="muted">0–3 Mo → 3–6 Mo</td></tr>
+          <tr><td><strong style="color:#fff">ISO/IEC 42001:2023</strong><br><span class="muted" style="font-size:11px">AI Management System — international standard, external certification capstone</span></td><td class="muted">Formal, auditable AI management system</td><td class="muted">Year-3 target certification, validated by Internal Audit + an external assessor</td><td><span class="pill pill-teal">Audit &amp; Assurance</span></td><td class="muted">Year 3</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const id = location.hash.replace('#', '');
+  const panel = document.getElementById('tab-' + id);
+  const btn = [...document.querySelectorAll('.tab-btn')].find(b => b.getAttribute('onclick').includes("'" + id + "'"));
+  if (panel && btn) showTab(id, btn);
+});
+</script>
+</body>
+</html>

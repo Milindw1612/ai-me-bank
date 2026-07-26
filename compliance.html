@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RBI, SEBI &amp; National AI Compliance Map — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 32px; display: flex; align-items: center; height: 64px; }
+  .nav-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.6), 0 0 26px rgba(57,255,20,0.35); flex-shrink: 0; text-decoration: none; }
+  .nav-links { display: flex; gap: 18px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); font-weight: 700; }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
+
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 780px; line-height: 1.7; }
+
+  .tabs-bar { display: flex; background: var(--surface); border-bottom: 1px solid var(--border2); padding: 0 24px; overflow-x: auto; position: sticky; top: 64px; z-index: 90; }
+  .tab-btn { padding: 14px 18px; font-size: 11.5px; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; white-space: nowrap; letter-spacing: 0.3px; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  main { padding: 0; }
+  .tab-panel { display: none; padding: 32px 48px 56px; }
+  .tab-panel.active { display: block; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+  .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 14px; margin-bottom: 32px; }
+  .ov-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; border-top: 3px solid var(--gold-dim); }
+  .ov-card .status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .ov-card h3 { font-size: 13px; font-weight: 700; }
+  .ov-card .meta { font-size: 10.5px; color: var(--muted); margin-bottom: 8px; }
+  .ov-card p { font-size: 11.5px; color: var(--mid); line-height: 1.6; }
+
+  .status { display: inline-block; font-size: 9.5px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; text-transform: uppercase; letter-spacing: .3px; }
+  .status-final { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .status-consult { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .status-progress { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
+  .status-bench { background: rgba(167,139,250,0.12); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+
+  .table-scroll { overflow-x: auto; margin-bottom: 28px; border-radius: 10px; border: 1px solid var(--border2); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  thead th { background: rgba(255,255,255,0.04); padding: 11px 16px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-align: left; white-space: nowrap; border-bottom: 1px solid var(--border2); }
+  tbody td { padding: 11px 16px; font-size: 12.5px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(255,255,255,0.02); }
+  td.muted { color: var(--muted); font-size: 12px; }
+  .master-table td:first-child { min-width: 190px; font-weight: 700; color: #fff; }
+  .master-table td, .master-table th { min-width: 150px; }
+
+  .pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; margin: 1px 2px 1px 0; }
+  .pill-teal { background: rgba(13,148,136,0.12); color: var(--teal); border: 1px solid rgba(13,148,136,0.3); }
+  .pill-blue { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
+  .pill-green { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .pill-gold { background: rgba(245,158,11,0.12); color: var(--gold); border: 1px solid rgba(245,158,11,0.3); }
+  .pill-purple { background: rgba(167,139,250,0.12); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+  .pill-red { background: rgba(248,113,113,0.12); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+
+  .note-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 6px; padding: 14px 18px; font-size: 12.5px; color: var(--mid); margin-bottom: 24px; line-height: 1.75; }
+  .note-box strong { color: var(--text); }
+
+  .checklist { list-style: none; margin-bottom: 8px; }
+  .checklist li { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--mid); }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+
+  .sutra-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 10px; margin-bottom: 28px; }
+  .sutra-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+  .sutra-card .num { font-family: Georgia, serif; font-size: 18px; color: var(--gold); font-weight: 700; margin-bottom: 4px; }
+  .sutra-card h4 { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .sutra-card p { font-size: 11px; color: var(--mid); line-height: 1.5; }
+
+  .pillar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 10px; margin-bottom: 28px; }
+  .pillar-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; border-left: 3px solid var(--teal); }
+  .pillar-card h4 { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .pillar-card p { font-size: 11px; color: var(--mid); line-height: 1.5; }
+
+  .sources-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; font-size: 11.5px; color: var(--mid); }
+  .sources-box h4 { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  .sources-box ul { list-style: none; columns: 2; column-gap: 32px; }
+  .sources-box li { margin-bottom: 8px; break-inside: avoid; }
+  .sources-box a { color: var(--mid); text-decoration: none; }
+  .sources-box a:hover { color: var(--gold); }
+  @media (max-width: 700px) { .sources-box ul { columns: 1; } }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; transition: color .2s; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .page-header { padding: 24px 20px; }
+    .tab-panel { padding: 20px; }
+    footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="index.html#usecases">Use Cases</a>
+      <a href="blueprints.html">Blueprints</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="roi.html">ROI</a>
+      <a href="cost.html">Cost Analysis</a>
+      <a href="helicopter.html">Helicopter View</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="roadmap.html">AI Roadmap</a>
+      <a href="compliance.html" class="active">Compliance Map</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source Code</a>
+      <a href="deploy-guide/index.html">Deploy Guide</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">India AI Regulatory Landscape · FY26</div>
+  <h1>RBI, SEBI &amp; National AI Compliance Map</h1>
+  <p>India's banking sector is moving fast on AI — credit, fraud, collections, customer service, liquidity — while regulators move to match it. RBI's FREE-AI Framework (13 Aug 2025), MeitY's India AI Governance Guidelines (5 Nov 2025), SEBI's AI/ML consultation paper, IRDAI's emerging framework, CERT-In's AI-era cybersecurity blueprint, and the DPDP Act now define the dual mandate every large bank faces: accelerate AI-driven innovation while proving board-level accountability for model risk, fairness, explainability and data protection. This page maps every applicable framework directly onto <span class="neon-brand">Ai-ME BANK</span>'s <a href="roadmap.html" style="color:var(--gold)">Enterprise AI Roadmap</a> — sourced from the actual public reports, not paraphrased second-hand.</p>
+</div>
+
+<div class="tabs-bar" id="tabsBar">
+  <button class="tab-btn active" onclick="showTab('overview',this)">Overview &amp; Master Mapping</button>
+  <button class="tab-btn" onclick="showTab('rbi',this)">RBI FREE-AI Framework</button>
+  <button class="tab-btn" onclick="showTab('meity',this)">MeitY AI Governance Guidelines</button>
+  <button class="tab-btn" onclick="showTab('sebi',this)">SEBI AI/ML Guidelines</button>
+  <button class="tab-btn" onclick="showTab('irdai',this)">IRDAI</button>
+  <button class="tab-btn" onclick="showTab('certin',this)">CERT-In</button>
+  <button class="tab-btn" onclick="showTab('dpdp',this)">DPDP Act 2023</button>
+  <button class="tab-btn" onclick="showTab('intl',this)">International Benchmarks</button>
+</div>
+
+<main>
+
+  <!-- ═══ OVERVIEW ═══ -->
+  <div id="tab-overview" class="tab-panel active">
+
+    <div class="section-label">Regulatory Landscape at a Glance</div>
+    <div class="overview-grid">
+      <div class="ov-card">
+        <div class="status-row"><h3 style="color:var(--gold)">RBI FREE-AI Framework</h3><span class="status status-final">Final</span></div>
+        <div class="meta">Reserve Bank of India · Committee report, 13 Aug 2025</div>
+        <p>7 Sutras, 6 pillars, 26 recommendations across an Innovation Enablement + Risk Mitigation dual framework for every RBI-regulated entity.</p>
+      </div>
+      <div class="ov-card" style="border-top-color:#5B8DEF">
+        <div class="status-row"><h3 style="color:#5B8DEF">MeitY AI Governance Guidelines</h3><span class="status status-final">Final</span></div>
+        <div class="meta">Ministry of Electronics &amp; IT · 5 Nov 2025, under IndiaAI Mission</div>
+        <p>"Do No Harm" — a lightweight, adaptive national AI governance approach across all sectors; precursor to the India-AI Impact Summit, Feb 2026.</p>
+      </div>
+      <div class="ov-card" style="border-top-color:var(--amber)">
+        <div class="status-row"><h3 style="color:var(--amber)">SEBI AI/ML Guidelines</h3><span class="status status-consult">Consultation</span></div>
+        <div class="meta">Securities and Exchange Board of India · Paper issued 20 Jun 2025</div>
+        <p>Governance, bias mitigation, investor protection and risk controls for AI/ML in securities markets — stricter regime for client-facing models.</p>
+      </div>
+      <div class="ov-card" style="border-top-color:var(--purple)">
+        <div class="status-row"><h3 style="color:var(--purple)">IRDAI AI Governance</h3><span class="status status-progress">In Progress</span></div>
+        <div class="meta">Insurance Regulatory &amp; Development Authority · Working group formed 19 Jun 2026</div>
+        <p>7-member working group drafting the insurance sector's first formal AI governance framework, building on the 2023 Information &amp; Cyber Security Guidelines.</p>
+      </div>
+      <div class="ov-card" style="border-top-color:var(--red)">
+        <div class="status-row"><h3 style="color:var(--red)">CERT-In AI-Era Blueprint</h3><span class="status status-final">Advisory</span></div>
+        <div class="meta">Indian Computer Emergency Response Team · 2026</div>
+        <p>38-page blueprint mandating 12-hour critical-vulnerability patching, zero-trust and secure-by-design controls as AI accelerates attack speed.</p>
+      </div>
+      <div class="ov-card" style="border-top-color:var(--green)">
+        <div class="status-row"><h3 style="color:var(--green)">DPDP Act 2023 &amp; Rules</h3><span class="status status-final">Statute</span></div>
+        <div class="meta">Ministry of Electronics &amp; IT · Act 2023, Rules 2025</div>
+        <p>India's data protection law — consent, data-principal rights, fiduciary obligations, breach notification; penalties up to ₹250 Cr.</p>
+      </div>
+      <div class="ov-card" style="border-top-color:var(--teal)">
+        <div class="status-row"><h3 style="color:var(--teal)">International MRM Benchmarks</h3><span class="status status-bench">Benchmark</span></div>
+        <div class="meta">US Fed/OCC SR 11-7 (2011) · UK PRA SS1/23 (2023)</div>
+        <p>Not India-specific — used to benchmark the bank's model risk management maturity against global standards.</p>
+      </div>
+    </div>
+
+    <div class="section-label">Master Mapping — Regulation → Ai-ME BANK's AI Plan</div>
+    <div class="table-scroll">
+      <table class="master-table">
+        <thead><tr><th>Framework / Requirement</th><th>Core Requirement</th><th>How the AI Plan Responds</th><th>Roadmap Pillar</th><th>Horizon</th></tr></thead>
+        <tbody>
+          <tr><td>RBI FREE-AI — 7 Sutras</td><td class="muted">Trust, People First, Innovation over Restraint, Fairness &amp; Equity, Accountability, Understandable by Design, Safety/Resilience/Sustainability</td><td class="muted">Board AI Committee charter + enterprise AI Policy v1 operationalise the Sutras as internal policy; risk-tiering taxonomy adopted bank-wide</td><td><span class="pill pill-gold">Governance</span></td><td class="muted">0–3 Mo</td></tr>
+          <tr><td>RBI FREE-AI — Infrastructure pillar</td><td class="muted">"Build on DPI, strengthen data quality, prepare for model monitoring and fallback paths"</td><td class="muted">Shared AWS EKS + LangGraph platform with PII middleware and Langfuse tracing already built and proven on 3 pilots</td><td><span class="pill pill-teal">Platform</span></td><td class="muted">Existing → 0–3 Mo</td></tr>
+          <tr><td>RBI FREE-AI — Policy pillar</td><td class="muted">"Adaptive policies that evolve with model capability, use, and risk"</td><td class="muted">Enterprise AI Policy v1, formally revisited at each roadmap horizon rather than fixed at launch</td><td><span class="pill pill-gold">Governance</span></td><td class="muted">0–3 Mo, ongoing</td></tr>
+          <tr><td>RBI FREE-AI — Capacity pillar</td><td class="muted">"Upskill risk, compliance, audit and frontline teams to work with AI safely"</td><td class="muted">AI CoE training and awareness program for Business-Unit AI Champions and control functions</td><td><span class="pill pill-gold">Governance</span></td><td class="muted">3–6 Mo</td></tr>
+          <tr><td>RBI FREE-AI — Governance pillar</td><td class="muted">"Ownership, decision rights, escalation routes, documentation standards"</td><td class="muted">Enterprise AI Operating Model RACI — Board Committee, CAIO, Model Risk Committee, CISO/DPO, Internal Audit, Business Champions</td><td><span class="pill pill-gold">Governance</span></td><td class="muted">0–3 Mo</td></tr>
+          <tr><td>RBI FREE-AI — Protection pillar</td><td class="muted">"Consumer disclosures, consent, recourse, fairness testing at every AI touchpoint"</td><td class="muted">MSME Credit CAM Prep already discloses the AI's role in its recommendation; bias/fairness testing standard extended enterprise-wide</td><td><span class="pill pill-blue">Responsible AI</span></td><td class="muted">Existing → 3–6 Mo</td></tr>
+          <tr><td>RBI FREE-AI — Assurance pillar</td><td class="muted">"Independent audits, stress tests, business continuity for AI-dependent processes"</td><td class="muted">Internal Audit AI-audit-universe scoping, followed by a regulatory-readiness dry-run of a simulated RBI supervisory review</td><td><span class="pill pill-teal">Audit</span></td><td class="muted">0–3 Mo → 6–12 Mo</td></tr>
+          <tr><td>RBI FREE-AI — 90-day checklist</td><td class="muted">Appoint an accountable executive; inventory AI use cases; draft board-approved policy; run fairness testing</td><td class="muted">CAIO appointment, 3-pilot model inventory (12 agent instances), AI Policy v1, and fairness-testing kickoff all land inside the roadmap's 0–3 Mo column</td><td><span class="pill pill-gold">Governance</span></td><td class="muted">0–3 Mo</td></tr>
+          <tr><td>MeitY Guidelines — "Do No Harm" principle</td><td class="muted">Lightweight, adaptive regulation leveraging existing law rather than a new AI statute</td><td class="muted">Every pilot's blast radius is already bounded by design — read-only where money moves, human sign-off wherever a decision is irreversible</td><td><span class="pill pill-blue">Responsible AI</span></td><td class="muted">Existing, ongoing</td></tr>
+          <tr><td>MeitY Guidelines — 6 pillars</td><td class="muted">Data Stewardship, Risk Mitigation, Regulatory Alignment, Innovation Enablement, Public Engagement, Global Cooperation</td><td class="muted">Mapped respectively to: DPDP-aligned PII middleware; Model Risk Committee; this Compliance Map; the AI CoE self-serve platform; an annual Responsible AI transparency report; benchmarking vs. SR 11-7/SS1/23</td><td><span class="pill pill-purple">Multiple</span></td><td class="muted">Year 2–3</td></tr>
+          <tr><td>SEBI — AI/ML Guidelines (consultation)</td><td class="muted">Governance, bias mitigation, investor protection and risk controls; stricter regime for client-facing models; senior-management accountability for the AI lifecycle</td><td class="muted">Tracked for the Wave 3 Wealth/Investment-Advisory candidate use case; senior-management accountability principle adopted enterprise-wide now, ahead of any SEBI-regulated launch</td><td><span class="pill pill-purple">Portfolio (Wave 3)</span></td><td class="muted">Monitor → Year 3 gate</td></tr>
+          <tr><td>IRDAI — AI Governance (emerging)</td><td class="muted">Sector AI governance framework in development (working group, 3-month mandate); existing 2023 Info &amp; Cyber Security Guidelines already in force</td><td class="muted">Tracked for relevance if any bancassurance-linked AI use case is scoped; 2023 guidelines' risk-based data-security approach already folded into the AI Security pillar</td><td><span class="pill pill-red">AI Security</span></td><td class="muted">Monitor, Year 2+</td></tr>
+          <tr><td>CERT-In — AI-Era Cybersecurity Blueprint</td><td class="muted">12-hour critical-vulnerability patching, zero-trust/defence-in-depth, secure-by-design, workforce awareness of AI-assisted phishing/deepfakes</td><td class="muted">AI Security pillar's red-team and secure-LLMOps program adopts the same phased (0–7 day foundational governance) implementation logic</td><td><span class="pill pill-red">AI Security</span></td><td class="muted">0–3 Mo → 3–6 Mo</td></tr>
+          <tr><td>DPDP Act 2023 &amp; Rules 2025</td><td class="muted">Consent (free/specific/informed/withdrawable), data-principal rights, fiduciary obligations, child/PwD protections, breach notification, penalties up to ₹250 Cr</td><td class="muted">Tokenise/encrypt/scrub PII middleware already proven on 3 pilots, mandated bank-wide; formal DPDP gap assessment and certification</td><td><span class="pill pill-green">Data Privacy</span></td><td class="muted">0–3 Mo → 3–6 Mo</td></tr>
+          <tr><td>International MRM (SR 11-7 / SS1/23)</td><td class="muted">Technology-neutral "model" definition already covers ML/LLM systems; SS1/23 emphasises board-level accountability</td><td class="muted">Independent model validation function (2nd line) plus an annual Board model-risk deep-dive, explicitly benchmarked against both standards</td><td><span class="pill pill-purple">Risk &amp; Validation</span></td><td class="muted">3–6 Mo → Year 3</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box"><strong>How to read this:</strong> every row above is sourced from a public regulatory document (see full citations at the bottom of each framework's tab, and the consolidated <a href="#" onclick="showTab('overview',document.querySelector('.tab-btn'));document.getElementById('sourcesAnchor').scrollIntoView({behavior:'smooth'});return false" style="color:var(--gold)">Sources</a> list below) — not a paraphrase. This is a directional alignment view for Board/CXO discussion, not a substitute for formal legal sign-off; every mapping here would go through the bank's own Legal &amp; Compliance review before being operationalised.</div>
+
+    <div id="sourcesAnchor" class="section-label" style="margin-top:8px">Sources</div>
+    <div class="sources-box">
+      <h4>Primary &amp; Secondary Sources Consulted</h4>
+      <ul>
+        <li><a href="https://completeaitraining.com/news/rbi-free-ai-framework-seven-sutras-six-pillars-for/" target="_blank">RBI FREE-AI Framework: Seven Sutras, Six Pillars — completeaitraining.com</a></li>
+        <li><a href="https://dvararesearch.com/summary-of-the-rbi-free-ai-committee-report/" target="_blank">Summary of the RBI FREE-AI Committee Report — Dvara Research</a></li>
+        <li><a href="https://kpmg.com/in/en/insights/2025/08/rbi-free-ai-committee-report-on-framework-for-responsible-and-ethical-enablement-of-artificial-intelligence.html" target="_blank">RBI FREE-AI Committee Report — KPMG India</a></li>
+        <li><a href="https://www.insightsonindia.com/2025/08/14/rbi-has-released-a-report-on-the-framework-for-responsible-and-ethical-enablement-of-artificial-intelligence-free-ai/" target="_blank">RBI FREE-AI Report Release — InsightsOnIndia</a></li>
+        <li><a href="https://law.asia/rbi-ai-framework/" target="_blank">RBI Issues FREE-AI Framework — Law.asia</a></li>
+        <li><a href="https://www.digitalindia.gov.in/press_release/meity-unveils-india-ai-governance-guidelines-under-indiaai-mission-to-ensure-safe-inclusive-and-responsible-adoption-of-artificial-intelligence-across-sectors/" target="_blank">MeitY Unveils India AI Governance Guidelines — Digital India (MeitY press release)</a></li>
+        <li><a href="https://www.scconline.com/blog/post/2025/11/06/meity-launches-india-ai-governance-guidelines-under-indiaai-mission-2025/" target="_blank">MeitY Launches India AI Governance Guidelines — SCC Online</a></li>
+        <li><a href="https://affairscloud.com/meity-releases-india-ai-governance-guidelines/" target="_blank">MeitY Releases India AI Governance Guidelines — AffairsCloud</a></li>
+        <li><a href="https://www.lexology.com/library/detail.aspx?g=1ad14350-2973-4596-8e27-b4458dc6c039" target="_blank">SEBI's Consultation Paper on AI/ML Guidelines — Lexology</a></li>
+        <li><a href="https://www.taxmann.com/post/blog/analysis-sebis-ai-ml-framework-ensuring-fair-and-safe-use-in-stock-markets" target="_blank">SEBI's AI/ML Framework Analysis — Taxmann</a></li>
+        <li><a href="https://www.business-standard.com/finance/insurance/irdai-sets-up-working-group-to-guide-ai-adoption-in-insurance-sector-126061801084_1.html" target="_blank">IRDAI Sets Up AI Working Group — Business Standard</a></li>
+        <li><a href="https://thehackernews.com/2026/05/cert-in-mandates-12-hour-patching-for.html" target="_blank">CERT-In Mandates 12-Hour Patching — The Hacker News</a></li>
+        <li><a href="https://www.medianama.com/2026/05/223-cert-in-releases-blueprint-for-defending-against-ai-assisted-cyber-threats/" target="_blank">CERT-In AI-Assisted Threat Blueprint — MediaNama</a></li>
+        <li><a href="https://www.ey.com/en_in/insights/cybersecurity/decoding-the-digital-personal-data-protection-act-2023" target="_blank">Decoding the DPDP Act 2023 &amp; DPDP Rules 2025 — EY India</a></li>
+        <li><a href="https://www.ardentprivacy.ai/blog/rights-and-duties-of-a-data-principal-under-the-dpdp-act/" target="_blank">Rights and Duties of a Data Principal — Ardent Privacy</a></li>
+        <li><a href="https://www.federalreserve.gov/supervisionreg/srletters/sr1107.htm" target="_blank">SR 11-7 Supervisory Guidance — Federal Reserve</a></li>
+        <li><a href="https://validmind.com/blog/ss1-23-model-risk-management-compliance-guide/" target="_blank">Navigating SS1/23 for Model Risk Management — ValidMind</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ RBI FREE-AI ═══ -->
+  <div id="tab-rbi" class="tab-panel">
+    <div class="note-box"><strong>What it is:</strong> on 13 August 2025, the RBI released the Framework for Responsible and Ethical Enablement of AI (FREE-AI) — a committee report chaired by Prof. Pushpak Bhattacharyya (IIT Bombay), giving every RBI-regulated entity a blueprint to "enable AI at scale and control risk with discipline." It is structured as two complementary sub-frameworks: an <strong>Innovation Enablement Framework</strong> and a <strong>Risk Mitigation Framework</strong>.</div>
+
+    <div class="section-label">The 7 Sutras (Guiding Principles)</div>
+    <div class="sutra-grid">
+      <div class="sutra-card"><div class="num">1</div><h4>Trust is the Foundation</h4><p>Establishing confidence in AI systems across customers, regulators and staff</p></div>
+      <div class="sutra-card"><div class="num">2</div><h4>People First</h4><p>Prioritising human interests and welfare over pure automation efficiency</p></div>
+      <div class="sutra-card"><div class="num">3</div><h4>Innovation over Restraint</h4><p>Encouraging development while managing risk, rather than defaulting to "no"</p></div>
+      <div class="sutra-card"><div class="num">4</div><h4>Fairness and Equity</h4><p>Ensuring non-discriminatory outcomes across customer segments</p></div>
+      <div class="sutra-card"><div class="num">5</div><h4>Accountability</h4><p>Clear, named responsibility for every AI-driven decision</p></div>
+      <div class="sutra-card"><div class="num">6</div><h4>Understandable by Design</h4><p>Systems built to be transparent and explainable, not explained after the fact</p></div>
+      <div class="sutra-card"><div class="num">7</div><h4>Safety, Resilience &amp; Sustainability</h4><p>Protection against failure, and long-term viability of the AI program itself</p></div>
+    </div>
+
+    <div class="section-label">The 6 Pillars (26 Recommendations)</div>
+    <div class="pillar-grid">
+      <div class="pillar-card"><h4>Infrastructure</h4><p>Build on Digital Public Infrastructure, strengthen data quality, prepare model monitoring and fallback paths</p></div>
+      <div class="pillar-card"><h4>Policy</h4><p>Set adaptive policies that evolve with model capability, use and risk</p></div>
+      <div class="pillar-card"><h4>Capacity</h4><p>Upskill risk, compliance, audit and frontline teams to work safely and effectively with AI</p></div>
+      <div class="pillar-card" style="border-left-color:var(--gold)"><h4>Governance</h4><p>Define ownership, decision rights, escalation routes and model documentation standards</p></div>
+      <div class="pillar-card" style="border-left-color:var(--gold)"><h4>Protection</h4><p>Embed consumer disclosures, consent, recourse and fairness testing into every AI touchpoint</p></div>
+      <div class="pillar-card" style="border-left-color:var(--gold)"><h4>Assurance</h4><p>Plan independent audits, stress tests and business continuity for AI-dependent processes</p></div>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:-16px;margin-bottom:24px">Infrastructure, Policy and Capacity form the <strong>Innovation Enablement Framework</strong>; Governance, Protection and Assurance form the <strong>Risk Mitigation Framework</strong>.</p>
+
+    <div class="section-label">90-Day Execution Checklist (RBI's own recommended first sprint)</div>
+    <ul class="checklist">
+      <li>Appoint an accountable executive for AI (this is the CAIO mandate on <a href="roadmap.html" style="color:var(--gold)">Ai-ME BANK's Roadmap</a>)</li>
+      <li>Inventory all AI use cases (the 3 flagship pilots, 12 agent instances, already documented)</li>
+      <li>Draft a board-approved AI policy</li>
+      <li>Conduct initial fairness testing on customer-facing models</li>
+    </ul>
+  </div>
+
+  <!-- ═══ MEITY ═══ -->
+  <div id="tab-meity" class="tab-panel">
+    <div class="note-box"><strong>What it is:</strong> on 5 November 2025, MeitY unveiled the "India AI Governance Guidelines — Enabling Safe and Trusted AI Innovation" under the IndiaAI Mission, chaired by a drafting committee under Prof. Balaraman Ravindran (IIT Madras). Unlike a new AI law, it proposes a <strong>lightweight, adaptive</strong> approach built on existing statutes — its core principle is <strong>"Do No Harm."</strong> The launch was a precursor to the India-AI Impact Summit, 19–20 Feb 2026, New Delhi.</div>
+
+    <div class="section-label">Same 7 Sutras, National Scope</div>
+    <p style="font-size:12.5px;color:var(--mid);margin-bottom:24px;line-height:1.7">MeitY's guidelines echo the same seven guiding principles as RBI's FREE-AI Framework (Trust, People First, Innovation over Restraint, Fairness &amp; Equity, Accountability, Understandable by Design, Safety/Resilience/Sustainability) — applied across every sector, not just financial services.</p>
+
+    <div class="section-label">6 Pillars of National AI Governance</div>
+    <div class="pillar-grid">
+      <div class="pillar-card"><h4>Data Stewardship</h4><p>Responsible data sourcing, quality and usage across the AI lifecycle</p></div>
+      <div class="pillar-card"><h4>Risk Mitigation</h4><p>Identifying and controlling AI-specific risks before they reach production</p></div>
+      <div class="pillar-card"><h4>Regulatory Alignment</h4><p>Consistency with sector regulators (RBI, SEBI, IRDAI) rather than a parallel AI-only regime</p></div>
+      <div class="pillar-card"><h4>Innovation Enablement</h4><p>Sandboxes and adaptive rules that don't choke early-stage AI adoption</p></div>
+      <div class="pillar-card"><h4>Public Engagement</h4><p>Transparency with citizens/customers on how AI affects them</p></div>
+      <div class="pillar-card"><h4>Global Cooperation</h4><p>Alignment with international norms (EU AI Act, UK FCA, US NIST AI RMF)</p></div>
+    </div>
+
+    <div class="note-box">The guidelines include an action plan structured across short-, medium- and long-term timelines. For <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span>, RBI's FREE-AI Framework remains the primary, sector-specific compliance reference; MeitY's guidelines are treated as the national context RBI's framework itself operates within.</div>
+  </div>
+
+  <!-- ═══ SEBI ═══ -->
+  <div id="tab-sebi" class="tab-panel">
+    <div class="note-box"><strong>What it is:</strong> on 20 June 2025, SEBI issued a consultation paper — "Guidelines for Responsible Usage of AI/ML in Indian Securities Markets" — open for comment until 11 July 2025. It is <strong>not yet final</strong>; this is a draft-stage framework, tracked for relevance rather than treated as a binding requirement today.</div>
+
+    <div class="section-label">Key Focus Areas</div>
+    <ul class="checklist">
+      <li>Governance — senior management with technical expertise accountable for the full AI model lifecycle</li>
+      <li>Data security and privacy for AI/ML pipelines</li>
+      <li>Bias prevention and mitigation in model outputs</li>
+      <li>Investor protection and disclosure for AI-influenced recommendations</li>
+      <li>Risk controls, with a lighter regime for internal-use models (e.g. surveillance) and stricter controls for client-facing models</li>
+      <li>Full accountability retained by the regulated entity even when AI/ML is outsourced to a vendor</li>
+    </ul>
+
+    <div class="section-label" style="margin-top:24px">Why This Is Tracked, Not Yet Applied</div>
+    <p style="font-size:12.5px;color:var(--mid);line-height:1.7"><span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span>'s 3 flagship pilots (MSME Credit, Fraud, Collections) are RBI-regulated, not SEBI-regulated. SEBI's framework becomes directly relevant only if/when the bank's Wealth &amp; Investment Advisory use case (Wave 3 on the <a href="roadmap.html" style="color:var(--gold)">Roadmap</a>) is scoped — at which point the senior-management-accountability and client-facing-model provisions would need a dedicated compliance review before launch.</p>
+  </div>
+
+  <!-- ═══ IRDAI ═══ -->
+  <div id="tab-irdai" class="tab-panel">
+    <div class="note-box"><strong>What it is:</strong> IRDAI does not yet have a finalised AI-specific governance framework. On 19 June 2026, it formed a 7-member working group — chaired by Prof. Sandeep Shukla (Director, IIIT Hyderabad) — with a 3-month mandate to recommend the insurance sector's first formal AI governance framework.</div>
+
+    <div class="section-label">Working Group Mandate</div>
+    <ul class="checklist">
+      <li>Recommend an AI governance framework for ethical, transparent, explainable AI in claims and fraud prevention</li>
+      <li>Assess the impact of frontier AI tools on the insurance sector</li>
+      <li>Examine the need for sector-wide AI stress testing</li>
+      <li>Suggest an AI audit framework covering both pre- and post-deployment</li>
+      <li>Identify skill gaps and capacity-building needs across the sector</li>
+    </ul>
+
+    <div class="section-label" style="margin-top:24px">What Already Applies Today</div>
+    <p style="font-size:12.5px;color:var(--mid);line-height:1.7">IRDAI's <strong>2023 Information &amp; Cyber Security Guidelines</strong> already mandate a risk-based approach to data security for regulated entities — this is already folded into the <a href="roadmap.html#tab-security" style="color:var(--gold)">AI Security pillar</a> of the Enterprise Roadmap. The forthcoming AI-specific framework is being tracked for any future bancassurance-linked AI use case, not applied retroactively to the 3 current pilots (none of which are insurance-related).</p>
+  </div>
+
+  <!-- ═══ CERT-IN ═══ -->
+  <div id="tab-certin" class="tab-panel">
+    <div class="note-box"><strong>What it is:</strong> CERT-In's 2026 cybersecurity blueprint (a 38-page advisory) responds directly to AI-accelerated cyberattacks — threat actors using AI/LLMs to automate vulnerability discovery, exploit development and large-scale attack execution, while AI systems themselves become new attack surfaces (prompt injection, data exfiltration, model theft, training-data poisoning).</div>
+
+    <div class="section-label">Core Mandate</div>
+    <ul class="checklist">
+      <li>Patch critical vulnerabilities on internet-exposed systems within <strong style="color:#fff">12 hours</strong> of being flagged, where feasible</li>
+      <li>Adopt zero-trust architecture and defence-in-depth as standard design principles</li>
+      <li>Build systems secure-by-design, not secured after the fact</li>
+      <li>Maintain continuous monitoring and visibility into system behaviour</li>
+    </ul>
+
+    <div class="section-label" style="margin-top:24px">Phase 1 (0–7 Days) — Foundational Governance</div>
+    <ul class="checklist">
+      <li>Multi-factor authentication for all critical access</li>
+      <li>Vulnerability assessment across internet-facing systems</li>
+      <li>Patch known exploited vulnerabilities first</li>
+      <li>Establish incident reporting and baseline monitoring</li>
+      <li>Workforce awareness training on AI-assisted phishing and deepfakes</li>
+    </ul>
+
+    <div class="note-box" style="margin-top:8px">This phased 0–7-day logic is the direct template for the <a href="roadmap.html" style="color:var(--gold)">AI Security pillar's</a> 0–3-month threat-modelling and red-team milestones on the Enterprise Roadmap.</div>
+  </div>
+
+  <!-- ═══ DPDP ═══ -->
+  <div id="tab-dpdp" class="tab-panel">
+    <div class="note-box"><strong>What it is:</strong> the Digital Personal Data Protection Act, 2023 (with Rules notified in 2025) is India's data protection statute — the legal foundation for every PII control already built into the 3 pilots via <code style="color:var(--amber)">shared/middleware.py</code>.</div>
+
+    <div class="section-label">Data Principal Rights</div>
+    <ul class="checklist">
+      <li>Right to access their own personal data</li>
+      <li>Right to correction, completion, updating and erasure</li>
+      <li>Right to nominate someone to exercise these rights on their behalf</li>
+      <li>Right to a grievance-redressal channel</li>
+    </ul>
+
+    <div class="section-label" style="margin-top:24px">Consent &amp; Data Fiduciary Obligations</div>
+    <ul class="checklist">
+      <li>Consent must be free, specific, informed, unconditional and clear — and as easy to withdraw as it was to give</li>
+      <li>Every consent request must be accompanied by a notice explaining what data, for what purpose, and how to exercise rights or complain</li>
+      <li>Verifiable parental/guardian consent required before processing a child's or a person-with-disability's data</li>
+      <li>No behavioural monitoring or targeted advertising directed at children</li>
+      <li>Penalties for non-compliance of up to <strong style="color:#fff">₹250 crore</strong></li>
+    </ul>
+
+    <div class="note-box" style="margin-top:8px">Every one of these obligations maps directly onto the tokenise (HMAC-SHA256) / encrypt (AES-256-GCM) / scrub (LLM prompt redaction) pattern already proven in code — see <a href="governance.html#pii" style="color:var(--gold)">Governance → Data Protection &amp; PII</a>.</div>
+  </div>
+
+  <!-- ═══ INTERNATIONAL BENCHMARKS ═══ -->
+  <div id="tab-intl" class="tab-panel">
+    <div class="note-box"><strong>Why these are here:</strong> none of the frameworks below are India-specific or mandatory for <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> — they're included because RBI's FREE-AI Framework and MeitY's guidelines both explicitly call for benchmarking against international standards, and a CAIO candidate is expected to know them.</div>
+
+    <div class="section-label">US Federal Reserve / OCC — SR 11-7 (2011)</div>
+    <p style="font-size:12.5px;color:var(--mid);margin-bottom:20px;line-height:1.7">"Supervisory Guidance on Model Risk Management" — the foundational, principles-based US standard for managing risk arising from quantitative models in bank decision-making. Its technology-neutral definition of a "model" already covers machine learning and LLM-based systems, even though it predates them.</p>
+
+    <div class="section-label">UK PRA — SS1/23 (2023, in force since 17 May 2024)</div>
+    <p style="font-size:12.5px;color:var(--mid);margin-bottom:20px;line-height:1.7">The first UK supervisory statement dedicated entirely to model risk management, applying to PRA-regulated firms with internal model approval. Its distinguishing emphasis versus SR 11-7 is <strong style="color:#fff">explicit board-level accountability</strong> for model risk, not just a technical/2nd-line function.</p>
+
+    <div class="section-label">Canada OSFI — E-23</div>
+    <p style="font-size:12.5px;color:var(--mid);margin-bottom:0;line-height:1.7">Canada's enterprise-wide model risk management guideline for deposit-taking institutions — the third of the three major global MRM regimes, alongside SR 11-7 and SS1/23, all pre-dating mainstream AI but structurally compatible with it.</p>
+
+    <div class="note-box" style="margin-top:24px"><strong>Ai-ME BANK's use of this benchmark:</strong> the independent Model Risk Committee on the <a href="roadmap.html" style="color:var(--gold)">Enterprise Roadmap</a> is explicitly designed against SS1/23's board-accountability emphasis, not just SR 11-7's original technical validation scope — a deliberate choice reflecting where global MRM practice has moved since 2011.</div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const id = location.hash.replace('#', '');
+  const panel = document.getElementById('tab-' + id);
+  const btn = [...document.querySelectorAll('.tab-btn')].find(b => b.getAttribute('onclick').includes("'" + id + "'"));
+  if (panel && btn) showTab(id, btn);
+});
+</script>
+</body>
+</html>
