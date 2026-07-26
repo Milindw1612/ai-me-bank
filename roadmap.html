@@ -60,6 +60,8 @@
   .matrix-table td:first-child { font-weight: 700; color: #fff; font-size: 12px; }
 
   .pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  a.pill { text-decoration: none; cursor: pointer; transition: transform .15s; }
+  a.pill:hover { transform: translateY(-1px); filter: brightness(1.15); }
   .pill-teal { background: rgba(13,148,136,0.12); color: var(--teal); border: 1px solid rgba(13,148,136,0.3); }
   .pill-blue { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
   .pill-green { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
@@ -160,43 +162,43 @@
       <table class="matrix-table">
         <thead><tr><th>Pillar</th><th>0–3 Months</th><th>3–6 Months</th><th>6–12 Months</th><th>Year 2</th><th>Year 3</th></tr></thead>
         <tbody>
-          <tr><td><span class="pill pill-gold">Governance &amp; Operating Model</span></td>
+          <tr><td><a href="#govop" class="pill pill-gold">Governance &amp; Operating Model</a></td>
             <td>Charter Board AI Committee + CAIO mandate; publish enterprise AI Policy v1; adopt risk-tiering taxonomy</td>
             <td>Model Risk Committee (2nd line) stood up; quarterly Board AI reporting begins</td>
             <td>3-lines-of-defense AI operating model fully operational</td>
             <td>AI CoE becomes self-serve platform with a formal intake/approval gate</td>
             <td>Governance is BAU; maturity assessed vs. FREE-AI Framework &amp; ISO 42001</td></tr>
-          <tr><td><span class="pill pill-blue">Responsible AI &amp; Ethics</span></td>
+          <tr><td><a href="#responsible" class="pill pill-blue">Responsible AI &amp; Ethics</a></td>
             <td>Human-in-the-loop standard (proven on 3 pilots) mandated enterprise-wide</td>
             <td>Bias/fairness testing standard for credit &amp; lending models</td>
             <td>Algorithmic Impact Assessment required pre-launch for every new use case</td>
             <td>Explainability tiering standardised by risk tier, all business lines</td>
             <td>Publish enterprise Responsible AI transparency report</td></tr>
-          <tr><td><span class="pill pill-purple">Risk &amp; Model Validation</span></td>
+          <tr><td><a href="#risk" class="pill pill-purple">Risk &amp; Model Validation</a></td>
             <td>Model inventory + risk register for the 3 pilots</td>
             <td>Independent model validation function (2nd line) live</td>
             <td>Drift monitoring + kill-switch/rollback standard on all production agents</td>
             <td>Model risk framework extended to 2nd-wave use cases</td>
             <td>Continuous validation is BAU; annual model risk deep-dive to Board</td></tr>
-          <tr><td><span class="pill pill-teal">Audit &amp; Assurance</span></td>
+          <tr><td><a href="#audit" class="pill pill-teal">Audit &amp; Assurance</a></td>
             <td>Internal Audit AI-audit-universe scoping</td>
             <td>First internal audit of the AI governance framework</td>
             <td>Regulatory-readiness dry-run (RBI supervisory review simulation)</td>
             <td>External assurance review of AI controls</td>
             <td>Recurring external audit cadence; findings tracked closed-loop</td></tr>
-          <tr><td><span class="pill pill-green">Data Privacy (DPDP)</span></td>
+          <tr><td><a href="#privacy" class="pill pill-green">Data Privacy (DPDP)</a></td>
             <td>DPDP Act gap assessment; consent-architecture review (AA framework)</td>
             <td>Full DPDP compliance certification for the 3 pilots</td>
             <td>PII tokenise/encrypt/scrub standard mandated for every new AI system</td>
             <td>Privacy-by-design gate added to the intake process</td>
             <td>Enterprise data-fiduciary maturity audit</td></tr>
-          <tr><td><span class="pill" style="background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)">AI Security</span></td>
+          <tr><td><a href="#security" class="pill" style="background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)">AI Security</a></td>
             <td>Initial LLM threat model (prompt injection, data exfiltration)</td>
             <td>First AI red-team exercise</td>
             <td>AI-specific additions to the bank's Cyber Security Framework program</td>
             <td>Secure LLMOps pipeline (model supply-chain checks) enterprise-wide</td>
             <td>Continuous AI red-teaming; CERT-In-aligned AI incident response</td></tr>
-          <tr><td><span class="pill" style="background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)">Use-Case Portfolio &amp; Platform</span></td>
+          <tr><td><a href="#portfolio" class="pill" style="background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)">Use-Case Portfolio &amp; Platform</a></td>
             <td>3 flagship pilots in build on shared AWS EKS + LangGraph platform</td>
             <td>MSME Credit CAM Prep live; Fraud Detection in build</td>
             <td>All 3 flagship pilots live; 2nd-wave scoping (Retail Lending, AML, Contact Centre AI)</td>
@@ -252,7 +254,7 @@
     <div class="section-label">Milestones by Horizon</div>
     <ul class="checklist">
       <li><strong style="color:#fff">0–3 Mo:</strong> Charter the Board AI Committee and CAIO mandate; publish enterprise AI Policy v1; adopt the risk-tiering taxonomy already used in <a href="governance.html#risk" style="color:var(--gold)">Governance → Risk Tiers</a> as the bank-wide standard</li>
-      <li><strong style="color:#fff">3–6 Mo:</strong> Stand up the Model Risk Committee (2nd line); begin quarterly Board AI reporting</li>
+      <li><strong style="color:#fff">3–6 Mo:</strong> Stand up the Model Risk Committee (2nd line); begin quarterly Board AI reporting; launch the AI CoE training and awareness program for Business-Unit AI Champions and control functions (RBI FREE-AI's Capacity pillar)</li>
       <li><strong style="color:#fff">6–12 Mo:</strong> 3-lines-of-defense model fully operational across all 3 live pilots</li>
       <li><strong style="color:#fff">Year 2:</strong> AI CoE matures into a self-serve platform with a formal intake/approval gate for new use cases</li>
       <li><strong style="color:#fff">Year 3:</strong> Governance is business-as-usual; independent maturity assessment against RBI's FREE-AI Framework and ISO/IEC 42001</li>
@@ -290,7 +292,7 @@
     <div class="section-label">Milestones by Horizon</div>
     <ul class="checklist">
       <li><strong style="color:#fff">0–3 Mo:</strong> Build the model inventory and risk register for the 3 flagship pilots (12 agent instances)</li>
-      <li><strong style="color:#fff">3–6 Mo:</strong> Independent model validation function live — separate from the build team, reporting to the Model Risk Committee</li>
+      <li><strong style="color:#fff">3–6 Mo:</strong> Independent model validation function live — separate from the build team, reporting to the Model Risk Committee, benchmarked against US SR 11-7 and UK PRA SS1/23 (see <a href="compliance.html#intl" style="color:var(--gold)">Compliance Map → International Benchmarks</a>)</li>
       <li><strong style="color:#fff">6–12 Mo:</strong> Drift monitoring and a kill-switch/rollback standard mandated on all production agents (extends the Langfuse tracing already live per pilot)</li>
       <li><strong style="color:#fff">Year 2:</strong> Model risk framework extended to every 2nd-wave use case as it's scoped, not bolted on after launch</li>
       <li><strong style="color:#fff">Year 3:</strong> Continuous validation is business-as-usual; an annual model-risk deep-dive goes to the Board AI Committee</li>
@@ -398,14 +400,14 @@
       <table>
         <thead><tr><th>Guideline / Framework</th><th>Core Requirement</th><th>How the AI Plan Addresses It</th><th>Pillar(s)</th><th>Target Horizon</th></tr></thead>
         <tbody>
-          <tr><td><strong style="color:#fff">RBI FREE-AI Framework</strong><br><span class="muted" style="font-size:11px">Framework for Responsible &amp; Ethical Enablement of AI, 2025 committee report</span></td><td class="muted">Bank-wide responsible-AI adoption principles — trust, accountability, fairness, safety/resilience, human-centricity</td><td class="muted">Board AI Committee charter + enterprise AI Policy v1 operationalise the framework's principles as internal policy</td><td><span class="pill pill-gold">Governance</span> <span class="pill pill-blue">Responsible AI</span></td><td class="muted">0–3 Mo, ongoing</td></tr>
-          <tr><td><strong style="color:#fff">RBI Digital Lending Guidelines</strong><br><span class="muted" style="font-size:11px">2022</span></td><td class="muted">Algorithmic lending decisions disclosed to borrower; grievance redress; no dark patterns</td><td class="muted">MSME Credit CAM Prep already discloses the AI's role in the recommendation; disclosure standard extended enterprise-wide</td><td><span class="pill pill-blue">Responsible AI</span></td><td class="muted">Existing → 6 Mo mandate</td></tr>
-          <tr><td><strong style="color:#fff">RBI Master Direction on Outsourcing of IT Services</strong><br><span class="muted" style="font-size:11px">2023</span></td><td class="muted">IT/cloud vendor risk register, risk assessment of outsourced services, documented exit strategy</td><td class="muted">Anthropic (model) + AWS (infra) already logged per pilot; formal enterprise vendor risk register + exit-strategy documentation</td><td><span class="pill pill-gold">Governance</span></td><td class="muted">3–6 Mo</td></tr>
-          <tr><td><strong style="color:#fff">RBI Cyber Security Framework for Banks</strong></td><td class="muted">Board-approved cybersecurity policy, periodic VAPT, incident reporting</td><td class="muted">AI-specific VAPT addendum (prompt injection, model extraction), first AI red-team exercise, CERT-In-aligned AI incident response</td><td><span class="pill" style="background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)">AI Security</span></td><td class="muted">0–3 Mo → 3–6 Mo</td></tr>
-          <tr><td><strong style="color:#fff">Digital Personal Data Protection (DPDP) Act</strong><br><span class="muted" style="font-size:11px">2023</span></td><td class="muted">Consent-based processing, data-fiduciary obligations, breach notification, purpose limitation</td><td class="muted">PII tokenise/encrypt/scrub pattern already proven on 3 pilots, mandated as the enterprise standard; formal DPDP certification</td><td><span class="pill pill-green">Data Privacy</span></td><td class="muted">0–3 Mo → 6 Mo</td></tr>
-          <tr><td><strong style="color:#fff">RBI Fair Practices Code</strong></td><td class="muted">No coercive/unfair collection practices; transparent customer communication</td><td class="muted">Collections Recovery's policy-band + escalation design becomes the enterprise pattern for any customer-facing negotiation/outreach agent</td><td><span class="pill pill-blue">Responsible AI</span></td><td class="muted">Existing, ongoing</td></tr>
-          <tr><td><strong style="color:#fff">RBI Model Risk &amp; Outsourcing Risk Guidance</strong><br><span class="muted" style="font-size:11px">General model-risk-management expectations for regulated entities</span></td><td class="muted">Independent model validation, ongoing performance monitoring, documented model inventory</td><td class="muted">Model inventory + risk register (3 pilots first); independent validation function stood up at 3–6 Mo</td><td><span class="pill pill-purple">Risk &amp; Validation</span></td><td class="muted">0–3 Mo → 3–6 Mo</td></tr>
-          <tr><td><strong style="color:#fff">ISO/IEC 42001:2023</strong><br><span class="muted" style="font-size:11px">AI Management System — international standard, external certification capstone</span></td><td class="muted">Formal, auditable AI management system</td><td class="muted">Year-3 target certification, validated by Internal Audit + an external assessor</td><td><span class="pill pill-teal">Audit &amp; Assurance</span></td><td class="muted">Year 3</td></tr>
+          <tr><td><strong style="color:#fff">RBI FREE-AI Framework</strong><br><span class="muted" style="font-size:11px">Framework for Responsible &amp; Ethical Enablement of AI, 2025 committee report</span></td><td class="muted">Bank-wide responsible-AI adoption principles — trust, accountability, fairness, safety/resilience, human-centricity</td><td class="muted">Board AI Committee charter + enterprise AI Policy v1 operationalise the framework's principles as internal policy</td><td><a href="#govop" class="pill pill-gold">Governance</a> <a href="#responsible" class="pill pill-blue">Responsible AI</a></td><td class="muted">0–3 Mo, ongoing</td></tr>
+          <tr><td><strong style="color:#fff">RBI Digital Lending Guidelines</strong><br><span class="muted" style="font-size:11px">2022</span></td><td class="muted">Algorithmic lending decisions disclosed to borrower; grievance redress; no dark patterns</td><td class="muted">MSME Credit CAM Prep already discloses the AI's role in the recommendation; disclosure standard extended enterprise-wide</td><td><a href="#responsible" class="pill pill-blue">Responsible AI</a></td><td class="muted">Existing → 6 Mo mandate</td></tr>
+          <tr><td><strong style="color:#fff">RBI Master Direction on Outsourcing of IT Services</strong><br><span class="muted" style="font-size:11px">2023</span></td><td class="muted">IT/cloud vendor risk register, risk assessment of outsourced services, documented exit strategy</td><td class="muted">Anthropic (model) + AWS (infra) already logged per pilot; formal enterprise vendor risk register + exit-strategy documentation</td><td><a href="#govop" class="pill pill-gold">Governance</a></td><td class="muted">3–6 Mo</td></tr>
+          <tr><td><strong style="color:#fff">RBI Cyber Security Framework for Banks</strong></td><td class="muted">Board-approved cybersecurity policy, periodic VAPT, incident reporting</td><td class="muted">AI-specific VAPT addendum (prompt injection, model extraction), first AI red-team exercise, CERT-In-aligned AI incident response</td><td><a href="#security" class="pill" style="background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)">AI Security</a></td><td class="muted">0–3 Mo → 3–6 Mo</td></tr>
+          <tr><td><strong style="color:#fff">Digital Personal Data Protection (DPDP) Act</strong><br><span class="muted" style="font-size:11px">2023</span></td><td class="muted">Consent-based processing, data-fiduciary obligations, breach notification, purpose limitation</td><td class="muted">PII tokenise/encrypt/scrub pattern already proven on 3 pilots, mandated as the enterprise standard; formal DPDP certification</td><td><a href="#privacy" class="pill pill-green">Data Privacy</a></td><td class="muted">0–3 Mo → 6 Mo</td></tr>
+          <tr><td><strong style="color:#fff">RBI Fair Practices Code</strong></td><td class="muted">No coercive/unfair collection practices; transparent customer communication</td><td class="muted">Collections Recovery's policy-band + escalation design becomes the enterprise pattern for any customer-facing negotiation/outreach agent</td><td><a href="#responsible" class="pill pill-blue">Responsible AI</a></td><td class="muted">Existing, ongoing</td></tr>
+          <tr><td><strong style="color:#fff">RBI Model Risk &amp; Outsourcing Risk Guidance</strong><br><span class="muted" style="font-size:11px">General model-risk-management expectations for regulated entities</span></td><td class="muted">Independent model validation, ongoing performance monitoring, documented model inventory</td><td class="muted">Model inventory + risk register (3 pilots first); independent validation function stood up at 3–6 Mo</td><td><a href="#risk" class="pill pill-purple">Risk &amp; Validation</a></td><td class="muted">0–3 Mo → 3–6 Mo</td></tr>
+          <tr><td><strong style="color:#fff">ISO/IEC 42001:2023</strong><br><span class="muted" style="font-size:11px">AI Management System — international standard, external certification capstone</span></td><td class="muted">Formal, auditable AI management system</td><td class="muted">Year-3 target certification, validated by Internal Audit + an external assessor</td><td><a href="#audit" class="pill pill-teal">Audit &amp; Assurance</a></td><td class="muted">Year 3</td></tr>
         </tbody>
       </table>
     </div>
@@ -426,12 +428,18 @@ function showTab(id, btn) {
   btn.classList.add('active');
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+function activateFromHash() {
   const id = location.hash.replace('#', '');
   const panel = document.getElementById('tab-' + id);
   const btn = [...document.querySelectorAll('.tab-btn')].find(b => b.getAttribute('onclick').includes("'" + id + "'"));
-  if (panel && btn) showTab(id, btn);
-});
+  if (panel && btn) {
+    showTab(id, btn);
+    document.getElementById('tabsBar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+window.addEventListener('DOMContentLoaded', activateFromHash);
+window.addEventListener('hashchange', activateFromHash);
 </script>
 </body>
 </html>
