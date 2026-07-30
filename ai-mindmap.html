@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Readiness Mindmap &amp; Action Plan — Ai-ME BANK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{ --gold:#F59E0B; --neon:#39FF14; }
+  nav{position:sticky;top:0;z-index:1000;background:rgba(59,15,26,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.06);padding:0 10px;display:flex;align-items:center;height:64px;}
+  .nav-inner{width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+  .nav-logo{font-size:19px;font-weight:800;letter-spacing:-0.3px;color:var(--neon);text-shadow:0 0 6px rgba(57,255,20,0.85),0 0 14px rgba(57,255,20,0.6),0 0 26px rgba(57,255,20,0.35);flex-shrink:0;text-decoration:none;}
+  .nav-links{display:flex;gap:4px;align-items:center;overflow-x:auto;scrollbar-width:none;}
+  .nav-links::-webkit-scrollbar{display:none;}
+  .nav-links a{font-size:9.5px;font-weight:500;color:#8A8578;text-decoration:none;transition:color .2s;white-space:nowrap;}
+  .nav-links a:hover{color:var(--gold);}
+  .nav-links a.active{color:var(--gold);font-weight:700;}
+  .nav-cta{background:linear-gradient(135deg,#D97706,#F59E0B);color:#000!important;font-weight:700!important;padding:5px 14px;border-radius:6px;}
+  @media (max-width:900px){.nav-links{display:none;}}
+  .site-footer{background:#2A0A12;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.05);flex-wrap:wrap;gap:8px;font-family:'Inter',sans-serif;}
+  .site-footer p{font-size:12px;color:#94765B;margin:0;}
+  .site-footer a{color:#94765B;text-decoration:none;transition:color .2s;}
+  .site-footer a:hover{color:var(--gold);}
+  :root{
+    --navy:#1B2A4A; --navy-ink:#0F1A30; --paper:#F6F4EE; --card:#FFFFFF;
+    --teal:#0F6E56; --teal-fill:#E1F5EE;
+    --amber:#8A5A0B; --amber-fill:#FBEEDA;
+    --coral:#993C1D; --coral-fill:#FAECE7;
+    --blue:#185FA5; --blue-fill:#E6F1FB;
+    --purple:#3C3489; --purple-fill:#EEEDFE;
+    --line:#D7D2C4; --muted:#5B5A52;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--navy-ink);font-family:'Inter',sans-serif;line-height:1.6;padding:56px 24px 100px;}
+  .wrap{max-width:980px;margin:0 auto;}
+  .kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px;}
+  h1{font-family:'Fraunces',serif;font-weight:500;font-size:36px;margin:0 0 8px;color:var(--navy);letter-spacing:-.01em;}
+  .sub{color:var(--muted);font-size:15px;max-width:720px;margin-bottom:18px;}
+  .note{background:var(--purple-fill);color:var(--purple);border-radius:10px;padding:12px 16px;font-size:13px;max-width:720px;margin-bottom:40px;}
+
+  .scorecard{background:var(--navy);border-radius:16px;padding:30px 32px;margin-bottom:56px;color:#fff;}
+  .scorecard h2{font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:0 0 6px;}
+  .scorecard .desc{font-size:13.5px;color:#B9C2D6;margin-bottom:24px;max-width:640px;}
+  .score-row{display:grid;grid-template-columns:200px 1fr;gap:16px;align-items:center;margin-bottom:14px;}
+  .score-label{font-size:13.5px;font-weight:500;}
+  .score-scale{display:flex;gap:6px;}
+  .score-opt{flex:1;text-align:center;}
+  .score-opt input{display:none;}
+  .score-opt label{display:block;padding:8px 4px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);font-size:11.5px;cursor:pointer;color:#D9DEEA;transition:all .15s;}
+  .score-opt input:checked + label{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:600;}
+  .score-total{margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.15);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  .score-total .num{font-family:'Fraunces',serif;font-size:32px;font-weight:500;}
+  .score-total .band{font-size:14px;color:#BFEBDC;font-weight:500;}
+  .legend-scale{display:flex;gap:14px;font-size:11.5px;color:#B9C2D6;flex-wrap:wrap;margin-top:14px;}
+
+  .legend{display:flex;gap:22px;margin-bottom:44px;font-size:12.5px;color:var(--muted);flex-wrap:wrap;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+
+  .pillar-block{margin-bottom:14px;}
+  .pillar-header{display:flex;align-items:baseline;gap:10px;margin-bottom:16px;padding-top:6px;border-top:2px solid var(--navy);}
+  .pillar-num{font-family:'Fraunces',serif;font-size:13px;font-weight:600;color:#fff;background:var(--navy);border-radius:6px;padding:3px 9px;letter-spacing:.03em;white-space:nowrap;}
+  .pillar-title{font-family:'Fraunces',serif;font-size:20px;font-weight:500;color:var(--navy);}
+
+  .gate{position:relative;margin-bottom:6px;}
+  .gate-num{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.03em;text-transform:uppercase;margin:0 0 6px;}
+  .question{background:var(--navy);color:#fff;border-radius:14px;padding:18px 24px;font-family:'Fraunces',serif;font-size:18px;font-weight:500;line-height:1.4;}
+  .question span{display:block;font-family:'Inter',sans-serif;font-weight:400;font-size:12.5px;color:#B9C2D6;margin-top:6px;letter-spacing:.02em;}
+
+  .branches{display:flex;gap:18px;margin:16px 0 0;padding-left:28px;border-left:2px solid var(--line);}
+  .branch{min-width:0;}
+  .branches > .branch:first-child{flex:0 0 25%;}
+  .branches > .branch:last-child{flex:1 1 75%;}
+  .tag{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:10px;}
+  .tag.yes{background:var(--teal-fill);color:var(--teal);}
+  .tag.no{background:var(--coral-fill);color:var(--coral);}
+
+  .yes-card{background:var(--card);border:1px solid var(--teal-fill);border-left:3px solid var(--teal);border-radius:10px;padding:14px 18px;font-size:14px;color:var(--navy-ink);}
+  .no-card{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--coral);border-radius:10px;padding:16px 18px;}
+  .no-card > .summary-line{font-size:13.5px;color:var(--navy-ink);margin-bottom:12px;}
+  .no-card > .summary-line b{color:var(--coral);}
+
+  details{margin-top:2px;}
+  details summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--navy);list-style:none;padding:8px 0;border-top:1px dashed var(--line);display:flex;align-items:center;gap:6px;}
+  details summary::-webkit-details-marker{display:none;}
+  details summary::before{content:"▸";color:var(--navy);font-size:11px;transition:transform .15s;}
+  details[open] summary::before{transform:rotate(90deg);}
+  details summary:hover{color:var(--teal);}
+
+  .deep{padding:6px 4px 14px 4px;}
+  .deep-section{margin-bottom:16px;}
+  .deep-section .dlabel{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;display:inline-block;padding:2px 9px;border-radius:5px;margin-bottom:8px;}
+  .deep-section.why .dlabel{background:var(--coral-fill);color:var(--coral);}
+  .deep-section.how .dlabel{background:var(--amber-fill);color:var(--amber);}
+  .deep-section.back .dlabel{background:var(--blue-fill);color:var(--blue);}
+  .deep-section.sustain .dlabel{background:var(--teal-fill);color:var(--teal);}
+  .deep-section p{font-size:13.5px;margin:0 0 6px;color:var(--navy-ink);}
+  .deep-section ul{margin:4px 0 0;padding-left:19px;font-size:13.5px;color:var(--navy-ink);}
+  .deep-section li{margin-bottom:5px;}
+  .why-cat{font-weight:600;color:var(--coral);}
+
+  /* action plan table */
+  .table-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:6px;}
+  .action-table{width:100%;min-width:560px;border-collapse:collapse;table-layout:fixed;font-size:12.5px;}
+  .action-table th{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);font-weight:600;}
+  .action-table th:nth-child(1){width:42%;}
+  .action-table th:nth-child(2){width:22%;}
+  .action-table th:nth-child(3){width:22%;}
+  .action-table th:nth-child(4){width:14%;}
+  .action-table td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--navy-ink);word-wrap:break-word;overflow-wrap:break-word;white-space:normal;}
+  .action-table tr.phase-row td{background:var(--amber-fill);font-weight:600;color:var(--amber);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;}
+  .action-table td.owner{color:var(--blue);font-weight:500;}
+  .action-table td.timeline{color:var(--muted);font-size:12px;}
+  @media (max-width:640px){
+    .action-table{min-width:480px;}
+  }
+
+  /* checklist */
+  .checklist{list-style:none;margin:4px 0 0;padding:0;}
+  .checklist li{font-size:13px;margin-bottom:7px;padding-left:24px;position:relative;color:var(--navy-ink);}
+  .checklist li::before{content:"☐";position:absolute;left:0;top:0;color:var(--blue);font-size:14px;}
+
+  .sustain-grid{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px;}
+  .sustain-grid .k{color:var(--muted);font-weight:600;white-space:nowrap;}
+  .sustain-grid .v{color:var(--navy-ink);}
+
+  .example-table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0 12px;}
+  .example-table th{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);font-weight:600;}
+  .example-table td{padding:6px 8px;border-bottom:1px solid var(--line);color:var(--navy-ink);vertical-align:top;}
+  .resource-table a{color:var(--teal);font-weight:600;text-decoration:none;border-bottom:1px solid var(--teal-fill);white-space:nowrap;}
+  .resource-table a:hover{border-bottom-color:var(--teal);}
+  .resource-table a::after{content:" ↗";font-size:10.5px;}
+  .gov-tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:6px 16px;border-radius:6px;background:#000000;color:#39FF14;border:1px solid #39FF14;box-shadow:0 0 10px rgba(57,255,20,0.55);text-shadow:0 0 6px rgba(57,255,20,0.7);margin-bottom:10px;}
+  .gov-tag.agentic{color:#FF2ECC;border-color:#FF2ECC;box-shadow:0 0 10px rgba(255,46,204,0.55);text-shadow:0 0 6px rgba(255,46,204,0.7);}
+  .agentic-addendum{margin-top:14px;background:#EEF0FB;border:1px dashed #4B4FA8;border-radius:10px;padding:14px 18px;}
+  .agentic-addendum .alabel{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#4B4FA8;margin-bottom:4px;}
+  .agentic-addendum .asub{font-size:11.5px;color:var(--muted);margin-bottom:10px;font-style:italic;}
+  .agentic-addendum ul{margin:4px 0 0;padding-left:19px;font-size:13px;color:var(--navy-ink);}
+  .agentic-addendum li{margin-bottom:6px;}
+  .agentic-addendum li b{color:#4B4FA8;}
+  .agent-addendum{margin-top:14px;background:#EAFBEF;border:1px dashed #128A3E;border-radius:10px;padding:14px 18px;}
+  .agent-addendum .alabel{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#128A3E;margin-bottom:4px;}
+  .agent-addendum .asub{font-size:11.5px;color:var(--muted);margin-bottom:10px;font-style:italic;}
+  .agent-addendum ul{margin:4px 0 0;padding-left:19px;font-size:13px;color:var(--navy-ink);}
+  .agent-addendum li{margin-bottom:6px;}
+  .agent-addendum li b{color:#128A3E;}
+  .industry-lens{margin-top:14px;background:var(--purple-fill);border-radius:10px;padding:12px 16px;}
+  .industry-lens .ilabel{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--purple);margin-bottom:8px;}
+  .industry-lens .irow{display:flex;gap:8px;font-size:12.5px;margin-bottom:6px;color:var(--navy-ink);}
+  .industry-lens .irow:last-child{margin-bottom:0;}
+  .industry-lens .itag{flex-shrink:0;font-weight:600;color:var(--purple);min-width:78px;}
+
+  .connector{display:flex;align-items:center;gap:8px;padding:8px 0 8px 12px;color:var(--muted);font-size:12.5px;font-weight:500;}
+  .connector::before{content:"↓";font-size:18px;color:var(--navy);}
+  .pillar-connector{display:flex;align-items:center;gap:10px;margin:22px 0 30px;color:var(--muted);font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+  .pillar-connector::before, .pillar-connector::after{content:"";flex:1;height:1px;background:var(--line);}
+
+  .final{margin-top:16px;background:var(--teal);color:#fff;border-radius:14px;padding:28px 30px;text-align:center;}
+  .final .kicker2{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#BFEBDC;font-weight:600;margin-bottom:8px;}
+  .final h2{font-family:'Fraunces',serif;font-weight:500;font-size:24px;margin:0 0 8px;}
+  .final p{font-size:14px;color:#DFF3EA;margin:0 auto;max-width:560px;}
+
+  @media print{ body{padding:24px;} details{display:block !important;} }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="index.html#usecases">Use Cases</a>
+      <a href="blueprints.html">Blueprints</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="roi.html">ROI</a>
+      <a href="cost.html">Cost</a>
+      <a href="helicopter.html">Helicopter</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="ai-gpolicy.html">AI-GPolicy</a>
+      <a href="roadmap.html">AI Roadmap</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="ai-mindmap.html" class="active">AI-Readiness</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source</a>
+      <a href="deploy-guide/index.html">Deploy</a>
+      <a href="https://milindw1612.github.io/#contact" target="_blank" class="nav-cta">Contact Me</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="kicker">AI digital transformation initiative &mdash; readiness &amp; execution playbook</div>
+  <h1>Before you commit: the readiness decision tree, execution-ready</h1>
+  <div class="sub">Six pillars, ten gates. Every "No" branch now carries a phased, owner-and-timeline action plan a working team can pick up directly &mdash; not just a principle to agree with. Root causes, a week-by-week remediation plan, a hard exit checklist, and the standing practice that keeps the gap closed &mdash; with banking, fintech, and IT/software specifics throughout.</div>
+  <div class="note">Pillars 1&ndash;5 can run in parallel by different workstream owners. Pillar 6 should start early but is checked last, since adoption readiness is easiest to judge once the other five are settled. Timelines assume a mid-size enterprise team working in parallel with other priorities &mdash; compress or extend based on your actual resourcing.</div>
+
+  <div class="scorecard">
+    <h2>CXO self-assessment scorecard</h2>
+    <div class="desc">Rate your organization 1&ndash;5 on each pillar before working through the gates below. Summed together, this gives a rough read on your competitive position in enterprise AI adoption.</div>
+
+    <div class="score-row"><div class="score-label">1. Strategic clarity</div>
+      <div class="score-scale" data-pillar="p1">
+        <div class="score-opt"><input type="radio" name="p1" value="1" id="p1-1"><label for="p1-1">1</label></div>
+        <div class="score-opt"><input type="radio" name="p1" value="2" id="p1-2"><label for="p1-2">2</label></div>
+        <div class="score-opt"><input type="radio" name="p1" value="3" id="p1-3"><label for="p1-3">3</label></div>
+        <div class="score-opt"><input type="radio" name="p1" value="4" id="p1-4"><label for="p1-4">4</label></div>
+        <div class="score-opt"><input type="radio" name="p1" value="5" id="p1-5"><label for="p1-5">5</label></div>
+      </div></div>
+    <div class="score-row"><div class="score-label">2. Leadership &amp; funding</div>
+      <div class="score-scale" data-pillar="p2">
+        <div class="score-opt"><input type="radio" name="p2" value="1" id="p2-1"><label for="p2-1">1</label></div>
+        <div class="score-opt"><input type="radio" name="p2" value="2" id="p2-2"><label for="p2-2">2</label></div>
+        <div class="score-opt"><input type="radio" name="p2" value="3" id="p2-3"><label for="p2-3">3</label></div>
+        <div class="score-opt"><input type="radio" name="p2" value="4" id="p2-4"><label for="p2-4">4</label></div>
+        <div class="score-opt"><input type="radio" name="p2" value="5" id="p2-5"><label for="p2-5">5</label></div>
+      </div></div>
+    <div class="score-row"><div class="score-label">3. Data &amp; governance</div>
+      <div class="score-scale" data-pillar="p3">
+        <div class="score-opt"><input type="radio" name="p3" value="1" id="p3-1"><label for="p3-1">1</label></div>
+        <div class="score-opt"><input type="radio" name="p3" value="2" id="p3-2"><label for="p3-2">2</label></div>
+        <div class="score-opt"><input type="radio" name="p3" value="3" id="p3-3"><label for="p3-3">3</label></div>
+        <div class="score-opt"><input type="radio" name="p3" value="4" id="p3-4"><label for="p3-4">4</label></div>
+        <div class="score-opt"><input type="radio" name="p3" value="5" id="p3-5"><label for="p3-5">5</label></div>
+      </div></div>
+    <div class="score-row"><div class="score-label">4. Infrastructure &amp; MLOps</div>
+      <div class="score-scale" data-pillar="p4">
+        <div class="score-opt"><input type="radio" name="p4" value="1" id="p4-1"><label for="p4-1">1</label></div>
+        <div class="score-opt"><input type="radio" name="p4" value="2" id="p4-2"><label for="p4-2">2</label></div>
+        <div class="score-opt"><input type="radio" name="p4" value="3" id="p4-3"><label for="p4-3">3</label></div>
+        <div class="score-opt"><input type="radio" name="p4" value="4" id="p4-4"><label for="p4-4">4</label></div>
+        <div class="score-opt"><input type="radio" name="p4" value="5" id="p4-5"><label for="p4-5">5</label></div>
+      </div></div>
+    <div class="score-row"><div class="score-label">5. Talent capability</div>
+      <div class="score-scale" data-pillar="p5">
+        <div class="score-opt"><input type="radio" name="p5" value="1" id="p5-1"><label for="p5-1">1</label></div>
+        <div class="score-opt"><input type="radio" name="p5" value="2" id="p5-2"><label for="p5-2">2</label></div>
+        <div class="score-opt"><input type="radio" name="p5" value="3" id="p5-3"><label for="p5-3">3</label></div>
+        <div class="score-opt"><input type="radio" name="p5" value="4" id="p5-4"><label for="p5-4">4</label></div>
+        <div class="score-opt"><input type="radio" name="p5" value="5" id="p5-5"><label for="p5-5">5</label></div>
+      </div></div>
+    <div class="score-row"><div class="score-label">6. Change &amp; culture</div>
+      <div class="score-scale" data-pillar="p6">
+        <div class="score-opt"><input type="radio" name="p6" value="1" id="p6-1"><label for="p6-1">1</label></div>
+        <div class="score-opt"><input type="radio" name="p6" value="2" id="p6-2"><label for="p6-2">2</label></div>
+        <div class="score-opt"><input type="radio" name="p6" value="3" id="p6-3"><label for="p6-3">3</label></div>
+        <div class="score-opt"><input type="radio" name="p6" value="4" id="p6-4"><label for="p6-4">4</label></div>
+        <div class="score-opt"><input type="radio" name="p6" value="5" id="p6-5"><label for="p6-5">5</label></div>
+      </div></div>
+
+    <div class="legend-scale">
+      <span>1 &mdash; Ad hoc / not started</span>
+      <span>2 &mdash; Emerging / informal</span>
+      <span>3 &mdash; Defined / documented</span>
+      <span>4 &mdash; Managed / measured</span>
+      <span>5 &mdash; Optimized / industry-leading</span>
+    </div>
+    <div class="score-total">
+      <div><div class="num" id="score-num">0 / 30</div></div>
+      <div class="band" id="score-band">Rate all six pillars to see your position.</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot" style="background:var(--navy)"></span>Gate / question</span>
+    <span><span class="dot" style="background:var(--teal)"></span>Yes &mdash; proceed</span>
+    <span><span class="dot" style="background:var(--coral)"></span>No &mdash; expand for the full execution plan</span>
+  </div>
+
+  <!-- ============ PILLAR 1 ============ -->
+  <div class="pillar-block">
+    <div class="pillar-header"><span class="pillar-num">Pillar 1</span><span class="pillar-title">Strategic clarity</span></div>
+
+    <div class="gate">
+      <div class="gate-num">Q1</div>
+      <div class="question">Is there a specific, high-value business problem identified for AI to solve?
+        <span>Not "we should use AI somewhere" &mdash; a named process, cost, or decision it will improve.</span>
+      </div>
+      <div class="branches">
+        <div class="branch"><div class="tag yes">Yes</div><div class="yes-card">Move to Q2.</div></div>
+        <div class="branch">
+          <div class="tag no">No</div>
+          <div class="no-card">
+            <div class="summary-line"><b>Quick take:</b> Run structured discovery, then select 1&ndash;2 use cases with a validated problem statement.</div>
+            <details open><summary>Full execution plan</summary>
+              <div class="deep">
+                <div class="deep-section why"><span class="dlabel">Why not</span>
+                  <ul>
+                    <li><span class="why-cat">Organizational:</span> No formal use-case intake process exists; business and IT operate in silos with no shared forum to surface ideas.</li>
+                    <li><span class="why-cat">Cultural:</span> Leadership is chasing competitor headlines or board FOMO rather than working backward from an operating pain point.</li>
+                    <li><span class="why-cat">Structural (regulated sectors):</span> Naming a specific problem (e.g. underwriting bias, missed fraud) can feel like creating an audit trail of admitted deficiency, so nobody names one explicitly.</li>
+                  </ul>
+                </div>
+                <div class="deep-section how"><span class="dlabel">How to implement</span>
+                  <div class="table-scroll"><table class="action-table">
+                    <tr><th>Action</th><th>Owner</th><th>Deliverable</th><th>Timeline</th></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 1 — Diagnose</td></tr>
+                    <tr><td>Run value-stream mapping workshops with each major business line (retail ops, underwriting, customer service, engineering)</td><td class="owner">CAIO / Transformation Lead + BU Heads</td><td>Workshop log of pain points with quantified cost/time/risk impact</td><td class="timeline">Weeks 1&ndash;3</td></tr>
+                    <tr><td>Distribute an "AI opportunity intake form" to all department heads (problem, current cost, desired outcome)</td><td class="owner">PMO / Transformation Office</td><td>Consolidated opportunity register</td><td class="timeline">Weeks 1&ndash;2 (parallel)</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 2 — Prioritize</td></tr>
+                    <tr><td>Score candidate use cases on a value-vs-feasibility matrix in a cross-functional workshop</td><td class="owner">CAIO + Finance + BU Leads</td><td>Ranked shortlist (top 5) with scoring rationale</td><td class="timeline">Week 4</td></tr>
+                    <tr><td>Draft one-page problem statements for shortlisted cases (current state, annual cost, future state)</td><td class="owner">Business Analyst per use case</td><td>5 problem-statement documents</td><td class="timeline">Week 5</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 3 — Validate &amp; select</td></tr>
+                    <tr><td>Validate shortlist against actual P&amp;L / risk line items</td><td class="owner">CFO / COO</td><td>Signed-off use case selection memo</td><td class="timeline">Week 6</td></tr>
+                    <tr><td>Select 1&ndash;2 use cases for pilot by value-to-effort ratio and regulatory complexity</td><td class="owner">Steering Committee</td><td>Approved pilot charter draft</td><td class="timeline">Week 6</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                  <p>Say leadership's starting point was: <i>"Let's use AI somewhere in retail banking, our competitors are doing it."</i> That's not a problem statement, it's a hope. Here's how Q1 turns it into something real.</p>
+                  <p><b>Step 1 &mdash; run the workshop.</b> A "value-stream mapping workshop" just means: put 5&ndash;8 people who actually do the work (not just their managers) in a room for half a day, write down every step of one process on sticky notes in order, and time each step. For loan document review, that looks like:</p>
+                  <table class="example-table">
+                    <tr><th>Pain point found</th><th>Time/cost impact</th></tr>
+                    <tr><td>Manual income-document review</td><td>Adds ~2 days per loan</td></tr>
+                    <tr><td>No system link between core banking and the credit bureau</td><td>Forces manual re-entry, ~30 min/loan</td></tr>
+                    <tr><td>Discrepancy escalation has no clear owner</td><td>Causes ~4% of files to be delayed &gt;5 days</td></tr>
+                  </table>
+                  <p><b>Step 2 &mdash; compare it against other candidate problems.</b> Run the same workshop for 2&ndash;3 other business lines, then score all the candidates side by side so the choice isn't just whoever shouted loudest:</p>
+                  <table class="example-table">
+                    <tr><th>Candidate problem</th><th>Value</th><th>Feasibility</th><th>Selected?</th></tr>
+                    <tr><td>Loan income-document review</td><td>High</td><td>High</td><td><b>Yes &mdash; selected for pilot</b></td></tr>
+                    <tr><td>Customer service chatbot</td><td>High</td><td>Low (needs new infrastructure)</td><td>Not yet</td></tr>
+                    <tr><td>Engineering code-review assistant</td><td>Medium</td><td>High</td><td>Candidate for later</td></tr>
+                  </table>
+                  <p><b>Step 3 &mdash; write the one-page problem statement.</b> In plain language: <i>"Underwriters spend 3.2 days per loan on manual document review, costing ~$170,000/month in staff time across 2,000 loans. Target: cut review time to 1 day using AI-assisted document extraction and cross-checking, freeing underwriters for judgment calls only."</i></p>
+                  <p><b>Step 4 &mdash; get it signed off.</b> The CFO/COO confirms this ties to a real cost line (loan processing cost) or risk line (backlog risk) &mdash; not just "it sounds useful."</p>
+                </div>
+                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                  <div class="table-scroll"><table class="action-table resource-table">
+                    <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
+                    <tr><td>Running a value-stream mapping workshop</td><td><a href="https://creately.com/guides/value-stream-mapping-guide/" target="_blank" rel="noopener noreferrer">Value stream mapping guide</a></td><td>Step-by-step method for Step 1 above</td></tr>
+                    <tr><td>Scoring and ranking candidate use cases</td><td><a href="https://www.atlassian.com/agile/product-management/prioritization-framework" target="_blank" rel="noopener noreferrer">Prioritization framework guide</a></td><td>Structured way to run Step 2's value-vs-feasibility scoring</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section back"><span class="dlabel">Exit checklist &mdash; when to re-check this gate</span>
+                  <ul class="checklist">
+                    <li>Documented, quantified problem statement exists for at least one use case</li>
+                    <li>Business-unit leader has co-signed the problem statement (not IT alone)</li>
+                    <li>CFO/COO has validated the tie to a P&amp;L or risk line item</li>
+                    <li>Use case selected and pilot charter drafted</li>
+                  </ul>
+                </div>
+                <div class="deep-section sustain"><span class="dlabel">How to sustain it</span>
+                  <div class="sustain-grid">
+                    <div class="k">Owner</div><div class="v">CAIO / Transformation Office</div>
+                    <div class="k">Cadence</div><div class="v">Quarterly "AI opportunity backlog" review with business-unit heads</div>
+                    <div class="k">Metric</div><div class="v">Number of validated use cases in pipeline; % of proposals with a completed problem statement before funding request</div>
+                  </div>
+                </div>
+                <div class="industry-lens">
+                  <div class="ilabel">Industry lens</div>
+                  <div class="irow"><span class="itag">Banking</span>Anchor use cases to regulatory pain points (KYC/AML alert triage, credit risk scoring) where the cost of manual review is auditable.</div>
+                  <div class="irow"><span class="itag">Fintech</span>Favor fast-feedback use cases (fraud detection, chatbot deflection) where ROI shows within one quarter.</div>
+                  <div class="irow"><span class="itag">IT/software</span>Start with internal engineering productivity (code review, ticket triage) as a low-risk proof point before customer-facing AI.</div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="connector">then</div>
+
+    <div class="gate">
+      <div class="gate-num">Q2</div>
+      <div class="question">Are there defined, measurable KPIs for ROI or efficiency gain?
+        <span>A baseline that lets the organization later say whether the initiative worked.</span>
+      </div>
+      <div class="branches">
+        <div class="branch"><div class="tag yes">Yes</div><div class="yes-card">Proceed to Pillar 2.</div></div>
+        <div class="branch">
+          <div class="tag no">No</div>
+          <div class="no-card">
+            <div class="summary-line"><b>Quick take:</b> Baseline the current process, agree KPIs jointly with finance, embed them in the pilot charter.</div>
+            <details open><summary>Full execution plan</summary>
+              <div class="deep">
+                <div class="deep-section why"><span class="dlabel">Why not</span>
+                  <ul>
+                    <li><span class="why-cat">Organizational:</span> Technology projects are traditionally measured by delivery (go-live date), not business outcome.</li>
+                    <li><span class="why-cat">Process:</span> No baseline exists for the current manual process, so there's nothing to compare the AI-assisted version against.</li>
+                    <li><span class="why-cat">Cultural:</span> IT and the business haven't agreed what "success" means &mdash; model accuracy vs. reduced handle time &mdash; and the mismatch never gets resolved.</li>
+                  </ul>
+                </div>
+                <div class="deep-section how"><span class="dlabel">How to implement</span>
+                  <div class="table-scroll"><table class="action-table">
+                    <tr><th>Action</th><th>Owner</th><th>Deliverable</th><th>Timeline</th></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 1 — Diagnose</td></tr>
+                    <tr><td>Run a time-and-motion study on the current manual process (cycle time, error rate, FTE hours, cost/transaction)</td><td class="owner">BU Ops Lead + Business Analyst</td><td>Baseline metrics report</td><td class="timeline">Weeks 1&ndash;3 (can overlap with Q1)</td></tr>
+                    <tr><td>Identify which metrics already tie into existing Finance/risk reporting</td><td class="owner">FP&amp;A Lead</td><td>List of relevant existing financial/risk metrics</td><td class="timeline">Week 1</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 2 — Define &amp; embed</td></tr>
+                    <tr><td>Facilitate a joint IT-business workshop to define 3&ndash;5 KPIs (min. 1 efficiency, 1 quality, 1 adoption metric)</td><td class="owner">CAIO + BU Lead + FP&amp;A</td><td>Signed KPI definition document with target thresholds</td><td class="timeline">Week 4</td></tr>
+                    <tr><td>Embed KPI targets and review cadence into the pilot charter</td><td class="owner">PMO</td><td>Updated pilot charter</td><td class="timeline">Week 4&ndash;5</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 3 — Institutionalize</td></tr>
+                    <tr><td>Build a live AI performance dashboard tracking the agreed KPIs</td><td class="owner">Data/BI team</td><td>Dashboard with monthly refresh</td><td class="timeline">Weeks 5&ndash;7, then ongoing</td></tr>
+                    <tr><td>Assign a KPI owner accountable for monthly reporting to steering committee</td><td class="owner">BU Lead</td><td>Monthly KPI report</td><td class="timeline">Recurring monthly</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                  <p>Say your Q1 use case is: <i>"Loan underwriters spend too long manually reviewing income documents."</i> Here's exactly how Q2 plays out for that one use case.</p>
+                  <p><b>Step 1 &mdash; measure the "before."</b> Before building anything, track the current manual process for 2&ndash;4 weeks:</p>
+                  <table class="example-table">
+                    <tr><th>What was measured</th><th>Result</th></tr>
+                    <tr><td>Average time to review one loan file</td><td>3.2 days</td></tr>
+                    <tr><td>Errors caught later (missed discrepancies)</td><td>4% of files</td></tr>
+                    <tr><td>Cost per review (staff time)</td><td>~$85</td></tr>
+                    <tr><td>Team hours spent per week on this task</td><td>25 hours</td></tr>
+                  </table>
+                  <p><b>Step 2 &mdash; agree what "success" looks like, in numbers.</b> Sit down with the business unit lead and finance and turn that baseline into 3 targets &mdash; not vague goals like "faster and better," but numbers with a deadline:</p>
+                  <table class="example-table">
+                    <tr><th>KPI type</th><th>What you track</th><th>Baseline</th><th>Target</th><th>Why it matters</th></tr>
+                    <tr><td><b>Efficiency</b></td><td>Average review time per loan</td><td>3.2 days</td><td>1 day within 6 months</td><td>Frees underwriters for higher-value work, speeds up customer decisions</td></tr>
+                    <tr><td><b>Quality</b></td><td>Missed-discrepancy rate</td><td>4%</td><td>Below 2%</td><td>Proves the AI reduces errors instead of just moving them around</td></tr>
+                    <tr><td><b>Adoption</b></td><td>% of loans actually processed via the tool</td><td>0%</td><td>70% by month 3</td><td>Confirms people are using it, not just that it exists</td></tr>
+                  </table>
+                  <p><b>Step 3 &mdash; write it down and attach it to the charter.</b> These three rows become a one-page KPI sheet, signed by the business unit lead and finance, and stapled to the pilot's approval documents &mdash; so nobody can later say "we never agreed what success meant."</p>
+                  <p><b>Step 4 &mdash; assign one owner.</b> Not IT. Here, the Head of Loan Operations owns these numbers and reports them to the steering committee monthly. If review time hasn't moved, that's a question for the pilot team; if adoption is at 10% instead of 70%, that's a change-management problem (Pillar 6) &mdash; and the dashboard flags it in month one instead of month six.</p>
+                </div>
+                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                  <div class="table-scroll"><table class="action-table resource-table">
+                    <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
+                    <tr><td>Baselining a process before automating it</td><td><a href="https://creately.com/guides/value-stream-mapping-guide/" target="_blank" rel="noopener noreferrer">Value stream mapping guide</a></td><td>Method for measuring the "before" state in Step 1</td></tr>
+                    <tr><td>Writing measurable, time-bound goals</td><td><a href="https://www.atlassian.com/agile/agile-at-scale/okr" target="_blank" rel="noopener noreferrer">OKR framework guide</a></td><td>Turning vague goals into the numeric targets used in Step 2</td></tr>
+                    <tr><td>Tying AI projects to financial ROI</td><td><a href="https://olakai.ai/blog/ai-roi-framework/" target="_blank" rel="noopener noreferrer">AI ROI measurement framework</a></td><td>Useful when Finance asks "what's this worth in dollars"</td></tr>
+                    <tr><td>Engineering-specific KPIs</td><td><a href="https://dora.dev/guides/dora-metrics/" target="_blank" rel="noopener noreferrer">DORA metrics guide</a></td><td>Ready-made KPI set if your Q1 use case is an internal engineering tool</td></tr>
+                  </table></div>
+                </div>
+                <div class="agent-addendum">
+                  <div class="gov-tag">AI Agent Governance</div>
+                  <div class="alabel" style="margin-top:0;">Addendum &mdash; if this system is an autonomous agent, not just a single AI call</div>
+                  <div class="asub">The efficiency/quality/adoption KPIs above apply to any AI system. An agent that acts on its own needs extra KPIs to govern, not just measure, its behavior.</div>
+                  <ul>
+                    <li><b>Task-completion rate:</b> % of tasks the agent finishes end-to-end without human intervention &mdash; a sudden drop is often the first sign something's wrong before it shows up anywhere else.</li>
+                    <li><b>Autonomous-vs-escalated action ratio:</b> how often it acts on its own versus hands off to a human. Track this on the same dashboard as Q2's KPIs, not separately &mdash; a sharp shift in this ratio deserves the same review as a missed KPI target.</li>
+                    <li><b>Cost per completed task, not per query:</b> an agent can call tools or APIs many times to finish one task, so cost-per-query understates the real spend. Track cost per completed task instead.</li>
+                  </ul>
+                </div>
+                <div class="deep-section back"><span class="dlabel">Exit checklist &mdash; when to re-check this gate</span>
+                  <ul class="checklist">
+                    <li>Baseline metrics documented and signed off by Finance</li>
+                    <li>3&ndash;5 KPIs defined with explicit targets and thresholds</li>
+                    <li>Named KPI owner assigned</li>
+                    <li>KPIs embedded in the pilot charter before kickoff</li>
+                  </ul>
+                </div>
+                <div class="deep-section sustain"><span class="dlabel">How to sustain it</span>
+                  <div class="sustain-grid">
+                    <div class="k">Owner</div><div class="v">Steering committee / FP&amp;A</div>
+                    <div class="k">Cadence</div><div class="v">Monthly KPI dashboard review at the steering committee</div>
+                    <div class="k">Metric</div><div class="v">% of active AI use cases with KPIs tracked on schedule</div>
+                  </div>
+                </div>
+                <div class="industry-lens">
+                  <div class="ilabel">Industry lens</div>
+                  <div class="irow"><span class="itag">Banking</span>Include regulatory KPIs &mdash; e.g. reduction in false-positive AML alerts, audit finding closure time.</div>
+                  <div class="irow"><span class="itag">Fintech</span>Track against customer metrics (NPS, churn, ticket deflection) since growth is the primary board metric.</div>
+                  <div class="irow"><span class="itag">IT/software</span>Use engineering KPIs (deployment frequency, defect escape rate, developer hours saved) mapped to existing DORA-style metrics.</div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pillar-connector">next pillar</div>
+
+  <!-- ============ PILLAR 2 ============ -->
+  <div class="pillar-block">
+    <div class="pillar-header"><span class="pillar-num">Pillar 2</span><span class="pillar-title">Leadership, sponsorship &amp; funding</span></div>
+
+    <div class="gate">
+      <div class="gate-num">Q3</div>
+      <div class="question">Is there active C-suite sponsorship and long-term funding committed?
+        <span>A named executive owner, and budget beyond a single pilot cycle.</span>
+      </div>
+      <div class="branches">
+        <div class="branch"><div class="tag yes">Yes</div><div class="yes-card">Move to Q4.</div></div>
+        <div class="branch">
+          <div class="tag no">No</div>
+          <div class="no-card">
+            <div class="summary-line"><b>Quick take:</b> Appoint a funded executive sponsor, build a 3-year phased business case, secure tranche-gated funding.</div>
+            <details open><summary>Full execution plan</summary>
+              <div class="deep">
+                <div class="deep-section why"><span class="dlabel">Why not</span>
+                  <ul>
+                    <li><span class="why-cat">Organizational:</span> AI has been delegated entirely to IT/innovation teams with no direct P&amp;L owner accountable for outcomes.</li>
+                    <li><span class="why-cat">Financial:</span> Funding was approved as a one-time "innovation budget" line, not a multi-year commitment, so it risks disappearing after the first cycle.</li>
+                    <li><span class="why-cat">Governance:</span> Shallow board-level understanding of AI means every follow-on funding ask faces the same skepticism as the first, instead of earned credibility.</li>
+                    <li><span class="why-cat">Sector-specific (banking):</span> AI competes for capital committee attention against regulatory-mandated technology spend and often loses.</li>
+                  </ul>
+                </div>
+                <div class="deep-section how"><span class="dlabel">How to implement</span>
+                  <div class="table-scroll"><table class="action-table">
+                    <tr><th>Action</th><th>Owner</th><th>Deliverable</th><th>Timeline</th></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 1 — Diagnose</td></tr>
+                    <tr><td>Map current funding source and duration vs. actual multi-year need</td><td class="owner">CFO office / Finance Business Partner</td><td>Funding gap analysis memo</td><td class="timeline">Weeks 1&ndash;2</td></tr>
+                    <tr><td>Assess board/investment committee's current AI literacy via short interviews</td><td class="owner">CAIO</td><td>Board readiness summary</td><td class="timeline">Week 1&ndash;2</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 2 — Build the case</td></tr>
+                    <tr><td>Appoint a formal executive sponsor with real budget authority (COO/CFO/CAIO)</td><td class="owner">CEO</td><td>Signed sponsor charter/mandate</td><td class="timeline">Week 3&ndash;4</td></tr>
+                    <tr><td>Build a 3-year phased investment case (Year 1 pilot, Year 2 scale, Year 3 run-rate) attached to the Q2 KPI framework</td><td class="owner">CAIO + FP&amp;A</td><td>Investment case / business case document</td><td class="timeline">Weeks 4&ndash;7</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 3 — Secure &amp; institutionalize</td></tr>
+                    <tr><td>Present to board/investment committee; negotiate tranche-gated funding release</td><td class="owner">Executive Sponsor</td><td>Board approval minutes + funding tranche schedule</td><td class="timeline">1 board cycle</td></tr>
+                    <tr><td>Stand up a standing AI steering committee (sponsor, CFO, CDO/CAIO, BU heads)</td><td class="owner">Executive Sponsor</td><td>Committee charter, set meeting cadence</td><td class="timeline">2 weeks to establish, then ongoing</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                  <p>Continuing the loan-review example: you now have a validated problem (Q1) and target KPIs (Q2). Q3 simply asks: <i>is someone with real budget authority actually going to pay for this, for more than one year?</i></p>
+                  <p>Instead of one lump sum, the funding is broken into tranches &mdash; each one released only if the previous stage actually worked:</p>
+                  <table class="example-table">
+                    <tr><th>Year</th><th>Budget</th><th>What it buys</th><th>Released if</th></tr>
+                    <tr><td>Year 1</td><td>$150K</td><td>Build + pilot for one business line (loan review)</td><td>Pilot charter approved</td></tr>
+                    <tr><td>Year 2</td><td>$600K</td><td>Scale to 3 more business lines</td><td>Q2 KPIs hit target within 20%</td></tr>
+                    <tr><td>Year 3</td><td>$1.2M</td><td>Enterprise-wide rollout + MLOps platform (Q8)</td><td>Year 2 KPIs sustained for 2 straight quarters</td></tr>
+                  </table>
+                  <p>In this example, the COO agrees to be the named sponsor and can approve the Year 1 budget alone. Years 2 and 3 are pre-agreed in principle but need board sign-off &mdash; and only get released if the KPI dashboard from Q2 shows the numbers actually holding, not on a fixed calendar date regardless of results.</p>
+                </div>
+                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                  <div class="table-scroll"><table class="action-table resource-table">
+                    <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
+                    <tr><td>Structuring a business case for the board</td><td><a href="https://www.smartsheet.com/business-case-analysis-examples" target="_blank" rel="noopener noreferrer">Business case templates &amp; examples</a></td><td>Format for the Year 1&ndash;3 investment case document</td></tr>
+                    <tr><td>Quantifying AI ROI for a funding ask</td><td><a href="https://olakai.ai/blog/ai-roi-framework/" target="_blank" rel="noopener noreferrer">AI ROI measurement framework</a></td><td>Turning the Q2 KPIs into the dollar figures a board wants to see</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section back"><span class="dlabel">Exit checklist &mdash; when to re-check this gate</span>
+                  <ul class="checklist">
+                    <li>Named executive sponsor with budget authority documented in the project charter</li>
+                    <li>Multi-year (even if tranche-gated) funding approved &mdash; not a single fiscal-year allocation</li>
+                    <li>AI steering committee established with a defined cadence</li>
+                    <li>Board-approved investment case on file</li>
+                  </ul>
+                </div>
+                <div class="deep-section sustain"><span class="dlabel">How to sustain it</span>
+                  <div class="sustain-grid">
+                    <div class="k">Owner</div><div class="v">Executive sponsor + steering committee</div>
+                    <div class="k">Cadence</div><div class="v">Monthly/quarterly funding-tranche review tied to KPI performance</div>
+                    <div class="k">Metric</div><div class="v">Tranche release on-time rate; sponsor engagement/attendance rate</div>
+                  </div>
+                </div>
+                <div class="industry-lens">
+                  <div class="ilabel">Industry lens</div>
+                  <div class="irow"><span class="itag">Banking</span>Position AI funding alongside regulatory/compliance technology spend to compete effectively for capital committee attention.</div>
+                  <div class="irow"><span class="itag">Fintech</span>Tie funding milestones to investor-facing metrics (growth, unit economics) given VC-influenced boards.</div>
+                  <div class="irow"><span class="itag">IT/software</span>Use internal productivity savings as justification, since engineering leadership often controls its own budget cycle.</div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="connector">then</div>
+
+    <div class="gate">
+      <div class="gate-num">Q4</div>
+      <div class="question">Is the organization's risk appetite for AI defined &mdash; hallucinations, ethics, reputational exposure?
+        <span>An explicit line for what level of model error or ethical risk is acceptable, and where it isn't.</span>
+      </div>
+      <div class="branches">
+        <div class="branch"><div class="tag yes">Yes</div><div class="yes-card">Proceed to Pillar 3.</div></div>
+        <div class="branch">
+          <div class="tag no">No</div>
+          <div class="no-card">
+            <div class="gov-tag">AI Agent Governance</div>
+            <div class="summary-line"><b>Quick take:</b> Define tiered risk thresholds jointly with risk/legal/compliance, get board sign-off, embed in vendor screening.</div>
+            <details open><summary>Full execution plan</summary>
+              <div class="deep">
+                <div class="deep-section why"><span class="dlabel">Why not</span>
+                  <ul>
+                    <li><span class="why-cat">Governance:</span> No one has decided what error rate is tolerable in which context &mdash; fine internally, unacceptable in customer-facing credit decisions.</li>
+                    <li><span class="why-cat">Process:</span> Legal and compliance are looped in reactively after an incident rather than proactively at design time.</li>
+                    <li><span class="why-cat">Cultural:</span> Fear of reputational damage produces blanket risk-aversion instead of a tiered framework that would actually enable safe progress.</li>
+                  </ul>
+                </div>
+                <div class="deep-section how"><span class="dlabel">How to implement</span>
+                  <div class="table-scroll"><table class="action-table">
+                    <tr><th>Action</th><th>Owner</th><th>Deliverable</th><th>Timeline</th></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 1 — Diagnose</td></tr>
+                    <tr><td>Inventory current/planned AI use cases and classify informally by stakes (internal / customer-facing / autonomous)</td><td class="owner">Risk/Compliance Lead + CAIO</td><td>Preliminary use-case risk inventory</td><td class="timeline">Weeks 1&ndash;2</td></tr>
+                    <tr><td>Review existing model risk management policy for what can extend to AI/LLM</td><td class="owner">Head of Model Risk/Compliance</td><td>Gap analysis vs. existing MRM framework</td><td class="timeline">Weeks 1&ndash;2</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 2 — Define &amp; approve</td></tr>
+                    <tr><td>Convene legal, compliance, risk, and business to define a tiered risk framework (Tier 1/2/3) with error thresholds and human-in-the-loop checkpoints</td><td class="owner">CRO + CAIO</td><td>Draft AI risk appetite statement</td><td class="timeline">Weeks 3&ndash;5</td></tr>
+                    <tr><td>Route the draft through risk committee/board for approval</td><td class="owner">CRO</td><td>Board/risk-committee-approved statement</td><td class="timeline">1 committee cycle</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 3 — Institutionalize</td></tr>
+                    <tr><td>Update vendor/procurement screening criteria against the new risk tiers</td><td class="owner">Procurement + Legal</td><td>Updated vendor risk questionnaire</td><td class="timeline">Weeks 6&ndash;7</td></tr>
+                    <tr><td>Stand up an AI ethics board / extend MRM to review new use cases against tiers on an ongoing basis</td><td class="owner">CRO / Ethics Board Chair</td><td>Standing board with published review cadence</td><td class="timeline">3&ndash;4 weeks to establish, then ongoing</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                  <p>Say a second use case is on the table: <i>"an AI chatbot that reads a customer's account balance and suggests a savings action."</i> Q4 simply asks: <i>how wrong is this allowed to be, and who decided that?</i></p>
+                  <p>Without an answer, every use case gets treated with the same paranoia as the riskiest one, which is exactly why organizations freeze. A simple tier table fixes that:</p>
+                  <table class="example-table">
+                    <tr><th>Tier</th><th>Example</th><th>Human checkpoint</th><th>Acceptable error rate</th></tr>
+                    <tr><td><b>Tier 1</b> &mdash; internal only</td><td>AI drafts an internal risk summary memo</td><td>Reviewed by an analyst before use</td><td>Up to 5% needing correction; no external impact</td></tr>
+                    <tr><td><b>Tier 2</b> &mdash; customer-facing, human-reviewed</td><td>Loan-review assistant flags discrepancies for the underwriter to confirm</td><td>Underwriter makes the final call; AI never approves alone</td><td>Below 2% missed discrepancies</td></tr>
+                    <tr><td><b>Tier 3</b> &mdash; autonomous, high-stakes</td><td>Chatbot auto-approves a savings transfer with no human review</td><td>Requires ethics board sign-off + real-time monitoring</td><td>Below 0.1%, or not permitted without extra controls</td></tr>
+                  </table>
+                  <p>With this table in hand, the loan-review assistant (Tier 2) can move forward quickly, while the autonomous savings chatbot (Tier 3) gets extra scrutiny &mdash; and nobody has to re-argue risk tolerance from scratch for every new idea.</p>
+                </div>
+                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                  <div class="table-scroll"><table class="action-table resource-table">
+                    <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
+                    <tr><td>Structuring AI risk tiers and governance</td><td><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener noreferrer">NIST AI Risk Management Framework</a></td><td>The most widely used public reference for building the tier table above</td></tr>
+                  </table></div>
+                </div>
+                <div class="agentic-addendum">
+                  <div class="gov-tag agentic">Agentic AI Governance</div>
+                  <div class="alabel" style="margin-top:0;">The system-level layer</div>
+                  <div class="asub">Everything above this box is AI Agent Governance (governs one agent's authority). This box applies only if this use case involves multiple agents that delegate tasks to each other — not a single-shot AI call.</div>
+                  <p style="font-size:13px;margin:0 0 8px;color:var(--navy-ink);">The tier table above governs one agent's authority. It doesn't catch problems that only exist when agents interact with each other. Add these before go-live:</p>
+                  <ul>
+                    <li><b>Permission inheritance rule:</b> when Agent A delegates a subtask to Agent B, does B inherit A's restrictions, or does it use its own? Decide this explicitly per workflow &mdash; don't let it default silently, or a Tier 1 agent can hand sensitive work to a less-restricted Tier 3 agent without anyone approving that.</li>
+                    <li><b>Agent-to-agent trust boundary map:</b> a simple diagram of which agents are allowed to call which other agents and tools &mdash; the same way a network diagram shows which systems can talk to which.</li>
+                    <li><b>System-wide kill-switch:</b> one control that halts the entire multi-agent workflow, not just the single agent that misbehaved &mdash; tested before go-live, not assumed to work.</li>
+                    <li><b>Emergent-behavior review:</b> a periodic check for outcomes where every agent behaved "correctly" on its own but the combination produced a bad result (e.g. two agents each independently approving the same refund).</li>
+                  </ul>
+                </div>
+                <div class="deep-section back"><span class="dlabel">Exit checklist &mdash; when to re-check this gate</span>
+                  <ul class="checklist">
+                    <li>Written, board/risk-committee-approved AI risk appetite statement with defined tiers</li>
+                    <li>New use cases classified against tiers before development begins</li>
+                    <li>Vendor screening criteria updated to reflect risk tiers</li>
+                    <li>AI ethics board / extended MRM function operating with a review cadence</li>
+                  </ul>
+                </div>
+                <div class="deep-section sustain"><span class="dlabel">How to sustain it</span>
+                  <div class="sustain-grid">
+                    <div class="k">Owner</div><div class="v">CRO / AI ethics board</div>
+                    <div class="k">Cadence</div><div class="v">Ongoing use-case review + annual or incident-triggered policy refresh</div>
+                    <div class="k">Metric</div><div class="v">% of use cases classified before build start; number of policy exceptions logged</div>
+                  </div>
+                </div>
+                <div class="industry-lens">
+                  <div class="ilabel">Industry lens</div>
+                  <div class="irow"><span class="itag">Banking</span>Align directly with existing model risk management governance (e.g. SR 11-7-style validation) &mdash; treat LLMs as models requiring the same rigor.</div>
+                  <div class="irow"><span class="itag">Fintech</span>Build risk tiers around consumer protection rules (fair lending, UDAAP) given direct-to-consumer exposure.</div>
+                  <div class="irow"><span class="itag">IT/software</span>Focus on code-generation and IP/security exposure &mdash; can AI-suggested code introduce vulnerabilities or leak proprietary logic.</div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pillar-connector">next pillar</div>
+
+  <!-- ============ PILLAR 3 ============ -->
+  <div class="pillar-block">
+    <div class="pillar-header"><span class="pillar-num">Pillar 3</span><span class="pillar-title">Data readiness &amp; governance</span></div>
+
+    <div class="gate">
+      <div class="gate-num">Q5</div>
+      <div class="question">Is the required data accessible, centralized, and high quality?
+        <span>AI is only as good as the data feeding it &mdash; usually the first real stall point.</span>
+      </div>
+      <div class="branches">
+        <div class="branch"><div class="tag yes">Yes</div><div class="yes-card">Move to Q6.</div></div>
+        <div class="branch">
+          <div class="tag no">No</div>
+          <div class="no-card">
+            <div class="summary-line"><b>Quick take:</b> Audit data quality, resolve ownership, run targeted MDM remediation for the pilot's data scope.</div>
+            <details open><summary>Full execution plan</summary>
+              <div class="deep">
+                <div class="deep-section why"><span class="dlabel">Why not</span>
+                  <ul>
+                    <li><span class="why-cat">Technical:</span> Data lives in silos (core banking, CRM, risk warehouse) never designed to interoperate, each with its own definition of the same entity.</li>
+                    <li><span class="why-cat">Process:</span> No data quality monitoring exists, so errors and duplicates propagate invisibly into anything built on the data.</li>
+                    <li><span class="why-cat">Organizational:</span> Ownership is unclear or contested &mdash; multiple teams believe they "own" the same dataset with no single accountable steward.</li>
+                  </ul>
+                </div>
+                <div class="deep-section how"><span class="dlabel">How to implement</span>
+                  <div class="table-scroll"><table class="action-table">
+                    <tr><th>Action</th><th>Owner</th><th>Deliverable</th><th>Timeline</th></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 1 — Diagnose</td></tr>
+                    <tr><td>Run a data maturity/readiness audit across systems relevant to the target use case (completeness, accuracy, freshness, accessibility)</td><td class="owner">Data Engineering Lead</td><td>Data readiness audit report with quality score</td><td class="timeline">Weeks 1&ndash;3</td></tr>
+                    <tr><td>Document current (often conflicting) ownership claims per key entity (customer, account, transaction)</td><td class="owner">Chief Data Officer</td><td>Data ownership map (current state)</td><td class="timeline">Weeks 1&ndash;2, parallel</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 2 — Remediate</td></tr>
+                    <tr><td>Stand up/strengthen MDM capability to resolve duplicate/conflicting records for the pilot's key entities</td><td class="owner">Data Engineering team</td><td>MDM remediation plan + cleaned reference dataset for pilot scope</td><td class="timeline">Weeks 4&ndash;9</td></tr>
+                    <tr><td>Appoint named data stewards per domain accountable for data quality</td><td class="owner">CDO</td><td>Data steward RACI + sign-off</td><td class="timeline">Weeks 4&ndash;5</td></tr>
+                    <tr><td>Build/expand a data catalog covering the pilot's data sources</td><td class="owner">Data Engineering + Enterprise Architecture</td><td>Live catalog entries for pilot data domains</td><td class="timeline">Weeks 6&ndash;9</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 3 — Institutionalize</td></tr>
+                    <tr><td>Implement automated data quality monitoring rather than one-time cleanup</td><td class="owner">Data Engineering</td><td>Automated DQ dashboard with alerting</td><td class="timeline">Weeks 8&ndash;13, then ongoing</td></tr>
+                    <tr><td>Expand stewardship and catalog coverage incrementally as new use cases are prioritized</td><td class="owner">CDO</td><td>Rolling data-domain onboarding roadmap</td><td class="timeline">Ongoing, quarterly review</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                  <p>For the loan-review assistant to work, it needs to read income documents and cross-check them against the credit bureau and the core banking system. Q5 simply asks: <i>can it actually get clean, trustworthy data to do that?</i></p>
+                  <p>A 3-week audit on just those three sources might turn up:</p>
+                  <table class="example-table">
+                    <tr><th>Data source</th><th>Issue found</th><th>Fix needed</th></tr>
+                    <tr><td>Core banking system</td><td>The "income" field is formatted differently than the same field in the CRM</td><td>Standardize the format before AI can compare them</td></tr>
+                    <tr><td>Credit bureau feed</td><td>Only updates once every 48 hours</td><td>AI must flag data as "as of" a date, not treat it as real-time</td></tr>
+                    <tr><td>Manually uploaded documents</td><td>~15% of scanned PDFs are low-quality images</td><td>Add an image-quality check before AI processing, or route to manual review</td></tr>
+                  </table>
+                  <p>In this example, the bank appoints a "Head of Lending Data" as the named steward &mdash; one person accountable for these three sources being clean and consistent, instead of the fix quietly becoming nobody's job after the audit is filed.</p>
+                </div>
+                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                  <div class="table-scroll"><table class="action-table resource-table">
+                    <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
+                    <tr><td>Setting up data ownership and quality standards</td><td><a href="https://www.informatica.com/resources/articles/master-data-governance-framework.html" target="_blank" rel="noopener noreferrer">Master data governance guide</a></td><td>Step-by-step framework for the steward/MDM work above</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section back"><span class="dlabel">Exit checklist &mdash; when to re-check this gate</span>
+                  <ul class="checklist">
+                    <li>Completed data audit report with documented quality score for the target use case's sources</li>
+                    <li>Named data steward accountable for the relevant domain</li>
+                    <li>MDM remediation applied to at least the pilot's data scope</li>
+                    <li>Data catalog entries live for pilot data sources</li>
+                  </ul>
+                </div>
+                <div class="deep-section sustain"><span class="dlabel">How to sustain it</span>
+                  <div class="sustain-grid">
+                    <div class="k">Owner</div><div class="v">CDO / Data Engineering</div>
+                    <div class="k">Cadence</div><div class="v">Ongoing automated DQ monitoring + quarterly stewardship review</div>
+                    <div class="k">Metric</div><div class="v">Data quality score trend; number of domains under active stewardship</div>
+                  </div>
+                </div>
+                <div class="industry-lens">
+                  <div class="ilabel">Industry lens</div>
+                  <div class="irow"><span class="itag">Banking</span>Prioritize core banking and risk data domains first &mdash; most high-value use cases (credit, fraud, AML) depend on them.</div>
+                  <div class="irow"><span class="itag">Fintech</span>Focus on transaction and behavioral data pipelines, often the primary differentiator but siloed across microservices.</div>
+                  <div class="irow"><span class="itag">IT/software</span>Treat code repositories, ticketing systems, and documentation as the "data" needing governance for internal AI copilots.</div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="connector">then</div>
+
+    <div class="gate">
+      <div class="gate-num">Q6</div>
+      <div class="question">Does the data architecture meet privacy and compliance standards (e.g. GDPR, SOC 2, DPDP)?
+        <span>Covers the jurisdictions and industry rules the organization actually operates under.</span>
+      </div>
+      <div class="branches">
+        <div class="branch"><div class="tag yes">Yes</div><div class="yes-card">Proceed to Pillar 4.</div></div>
+        <div class="branch">
+          <div class="tag no">No</div>
+          <div class="no-card">
+            <div class="summary-line"><b>Quick take:</b> Map data flows, apply masking/tokenization, amend vendor contracts, complete a formal PIA before go-live.</div>
+            <details open><summary>Full execution plan</summary>
+              <div class="deep">
+                <div class="deep-section why"><span class="dlabel">Why not</span>
+                  <ul>
+                    <li><span class="why-cat">Technical:</span> Data pipelines were built before AI use was contemplated, so PII flows without the masking/access logging regulators would expect.</li>
+                    <li><span class="why-cat">Legal:</span> No clarity exists on whether customer data can legally train or fine-tune models, especially with third-party vendors.</li>
+                    <li><span class="why-cat">Regulatory:</span> Cross-border data flows create jurisdictional exposure if AI infrastructure sits outside the data's origin jurisdiction.</li>
+                  </ul>
+                </div>
+                <div class="deep-section how"><span class="dlabel">How to implement</span>
+                  <div class="table-scroll"><table class="action-table">
+                    <tr><th>Action</th><th>Owner</th><th>Deliverable</th><th>Timeline</th></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 1 — Diagnose</td></tr>
+                    <tr><td>Map data flows end-to-end for the target use case (source, transformation, storage, third-party touchpoints)</td><td class="owner">Data Engineering + Enterprise Architecture</td><td>Data flow diagram</td><td class="timeline">Weeks 1&ndash;3</td></tr>
+                    <tr><td>Classify data by sensitivity (PII, financial, health) for the use case's scope</td><td class="owner">Data Privacy Officer</td><td>Data sensitivity classification</td><td class="timeline">Weeks 2&ndash;3</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 2 — Remediate</td></tr>
+                    <tr><td>Apply masking, tokenization, or synthetic substitution wherever full sensitive data isn't strictly necessary</td><td class="owner">Data Engineering + Security</td><td>Updated pipeline with masking controls</td><td class="timeline">Weeks 4&ndash;7</td></tr>
+                    <tr><td>Review/renegotiate vendor contracts to address data use, retention, and training rights</td><td class="owner">Legal + Procurement</td><td>Amended vendor contract / DPA addendum</td><td class="timeline">Weeks 4&ndash;9 (vendor-dependent)</td></tr>
+                    <tr><td>Complete a formal privacy impact assessment (PIA/DPIA)</td><td class="owner">Data Privacy Officer + Legal</td><td>Signed-off PIA/DPIA document</td><td class="timeline">Weeks 6&ndash;8</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 3 — Institutionalize</td></tr>
+                    <tr><td>Make PIA/DPIA completion a mandatory lifecycle gate for every future use case</td><td class="owner">Legal/Compliance + PMO</td><td>Updated AI development lifecycle policy</td><td class="timeline">2 weeks to formalize, then ongoing</td></tr>
+                    <tr><td>Set up continuous DLP/access-logging monitoring specifically for AI data flows</td><td class="owner">CISO/Security team</td><td>DLP/monitoring dashboard for AI data flows</td><td class="timeline">Weeks 8&ndash;13, then ongoing</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                  <p>The loan-review assistant will handle income documents &mdash; salary slips, tax returns &mdash; which is sensitive personal and financial data. Q6 simply asks: <i>is that handled the way regulators expect?</i></p>
+                  <table class="example-table">
+                    <tr><th>Data element</th><th>Sensitivity</th><th>How it's handled</th></tr>
+                    <tr><td>Salary slip / tax return</td><td>High (financial PII)</td><td>Account numbers are masked before the AI ever sees the raw file; only the fields it needs (income figure, date) are extracted</td></tr>
+                    <tr><td>AI vendor contract</td><td>&mdash;</td><td>Written confirmation obtained: "customer documents are never used to train the vendor's model"</td></tr>
+                    <tr><td>Vendor's server location</td><td>Depends on region</td><td>Confirmed the vendor's hosting region complies with local data-residency rules before go-live</td></tr>
+                  </table>
+                  <p>None of this is exotic &mdash; it's the difference between "the AI reads the whole scanned document" and "the AI only ever sees the three numbers it actually needs," which is a much easier conversation to have with a regulator or auditor.</p>
+                </div>
+                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                  <div class="table-scroll"><table class="action-table resource-table">
+                    <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
+                    <tr><td>Running a data protection impact assessment</td><td><a href="https://gdpr.eu/data-protection-impact-assessment-template/" target="_blank" rel="noopener noreferrer">DPIA guide &amp; template</a></td><td>Structure and template for the PIA/DPIA deliverable above</td></tr>
+                  </table></div>
+                </div>
+                <div class="agent-addendum">
+                  <div class="gov-tag">AI Agent Governance</div>
+                  <div class="alabel" style="margin-top:0;">Addendum &mdash; if this system is an autonomous agent, not just a single AI call</div>
+                  <div class="asub">The DPIA above maps data flows as a fixed diagram. An agent's data access isn't fixed &mdash; it decides, at runtime, which tool or system to call for a given task.</div>
+                  <ul>
+                    <li><b>Runtime access logging:</b> log which systems/tools the agent actually accessed for each task, not just which it's allowed to access &mdash; "allowed" and "used" can diverge, and only runtime logs catch that.</li>
+                    <li><b>Least-privilege tool scoping:</b> give the agent only the specific tool function it needs (e.g. "read income field") rather than broad access (e.g. "read entire customer record"). A human deciding to overreach is one risk; an algorithm doing it at machine speed, repeatedly, is a bigger blast radius.</li>
+                    <li><b>Re-run the DPIA when a new tool is added:</b> a new tool the agent can call is a new data flow, not a minor configuration change &mdash; treat it as triggering Q6 again, not a footnote to the existing assessment.</li>
+                  </ul>
+                </div>
+                <div class="deep-section back"><span class="dlabel">Exit checklist &mdash; when to re-check this gate</span>
+                  <ul class="checklist">
+                    <li>Completed data flow map and privacy impact assessment for the use case</li>
+                    <li>Legal/compliance sign-off obtained</li>
+                    <li>Vendor contracts amended to reflect data-use restrictions</li>
+                    <li>Masking/tokenization controls implemented in the pipeline</li>
+                  </ul>
+                </div>
+                <div class="deep-section sustain"><span class="dlabel">How to sustain it</span>
+                  <div class="sustain-grid">
+                    <div class="k">Owner</div><div class="v">Legal/Compliance + CISO</div>
+                    <div class="k">Cadence</div><div class="v">Mandatory PIA at every use-case gate + continuous DLP monitoring reviewed regularly</div>
+                    <div class="k">Metric</div><div class="v">% of use cases with completed PIA before go-live; DLP incidents flagged/resolved</div>
+                  </div>
+                </div>
+                <div class="industry-lens">
+                  <div class="ilabel">Industry lens</div>
+                  <div class="irow"><span class="itag">Banking</span>Align with data localization rules; coordinate jointly between the Chief Data Officer and Chief Compliance Officer.</div>
+                  <div class="irow"><span class="itag">Fintech</span>Pay particular attention to payment card data (PCI DSS) alongside general privacy law if AI touches transaction data.</div>
+                  <div class="irow"><span class="itag">IT/software</span>If selling AI features to enterprise customers, ensure architecture supports customer-specific data isolation for security reviews.</div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pillar-connector">next pillar</div>
+
+  <!-- ============ PILLAR 4 ============ -->
+  <div class="pillar-block">
+    <div class="pillar-header"><span class="pillar-num">Pillar 4</span><span class="pillar-title">Technical infrastructure &amp; MLOps</span></div>
+
+    <div class="gate">
+      <div class="gate-num">Q7</div>
+      <div class="question">Is the current IT stack scalable for large-scale LLM or ML inference workloads?
+        <span>Compute, storage, and an integration layer that can reach core systems securely.</span>
+      </div>
+      <div class="branches">
+        <div class="branch"><div class="tag yes">Yes</div><div class="yes-card">Move to Q8.</div></div>
+        <div class="branch">
+          <div class="tag no">No</div>
+          <div class="no-card">
+            <div class="summary-line"><b>Quick take:</b> Assess, choose a cloud/hybrid/GPU-aaS strategy, build a gateway layer, and update security controls.</div>
+            <details open><summary>Full execution plan</summary>
+              <div class="deep">
+                <div class="deep-section why"><span class="dlabel">Why not</span>
+                  <ul>
+                    <li><span class="why-cat">Technical:</span> Legacy on-premise infrastructure with no elastic compute capacity and long hardware procurement cycles.</li>
+                    <li><span class="why-cat">Integration:</span> No API layer exists between core systems and any new AI service, forcing custom point-to-point integration per use case.</li>
+                    <li><span class="why-cat">Security:</span> Network/security architecture predates the AI threat model, exposing unaddressed attack surface once models can query internal systems.</li>
+                  </ul>
+                </div>
+                <div class="deep-section how"><span class="dlabel">How to implement</span>
+                  <div class="table-scroll"><table class="action-table">
+                    <tr><th>Action</th><th>Owner</th><th>Deliverable</th><th>Timeline</th></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 1 — Diagnose</td></tr>
+                    <tr><td>Conduct a technical readiness assessment: compute capacity, network latency/bandwidth, existing API surface</td><td class="owner">Head of Infrastructure/Cloud Architecture</td><td>Technical readiness assessment report</td><td class="timeline">Weeks 1&ndash;3</td></tr>
+                    <tr><td>Conduct an AI-specific threat-model review for workloads accessing core systems</td><td class="owner">CISO</td><td>AI threat model document</td><td class="timeline">Weeks 2&ndash;3, parallel</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 2 — Remediate</td></tr>
+                    <tr><td>Select and budget an infrastructure strategy (full cloud / hybrid / GPU-as-a-service) fit for constraints</td><td class="owner">CTO / Head of Infrastructure</td><td>Approved infrastructure strategy + budget</td><td class="timeline">Weeks 4&ndash;7 (decision), 8&ndash;20 weeks execution</td></tr>
+                    <tr><td>Build a lightweight API gateway layer in front of core systems for standardized AI service access</td><td class="owner">Enterprise Architecture / Engineering</td><td>Deployed API gateway for pilot scope</td><td class="timeline">Weeks 6&ndash;13</td></tr>
+                    <tr><td>Implement updated network security controls (segmentation, zero-trust access) for AI workloads</td><td class="owner">CISO / Security Engineering</td><td>Security architecture sign-off for AI data paths</td><td class="timeline">Weeks 8&ndash;13</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 3 — Institutionalize</td></tr>
+                    <tr><td>Fold AI infrastructure capacity planning into the annual IT budget cycle</td><td class="owner">CTO / Finance</td><td>AI infra line item in annual budget</td><td class="timeline">Recurring annually</td></tr>
+                    <tr><td>Extend the API gateway pattern to additional core systems as new use cases onboard</td><td class="owner">Enterprise Architecture</td><td>Rolling integration roadmap</td><td class="timeline">Ongoing</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                  <p>To read a scanned salary slip and cross-check it against two other systems in under a minute, the AI needs to actually reach those systems. Q7 simply asks: <i>can it, without exposing them?</i></p>
+                  <p><b>Before:</b> The core banking system has no API &mdash; the only way to get data out is a nightly file export. An AI tool can't usefully work with data that's up to 24 hours old.</p>
+                  <p><b>After:</b> IT builds a lightweight, read-only API gateway in front of the core system, so the AI tool can request just the fields it needs (income, account status) in real time, without ever having open access to the whole database.</p>
+                  <table class="example-table">
+                    <tr><th>Option</th><th>What it means for this pilot</th><th>Trade-off</th></tr>
+                    <tr><td>Full cloud migration</td><td>Move the core banking data warehouse to the cloud</td><td>Best long-term, but 12+ months, too slow and risky for a first pilot</td></tr>
+                    <tr><td><b>Hybrid (used here)</b></td><td>Core banking stays on-prem; the AI model runs in the cloud, connected via the new API gateway</td><td>Pilot-ready in 8&ndash;10 weeks; keeps sensitive data on-prem</td></tr>
+                    <tr><td>GPU-as-a-service</td><td>Rent inference compute instead of buying hardware</td><td>Useful if AI demand spikes, e.g. month-end loan surges</td></tr>
+                  </table>
+                </div>
+                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                  <div class="table-scroll"><table class="action-table resource-table">
+                    <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
+                    <tr><td>Choosing a migration/integration approach</td><td><a href="https://aws.amazon.com/what-is/cloud-migration-strategy/" target="_blank" rel="noopener noreferrer">Cloud migration strategy guide</a></td><td>Comparing the options in the table above (the industry-standard "7 Rs")</td></tr>
+                  </table></div>
+                </div>
+                <div class="agent-addendum">
+                  <div class="gov-tag">AI Agent Governance</div>
+                  <div class="alabel" style="margin-top:0;">Addendum &mdash; if this system is an autonomous agent, not just a single AI call</div>
+                  <div class="asub">The threat model above covers a standard AI workload reaching core systems. An agent that can call tools and take action introduces attack surface a static-model threat model doesn't account for.</div>
+                  <ul>
+                    <li><b>Prompt injection leading to real action:</b> a malicious instruction hidden inside a document the agent reads could cause it to actually execute an unintended action (e.g. approve a loan) &mdash; not just produce a bad piece of text someone has to act on.</li>
+                    <li><b>Tool-chaining exploits:</b> an attacker may not be able to misuse one permitted tool directly, but could chain two allowed tool calls together to achieve something neither call was individually meant to permit. Test combinations, not just individual tools.</li>
+                    <li><b>Escalation via delegation:</b> if this agent can hand tasks to other agents, test whether a restricted agent can gain broader access indirectly through delegation &mdash; this is the same failure mode Q4's Agentic AI Governance layer is designed to catch, so coordinate the two tests together.</li>
+                  </ul>
+                </div>
+                <div class="deep-section back"><span class="dlabel">Exit checklist &mdash; when to re-check this gate</span>
+                  <ul class="checklist">
+                    <li>Technical readiness assessment documented with an approved, budgeted infrastructure decision</li>
+                    <li>API gateway live for at least the pilot's systems</li>
+                    <li>Updated security controls in place for AI data paths</li>
+                    <li>AI-specific threat model reviewed and signed off by CISO</li>
+                  </ul>
+                </div>
+                <div class="deep-section sustain"><span class="dlabel">How to sustain it</span>
+                  <div class="sustain-grid">
+                    <div class="k">Owner</div><div class="v">CTO / CISO</div>
+                    <div class="k">Cadence</div><div class="v">Annual infrastructure budget cycle + ongoing integration roadmap reviews</div>
+                    <div class="k">Metric</div><div class="v">Inference latency/cost trend; number of systems behind the API gateway</div>
+                  </div>
+                </div>
+                <div class="industry-lens">
+                  <div class="ilabel">Industry lens</div>
+                  <div class="irow"><span class="itag">Banking</span>Hybrid architectures are typically necessary given data residency constraints &mdash; plan on-prem/private-cloud inference for regulated data.</div>
+                  <div class="irow"><span class="itag">Fintech</span>Cloud-native infrastructure usually already exists; focus on inference cost control given high transaction volumes.</div>
+                  <div class="irow"><span class="itag">IT/software</span>Leverage existing DevOps/cloud maturity &mdash; the real gap is usually MLOps specifically, not general infrastructure.</div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="connector">then</div>
+
+    <div class="gate">
+      <div class="gate-num">Q8</div>
+      <div class="question">Is there an MLOps pipeline ready for deployment, monitoring, and governance?
+        <span>Different from Q7 &mdash; this is about running models in production, not just having compute.</span>
+      </div>
+      <div class="branches">
+        <div class="branch"><div class="tag yes">Yes</div><div class="yes-card">Proceed to Pillar 5.</div></div>
+        <div class="branch">
+          <div class="tag no">No</div>
+          <div class="no-card">
+            <div class="gov-tag">AI Agent Governance</div>
+            <div class="summary-line"><b>Quick take:</b> Stand up MLOps tooling, live monitoring, an audit trail, and a tested rollback procedure.</div>
+            <details open><summary>Full execution plan</summary>
+              <div class="deep">
+                <div class="deep-section why"><span class="dlabel">Why not</span>
+                  <ul>
+                    <li><span class="why-cat">Process:</span> AI work is stuck at PoC/notebook stage with no path to production deployment, versioning, or rollback.</li>
+                    <li><span class="why-cat">Monitoring:</span> No drift/accuracy monitoring exists; issues surface only when a business user complains.</li>
+                    <li><span class="why-cat">Governance:</span> No audit trail of model version, data lineage, or approvals &mdash; a hard blocker at regulatory exam time.</li>
+                  </ul>
+                </div>
+                <div class="deep-section how"><span class="dlabel">How to implement</span>
+                  <div class="table-scroll"><table class="action-table">
+                    <tr><th>Action</th><th>Owner</th><th>Deliverable</th><th>Timeline</th></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 1 — Diagnose</td></tr>
+                    <tr><td>Inventory current AI/ML assets and their deployment status (notebook-only vs. productionized)</td><td class="owner">Head of Data Science/ML Engineering</td><td>MLOps maturity inventory</td><td class="timeline">Weeks 1&ndash;2</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 2 — Build</td></tr>
+                    <tr><td>Select and stand up MLOps tooling (version control for models/prompts, CI/CD, model registry)</td><td class="owner">ML Engineering Lead</td><td>Deployed MLOps platform for pilot use case</td><td class="timeline">Weeks 3&ndash;8</td></tr>
+                    <tr><td>Implement production monitoring for accuracy, latency, and drift with alerting tied to Q2 KPIs</td><td class="owner">ML Engineering + Data Science</td><td>Live monitoring dashboard with alert thresholds</td><td class="timeline">Weeks 5&ndash;8</td></tr>
+                    <tr><td>Build an audit trail capturing model version, data lineage, approvals, and validation results</td><td class="owner">Model Risk/Compliance + ML Engineering</td><td>Audit trail template + first completed record</td><td class="timeline">Weeks 6&ndash;8</td></tr>
+                    <tr><td>Define and test a rollback/incident response procedure for AI model failures</td><td class="owner">ML Engineering + Incident Response</td><td>Tested rollback runbook</td><td class="timeline">Weeks 7&ndash;8</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 3 — Institutionalize</td></tr>
+                    <tr><td>Mandate MLOps pipeline usage for anything reaching production, no exceptions</td><td class="owner">CAIO / Head of Engineering</td><td>Updated AI development policy</td><td class="timeline">Immediate, enforced ongoing</td></tr>
+                    <tr><td>Extend model validation/revalidation to every deployed model on a fixed schedule</td><td class="owner">Model Risk function</td><td>Revalidation calendar per model</td><td class="timeline">Recurring (e.g. semi-annual)</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                  <p>The loan-review AI works well in testing. Q8 simply asks: <i>what happens when it starts getting things wrong in production, and how would anyone know?</i></p>
+                  <p><b>Without monitoring:</b> Three months after launch, applicants start submitting a new type of income document (gig-economy pay stubs) the model wasn't trained on. It quietly starts missing more discrepancies than it did at launch. Nobody notices until a customer complains.</p>
+                  <p><b>With monitoring:</b> The dashboard flags a rise in the "missed-discrepancy rate" within a week, the model is rolled back to the previous version automatically, and the ML team is alerted to retrain on the new document type.</p>
+                  <table class="example-table">
+                    <tr><th>What's tracked</th><th>Normal range</th><th>What happens if it's breached</th></tr>
+                    <tr><td>Missed-discrepancy rate</td><td>Below 2%</td><td>Alert to ML team + underwriting lead; investigate within 48 hours</td></tr>
+                    <tr><td>Model response time</td><td>Under 30 seconds</td><td>Auto-scale compute; alert if still breached after scaling</td></tr>
+                    <tr><td>% of cases needing manual override</td><td>Below 10%</td><td>Flagged for retraining review at the next monthly cycle</td></tr>
+                  </table>
+                </div>
+                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                  <div class="table-scroll"><table class="action-table resource-table">
+                    <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
+                    <tr><td>What MLOps covers and why it matters</td><td><a href="https://aws.amazon.com/what-is/mlops/" target="_blank" rel="noopener noreferrer">What is MLOps? guide</a></td><td>Plain-language overview of the monitoring/versioning/rollback setup above</td></tr>
+                  </table></div>
+                </div>
+                <div class="agentic-addendum">
+                  <div class="gov-tag agentic">Agentic AI Governance</div>
+                  <div class="alabel" style="margin-top:0;">The system-level layer</div>
+                  <div class="asub">Everything above this box is AI Agent Governance (governs one model's monitoring and rollback). This box applies only if this use case involves multiple agents that delegate tasks to each other — not a single-shot AI call.</div>
+                  <p style="font-size:13px;margin:0 0 8px;color:var(--navy-ink);">The monitoring above tracks one model's drift and accuracy. It doesn't reconstruct what happened across a chain of agents, or stop a runaway workflow mid-execution. Add these:</p>
+                  <ul>
+                    <li><b>End-to-end trace logging:</b> one log that follows a task across every agent it touched &mdash; not just each agent's own log &mdash; so "why did the workflow do this" can be answered, not just "what did each step do."</li>
+                    <li><b>Continuous runtime monitoring, not periodic checks:</b> agents act continuously, so drift checks that run daily or weekly are too slow; use behavioral baselines and anomaly detection that flag unusual agent behavior in real time.</li>
+                    <li><b>Delegation audit trail:</b> a record of which agent handed a task to which other agent, with what permissions, at what time &mdash; this is what Q4's inheritance rule depends on being enforceable, not just written down.</li>
+                    <li><b>System-wide rollback, not just model rollback:</b> extend the rollback runbook from Q8's core plan to halt and revert the entire multi-agent workflow, since reverting one agent's model version doesn't help if the problem was in how agents coordinated.</li>
+                  </ul>
+                </div>
+                <div class="deep-section back"><span class="dlabel">Exit checklist &mdash; when to re-check this gate</span>
+                  <ul class="checklist">
+                    <li>MLOps tooling deployed and used for at least the pilot use case</li>
+                    <li>Live monitoring dashboards operating with alert thresholds</li>
+                    <li>Audit trail and rollback procedure documented and tested</li>
+                    <li>Production deployment policy mandates MLOps usage, no exceptions</li>
+                  </ul>
+                </div>
+                <div class="deep-section sustain"><span class="dlabel">How to sustain it</span>
+                  <div class="sustain-grid">
+                    <div class="k">Owner</div><div class="v">ML Engineering + Model Risk</div>
+                    <div class="k">Cadence</div><div class="v">Continuous monitoring + fixed-schedule revalidation</div>
+                    <div class="k">Metric</div><div class="v">Model drift incidents caught vs. missed; time-to-rollback when triggered</div>
+                  </div>
+                </div>
+                <div class="industry-lens">
+                  <div class="ilabel">Industry lens</div>
+                  <div class="irow"><span class="itag">Banking</span>Mirror existing model risk management documentation standards to satisfy regulatory examiners.</div>
+                  <div class="irow"><span class="itag">Fintech</span>Prioritize low-latency monitoring given real-time decisioning use cases (fraud, underwriting).</div>
+                  <div class="irow"><span class="itag">IT/software</span>Integrate into existing CI/CD and observability stacks rather than standing up a parallel system.</div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pillar-connector">next pillar</div>
+
+  <!-- ============ PILLAR 5 ============ -->
+  <div class="pillar-block">
+    <div class="pillar-header"><span class="pillar-num">Pillar 5</span><span class="pillar-title">Talent capability</span></div>
+
+    <div class="gate">
+      <div class="gate-num">Q9</div>
+      <div class="question">Does the organization have, or can it access, the talent to build, deploy, and maintain AI systems responsibly?
+        <span>In-house capability, vendor partnerships, and a plan to reduce vendor reliance over time.</span>
+      </div>
+      <div class="branches">
+        <div class="branch"><div class="tag yes">Yes</div><div class="yes-card">Proceed to Pillar 6.</div></div>
+        <div class="branch">
+          <div class="tag no">No</div>
+          <div class="no-card">
+            <div class="summary-line"><b>Quick take:</b> Blend anchor hiring, structured upskilling, and vendor knowledge-transfer clauses.</div>
+            <details open><summary>Full execution plan</summary>
+              <div class="deep">
+                <div class="deep-section why"><span class="dlabel">Why not</span>
+                  <ul>
+                    <li><span class="why-cat">Market:</span> A global AI/ML talent shortage makes hiring slow, expensive, and competitive against tech-native firms.</li>
+                    <li><span class="why-cat">Capability:</span> Existing staff have general software skills but haven't been upskilled in MLOps, prompt engineering, or responsible AI.</li>
+                    <li><span class="why-cat">Dependency:</span> Overreliance on a single vendor creates risk &mdash; if the relationship ends, no internal capability remains.</li>
+                  </ul>
+                </div>
+                <div class="deep-section how"><span class="dlabel">How to implement</span>
+                  <div class="table-scroll"><table class="action-table">
+                    <tr><th>Action</th><th>Owner</th><th>Deliverable</th><th>Timeline</th></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 1 — Diagnose</td></tr>
+                    <tr><td>Assess talent gaps against roles actually needed (ML engineers, MLOps engineers, prompt engineers, AI PMs, AI risk/compliance specialists)</td><td class="owner">Head of HR/Talent + CAIO</td><td>Talent gap assessment</td><td class="timeline">Weeks 1&ndash;2</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 2 — Build capability</td></tr>
+                    <tr><td>Launch hiring for 1&ndash;2 critical anchor roles</td><td class="owner">HR/Talent Acquisition</td><td>Signed offers for anchor roles</td><td class="timeline">Weeks 3&ndash;12 (market-dependent)</td></tr>
+                    <tr><td>Design and roll out a structured upskilling program for existing staff (MLOps, prompt engineering, responsible AI)</td><td class="owner">L&amp;D + CAIO</td><td>Training curriculum + first cohort completion</td><td class="timeline">Weeks 4&ndash;16</td></tr>
+                    <tr><td>Negotiate vendor contracts to include explicit knowledge-transfer/co-build clauses</td><td class="owner">Procurement + Legal</td><td>Amended vendor SOW with KT deliverables</td><td class="timeline">Weeks 4&ndash;7</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 3 — Institutionalize</td></tr>
+                    <tr><td>Build internal career paths and retention incentives for AI roles</td><td class="owner">HR/Talent</td><td>Defined AI career track + compensation benchmarking</td><td class="timeline">Weeks 8&ndash;15, then ongoing</td></tr>
+                    <tr><td>Track internal AI capability (% of projects delivered without vendor dependency) as a standing KPI</td><td class="owner">CAIO</td><td>Capability KPI on steering committee dashboard</td><td class="timeline">Ongoing</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                  <p>The loan-review pilot needs someone who can fine-tune a document-extraction model and someone who understands the monitoring setup from Q8. Q9 simply asks: <i>does the bank actually have them?</i></p>
+                  <p>In this example, the bank has strong data analysts but nobody who has taken an ML model into production before. Rather than waiting 6 months to hire a full team, it takes a blended approach:</p>
+                  <table class="example-table">
+                    <tr><th>Need</th><th>Blended approach used</th><th>Timeline</th></tr>
+                    <tr><td>Model fine-tuning expertise</td><td>Hire one senior ML engineer as an anchor hire</td><td>~8 weeks to hire</td></tr>
+                    <tr><td>MLOps / monitoring setup</td><td>Use the AI vendor's implementation team for the first 3 months, with a written knowledge-transfer clause in the contract</td><td>Immediate; hands off to the internal team by month 4</td></tr>
+                    <tr><td>Underwriter AI literacy</td><td>Upskill 2 existing senior underwriters through a 4-week internal training program</td><td>Runs in parallel</td></tr>
+                  </table>
+                  <p>By month 4, the anchor hire and the two upskilled underwriters can run the pilot without leaning on the vendor for day-to-day support &mdash; the vendor's team becomes optional, not load-bearing.</p>
+                </div>
+                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                  <div class="table-scroll"><table class="action-table resource-table">
+                    <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
+                    <tr><td>Building an AI upskilling program</td><td><a href="https://www.techtarget.com/searchenterpriseai/feature/AI-upskilling-strategies-that-center-workers-not-tech" target="_blank" rel="noopener noreferrer">AI upskilling strategy guide</a></td><td>Approaches for the internal training program in the example above</td></tr>
+                  </table></div>
+                </div>
+                <div class="agent-addendum">
+                  <div class="gov-tag">AI Agent Governance</div>
+                  <div class="alabel" style="margin-top:0;">Addendum &mdash; if this system is an autonomous agent, not just a single AI call</div>
+                  <div class="asub">General ML engineering and prompt engineering hiring covers building models. Running agents in production is increasingly its own specialty, separate from model-building skills.</div>
+                  <ul>
+                    <li><b>Agent orchestration engineering:</b> designing and debugging multi-step, tool-calling workflows is a different skill from training or fine-tuning a model &mdash; don't assume your ML hires already cover this.</li>
+                    <li><b>Agent security specialization:</b> testing for prompt injection, tool misuse, and permission escalation (see Q7's addendum) is becoming a distinct role from general application security, not a subset of it.</li>
+                    <li><b>Name this explicitly in the Q9 talent gap assessment:</b> "we have ML engineers" does not mean "we have agent engineers" &mdash; treat it as its own line item, not an assumed capability.</li>
+                  </ul>
+                </div>
+                <div class="deep-section back"><span class="dlabel">Exit checklist &mdash; when to re-check this gate</span>
+                  <ul class="checklist">
+                    <li>At least one anchor hire or clearly identified internal lead in place for the pilot</li>
+                    <li>Training plan for existing staff underway with a completed first cohort</li>
+                    <li>Vendor contracts include knowledge-transfer terms</li>
+                    <li>AI career track defined for retention</li>
+                  </ul>
+                </div>
+                <div class="deep-section sustain"><span class="dlabel">How to sustain it</span>
+                  <div class="sustain-grid">
+                    <div class="k">Owner</div><div class="v">HR/Talent + CAIO</div>
+                    <div class="k">Cadence</div><div class="v">Annual buy/build/partner strategy review</div>
+                    <div class="k">Metric</div><div class="v">% of AI projects delivered with internal capability vs. vendor-dependent</div>
+                  </div>
+                </div>
+                <div class="industry-lens">
+                  <div class="ilabel">Industry lens</div>
+                  <div class="irow"><span class="itag">Banking</span>Competing on compensation with tech firms is hard &mdash; emphasize mission, stability, and data scale, and lean on upskilling existing quant/risk talent.</div>
+                  <div class="irow"><span class="itag">Fintech</span>Usually better positioned to attract engineering talent; the real gap is often AI governance/compliance talent.</div>
+                  <div class="irow"><span class="itag">IT/software</span>Leverage strong existing engineering talent with targeted upskilling rather than external hiring.</div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pillar-connector">next pillar</div>
+
+  <!-- ============ PILLAR 6 ============ -->
+  <div class="pillar-block">
+    <div class="pillar-header"><span class="pillar-num">Pillar 6</span><span class="pillar-title">Change management &amp; culture</span></div>
+
+    <div class="gate">
+      <div class="gate-num">Q10</div>
+      <div class="question">Is there a clear change management plan to handle employee AI adoption?
+        <span>The most common reason technically-ready initiatives stall after launch.</span>
+      </div>
+      <div class="branches">
+        <div class="branch"><div class="tag yes">Yes</div><div class="yes-card">All ten gates cleared &mdash; proceed.</div></div>
+        <div class="branch">
+          <div class="tag no">No</div>
+          <div class="no-card">
+            <div class="summary-line"><b>Quick take:</b> Communicate transparently, train AI champions, redesign workflows, engage middle management directly.</div>
+            <details open><summary>Full execution plan</summary>
+              <div class="deep">
+                <div class="deep-section why"><span class="dlabel">Why not</span>
+                  <ul>
+                    <li><span class="why-cat">Cultural:</span> Employees fear job displacement, and leadership hasn't communicated a clear narrative on role change vs. elimination.</li>
+                    <li><span class="why-cat">Operational:</span> No training exists on new AI-assisted workflows, so employees revert to old processes out of unfamiliarity.</li>
+                    <li><span class="why-cat">Political:</span> Middle management hasn't been engaged and may quietly resist a tool they see as threatening their team's relevance.</li>
+                  </ul>
+                </div>
+                <div class="deep-section how"><span class="dlabel">How to implement</span>
+                  <div class="table-scroll"><table class="action-table">
+                    <tr><th>Action</th><th>Owner</th><th>Deliverable</th><th>Timeline</th></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 1 — Diagnose</td></tr>
+                    <tr><td>Run an employee sentiment survey/focus groups in the affected business unit</td><td class="owner">HR/Change Management Lead</td><td>Sentiment assessment report</td><td class="timeline">Weeks 1&ndash;2</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 2 — Remediate</td></tr>
+                    <tr><td>Develop and deliver a transparent leadership communication plan on what AI will/won't change about roles, before deployment</td><td class="owner">CHRO/Comms + Executive Sponsor</td><td>Communication plan + first town hall delivered</td><td class="timeline">Weeks 3&ndash;6</td></tr>
+                    <tr><td>Identify and train "AI champions" within each affected team</td><td class="owner">Change Management Lead</td><td>Trained champion cohort (named individuals)</td><td class="timeline">Weeks 4&ndash;7</td></tr>
+                    <tr><td>Redesign affected workflows explicitly and build hands-on training tied to the redesign</td><td class="owner">BU Ops Lead + L&amp;D</td><td>Redesigned workflow docs + training completion records</td><td class="timeline">Weeks 5&ndash;10</td></tr>
+                    <tr><td>Engage middle management directly with talking points and pilot feedback involvement; tie part of performance goals to adoption</td><td class="owner">HR + Business Unit Leadership</td><td>Manager engagement plan + updated goal-setting docs</td><td class="timeline">Weeks 4&ndash;6</td></tr>
+                    <tr class="phase-row"><td colspan="4">Phase 3 — Institutionalize</td></tr>
+                    <tr><td>Repeat communication/training/champion programs for every subsequent rollout</td><td class="owner">Change Management function</td><td>Standardized change management playbook</td><td class="timeline">Ongoing, per rollout</td></tr>
+                    <tr><td>Include employee sentiment and adoption rate as a standing metric at the steering committee</td><td class="owner">HR/Change Management</td><td>Adoption metrics on steering committee dashboard</td><td class="timeline">Ongoing, monthly</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                  <p>The underwriting team hears "we're introducing an AI tool for document review" and the unspoken question is: <i>are they replacing us?</i> A well-known 4-step pattern (Awareness &rarr; Desire &rarr; Knowledge &rarr; Reinforcement) handles this in order &mdash; skipping ahead to training before people are on board is the single most common mistake here.</p>
+                  <table class="example-table">
+                    <tr><th>Step</th><th>What it looks like in this example</th></tr>
+                    <tr><td><b>1. Awareness</b></td><td>The Head of Lending Ops holds a session explaining <i>why</i>: the review backlog costs ~$170K/month and delays customer decisions &mdash; not that underwriters are underperforming</td></tr>
+                    <tr><td><b>2. Desire</b></td><td>Underwriters are shown the AI does the tedious cross-checking, freeing them for judgment calls on complex flagged cases &mdash; and told plainly that no headcount reduction is planned for this pilot</td></tr>
+                    <tr><td><b>3. Knowledge &amp; ability</b></td><td>Two senior underwriters are trained as "AI champions" and run three hands-on sessions for the rest of the team before go-live</td></tr>
+                    <tr><td><b>4. Reinforcement</b></td><td>Adoption rate (the Q2 KPI) is reviewed monthly; if usage drops, the change lead talks to the team directly instead of assuming the tool itself failed</td></tr>
+                  </table>
+                </div>
+                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                  <div class="table-scroll"><table class="action-table resource-table">
+                    <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
+                    <tr><td>Sequencing communication, training, and reinforcement</td><td><a href="https://whatfix.com/blog/adkar-model-what-is-it-and-how-to-use-it/" target="_blank" rel="noopener noreferrer">ADKAR change model guide</a></td><td>The 4-step sequence used in the example above</td></tr>
+                  </table></div>
+                </div>
+                <div class="deep-section back"><span class="dlabel">Exit checklist &mdash; when to re-check this gate</span>
+                  <ul class="checklist">
+                    <li>Communication plan delivered to affected employees before/at deployment</li>
+                    <li>AI champions identified and trained for the pilot group</li>
+                    <li>Workflow redesign and hands-on training completed</li>
+                    <li>Adoption metrics tracked alongside the KPI dashboard from Q2</li>
+                  </ul>
+                </div>
+                <div class="deep-section sustain"><span class="dlabel">How to sustain it</span>
+                  <div class="sustain-grid">
+                    <div class="k">Owner</div><div class="v">Change Management function + HR</div>
+                    <div class="k">Cadence</div><div class="v">Ongoing, repeated per rollout; monthly adoption metric review</div>
+                    <div class="k">Metric</div><div class="v">Adoption/usage rate; employee sentiment score trend</div>
+                  </div>
+                </div>
+                <div class="industry-lens">
+                  <div class="ilabel">Industry lens</div>
+                  <div class="irow"><span class="itag">Banking</span>Unionized or highly tenured workforces may need longer engagement timelines tied to existing HR/labor relations processes.</div>
+                  <div class="irow"><span class="itag">Fintech</span>Resistance is often more about trust in AI accuracy than job fear &mdash; focus communication on decision transparency.</div>
+                  <div class="irow"><span class="itag">IT/software</span>Frame AI coding tools as augmenting senior engineer judgment, not replacing it, to address professional-identity concerns.</div>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final">
+    <div class="kicker2">All ten gates cleared</div>
+    <h2>Proceed to enterprise implementation</h2>
+    <p>Launch a scoped pilot on one or two high-value use cases from Pillar 1, measure against the KPIs defined in Q2, then scale iteratively across the enterprise.</p>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <p>© 2026 <span style="color:var(--neon);text-shadow:0 0 6px rgba(57,255,20,.85),0 0 14px rgba(57,255,20,.65),0 0 28px rgba(57,255,20,.4)">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+<script>
+function updateScore(){
+  var pillars=['p1','p2','p3','p4','p5','p6'];
+  var total=0, answered=0;
+  pillars.forEach(function(p){
+    var sel=document.querySelector('input[name="'+p+'"]:checked');
+    if(sel){total+=parseInt(sel.value);answered++;}
+  });
+  document.getElementById('score-num').textContent=total+' / 30';
+  var bandEl=document.getElementById('score-band');
+  if(answered<6){
+    bandEl.textContent='Rate all six pillars to see your position ('+answered+'/6 rated).';
+    return;
+  }
+  var band;
+  if(total<=12) band='AI laggard — significant foundational gaps, high risk of stalled initiatives.';
+  else if(total<=18) band='AI aware — early readiness in pockets, not enterprise-ready yet.';
+  else if(total<=24) band='AI practitioner — most foundations in place, ready for scoped pilots.';
+  else band='AI leader — enterprise-ready, positioned to compete effectively.';
+  bandEl.textContent=band;
+}
+document.querySelectorAll('.scorecard input[type="radio"]').forEach(function(el){
+  el.addEventListener('change', updateScore);
+});
+</script>
+</body>
+</html>

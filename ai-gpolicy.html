@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise Agentic AI &amp; AI Agent Governance Policy — Ai-ME BANK</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#3B0F1A;color:#CBD5E1;line-height:1.65;font-size:14px}
+a{color:#F59E0B;text-decoration:none}
+h2{font-size:20px;font-weight:800;color:#fff;border-left:3px solid #F59E0B;padding-left:12px;margin-bottom:14px;scroll-margin-top:64px}
+h3{font-size:14.5px;font-weight:700;color:#F59E0B;margin:20px 0 8px}
+h4{font-size:12px;font-weight:700;color:#E2E8F0;text-transform:uppercase;letter-spacing:.6px;margin:14px 0 6px}
+p{color:#94A3B8;font-size:13.5px;margin-bottom:10px;line-height:1.75}
+ul.plist{margin:4px 0 14px 20px;color:#94A3B8;font-size:13.5px;line-height:1.85}
+ul.plist li{margin-bottom:6px}
+
+/* ── Sub-nav (matches deploy-guide compact pattern) ── */
+.site-nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(59,15,26,0.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07);height:50px;display:flex;align-items:center;padding:0 18px;gap:0}
+.site-nav .nav-logo{font-size:15px;font-weight:800;color:#39FF14;margin-right:12px;white-space:nowrap;text-shadow:0 0 6px rgba(57,255,20,.7)}
+.site-nav .nav-sep{width:1px;height:20px;background:rgba(255,255,255,0.1);margin:0 8px;flex-shrink:0}
+.site-nav .nav-links{display:flex;gap:8px;align-items:center;overflow-x:auto;scrollbar-width:none}
+.site-nav .nav-links::-webkit-scrollbar{display:none}
+.site-nav .nav-links a{font-size:10.5px;font-weight:500;color:#64748B;text-decoration:none;padding:5px 9px;border-radius:5px;white-space:nowrap;transition:color .15s,background .15s}
+.site-nav .nav-links a:hover{color:#F59E0B;background:rgba(245,158,11,0.08)}
+.site-nav .nav-links a.active{color:#F59E0B;font-weight:700;background:rgba(245,158,11,0.12)}
+.site-nav .nav-cta{margin-left:auto;flex-shrink:0;background:linear-gradient(135deg,#D97706,#F59E0B);color:#000!important;font-weight:700;font-size:11px;padding:5px 13px;border-radius:6px;text-decoration:none;white-space:nowrap}
+
+.hero{padding:66px 32px 24px;background:linear-gradient(135deg,#4A1420,#3B0F1A);border-bottom:1px solid rgba(245,158,11,0.2)}
+.hero-badge{display:inline-block;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);color:#F59E0B;font-size:10.5px;font-weight:700;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;margin-bottom:10px;text-transform:uppercase}
+.hero h1{font-size:24px;font-weight:800;color:#fff;margin-bottom:6px}
+.hero .sub{color:#94A3B8;font-size:13px;max-width:820px;margin-bottom:14px}
+.cover-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;max-width:900px}
+.cover-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:9px 12px}
+.cover-item .k{font-size:9.5px;font-weight:700;color:#94765B;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.cover-item .v{font-size:12px;color:#E2E8F0}
+
+.body{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 50px)}
+.toc{background:#26131A;border-right:1px solid rgba(255,255,255,0.06);padding:16px 0;position:sticky;top:50px;height:calc(100vh - 50px);overflow-y:auto}
+.toc-title{font-size:9.5px;font-weight:700;color:#94765B;letter-spacing:1.5px;text-transform:uppercase;padding:0 16px 8px}
+.toc a{display:block;padding:4px 16px;font-size:11px;color:#64748B;border-left:2px solid transparent;transition:all .15s}
+.toc a:hover{color:#F59E0B;border-left-color:#F59E0B;background:rgba(245,158,11,0.06)}
+.toc-section{font-size:9.5px;font-weight:700;color:#94765B;letter-spacing:1.2px;text-transform:uppercase;padding:12px 16px 3px}
+
+.content{padding:28px 40px 70px;max-width:900px}
+.psec{margin-bottom:34px;scroll-margin-top:64px}
+
+.table-scroll{overflow-x:auto;margin:10px 0 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.09)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:#26131A;color:#94765B;font-weight:700;padding:8px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.08);font-size:10.5px;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap}
+td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#CBD5E1;vertical-align:top}
+tr:hover td{background:rgba(255,255,255,0.02)}
+tr:last-child td{border-bottom:none}
+
+.pill{display:inline-block;font-size:10px;font-weight:800;padding:2px 9px;border-radius:20px;white-space:nowrap}
+.tier-0{background:rgba(148,163,184,.15);color:#CBD5E1;border:1px solid rgba(148,163,184,.35)}
+.tier-1{background:rgba(52,211,153,.12);color:#34D399;border:1px solid rgba(52,211,153,.3)}
+.tier-2{background:rgba(245,158,11,.12);color:#F59E0B;border:1px solid rgba(245,158,11,.3)}
+.tier-3{background:rgba(251,146,60,.15);color:#FB923C;border:1px solid rgba(251,146,60,.35)}
+.tier-4{background:rgba(248,113,113,.15);color:#F87171;border:1px solid rgba(248,113,113,.4)}
+
+.warn-box{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:8px;padding:12px 16px;font-size:12.5px;color:#FCD34D;margin:10px 0 16px}
+.info-box{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:8px;padding:12px 16px;font-size:12.5px;color:#93C5FD;margin:10px 0 16px}
+.new-tag{display:inline-block;background:rgba(167,139,250,.15);color:#A78BFA;border:1px solid rgba(167,139,250,.4);font-size:9.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:2px 10px;border-radius:12px;margin-bottom:10px}
+
+.restricted-box{background:rgba(248,113,113,0.07);border:2px solid rgba(248,113,113,0.4);border-radius:10px;padding:18px 20px;margin:12px 0 18px}
+.restricted-box .rlabel{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#F87171;margin-bottom:10px}
+.restricted-box ul{margin:0 0 8px 20px;color:#E2E8F0;font-size:13px;line-height:1.85}
+.restricted-box ul li{margin-bottom:8px}
+
+.resolution-box{background:rgba(255,255,255,.03);border-left:3px solid #F59E0B;border-radius:0 8px 8px 0;padding:16px 20px;margin:10px 0}
+.resolution-box p{color:#E2E8F0;font-style:italic;font-size:13px;margin-bottom:12px}
+
+.checklist{list-style:none;margin:6px 0 14px}
+.checklist li{display:flex;align-items:flex-start;gap:9px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;color:#CBD5E1}
+.checklist li:last-child{border-bottom:none}
+.checklist li::before{content:'✓';color:#10B981;font-weight:700;flex-shrink:0}
+
+footer{background:#2A0A12;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.05);flex-wrap:wrap;gap:8px}
+footer p{font-size:12px;color:#94765B}
+footer a{color:#94765B}
+footer a:hover{color:#F59E0B}
+
+@media(max-width:900px){.body{grid-template-columns:1fr}.toc{display:none}}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+  <div class="nav-sep"></div>
+  <div class="nav-links">
+    <a href="index.html#usecases">Use Cases</a>
+    <a href="blueprints.html">Blueprints</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="roi.html">ROI</a>
+    <a href="cost.html">Cost</a>
+    <a href="helicopter.html">Helicopter</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="governance.html">Governance</a>
+    <a href="ai-gpolicy.html" class="active">AI-GPolicy</a>
+    <a href="roadmap.html">AI Roadmap</a>
+    <a href="compliance.html">Compliance</a>
+    <a href="ai-mindmap.html">AI-Readiness</a>
+    <a href="glossary.html">Glossary</a>
+  </div>
+  <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank" class="nav-cta">Source</a>
+  <a href="https://milindw1612.github.io/#contact" target="_blank" class="nav-cta" style="margin-left:6px">Contact Me</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Board Policy · Document Classification: Internal / Confidential</div>
+  <h1>Enterprise Agentic AI &amp; AI Agent Governance Policy</h1>
+  <div class="sub">Board-Level Policy for Traditional AI/ML, Generative AI, and Autonomous / Agentic AI Systems — aligned to the RBI's FREE-AI Framework (13 August 2025), applicable RBI Master Directions, CERT-In Cyber Security Directions, and the Digital Personal Data Protection Act/Rules.</div>
+  <div class="cover-grid">
+    <div class="cover-item"><div class="k">Policy Owner</div><div class="v">Chief AI Officer (CAIO)</div></div>
+    <div class="cover-item"><div class="k">Approving Authority</div><div class="v">Board of Directors, on recommendation of RMCB &amp; ITSC</div></div>
+    <div class="cover-item"><div class="k">Version</div><div class="v">2.0 (Merged Draft for Board Approval)</div></div>
+    <div class="cover-item"><div class="k">Effective Date</div><div class="v">[DD-MM-YYYY]</div></div>
+    <div class="cover-item"><div class="k">Next Review</div><div class="v">[DD-MM-YYYY]</div></div>
+  </div>
+</div>
+
+<div class="body">
+  <div class="toc">
+    <div class="toc-title">Document</div>
+    <a href="#doc-control">Document Control</a>
+    <div class="toc-section">Policy Sections</div>
+    <a href="#s1">1. Introduction &amp; Purpose</a>
+    <a href="#s2">2. Scope &amp; Applicability</a>
+    <a href="#s3">3. Regulatory Foundation</a>
+    <a href="#s4">4. Definitions</a>
+    <a href="#s5">5. Guiding Principles — FREE-AI Sutras</a>
+    <a href="#s6">6. Governance Structure</a>
+    <a href="#s7">7. Risk Classification (Tier 0–4)</a>
+    <a href="#s8">8. Autonomy Framework (A0–A5)</a>
+    <a href="#s9">9. Non-Negotiable Restrictions</a>
+    <a href="#s10">10. Per-Agent Controls</a>
+    <a href="#s11">11. System-Level Controls</a>
+    <a href="#s12">12. Human Oversight &amp; Escalation</a>
+    <a href="#s13">13. Data Governance &amp; Privacy</a>
+    <a href="#s14">14. Third-Party &amp; Vendor Governance</a>
+    <a href="#s15">15. Risk &amp; Validation Lifecycle</a>
+    <a href="#s16">16. Cybersecurity Controls</a>
+    <a href="#s17">17. CERT-In Compliance</a>
+    <a href="#s18">18. Customer Protection</a>
+    <a href="#s19">19. Incident Management</a>
+    <a href="#s20">20. Monitoring &amp; Audit</a>
+    <a href="#s21">21. Training &amp; Capacity</a>
+    <a href="#s22">22. Roles &amp; Responsibilities (RACI)</a>
+    <a href="#s23">23. Implementation Roadmap</a>
+    <a href="#s24">24. Review, Exceptions &amp; Enforcement</a>
+    <div class="toc-section">Annexures</div>
+    <a href="#annA">A — Glossary of Terms</a>
+    <a href="#annB">B — Regulatory Reference Table</a>
+    <a href="#annC">C — Risk/Autonomy Assessment Template</a>
+    <a href="#annD">D — Use-Case Approval Form</a>
+    <a href="#annE">E — Agent Permission Matrix</a>
+    <a href="#annF">F — AI Red-Team Test Catalogue</a>
+    <a href="#annG">G — Incident Reporting Template</a>
+    <a href="#annH">H — KPI / KRI Dashboard</a>
+    <a href="#annI">I — Board Adoption Resolution</a>
+  </div>
+
+  <div class="content">
+
+    <div class="psec" id="doc-control">
+      <h2>Document Control</h2>
+      <h3>Version History</h3>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Version</th><th>Date</th><th>Summary</th></tr></thead>
+        <tbody>
+          <tr><td>1.0</td><td>[DD-MM-YYYY]</td><td>Initial Board draft</td></tr>
+          <tr><td>2.0</td><td>[DD-MM-YYYY]</td><td>Merged version: added 5-tier risk classification (Tier 0–4), A0–A5 autonomy framework, standalone Non-Negotiable Restrictions section, CERT-In compliance section, enterprise implementation roadmap, and five new appendices (Permission Matrix, Red-Team Catalogue, Incident Template, KPI/KRI Dashboard, Board Resolution). Corrected regulatory citation dates and added RBI KYC, Fraud Risk Management, and Digital Payment Security Directions to the regulatory foundation.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Distribution List</h3>
+      <ul class="plist">
+        <li>Board of Directors and Risk Management Committee of the Board (RMCB)</li>
+        <li>IT Strategy Committee (ITSC); Executive AI Governance Council</li>
+        <li>MD &amp; CEO; Chief Risk Officer; Chief Information Security Officer; Chief Compliance Officer</li>
+        <li>Chief AI Officer (CAIO); Chief Data Officer; Head of Internal Audit</li>
+        <li>Heads of all Business and Support Functions deploying or planning to deploy AI agents</li>
+      </ul>
+      <p>This Policy supplements, and does not replace, the Bank's IT Governance, Information Security, Outsourcing, Model Risk Management, Data Governance, Business Continuity, and Fair Practices policies. Where this Policy conflicts with a binding RBI Direction, CERT-In Direction, or applicable law, the binding instruction prevails. Where this Policy is stricter, this Policy governs unless a documented exception is approved.</p>
+    </div>
+
+    <div class="psec" id="s1">
+      <h2>1. Introduction and Purpose</h2>
+      <p>This Policy establishes <strong style="color:#fff">Ai-ME BANK's</strong> ("the Bank") enterprise-wide framework for the responsible design, approval, deployment, monitoring, and retirement of Artificial Intelligence (AI) systems that act autonomously or semi-autonomously on the Bank's behalf — referred to as "AI Agents" and, where multiple such agents interact, "Agentic AI Systems."</p>
+      <p>Agentic systems differ materially from traditional predictive or generative AI: they do not merely produce an output for a human to act upon — they can independently decide and execute actions, invoke tools and APIs, delegate work to other agents, and retain context across a task. This shift from "AI that informs" to "AI that acts" is treated in this Policy as a materially higher risk class, requiring governance beyond conventional model risk management.</p>
+      <p>This Policy is built around the RBI's Framework for Responsible and Ethical Enablement of Artificial Intelligence ("FREE-AI"), released 13 August 2025, and consolidates the Bank's obligations under RBI's technology, outsourcing, lending, KYC, fraud-risk, payment-security, and cybersecurity regulations, CERT-In's cyber security directions, and the Digital Personal Data Protection Act and Rules, as detailed in Section 3.</p>
+      <h3>1.1 Objectives</h3>
+      <ul class="plist">
+        <li>Establish clear Board-level accountability for AI Agents and Agentic AI Systems across the Bank.</li>
+        <li>Distinguish AI Agent Governance (controls over a single autonomous system) from Agentic AI Governance (controls over multiple interacting agents), and mandate both, calibrated to risk.</li>
+        <li>Classify every AI Agent by risk tier (Section 7) and autonomy level (Section 8), and ensure technical capability is never mistaken for business authority.</li>
+        <li>Preserve the customer's and the Bank's right to human review and override of any AI-driven decision.</li>
+        <li>Ensure full traceability and auditability of autonomous actions, for RBI, CERT-In, and internal/statutory audit.</li>
+        <li>Protect customer data consistent with the DPDP Act/Rules and RBI data localisation requirements.</li>
+      </ul>
+      <h3>1.2 Statement of Intent</h3>
+      <p>This Policy favours proportionate, risk-tiered governance over blanket restriction, consistent with FREE-AI's "Innovation over Restraint" Sutra. The goal is to let AI Agents and Agentic AI Systems move at pace within clear guardrails, not to treat innovation and public trust as competing goals.</p>
+    </div>
+
+    <div class="psec" id="s2">
+      <h2>2. Scope and Applicability</h2>
+      <h3>2.1 Entities and Systems Covered</h3>
+      <p>This Policy applies to Ai-ME BANK, its Indian branches, subsidiaries and group entities engaged in RBI-regulated activity, and all employees, contractors, and third parties (including Lending Service Providers and AI/cloud vendors) who design, build, deploy, or operate AI Agents on the Bank's behalf.</p>
+      <p>This Policy applies to any AI system that can select and execute an action without prior human approval of that specific instance, invoke external tools or APIs, delegate a task to another agent, or retain state across a task in a way that influences future autonomous decisions. Systems that only generate a recommendation for a human to act upon are governed by the Bank's Model Risk Management Policy, and by Sections 13 and 16–17 of this Policy for data and security purposes.</p>
+      <h3>2.2 Effective Date and Existing Systems</h3>
+      <p>This Policy applies immediately to all new initiatives. AI Agents already in production shall be inventoried (Section 10.5) and brought into compliance within [180 days] of the Effective Date, coordinated by the CAIO Office and reported to the ITSC and RMCB.</p>
+    </div>
+
+    <div class="psec" id="s3">
+      <h2>3. Regulatory Foundation</h2>
+      <p>This Policy must be read together with the following instruments. The full reference table with dates is at <a href="#annB">Annexure B</a>.</p>
+      <h3>3.1 FREE-AI — Framework for Responsible and Ethical Enablement of Artificial Intelligence</h3>
+      <p>Released by the RBI on 13 August 2025 (Committee chaired by Prof. Pushpak Bhattacharyya, IIT Bombay), FREE-AI sets out seven Sutras — Trust is the Foundation; People First; Innovation over Restraint; Fairness and Equity; Accountability; Understandable by Design; and Safety, Resilience and Sustainability — across six pillars (Infrastructure, Policy, Capacity, Governance, Protection, Assurance) and 26 recommendations, and expressly calls for a Board-approved AI policy with lifecycle governance. Section 5 maps each Sutra to a specific control in this Policy.</p>
+      <h3>3.2 RBI (IT Governance, Risk, Controls and Assurance Practices) Directions, 2023</h3>
+      <p>Issued 7 November 2023, effective 1 April 2024. Requires a Board-approved IT Governance Framework, an IT and Information Security Risk Management Framework, defined Board/ITSC/Head of IT roles, and periodic RMCB review of IT and cyber risk. This Policy operates as an AI/agent-specific extension of that framework.</p>
+      <h3>3.3 RBI (Outsourcing of Information Technology Services) Directions, 2023</h3>
+      <p>Issued 10 April 2023, effective 1 October 2023. Governs any AI Agent, model, or orchestration layer that is hosted or operated by a third party, including cloud providers and AI/LLM vendors. Section 14 sets out the agent-specific due diligence and contracting requirements that apply in addition to this Direction.</p>
+      <h3>3.4 RBI Master Directions on Fraud Risk Management (15 July 2024)</h3>
+      <p>These consolidated Directions require an Early Warning Signals (EWS) framework, Red-Flagged Account (RFA) classification, and reporting of qualifying frauds to the RBI's Central Repository of Information on Large Credits (CRILC) and Central Fraud Registry. Where an AI Agent is used in fraud detection or EWS scoring, its output is an input to this framework, not a substitute for it: closure of a fraud case or an RFA classification remains a non-delegable human decision (Section 9).</p>
+      <h3>3.5 RBI KYC Directions, 2016, as amended</h3>
+      <p>Governs Customer Due Diligence (CDD) and ongoing due diligence. AI Agents may assist in document verification or risk-scoring, but may never waive a KYC requirement, auto-close a KYC exception, or reset a customer's authentication factors autonomously (Section 9).</p>
+      <h3>3.6 RBI (Digital Lending) Directions, 2025</h3>
+      <p>Issued 8 May 2025, consolidating prior digital lending guidelines. Requires disclosure of key facts to borrowers, explicit consent for automated credit-limit increases, Lending Service Provider due diligence, and reporting of Digital Lending Apps to the RBI's Centralised Information Management System (CIMS).</p>
+      <h3>3.7 RBI Digital Payment Security Controls and applicable payment directions</h3>
+      <p>Cover authentication, API security, and fraud monitoring for digital payments. No AI Agent may be granted unrestricted authority over payment initiation, beneficiary addition/change, or authentication resets (Section 9).</p>
+      <h3>3.8 RBI Cyber Security Framework for Banks (2 June 2016) and the ITGRCA Directions' cyber-risk provisions</h3>
+      <p>Set baseline security controls, annual penetration testing, and RBI incident-reporting timelines. Section 19 extends these to AI Agent-specific incidents.</p>
+      <h3>3.9 CERT-In Cyber Security Directions, 2022</h3>
+      <p>Issued by India's Computer Emergency Response Team (CERT-In) under Section 70B of the Information Technology Act, 2000, these Directions impose obligations independent of, and in addition to, the RBI's own cyber-incident reporting regime, including mandatory reporting of specified categories of cyber incidents to CERT-In within 6 hours of detection or being made aware of them, retention of ICT system logs for 180 days within India, and time synchronisation of relevant systems. Section 17 addresses how this applies specifically to AI Agent incidents — a requirement distinct from, and not satisfied merely by, RBI incident reporting.</p>
+      <h3>3.10 RBI Directions on Storage of Payment System Data</h3>
+      <p>Issued 6 April 2018 and subsequently clarified, requiring payment system data to be stored exclusively within India, with a narrow exception for the foreign leg of cross-border transactions. Section 13.3 addresses the specific implications for AI Agents using overseas-hosted models.</p>
+      <h3>3.11 Digital Personal Data Protection Act, 2023 and Digital Personal Data Protection Rules, 2025</h3>
+      <p>The DPDP Rules, 2025 were notified by MeitY on 13–14 November 2025, bringing the Data Protection Board into operation immediately while phasing in core obligations (consent, notice, security safeguards, breach notification, data-principal rights) over an 18-month period. AI Agents that process personal data must be designed to the standard these Rules will impose by their effective dates, not merely to the parent Act.</p>
+      <h3>3.12 Banking Regulation Act, 1949 and Reserve Bank of India Act, 1934</h3>
+      <p>This Policy and the Directions above are issued under powers including Section 35A of the Banking Regulation Act, 1949 and Section 45L of the RBI Act, 1934. No AI Agent may exercise a statutory or regulatory function, or take any action, that law requires to be performed by a natural person or the Board.</p>
+      <div class="info-box"><strong>Regulatory hierarchy rule:</strong> where this Policy is less stringent than a binding law, RBI Direction, CERT-In Direction, or supervisory instruction, the binding requirement prevails. Where this Policy is more stringent, the Bank follows this Policy unless a documented, legally permissible exception exists (Section 24). This Policy reflects the Bank's understanding as of the version date on the cover page; Legal and Compliance must validate every citation in Annexure B against the RBI and CERT-In websites before Board adoption and at every review cycle (Section 24.1).</div>
+    </div>
+
+    <div class="psec" id="s4">
+      <h2>4. Definitions</h2>
+      <p>Terms not defined here take the meaning given in the RBI Directions, CERT-In Directions, or Acts referenced in Section 3. The full glossary is repeated at <a href="#annA">Annexure A</a> for standalone reference.</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#fff">AI Agent</strong></td><td>A software system that uses AI/ML to perceive a task, decide a course of action, and execute it — including invoking tools or APIs — with limited or no real-time human approval of the specific action.</td></tr>
+          <tr><td><strong style="color:#fff">Agentic AI System</strong></td><td>An architecture in which two or more AI Agents interact, delegate tasks, or are orchestrated together, such that the outcome depends on inter-agent behaviour and not solely on any single agent.</td></tr>
+          <tr><td><strong style="color:#fff">Agent Runtime</strong></td><td>The controlled execution environment that authenticates agents and manages their tools, context, policy enforcement, budgets, and logging.</td></tr>
+          <tr><td><strong style="color:#fff">Agent Action</strong></td><td>Any externally observable operation an agent performs through a tool or API — data retrieval, record modification, communication, workflow initiation, or transaction initiation.</td></tr>
+          <tr><td><strong style="color:#fff">High-Impact AI</strong></td><td>AI whose failure, bias, misuse, or unauthorised action could materially affect customers, credit, money movement, financial-crime controls, regulatory obligations, or the Bank's reputation.</td></tr>
+          <tr><td><strong style="color:#fff">AI Agent Governance</strong></td><td>Controls, approvals, and monitoring applied to a single AI Agent — its scope of authority, data access, security posture, and performance monitoring.</td></tr>
+          <tr><td><strong style="color:#fff">Agentic AI Governance</strong></td><td>Controls applied at the level of the overall multi-agent system — permission inheritance, trust boundaries, delegation audit trails, system-wide kill-switches, and emergent-behaviour monitoring.</td></tr>
+          <tr><td><strong style="color:#fff">Autonomy Level (A0–A5)</strong></td><td>The Bank's standard scale (Section 8) for how much freedom an agent has to act without human approval, independent of the stakes of that action (which is the Risk Tier, Section 7).</td></tr>
+          <tr><td><strong style="color:#fff">Human-in-the-Loop (HITL)</strong></td><td>A human must explicitly approve an agent's proposed action before execution.</td></tr>
+          <tr><td><strong style="color:#fff">Human-on-the-Loop (HOTL)</strong></td><td>An agent may act autonomously within pre-approved limits while a human continuously monitors and can intervene at any time.</td></tr>
+          <tr><td><strong style="color:#fff">Human-in-Command (HIC)</strong></td><td>A human retains final authority to start, stop, override, accept, or reject material AI outcomes at the system level.</td></tr>
+          <tr><td><strong style="color:#fff">Kill-Switch</strong></td><td>A tested control capable of immediately halting a single agent, or an entire Agentic AI System, without depending on the agent's cooperation.</td></tr>
+          <tr><td><strong style="color:#fff">Risk Tier (0–4)</strong></td><td>The classification (Section 7) of an AI Agent based on the stakes of its actions.</td></tr>
+          <tr><td><strong style="color:#fff">Regulated Entity (RE)</strong></td><td>As used by the RBI generally: scheduled commercial banks, cooperative banks, NBFCs, payment system operators, and other RBI-regulated entities, including Ai-ME BANK.</td></tr>
+          <tr><td><strong style="color:#fff">Lending Service Provider (LSP)</strong></td><td>An agent of the Bank under the RBI (Digital Lending) Directions, 2025, performing customer acquisition, underwriting support, or servicing on the Bank's behalf.</td></tr>
+          <tr><td><strong style="color:#fff">Prompt Injection</strong></td><td>An attack embedding malicious instructions within data an agent processes, intended to cause an unintended or harmful action.</td></tr>
+          <tr><td><strong style="color:#fff">Delegation</strong></td><td>One agent assigning a sub-task to another agent, tool, or automated system, with or without transferring some or all of its own permissions.</td></tr>
+          <tr><td><strong style="color:#fff">AI Incident</strong></td><td>An event involving an AI system or agent causing, or reasonably capable of causing, material customer, financial, legal, regulatory, privacy, cyber, or reputational harm.</td></tr>
+          <tr><td><strong style="color:#fff">CERT-In</strong></td><td>India's Computer Emergency Response Team, empowered under Section 70B of the IT Act, 2000, with cyber incident reporting authority independent of the RBI.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="psec" id="s5">
+      <h2>5. Guiding Principles — the FREE-AI Seven Sutras</h2>
+      <p>This table maps each Sutra to the specific control that operationalises it — the Bank's primary evidence, for RBI supervisory review, that FREE-AI's principles are enforceable controls rather than aspirational statements.</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>FREE-AI Sutra</th><th>How this Policy operationalises it</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#fff">1. Trust is the Foundation</strong></td><td>Every AI Agent is independently validated before deployment (Section 15) and continuously monitored (Section 11) so its behaviour remains reliable throughout its operational life.</td></tr>
+          <tr><td><strong style="color:#fff">2. People First</strong></td><td>No AI Agent may make a final decision materially affecting a customer without the customer being informed AI was involved and retaining a right to request human review (Sections 12, 18).</td></tr>
+          <tr><td><strong style="color:#fff">3. Innovation over Restraint</strong></td><td>A proportionate, risk-and-autonomy-tiered approach (Sections 7–8) allows low-stake, well-controlled use cases to move quickly while high-stake use cases receive commensurate scrutiny.</td></tr>
+          <tr><td><strong style="color:#fff">4. Fairness and Equity</strong></td><td>AI Agents in credit, pricing, or eligibility decisions are tested for disparate impact before deployment and at defined intervals, with findings reported to Model Risk Management.</td></tr>
+          <tr><td><strong style="color:#fff">5. Accountability</strong></td><td>Every AI Agent has a named Business Owner and Technical Owner, accountable to the CAIO and ultimately the Board (Sections 6, 22).</td></tr>
+          <tr><td><strong style="color:#fff">6. Understandable by Design</strong></td><td>AI Agents produce a human-readable record of the basis for each material action, sufficient for an auditor, supervisor, or affected customer (Sections 10, 19).</td></tr>
+          <tr><td><strong style="color:#fff">7. Safety, Resilience and Sustainability</strong></td><td>Every AI Agent and Agentic AI System has a tested kill-switch (Section 11), and computational resource use is periodically reviewed for efficiency.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="psec" id="s6">
+      <h2>6. Governance Structure and Accountability</h2>
+      <h3>6.1 Board of Directors</h3>
+      <p>Approves this Policy and material revisions; receives at least quarterly reporting on the AI portfolio, material incidents, exceptions, and concentration risk; approves deployment of any Tier 4 AI Agent and any A4/A5 autonomy assignment before production launch.</p>
+      <h3>6.2 Risk Management Committee of the Board (RMCB)</h3>
+      <p>Reviews this Policy at least annually in consultation with the ITSC; reviews the AI risk register at each scheduled meeting; approves the AI risk appetite statement.</p>
+      <h3>6.3 IT Strategy Committee (ITSC)</h3>
+      <p>Oversees alignment of AI deployments with the Bank's IT Governance Framework; reviews technical readiness of Tier 2+ AI Agents prior to deployment.</p>
+      <h3>6.4 Executive AI Governance Council</h3>
+      <p>A management-level Council chaired by the CAIO, with standing members including the CRO, CISO, Chief Compliance Officer, Chief Data Officer, and Head of Internal Audit (observer). The Council approves every proposed AI Agent use case against Sections 7–8, maintains the AI Agent Register (Section 10.5), reviews incidents monthly, and recommends this Policy's review to the RMCB.</p>
+      <h3>6.5 Chief AI Officer (CAIO)</h3>
+      <p>The single accountable executive for the Bank's AI Agent and Agentic AI System portfolio, reporting to the CRO or MD &amp; CEO with a dotted line to the RMCB.</p>
+      <h3>6.6 Business and Technical Owners</h3>
+      <p>Every AI Agent has a named Business Owner (purpose, KPIs, customer impact) and Technical Owner (engineering, monitoring, incident response), recorded in the AI Agent Register.</p>
+      <h3>6.7 Three Lines of Defence</h3>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Line</th><th>Function</th><th>Responsibility for AI Agents</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#fff">First</strong></td><td>Business and Technology teams</td><td>Day-to-day compliance; agent-level monitoring; escalation of anomalies</td></tr>
+          <tr><td><strong style="color:#fff">Second</strong></td><td>Risk, Compliance, Information Security, Model Risk</td><td>Independent review and challenge of risk tiering, validation, and control design</td></tr>
+          <tr><td><strong style="color:#fff">Third</strong></td><td>Internal Audit</td><td>Independent assurance this Policy is followed in practice, reported to the Audit Committee</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="psec" id="s7">
+      <h2>7. Risk Classification Framework (Tier 0–4)</h2>
+      <p>Every proposed AI Agent is classified into one of five risk tiers before development begins, and reclassified whenever its scope of authority materially changes. Risk Tier answers "what is at stake"; Autonomy Level (Section 8) answers "how much freedom does the agent have" — the two are assessed together but are independent dimensions.</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Tier</th><th>Definition</th><th>Illustrative Example</th><th>Minimum Governance Requirement</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill tier-0">Tier 0 — Experimental</span></td><td>No production data; sandbox only; no customer or financial effect.</td><td>Synthetic-data experiments; model benchmarking.</td><td>AI Governance Council delegated technical approval.</td></tr>
+          <tr><td><span class="pill tier-1">Tier 1 — Low Impact</span></td><td>Internal productivity use; no material customer or financial effect.</td><td>Internal drafting assistant; internal risk-summary agent; code-review agent.</td><td>Business Owner + AI Governance Council approval; annual revalidation.</td></tr>
+          <tr><td><span class="pill tier-2">Tier 2 — Moderate</span></td><td>Customer-facing or operational decision support with reversible outcomes; human reviews before action.</td><td>Customer-service triage agent; document classification; internal risk analysis.</td><td>AI Governance Council + Risk/Security/Privacy review; independent validation; monthly monitoring.</td></tr>
+          <tr><td><span class="pill tier-3">Tier 3 — High Impact</span></td><td>Material effect on customers, credit, fraud, compliance, or reputation.</td><td>Credit recommendation; AML alert prioritisation; fraud-detection scoring; collections strategy.</td><td>Executive AI Council approval + independent validation + formal go-live sign-off.</td></tr>
+          <tr><td><span class="pill tier-4">Tier 4 — Critical / Autonomous</span></td><td>Agent can materially alter records, initiate financial actions, or operate with high autonomy.</td><td>Payment execution agent; core-system change agent; autonomous treasury action.</td><td>Board / Board-designated committee approval; normally prohibited for autonomous execution (see Section 9).</td></tr>
+        </tbody>
+      </table></div>
+      <h3>7.1 Tiering Procedure</h3>
+      <ul class="plist">
+        <li>The Business Owner completes the Risk Tier &amp; Autonomy Level Assessment (<a href="#annC">Annexure C</a>) at concept stage, before build work begins.</li>
+        <li>The Executive AI Governance Council reviews the assessment and assigns a provisional tier and autonomy level.</li>
+        <li>For Tier 3, the CRO and CISO must countersign; for Tier 4, the full business case must be presented to the RMCB and approved by the Board before any pilot beyond a controlled sandbox.</li>
+        <li>The assigned tier and level are recorded in the AI Agent Register (Section 10.5) and revalidated at least annually.</li>
+      </ul>
+      <h3>7.2 Reclassification Triggers</h3>
+      <ul class="plist">
+        <li>The agent is granted access to a new data source, system, or external tool.</li>
+        <li>The agent's permitted autonomy is increased.</li>
+        <li>The agent begins delegating tasks to, or receiving delegated tasks from, another agent.</li>
+        <li>A Tier-relevant incident (Section 19) occurs involving the agent.</li>
+      </ul>
+    </div>
+
+    <div class="psec" id="s8">
+      <h2>8. Agentic AI Autonomy Control Framework (A0–A5)</h2>
+      <span class="new-tag">New in this version</span>
+      <p>Every AI Agent is assigned an explicit autonomy level in addition to its risk tier. Technical capability must never be interpreted as business authority: an agent's effective permissions are the intersection of business authorisation, system entitlements, data access, tool allowlists, and policy-engine decisions — not merely what the underlying model is technically capable of doing.</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Level</th><th>Permitted Pattern</th><th>Mandatory Controls</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill tier-0">A0 — Observe Only</span></td><td>Read or monitor systems; takes no external action.</td><td>Read-only credentials; full logging of every access.</td></tr>
+          <tr><td><span class="pill tier-1">A1 — Recommend</span></td><td>Generates a recommendation for a human to act upon; takes no action itself.</td><td>Human acceptance required; rationale and evidence recorded with every recommendation.</td></tr>
+          <tr><td><span class="pill tier-2">A2 — Execute Reversible, Low-Risk Tasks</span></td><td>Creates drafts, tickets, or summaries; performs non-material workflow steps.</td><td>Tool allowlist; rate limits; rollback capability; full audit trail.</td></tr>
+          <tr><td><span class="pill tier-3">A3 — Execute Bounded Operational Actions</span></td><td>Completes multi-step workflows within predefined limits.</td><td>Human-on-the-loop supervision; policy-engine enforcement; transaction limits; circuit breakers; continuous monitoring.</td></tr>
+          <tr><td><span class="pill tier-4">A4 — High-Impact, Semi-Autonomous</span></td><td>Takes high-impact actions, but only at mandatory human-approval gates.</td><td>Human-in-the-loop approval at every gate; dual control for financial actions; strong authentication; immutable audit log.</td></tr>
+          <tr><td><span class="pill" style="background:rgba(0,0,0,.3);color:#F87171;border:1px solid #F87171">A5 — Unrestricted Autonomous Authority</span></td><td>No routine production use is permitted at this level.</td><td>Prohibited in production unless specifically approved by the Board with demonstrated compliance with every applicable requirement; financial authorisation always remains human-controlled regardless of this exception.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>8.1 Relationship Between Risk Tier and Autonomy Level</h3>
+      <p>A high Risk Tier must never be paired with a high Autonomy Level by default. As a floor: Tier 0–1 agents may operate up to A2; Tier 2 agents may operate up to A3 with Human-on-the-Loop supervision; Tier 3 agents may operate up to A3 only, and any A4 assignment for a Tier 3 agent requires Executive AI Governance Council and CRO sign-off in addition to the Tier 3 approval; Tier 4 agents may never be assigned A4 or A5 in production except through the exceptional, Board-approved, demonstrably compliant pathway described in the A5 row above, and even then, financial authorisation itself remains outside the agent's authority under Section 9.</p>
+      <h3>8.2 Recording and Review</h3>
+      <p>The assigned autonomy level, and the date it was last reviewed, is recorded in the AI Agent Register (Section 10.5) alongside the risk tier, and is subject to the same reclassification triggers (Section 7.2).</p>
+    </div>
+
+    <div class="psec" id="s9">
+      <h2>9. Non-Negotiable Agent Restrictions</h2>
+      <span class="new-tag">New in this version — elevated from section on human oversight</span>
+      <p>The following restrictions apply to every AI Agent regardless of risk tier or autonomy level, and may not be waived by any exception process (Section 24). They are stated here as a standalone, auditable list precisely so that no individual approval can quietly erode them.</p>
+      <div class="restricted-box">
+        <div class="rlabel">⛔ Absolute restrictions — no exception process may waive these</div>
+        <ul>
+          <li>No agent may independently authorise a customer payment or funds transfer, change a beneficiary, reset an authentication factor, release collateral, approve a loan, increase a credit limit, waive a KYC/AML requirement, close a fraud case or Red-Flagged Account, or override any regulatory control.</li>
+          <li>Agents shall not be given shared human credentials, generic administrator accounts, or unrestricted production API keys; agent credentials shall be unique, scoped to minimum required permissions, short-lived where technically feasible, and continuously monitored.</li>
+          <li>Every externally consequential agent action shall be attributable to an agent identity, initiating context, approver identity (where applicable), tool, timestamp, data sources, and resulting system state.</li>
+          <li>Agents shall not alter their own policy, permissions, code, safety limits, logging configuration, or underlying model without a controlled change process (Section 15.2).</li>
+          <li>Agents shall not self-provision additional tools, sub-agents, credentials, or cloud resources.</li>
+          <li>Agent-to-agent communication shall be authenticated and logged; delegation shall never increase the effective privilege available to the receiving agent beyond what the delegating agent itself held, unless a fresh, independent approval is obtained (Section 11.1).</li>
+          <li>Model Context Protocol (MCP), Agent-to-Agent (A2A), or equivalent integration interfaces shall be treated as privileged integration surfaces, governed by the same API security and least-privilege standards as any other production system access (Section 16).</li>
+        </ul>
+      </div>
+      <p>These restrictions are drafted deliberately as absolutes rather than tiered guidance. If a genuine business need appears to require an exception to any restriction in this section, that is a signal to escalate to the Board via Section 24, not to reinterpret the restriction.</p>
+    </div>
+
+    <div class="psec" id="s10">
+      <h2>10. AI Agent Governance — Per-Agent Controls</h2>
+      <p>This section sets out mandatory controls for every individual AI Agent. Section 11 sets out additional controls that apply only where multiple agents interact.</p>
+      <h3>10.1 Scope of Authority</h3>
+      <p>Every AI Agent operates under a documented, approved statement of scope: the systems/data it may access, the actions it may take, any financial/transactional limits, and the specific circumstances requiring escalation to a human.</p>
+      <h3>10.2 Least-Privilege Access</h3>
+      <p>Each agent is granted the minimum data and system access required for its approved function. Broader access requires written justification and CISO sign-off.</p>
+      <h3>10.3 Monitoring and Performance</h3>
+      <p>Every agent is monitored against: task-completion rate; the ratio of autonomous-to-escalated actions (with a documented threshold for sudden shifts); accuracy/error rate; and cost per completed task, since a single task may involve multiple tool invocations.</p>
+      <h3>10.4 Runtime Data Access Logging</h3>
+      <p>Because an agent may decide at runtime which system or tool to call, each agent maintains a runtime log of what it actually accessed for each task, not merely what it is permitted to access, so any divergence can be detected.</p>
+      <h3>10.5 AI Agent Register</h3>
+      <p>The CAIO Office maintains a central register of every agent in development, pilot, or production: name and purpose; risk tier and autonomy level; Business and Technical Owner; date of last validation; accessible systems/data; and operational status. Available to Internal Audit, and to the RBI or CERT-In on request.</p>
+      <h3>10.6 Talent and Ownership</h3>
+      <p>Operating AI Agents responsibly requires skills distinct from conventional AI/ML model-building — agent orchestration engineering and agent-specific security testing. HR, in consultation with the CAIO, maintains a specific talent-gap assessment for these roles.</p>
+    </div>
+
+    <div class="psec" id="s11">
+      <h2>11. Agentic AI Governance — System-Level Controls</h2>
+      <p>Where two or more agents interact — by delegation, joint workflow completion, or communication via protocols such as MCP or A2A — the per-agent controls in Section 10 are necessary but not sufficient. Problems can emerge purely from agent interaction even where every individual agent behaves within its own approved parameters.</p>
+      <h3>11.1 Permission Inheritance Rules</h3>
+      <p>Where Agent A delegates to Agent B, the Bank defines in advance, in writing, whether B inherits A's restrictions or uses its own independently approved permissions. Per the Section 9 restriction, delegation shall never increase effective privilege without a fresh, documented approval — this must never be left to default or implicit behaviour.</p>
+      <h3>11.2 Agent-to-Agent Trust Boundary Map</h3>
+      <p>For every Agentic AI System, the Technical Owner maintains a current diagram of which agents may call which other agents and tools, reviewed by the CISO before production and after any topology change.</p>
+      <h3>11.3 System-Wide Kill-Switch</h3>
+      <p>Every Agentic AI System has a single tested control capable of halting the entire multi-agent workflow, tested before go-live and at least semi-annually thereafter.</p>
+      <h3>11.4 End-to-End Trace Logging and Delegation Audit Trail</h3>
+      <p>A single trace log follows a task across every agent it touches. A separate delegation audit trail records which agent handed a task to which other agent, with what permissions, at what time — this is what makes the Section 11.1 inheritance rule independently verifiable.</p>
+      <h3>11.5 Emergent-Behaviour Review</h3>
+      <p>The Executive AI Governance Council conducts a periodic review — at minimum quarterly for Tier 3–4 Agentic AI Systems — for outcomes where every individual agent behaved within its approved parameters, but the combination produced an unintended result (e.g., two agents independently approving the same refund).</p>
+      <h3>11.6 Continuous Runtime Monitoring</h3>
+      <p>Because agents in an Agentic AI System act continuously, monitoring uses continuous behavioural baselines and real-time anomaly detection, not solely periodic drift checks calibrated for static models.</p>
+      <div class="info-box">Sections 10 and 11 are cumulative: any Agentic AI System must satisfy every applicable Section 10 control for each constituent agent, in addition to every Section 11 control for the system as a whole.</div>
+    </div>
+
+    <div class="psec" id="s12">
+      <h2>12. Human Oversight and Escalation</h2>
+      <h3>12.1 Right to Human Review</h3>
+      <p>Any customer materially affected by an AI Agent's action has the right to request human review. This right is disclosed to the customer at or before the action is communicated (Section 18).</p>
+      <h3>12.2 Escalation Design</h3>
+      <p>Every Tier 2+ AI Agent has a documented, tested escalation path defining precisely when the agent must stop and refer to a human, who that human is, and the maximum time before further escalation.</p>
+      <h3>12.3 Override Logging</h3>
+      <p>Every instance where a human overrides, reverses, or declines to act on an agent's proposed action is logged and reviewed periodically by the Business Owner for systematic patterns suggesting the agent needs revalidation.</p>
+      <div class="warn-box">The absolute restrictions on what an agent may never do autonomously — regardless of tier, level, or escalation design — are set out in Section 9, not here.</div>
+    </div>
+
+    <div class="psec" id="s13">
+      <h2>13. Data Governance, Privacy and Localization</h2>
+      <h3>13.1 Data Protection Principles</h3>
+      <p>All personal data accessed by an AI Agent is handled per the DPDP Act/Rules and the Bank's Data Governance Policy. Purpose limitation and data minimisation are enforced through least-privilege tool scoping (Section 10.2): an agent receives access to specific fields, not entire records, wherever feasible.</p>
+      <h3>13.2 Consent for Automated Decisions</h3>
+      <p>Where an agent's action affects a borrower's credit limit or terms, explicit borrower consent is obtained beforehand, per the RBI (Digital Lending) Directions, 2025. Blanket, bundled, or pre-ticked consent does not satisfy this requirement.</p>
+      <h3>13.3 Data Localisation</h3>
+      <p>Payment system data, per RBI's Directions on Storage of Payment System Data, is stored exclusively within India. Where an agent uses an overseas-hosted model or AI/LLM provider, the Bank ensures — via contract and technical controls verified by the CISO — that no payment system data is transmitted to or retained on infrastructure outside India, other than the narrow permitted exception for the foreign leg of cross-border transactions. This is a hard constraint on vendor selection for any Tier 2+ agent touching payment data, not a negotiable preference.</p>
+      <h3>13.4 Dynamic Data Access Assessments</h3>
+      <p>Because an agent may decide at runtime which tool or data source to call, a Data Protection Impact Assessment (DPIA) prepared at design time cannot fully anticipate every access pattern. A DPIA is required before any Tier 2+ agent is deployed; adding a new tool or data source triggers a fresh DPIA; the runtime access log (Section 10.4) is reconciled against the DPIA's assumptions at least quarterly.</p>
+      <h3>13.5 Vendor Data Use Restrictions</h3>
+      <p>Contracts with AI/LLM vendors prohibit use of the Bank's customer data to train or fine-tune the vendor's models, absent a specific, time-bound, written exception approved by the Chief Data Officer and Chief Compliance Officer.</p>
+    </div>
+
+    <div class="psec" id="s14">
+      <h2>14. Third-Party, Outsourcing and Vendor AI Governance</h2>
+      <p>An AI Agent's involvement does not reduce the Bank's responsibility for outcomes delivered through outsourced systems. This section applies in addition to the Bank's existing Outsourcing and Third-Party Risk Management Policy.</p>
+      <h3>14.1 Due Diligence</h3>
+      <p>Before onboarding any vendor whose product includes an AI Agent component, the Bank assesses the vendor's own AI governance maturity, whether its system can be risk-tiered under Section 7, its incident-notification commitments, and its ability to support the Bank's audit, logging, and kill-switch requirements.</p>
+      <h3>14.2 Contractual Requirements</h3>
+      <p>Contracts include, at minimum: a right to audit; the data-use restriction in Section 13.5; an obligation to notify the Bank of any security incident affecting the agent within a period at least as strict as the Bank's own regulatory reporting timelines (Sections 17, 19); a right to independently test the vendor's system for the security risks in Section 16; and exit/transition-assistance terms.</p>
+      <h3>14.3 Concentration Risk</h3>
+      <p>The Executive AI Governance Council monitors concentration of Tier 3+ AI Agent functionality in any single vendor or model provider, and reports material concentration to the RMCB.</p>
+      <h3>14.4 Lending Service Providers</h3>
+      <p>Where an LSP uses an AI Agent on the Bank's behalf, the Bank remains solely responsible for compliance with the RBI (Digital Lending) Directions, 2025, and ensures the LSP's agent is registered in the AI Agent Register (Section 10.5) notwithstanding third-party operation.</p>
+    </div>
+
+    <div class="psec" id="s15">
+      <h2>15. Agent Risk Management and Validation Lifecycle</h2>
+      <p>Every AI Agent passes through these stages, each with a named accountable function; no agent proceeds to the next stage without the preceding sign-off.</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Stage</th><th>Description</th><th>Accountable Function</th></tr></thead>
+        <tbody>
+          <tr><td>1. Concept &amp; Tiering</td><td>Risk Tier &amp; Autonomy Level Assessment (Annexure C) completed and provisionally assigned</td><td>Business Owner, Executive AI Governance Council</td></tr>
+          <tr><td>2. Design &amp; Development</td><td>Scope of authority, least-privilege design, and (for Agentic Systems) trust-boundary map drafted</td><td>Technical Owner, CISO</td></tr>
+          <tr><td>3. Independent Validation</td><td>Independently validated for accuracy, bias, security (Section 16), and, for Agentic Systems, delegation/emergent-behaviour testing</td><td>Model Risk Management function, independent of the build team</td></tr>
+          <tr><td>4. Approval</td><td>Sign-off at the level required by Section 7/8</td><td>Executive AI Governance Council / RMCB / Board, as applicable</td></tr>
+          <tr><td>5. Controlled Pilot</td><td>Limited deployment with enhanced monitoring and a tested kill-switch</td><td>Technical Owner, Business Owner</td></tr>
+          <tr><td>6. Full Deployment</td><td>Deployment at scale, subject to continuous monitoring</td><td>Technical Owner</td></tr>
+          <tr><td>7. Periodic Revalidation</td><td>At least annually for Tier 2, semi-annually for Tier 3–4, or immediately on a reclassification trigger</td><td>Model Risk Management function</td></tr>
+          <tr><td>8. Retirement</td><td>Formal decommissioning, credential revocation, removal from active Register status (record retained for audit)</td><td>Technical Owner, CISO</td></tr>
+        </tbody>
+      </table></div>
+      <h3>15.1 Independent Validation Standards</h3>
+      <p>Performed by a function independent of the build team, per the Model Risk Management Policy, and additionally testing, for Tier 2+ agents: resistance to prompt injection; behaviour under tool-chaining attack scenarios; and, for Agentic Systems, enforceability of permission inheritance rules under adversarial conditions.</p>
+      <h3>15.2 Change Management</h3>
+      <p>Any material change to scope of authority, data access, underlying model, risk tier, autonomy level, or an Agentic System's topology triggers Stages 3–4 afresh, not a routine configuration change.</p>
+    </div>
+
+    <div class="psec" id="s16">
+      <h2>16. Cybersecurity Controls for Agentic Systems</h2>
+      <p>This section applies in addition to the Bank's Information Security and Cyber Security Policies, addressing attack surface a conventional static-model threat model does not cover.</p>
+      <h3>16.1 Threat Modelling</h3>
+      <p>Prior to deployment of any Tier 2+ agent, the CISO's function conducts an AI-specific threat model covering: prompt injection leading to real action; tool-chaining exploits; credential/permission exposure through agent logs; and, for Agentic Systems, escalation via delegation.</p>
+      <h3>16.2 Minimum Security Architecture</h3>
+      <ul class="plist">
+        <li>A dedicated AI gateway / control plane for model access, authentication, policy enforcement, rate limiting, and telemetry — no agent connects directly to core systems or databases.</li>
+        <li>Agent identity integrated with enterprise IAM/PAM; no shared or generic credentials.</li>
+        <li>A tool registry with allowlisting, schema validation, and per-tool risk classification; tool arguments validated independently of the model, not trusted at face value.</li>
+        <li>A policy engine positioned between agent reasoning and tool execution, so the model can never bypass policy enforcement directly.</li>
+        <li>Secrets held in a vault, never placed in prompts, logs, or agent memory in plain text.</li>
+        <li>Immutable, tamper-evident audit logs covering prompts (where permitted), retrieved sources, tool calls, approvals, and resulting outputs.</li>
+      </ul>
+      <h4>16.2.1 Retrieval-Augmented Generation (RAG)</h4>
+      <ul class="plist">
+        <li>Every knowledge source has a named owner, approval status, version, and retention rule.</li>
+        <li>Retrieval respects the requesting user's or agent's own authorization context — an agent must never retrieve what its human counterpart could not.</li>
+        <li>Retrieved content is treated as data, not as a trusted instruction, unless the source is explicitly designated as trusted.</li>
+        <li>Stale or superseded documents are removed or clearly versioned so they cannot silently influence a live decision.</li>
+      </ul>
+      <h4>16.2.2 Tool / MCP Interfaces</h4>
+      <ul class="plist">
+        <li>Every tool has an owner, risk classification, schema, permission scope, and documented failure behaviour.</li>
+        <li>Tool servers must not expose unrestricted filesystem, shell, database, or network capability to an agent.</li>
+        <li>High-risk tools require an additional policy check and human approval gate, consistent with the agent's autonomy level (Section 8).</li>
+      </ul>
+      <h4>16.2.3 Agent-to-Agent (A2A) / Multi-Agent</h4>
+      <ul class="plist">
+        <li>Each agent has a unique identity and a defined scope of responsibility; agent messages are authenticated and logged.</li>
+        <li>The parent/originating agent in a delegation chain remains accountable for the delegated action within its workflow (Section 11.4).</li>
+        <li>The system enforces global action budgets and stop conditions across the entire agent graph, not only per-agent limits.</li>
+        <li>No emergent multi-agent behaviour may be cited as a justification for bypassing this Policy.</li>
+      </ul>
+      <h3>16.3 Penetration Testing</h3>
+      <p>Tier 2+ agents and Agentic AI Systems are included in the Bank's annual penetration testing programme conducted by CERT-In empanelled auditors, with specific test cases drawn from <a href="#annF">Annexure F</a>.</p>
+      <h3>16.4 Business Continuity</h3>
+      <p>The Bank's Business Continuity Policy is extended to cover failure or unavailability of any Tier 2+ agent, including a defined manual fallback capable of sustaining the affected business function until the agent is restored or the kill-switch condition is resolved.</p>
+    </div>
+
+    <div class="psec" id="s17">
+      <h2>17. CERT-In Compliance and Cyber Incident Reporting</h2>
+      <span class="new-tag">New in this version</span>
+      <p>This section addresses an obligation distinct from, and in addition to, the RBI incident-reporting requirements in Section 19. Both must be satisfied in parallel where applicable; complying with one does not discharge the other.</p>
+      <h3>17.1 Legal Basis</h3>
+      <p>CERT-In's Cyber Security Directions, 2022, issued under Section 70B of the Information Technology Act, 2000, apply to the Bank as a body corporate operating computer resources in India, independent of its status as an RBI-Regulated Entity.</p>
+      <h3>17.2 Six-Hour Reporting Obligation</h3>
+      <p>Where an AI Agent Incident (Section 19.1) falls within CERT-In's specified categories of reportable cyber incidents — including, without limitation, unauthorised access to or compromise of a system, data breach or data leak, or an incident affecting critical information infrastructure — it must be reported to CERT-In within <strong style="color:#fff">6 hours</strong> of the Bank detecting it or being made aware of it. This timeline is materially shorter than typical internal escalation cycles and must be built into the incident response runbook (Section 19.2) as a hard deadline, not a target.</p>
+      <h3>17.3 Log Retention and Time Synchronisation</h3>
+      <p>The Bank shall retain ICT system logs relevant to AI Agent and Agentic AI System operation for the period mandated by CERT-In (currently 180 days), with those logs maintained within India, and shall ensure relevant systems are synchronised to the standard time source specified by CERT-In.</p>
+      <h3>17.4 Applicability Judgement</h3>
+      <p>Not every AI Agent Incident will meet CERT-In's specified reportable categories; determining whether a given incident qualifies is a Legal/Compliance/CISO judgement, made promptly given the 6-hour clock. Ambiguous cases should be resolved in favour of reporting rather than waiting for certainty.</p>
+      <h3>17.5 Coordination with RBI Reporting</h3>
+      <p>Where an incident triggers both this Section and Section 19's RBI reporting obligations, the Bank shall run both notification workstreams in parallel from the point of detection, coordinated by the CISO, rather than sequencing one after the other.</p>
+    </div>
+
+    <div class="psec" id="s18">
+      <h2>18. Customer Protection, Disclosure and Grievance Redressal</h2>
+      <h3>18.1 Disclosure of AI Involvement</h3>
+      <p>Customers are clearly informed, in plain language, whenever an AI Agent is involved in a decision or communication materially affecting them. Dark patterns designed to obscure this disclosure are prohibited.</p>
+      <h3>18.2 Right to Explanation</h3>
+      <p>Where an agent's action adversely affects a customer, the customer is entitled to a plain-language explanation of the principal basis for that action, consistent with FREE-AI's "Understandable by Design" Sutra.</p>
+      <h3>18.3 Grievance Redressal</h3>
+      <p>Grievances relating to an AI Agent's action are handled through the Bank's existing grievance mechanism and the Reserve Bank – Integrated Ombudsman Scheme, without lower priority merely because AI was involved. AI-related grievances are specifically tagged and reported to the Executive AI Governance Council monthly.</p>
+      <h3>18.4 Fair Practices</h3>
+      <p>Agents engaged in customer communication, collections, or recovery operate within the Bank's Fair Practices Code and shall not employ manipulative design, undue pressure, or misleading representations.</p>
+    </div>
+
+    <div class="psec" id="s19">
+      <h2>19. Incident Management and Regulatory Reporting</h2>
+      <h3>19.1 AI Agent Incident Definition and Severity</h3>
+      <p>An "AI Agent Incident" includes any autonomous action outside approved scope, a successful prompt-injection or tool-chaining exploit, an Agentic AI System emergent-behaviour failure, a kill-switch activation, or customer harm/financial loss from an agent's action. Severity is classified as follows:</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Severity</th><th>Illustrative Event</th><th>Minimum Response</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill tier-4">SEV-1 Critical</span></td><td>Unauthorized financial action, major customer harm, material data breach, systemic agent runaway, critical control bypass.</td><td>Immediate containment; kill-switch activation; executive escalation; Legal/Compliance assessment; RBI, CERT-In (Section 17), and customer notification as applicable.</td></tr>
+          <tr><td><span class="pill tier-3">SEV-2 High</span></td><td>Material wrong decisions, significant privacy leakage, widespread hallucination, high-impact model failure.</td><td>Containment within a defined SLA; root-cause analysis; independent review; Board reporting as appropriate.</td></tr>
+          <tr><td><span class="pill tier-2">SEV-3 Medium</span></td><td>Limited impact, repeated control violations, significant quality degradation.</td><td>Remediation plan; monitoring; management reporting.</td></tr>
+          <tr><td><span class="pill tier-0">SEV-4 Low</span></td><td>Non-material defect or isolated error without customer harm.</td><td>Corrective action and trend monitoring.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>19.2 Internal Escalation</h3>
+      <p>AI Agent Incidents are reported immediately by the Technical Owner to the CISO and CAIO Office, logged in the Bank's standard incident system, tagged as AI Agent-related.</p>
+      <h3>19.3 RBI Regulatory Reporting Timelines</h3>
+      <p>Where an incident meets the criteria of a reportable cyber security incident under RBI's framework, it is reported within the prescribed timelines (in current practice, approximately 2 hours for incidents involving customer data compromise or financial loss, and approximately 6 hours for other significant incidents), followed by a detailed root-cause report (currently approximately 21 days). Legal and Compliance must confirm exact current timelines at the time of any actual incident, and must additionally assess CERT-In applicability under Section 17 in parallel, not sequentially.</p>
+      <h3>19.4 Evidence to Preserve</h3>
+      <ul class="plist">
+        <li>Agent and user identity; prompt/request and relevant context, subject to privacy and retention rules.</li>
+        <li>Retrieved sources/documents and their versions; model/provider/version and configuration.</li>
+        <li>Tool calls, parameters, approvals, and downstream responses; policy-engine decisions and blocked actions.</li>
+        <li>Output presented to the customer/user and the actual downstream effect; containment, root cause, and remediation.</li>
+      </ul>
+      <h3>19.5 Root Cause Analysis</h3>
+      <p>Every significant AI Agent Incident undergoes documented root cause analysis, including, for Agentic System incidents, whether it arose from a single agent's behaviour or from inter-agent interaction, with findings presented to the Executive AI Governance Council and, for Tier 3–4 agents, the RMCB.</p>
+      <h3>19.6 Post-Incident Kill-Switch Review</h3>
+      <p>Following any kill-switch activation, the affected system is not restored to production until effectiveness is confirmed and the root cause is remediated and independently re-validated.</p>
+    </div>
+
+    <div class="psec" id="s20">
+      <h2>20. Monitoring, Internal Audit and Assurance</h2>
+      <h3>20.1 Continuous Monitoring</h3>
+      <p>Tier 2+ agents are subject to continuous, automated monitoring against Sections 10.3 and 11.6, with alert thresholds and named recipients defined prior to go-live.</p>
+      <h3>20.2 Internal Audit Coverage</h3>
+      <p>Internal Audit includes AI Agent governance in its annual audit universe, ensuring every Tier 4 agent is independently audited at least annually, with unrestricted access to the AI Agent Register, validation records, monitoring dashboards, and incident logs.</p>
+      <h3>20.3 Concurrent Audit</h3>
+      <p>Where concurrent audit covers a function relying on a Tier 3–4 agent for transaction processing or credit decisioning, its scope is extended to sample-test that agent's autonomous decisions against this Policy.</p>
+      <h3>20.4 Assurance Reporting to the Board</h3>
+      <p>A consolidated assurance report — Register summary, incident statistics, audit findings, outstanding remediation — is presented to the RMCB at least half-yearly and summarised to the Board at least annually.</p>
+      <h3>20.5 Regulatory Examination Readiness</h3>
+      <p>The CAIO Office ensures the Register, validation records, risk tier/autonomy assessments, and incident logs can be produced to the RBI or CERT-In within the timeframe specified for supervisory examination.</p>
+    </div>
+
+    <div class="psec" id="s21">
+      <h2>21. Training and Capacity Building</h2>
+      <ul class="plist">
+        <li>Mandatory annual training on this Policy for all staff who own, build, operate, or approve AI Agents, with role-specific modules for Business Owners, Technical Owners, Risk/Compliance, and Internal Audit.</li>
+        <li>Specialised training on agent orchestration engineering and agent-specific security testing for relevant technical staff, recognising these as distinct from general ML engineering.</li>
+        <li>AI Agent governance awareness in induction programmes for new employees in Technology, Risk, Compliance, and Business functions.</li>
+        <li>Training completion records maintained as evidence for regulatory examination.</li>
+      </ul>
+    </div>
+
+    <div class="psec" id="s22">
+      <h2>22. Roles and Responsibilities (RACI)</h2>
+      <p>R = Responsible, A = Accountable, C = Consulted, I = Informed.</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Activity</th><th>Responsible</th><th>Accountable</th><th>Consulted</th><th>Informed</th></tr></thead>
+        <tbody>
+          <tr><td>Define and approve AI Agent/Agentic AI strategy</td><td>Board</td><td>RMCB, ITSC</td><td>CAIO</td><td>All Business Units</td></tr>
+          <tr><td>Approve this Policy and revisions</td><td>Board</td><td>RMCB</td><td>CAIO</td><td>All Staff</td></tr>
+          <tr><td>Assign risk tier and autonomy level</td><td>Executive AI Governance Council</td><td>CRO, CISO</td><td>Business Owner</td><td>Internal Audit</td></tr>
+          <tr><td>Approve Tier 4 agent / A4-A5 assignment</td><td>Board</td><td>RMCB, ITSC</td><td>CAIO</td><td>Business &amp; Technical Owners</td></tr>
+          <tr><td>Independent validation</td><td>Model Risk Management function</td><td>Executive AI Governance Council</td><td>Technical Owner</td><td>Business Owner</td></tr>
+          <tr><td>Day-to-day agent monitoring</td><td>Technical Owner</td><td>CISO</td><td>—</td><td>Business Owner, CAIO Office</td></tr>
+          <tr><td>RBI incident reporting</td><td>CISO / Compliance</td><td>CAIO, Legal</td><td>Technical Owner</td><td>RMCB, Board</td></tr>
+          <tr><td>CERT-In incident reporting</td><td>CISO</td><td>Legal, Compliance</td><td>CAIO</td><td>RMCB</td></tr>
+          <tr><td>Vendor/outsourcing due diligence</td><td>Third-Party Risk function</td><td>CISO, CAIO</td><td>Business Owner</td><td>RMCB</td></tr>
+          <tr><td>Internal audit of AI Agent governance</td><td>Head of Internal Audit</td><td>Audit Committee</td><td>—</td><td>Executive AI Governance Council</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="psec" id="s23">
+      <h2>23. Enterprise Implementation Roadmap</h2>
+      <span class="new-tag">New in this version</span>
+      <p>This roadmap gives the CAIO Office a sequencing plan for bringing the Bank into compliance with this Policy. Timeframes are indicative and should be calibrated to the Bank's actual resourcing; the intent is the ordering (governance and inventory before scaling, security and validation before autonomy increases), not the exact week count.</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Workstream</th><th>0–90 Days</th><th>90–180 Days</th><th>180–365 Days</th><th>Year 2+</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#fff">Governance</strong></td><td>Board approves this Policy; Executive AI Governance Council and CAIO Office established; risk appetite set</td><td>Formal RACI operational; committee reporting cadence live; exception process defined</td><td>Mature three-lines-of-defence governance embedded in BAU</td><td>Continuous alignment as RBI/CERT-In guidance evolves</td></tr>
+          <tr><td><strong style="color:#fff">Inventory &amp; Registry</strong></td><td>Discover and register all existing AI/agent/vendor deployments (Section 10.5)</td><td>Risk-tier and autonomy-level every registered system</td><td>Close any shadow-AI gaps found during discovery</td><td>Continuous inventory monitoring as BAU</td></tr>
+          <tr><td><strong style="color:#fff">Architecture</strong></td><td>AI gateway, IAM/PAM integration, and tool-registry blueprint drafted</td><td>Policy engine, DLP, and SIEM integration deployed</td><td>Scale the agent runtime and control plane to full production</td><td>Federated, enterprise-wide AI platform</td></tr>
+          <tr><td><strong style="color:#fff">Risk &amp; Validation</strong></td><td>Risk tier / autonomy assessment template and independent validation standard finalised</td><td>First independent validations completed for Tier 2+ agents</td><td>Automated evaluation and monitoring at scale</td><td>Continuous model/agent assurance</td></tr>
+          <tr><td><strong style="color:#fff">Security</strong></td><td>AI-specific threat model and Non-Negotiable Restrictions (Section 9) formally adopted</td><td>Red-team testing (Annexure F) and agent-specific controls implemented</td><td>AI-aware SOC monitoring operational</td><td>Advanced AI threat intelligence capability</td></tr>
+          <tr><td><strong style="color:#fff">Data</strong></td><td>AI data classification and DPIA process defined</td><td>RAG/data lineage controls and localisation checks (Section 13.3) implemented</td><td>Privacy automation and deletion-propagation in place</td><td>Privacy-enhancing technologies evaluated</td></tr>
+          <tr><td><strong style="color:#fff">People</strong></td><td>Board/executive briefing; acceptable-use rules issued to staff</td><td>Role-based training and certification rolled out</td><td>Dedicated AI/agent engineering capability built internally</td><td>Continuous capability building</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="psec" id="s24">
+      <h2>24. Policy Review, Exceptions and Enforcement</h2>
+      <h3>24.1 Review Cycle</h3>
+      <p>Reviewed at least annually by the CAIO Office and recommended for RMCB/Board approval, and additionally whenever: the RBI or CERT-In issues a binding regulation materially affecting AI governance; a significant AI Agent Incident indicates a control gap; or the Bank materially changes its AI risk appetite.</p>
+      <h3>24.2 Exceptions</h3>
+      <p>Any exception must be requested in writing, stating the specific control from which an exception is sought, the compensating control, and the time-bound period, approved by the Executive AI Governance Council (Tier 0–2) or the RMCB (Tier 3–4). <strong style="color:#F87171">No exception may be granted to Section 9 (Non-Negotiable Agent Restrictions).</strong></p>
+      <h3>24.3 Enforcement</h3>
+      <p>Non-compliance is addressed through the Bank's existing disciplinary and vendor management frameworks; material or repeated non-compliance is reported to the RMCB, Internal Audit, and the Chief Compliance Officer.</p>
+      <h3>24.4 Policy Owner</h3>
+      <p>The Chief AI Officer is the named owner of this Policy, responsible for its accuracy, review, and consistent application across the Bank.</p>
+    </div>
+
+    <div class="psec" id="annA">
+      <h2>Annexure A — Glossary of Terms</h2>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#fff">API</strong></td><td>Application Programming Interface.</td></tr>
+          <tr><td><strong style="color:#fff">CAIO</strong></td><td>Chief AI Officer.</td></tr>
+          <tr><td><strong style="color:#fff">CISO</strong></td><td>Chief Information Security Officer.</td></tr>
+          <tr><td><strong style="color:#fff">CIMS</strong></td><td>Centralised Information Management System — RBI's Digital Lending App reporting portal.</td></tr>
+          <tr><td><strong style="color:#fff">DPDP Act / Rules</strong></td><td>Digital Personal Data Protection Act, 2023, and Rules, 2025.</td></tr>
+          <tr><td><strong style="color:#fff">DPIA</strong></td><td>Data Protection Impact Assessment.</td></tr>
+          <tr><td><strong style="color:#fff">EWS / RFA</strong></td><td>Early Warning Signals / Red-Flagged Account, under RBI's Fraud Risk Management Directions.</td></tr>
+          <tr><td><strong style="color:#fff">ITSC</strong></td><td>IT Strategy Committee of the Board.</td></tr>
+          <tr><td><strong style="color:#fff">LSP</strong></td><td>Lending Service Provider.</td></tr>
+          <tr><td><strong style="color:#fff">MRM</strong></td><td>Model Risk Management.</td></tr>
+          <tr><td><strong style="color:#fff">RMCB</strong></td><td>Risk Management Committee of the Board.</td></tr>
+          <tr><td><strong style="color:#fff">RE</strong></td><td>Regulated Entity, as defined by the RBI.</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-top:8px">The core AI/agent terms (AI Agent, Agentic AI System, Risk Tier, Autonomy Level, Kill-Switch, HITL/HOTL/HIC, and others) are defined in full in <a href="#s4">Section 4</a> and apply identically here.</p>
+    </div>
+
+    <div class="psec" id="annB">
+      <h2>Annexure B — Regulatory Reference Table</h2>
+      <div class="info-box">This table must be verified against rbi.org.in and cert-in.org.in at every policy review (Section 24.1); it reflects the Bank's understanding at the time this version was drafted.</div>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Instrument</th><th>Issuing Authority</th><th>Date</th><th>Referenced In</th></tr></thead>
+        <tbody>
+          <tr><td>FREE-AI Framework</td><td>RBI (Committee Report)</td><td>13 August 2025</td><td>Sections 1, 3.1, 5</td></tr>
+          <tr><td>IT Governance, Risk, Controls and Assurance Practices Directions</td><td>RBI</td><td>7 Nov 2023; effective 1 Apr 2024</td><td>Sections 3.2, 6, 16</td></tr>
+          <tr><td>Outsourcing of Information Technology Services Directions</td><td>RBI</td><td>10 Apr 2023; effective 1 Oct 2023</td><td>Sections 3.3, 14</td></tr>
+          <tr><td>Master Directions on Fraud Risk Management</td><td>RBI</td><td>15 July 2024</td><td>Section 3.4</td></tr>
+          <tr><td>KYC Directions, 2016, as amended</td><td>RBI</td><td>2016, as amended</td><td>Section 3.5</td></tr>
+          <tr><td>Digital Lending Directions</td><td>RBI</td><td>8 May 2025</td><td>Sections 3.6, 13.2</td></tr>
+          <tr><td>Digital Payment Security Controls / applicable payment directions</td><td>RBI</td><td>As amended from time to time</td><td>Section 3.7</td></tr>
+          <tr><td>Cyber Security Framework for Banks</td><td>RBI</td><td>2 June 2016</td><td>Sections 3.8, 19</td></tr>
+          <tr><td>Cyber Security Directions, 2022</td><td>CERT-In</td><td>2022</td><td>Sections 3.9, 17</td></tr>
+          <tr><td>Directions on Storage of Payment System Data</td><td>RBI</td><td>6 April 2018, as clarified</td><td>Sections 3.10, 13.3</td></tr>
+          <tr><td>Digital Personal Data Protection Act, 2023</td><td>Government of India</td><td>2023</td><td>Section 3.11</td></tr>
+          <tr><td>Digital Personal Data Protection Rules, 2025</td><td>MeitY</td><td>Notified 13–14 Nov 2025; phased over 18 months</td><td>Section 3.11</td></tr>
+          <tr><td>Banking Regulation Act (S.35A) / RBI Act (S.45L)</td><td>Government of India / RBI</td><td>1949 / 1934</td><td>Section 3.12</td></tr>
+          <tr><td>Reserve Bank – Integrated Ombudsman Scheme</td><td>RBI</td><td>2021, as amended</td><td>Section 18.3</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="psec" id="annC">
+      <h2>Annexure C — Risk Tier &amp; Autonomy Level Assessment Template</h2>
+      <p>Completed by the Business Owner for every proposed AI Agent, prior to development, and re-completed on any reclassification trigger (Section 7.2).</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Field</th><th>Response</th></tr></thead>
+        <tbody>
+          <tr><td>Proposed AI Agent name / use case</td><td class="muted">—</td></tr>
+          <tr><td>Business Owner / Technical Owner</td><td class="muted">—</td></tr>
+          <tr><td>Business problem being solved</td><td class="muted">—</td></tr>
+          <tr><td>Systems and data the agent will access</td><td class="muted">—</td></tr>
+          <tr><td>Can the agent execute an action without prior human approval? (Y/N)</td><td class="muted">—</td></tr>
+          <tr><td>Can the agent invoke external tools/APIs? (Y/N — list them)</td><td class="muted">—</td></tr>
+          <tr><td>Can the agent delegate tasks to another agent? (Y/N — if Y, complete Section 11)</td><td class="muted">—</td></tr>
+          <tr><td>Maximum financial/transactional exposure per action</td><td class="muted">—</td></tr>
+          <tr><td>Customer-facing? (Y/N)</td><td class="muted">—</td></tr>
+          <tr><td>Involves credit, pricing, fraud, or KYC/AML? (Y/N)</td><td class="muted">—</td></tr>
+          <tr><td>Proposed Risk Tier (0 / 1 / 2 / 3 / 4)</td><td class="muted">—</td></tr>
+          <tr><td>Proposed Autonomy Level (A0–A5)</td><td class="muted">—</td></tr>
+          <tr><td>Executive AI Governance Council decision and date</td><td class="muted">—</td></tr>
+          <tr><td>RMCB / Board approval (if Tier 3–4) and date</td><td class="muted">—</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="psec" id="annD">
+      <h2>Annexure D — Agentic AI Use-Case Approval Form</h2>
+      <p>To be completed in full before any Tier 2+ AI Agent proceeds from design to independent validation (Section 15).</p>
+      <ul class="checklist">
+        <li>1. Use-case name / AI Agent Register ID</li>
+        <li>2. Business Owner / Executive Sponsor</li>
+        <li>3. Problem statement and expected measurable value</li>
+        <li>4. Customer / employee / third-party impact</li>
+        <li>5. AI technique used (ML / GenAI / LLM / RAG / single agent / multi-agent)</li>
+        <li>6. Risk Tier and Autonomy Level with rationale (Sections 7–8)</li>
+        <li>7. Data sources, classification, legal basis, retention, and cross-border flows (Section 13)</li>
+        <li>8. Model/provider/version and hosting architecture — including data localisation confirmation (Section 13.3)</li>
+        <li>9. RAG sources / vector database / memory architecture, if applicable (Section 16.2.1)</li>
+        <li>10. Agent tools/APIs and permissions (Section 16.2.2)</li>
+        <li>11. Human oversight points and approval gates (Section 12)</li>
+        <li>12. Threat model and AI security assessment (Section 16.1)</li>
+        <li>13. Bias/fairness assessment</li>
+        <li>14. Explainability and customer disclosure design (Section 18)</li>
+        <li>15. Independent validation outcome (Section 15.1)</li>
+        <li>16. Monitoring metrics, thresholds, and alert owners (Section 10.3)</li>
+        <li>17. Business continuity fallback and kill-switch plan (Sections 11.3, 16.4)</li>
+        <li>18. Vendor/outsourcing assessment and exit plan, if applicable (Section 14)</li>
+        <li>19. CERT-In / RBI incident reporting applicability assessment (Sections 17, 19)</li>
+        <li>20. Final approvals and evidence repository location</li>
+      </ul>
+    </div>
+
+    <div class="psec" id="annE">
+      <h2>Annexure E — Agent Permission Matrix</h2>
+      <span class="new-tag">New in this version</span>
+      <p>Cross-references Section 8's autonomy levels against common capability categories. This matrix is a starting default for the Executive AI Governance Council; it does not override the Non-Negotiable Restrictions in Section 9, which apply regardless of level.</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Capability</th><th>A0</th><th>A1</th><th>A2</th><th>A3</th><th>A4</th><th>A5</th></tr></thead>
+        <tbody>
+          <tr><td>Read approved knowledge source</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>No routine use</td></tr>
+          <tr><td>Draft communication</td><td>No</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>No routine use</td></tr>
+          <tr><td>Create ticket / task</td><td>No</td><td>Recommend only</td><td>Yes</td><td>Yes</td><td>Yes</td><td>No routine use</td></tr>
+          <tr><td>Modify a non-critical record</td><td>No</td><td>Recommend only</td><td>Controlled / logged</td><td>Controlled / logged</td><td>HITL approval required</td><td>Prohibited</td></tr>
+          <tr><td>Customer financial action</td><td>No</td><td>Recommend only</td><td>No</td><td>HITL required</td><td>HITL + dual control</td><td>Prohibited</td></tr>
+          <tr><td>Payment authorisation (see Section 9)</td><td>No</td><td>No</td><td>No</td><td>No</td><td>Human authorisation outside the agent</td><td>Prohibited</td></tr>
+          <tr><td>Production administrative access</td><td>No</td><td>No</td><td>No</td><td>No</td><td>Exceptional, controlled only</td><td>Prohibited</td></tr>
+          <tr><td>Create new credentials / tools / sub-agents</td><td>No</td><td>No</td><td>No</td><td>No</td><td>No</td><td>Prohibited</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="psec" id="annF">
+      <h2>Annexure F — AI Red-Team Test Catalogue</h2>
+      <span class="new-tag">New in this version</span>
+      <p>Minimum test categories for independent validation (Section 15.1) of any Tier 2+ AI Agent or Agentic AI System.</p>
+      <ul class="plist">
+        <li>Prompt injection and indirect prompt injection through RAG-retrieved documents</li>
+        <li>Jailbreak and system-prompt / policy evasion attempts</li>
+        <li>Sensitive data extraction from model context, memory, or logs</li>
+        <li>Cross-tenant / cross-customer data leakage</li>
+        <li>Unauthorized tool discovery or invocation outside the allowlist</li>
+        <li>Tool-argument manipulation and parameter tampering</li>
+        <li>Agent loop, recursive delegation, and resource-exhaustion scenarios</li>
+        <li>Hallucination and unsupported financial/credit recommendations</li>
+        <li>False or manipulated citations and retrieval-source poisoning</li>
+        <li>Model drift and out-of-distribution behaviour</li>
+        <li>Fairness and discriminatory-outcome testing across protected characteristics</li>
+        <li>Adversarial multimodal inputs (image, audio, document)</li>
+        <li>Compromised model/provider endpoint and dependency-outage handling</li>
+        <li>Credential theft, replay, and privilege-escalation attempts</li>
+        <li>Kill-switch, rollback, and manual-fallback effectiveness testing</li>
+      </ul>
+    </div>
+
+    <div class="psec" id="annG">
+      <h2>Annexure G — AI Incident Reporting Template</h2>
+      <span class="new-tag">New in this version</span>
+      <ul class="checklist">
+        <li>Incident ID / date / time / detection source</li>
+        <li>Affected AI Agent, model, and version; risk tier and autonomy level</li>
+        <li>Business process, customers, and geographies affected</li>
+        <li>Description of event and triggering cause</li>
+        <li>Prompt / context / retrieval / tool-call evidence preserved (Section 19.4)</li>
+        <li>Customer, financial, regulatory, privacy, and cyber impact</li>
+        <li>Containment and kill-switch action taken</li>
+        <li>RBI reporting assessment and timeline (Section 19.3)</li>
+        <li>CERT-In reporting assessment and 6-hour clock status (Section 17)</li>
+        <li>Root cause and contributing factors</li>
+        <li>Corrective and preventive actions</li>
+        <li>Owner, target closure date, and closure evidence</li>
+      </ul>
+    </div>
+
+    <div class="psec" id="annH">
+      <h2>Annexure H — AI Control KPI / KRI Dashboard</h2>
+      <span class="new-tag">New in this version</span>
+      <p>Reported to the Executive AI Governance Council monthly and to the RMCB at least half-yearly (Section 20.4).</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Metric</th><th>Target / Threshold</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr><td>% production AI Agents registered in the AI Agent Register</td><td>100%</td><td>AI Governance Council</td></tr>
+          <tr><td>% Tier 3–4 agents independently validated on schedule</td><td>100%</td><td>Model Risk Management</td></tr>
+          <tr><td>% agents with least-privilege, non-shared identity</td><td>100%</td><td>IAM / CISO</td></tr>
+          <tr><td>% agent tool calls covered by the policy engine</td><td>100% for production agents</td><td>Security</td></tr>
+          <tr><td>High-impact AI incidents (Section 19)</td><td>Zero material uncontrolled incidents</td><td>Executive AI Governance Council</td></tr>
+          <tr><td>Kill-switch test success rate (Sections 11.3, 16.4)</td><td>100% of scheduled tests</td><td>Technical Owners</td></tr>
+          <tr><td>AI-related customer complaints (Section 18.3)</td><td>Trend monitored; material spikes escalated</td><td>Customer Service</td></tr>
+          <tr><td>Fairness threshold breaches</td><td>Zero unresolved material breaches</td><td>Risk</td></tr>
+          <tr><td>Unapproved / shadow AI findings</td><td>Declining trend; material findings actioned immediately</td><td>AI Governance Council</td></tr>
+          <tr><td>CERT-In 6-hour reporting SLA met (Section 17.2)</td><td>100%</td><td>CISO</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="psec" id="annI">
+      <h2>Annexure I — Board Adoption Resolution (Draft)</h2>
+      <span class="new-tag">New in this version</span>
+      <div class="resolution-box">
+        <p>"RESOLVED THAT the Board hereby approves the Enterprise Agentic AI &amp; AI Agent Governance Policy of the Bank, including its risk-tier and autonomy-level classification framework, non-negotiable agent restrictions, human oversight requirements, data and privacy controls, cybersecurity standards, CERT-In compliance requirements, model validation, third-party governance, incident management, and audit and monitoring requirements."</p>
+        <p>"RESOLVED FURTHER THAT the Chief Executive Officer, Chief AI Officer, Chief Technology Officer, Chief Information Security Officer, Chief Risk Officer, Chief Compliance Officer, Chief Data Officer, Legal function, and relevant business heads are authorised to implement the Policy and issue supporting standards and procedures, provided such standards remain consistent with applicable law, RBI and CERT-In Directions, and Board-approved risk appetite."</p>
+        <p>"RESOLVED FURTHER THAT the Policy shall be reviewed at least annually and sooner where required by material regulatory, technological, business, or supervisory developments (Section 24.1)."</p>
+      </div>
+      <div class="warn-box">This is a drafting aid only. Company Secretary and Legal must finalise the resolution's form and ensure it matches the Bank's actual board-minute conventions before use.</div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 <span style="color:#39FF14;text-shadow:0 0 6px rgba(57,255,20,.7)">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+</body>
+</html>
