@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 10px; display: flex; align-items: center; height: 64px; }
+  .nav-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.6), 0 0 26px rgba(57,255,20,0.35); flex-shrink: 0; text-decoration: none; }
+  .nav-links { display: flex; gap: 4px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 9.5px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); font-weight: 700; }
+  .nav-cta { background: linear-gradient(135deg,#D97706,#F59E0B); color:#000 !important; font-weight:700 !important; padding: 5px 14px; border-radius: 6px; }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
+
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 680px; line-height: 1.7; }
+
+  main { padding: 40px 48px 60px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+  .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 16px; margin-bottom: 44px; }
+  .contact-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 22px; text-decoration: none; display: flex; flex-direction: column; gap: 6px; transition: transform .2s, border-color .2s; }
+  .contact-card:hover { transform: translateY(-3px); border-color: rgba(245,158,11,0.35); }
+  .contact-icon { font-size: 22px; margin-bottom: 4px; }
+  .contact-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); }
+  .contact-value { font-size: 14px; font-weight: 600; color: var(--text); word-break: break-word; }
+  .contact-sub { font-size: 11.5px; color: var(--mid); }
+
+  .note-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 6px; padding: 14px 18px; font-size: 12.5px; color: var(--mid); margin-bottom: 40px; line-height: 1.75; }
+  .note-box strong { color: var(--text); }
+
+  .explore-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 12px; }
+  .explore-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; text-decoration: none; display: block; transition: border-color .2s; }
+  .explore-card:hover { border-color: rgba(245,158,11,0.35); }
+  .explore-card h3 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .explore-card p { font-size: 11.5px; color: var(--mid); line-height: 1.5; }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; transition: color .2s; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .page-header { padding: 24px 20px; }
+    main { padding: 24px 20px; }
+    footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="ai-mindmap.html">AI-Readiness</a>
+      <a href="index.html">Use Cases</a>
+      <a href="roi.html">ROI</a>
+      <a href="blueprints.html">Blueprints</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="helicopter.html">Helicopter View</a>
+      <a href="cost.html">Cost</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="ai-gpolicy.html">AI-GPolicy</a>
+      <a href="roadmap.html">AI Roadmap</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source</a>
+      <a href="deploy-guide/index.html">Deploy</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="contact.html" class="active nav-cta">Contact Me</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">Get In Touch</div>
+  <h1>Let's Talk About Building This — For Real</h1>
+  <p>Whether you're evaluating AI leadership talent, exploring what an enterprise agentic AI program looks like inside a regulated bank, or want to compare notes on RBI FREE-AI alignment — I'd like to hear from you.</p>
+</div>
+
+<main>
+  <div class="section-label">Reach Me Directly</div>
+  <div class="contact-grid">
+    <a href="mailto:milind.job21@gmail.com" class="contact-card">
+      <div class="contact-icon">📧</div>
+      <div class="contact-label">Email</div>
+      <div class="contact-value">milind.job21@gmail.com</div>
+      <div class="contact-sub">Fastest way to reach me</div>
+    </a>
+    <a href="https://linkedin.com/in/milindw1612" target="_blank" class="contact-card">
+      <div class="contact-icon">💼</div>
+      <div class="contact-label">LinkedIn</div>
+      <div class="contact-value">linkedin.com/in/milindw1612</div>
+      <div class="contact-sub">Connect or send a message</div>
+    </a>
+    <a href="https://github.com/Milindw1612" target="_blank" class="contact-card">
+      <div class="contact-icon">🐙</div>
+      <div class="contact-label">GitHub</div>
+      <div class="contact-value">github.com/Milindw1612</div>
+      <div class="contact-sub">All the code behind this site</div>
+    </a>
+    <a href="https://milindw1612.github.io/" target="_blank" class="contact-card">
+      <div class="contact-icon">🌐</div>
+      <div class="contact-label">Portfolio</div>
+      <div class="contact-value">milindw1612.github.io</div>
+      <div class="contact-sub">Full career background &amp; other work</div>
+    </a>
+  </div>
+
+  <div class="note-box"><strong>Still learning. Building fast. Sharing everything.</strong> This entire site — architecture, cost, ROI, governance, roadmap and all — was built to show how I think about enterprise AI, not just talk about it.</div>
+
+  <div class="section-label">Explore More of Ai-ME BANK First</div>
+  <div class="explore-grid">
+    <a href="governance.html" class="explore-card"><h3>Governance</h3><p>Human-in-the-loop, PII protection, RBI regulatory alignment.</p></a>
+    <a href="roadmap.html" class="explore-card"><h3>AI Roadmap</h3><p>The enterprise-scale 3-month to 3-year operating plan.</p></a>
+    <a href="compliance.html" class="explore-card"><h3>Compliance</h3><p>RBI FREE-AI, CERT-In, DPDP &amp; IRDAI mapped to the plan.</p></a>
+    <a href="ai-gpolicy.html" class="explore-card"><h3>AI-GPolicy</h3><p>The full board-level Agentic AI Governance Policy.</p></a>
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+</body>
+</html>
