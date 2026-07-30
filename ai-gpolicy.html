@@ -15,18 +15,19 @@ p{color:#94A3B8;font-size:13.5px;margin-bottom:10px;line-height:1.75}
 ul.plist{margin:4px 0 14px 20px;color:#94A3B8;font-size:13.5px;line-height:1.85}
 ul.plist li{margin-bottom:6px}
 
-/* ── Sub-nav (matches deploy-guide compact pattern) ── */
-.site-nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(59,15,26,0.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07);height:50px;display:flex;align-items:center;padding:0 18px;gap:0}
-.site-nav .nav-logo{font-size:15px;font-weight:800;color:#39FF14;margin-right:12px;white-space:nowrap;text-shadow:0 0 6px rgba(57,255,20,.7)}
-.site-nav .nav-sep{width:1px;height:20px;background:rgba(255,255,255,0.1);margin:0 8px;flex-shrink:0}
-.site-nav .nav-links{display:flex;gap:8px;align-items:center;overflow-x:auto;scrollbar-width:none}
-.site-nav .nav-links::-webkit-scrollbar{display:none}
-.site-nav .nav-links a{font-size:10.5px;font-weight:500;color:#64748B;text-decoration:none;padding:5px 9px;border-radius:5px;white-space:nowrap;transition:color .15s,background .15s}
-.site-nav .nav-links a:hover{color:#F59E0B;background:rgba(245,158,11,0.08)}
-.site-nav .nav-links a.active{color:#F59E0B;font-weight:700;background:rgba(245,158,11,0.12)}
-.site-nav .nav-cta{margin-left:auto;flex-shrink:0;background:linear-gradient(135deg,#D97706,#F59E0B);color:#000!important;font-weight:700;font-size:11px;padding:5px 13px;border-radius:6px;text-decoration:none;white-space:nowrap}
+/* ── Nav (matches the standard root-page nav across the site) ── */
+nav{position:sticky;top:0;z-index:1000;background:rgba(59,15,26,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.06);padding:0 10px;display:flex;align-items:center;height:64px}
+.nav-inner{width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.nav-logo{font-size:19px;font-weight:800;letter-spacing:-0.3px;color:#39FF14;text-shadow:0 0 6px rgba(57,255,20,0.85),0 0 14px rgba(57,255,20,0.6),0 0 26px rgba(57,255,20,0.35);flex-shrink:0;text-decoration:none}
+.nav-links{display:flex;gap:4px;align-items:center;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{font-size:9.5px;font-weight:500;color:#64748B;text-decoration:none;transition:color .2s;white-space:nowrap}
+.nav-links a:hover{color:#F59E0B}
+.nav-links a.active{color:#F59E0B;font-weight:700}
+.nav-cta{background:linear-gradient(135deg,#D97706,#F59E0B);color:#000!important;font-weight:700!important;padding:5px 14px;border-radius:6px}
+@media(max-width:900px){.nav-links{display:none}}
 
-.hero{padding:66px 32px 24px;background:linear-gradient(135deg,#4A1420,#3B0F1A);border-bottom:1px solid rgba(245,158,11,0.2)}
+.hero{padding:40px 32px 24px;background:linear-gradient(135deg,#4A1420,#3B0F1A);border-bottom:1px solid rgba(245,158,11,0.2)}
 .hero-badge{display:inline-block;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);color:#F59E0B;font-size:10.5px;font-weight:700;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;margin-bottom:10px;text-transform:uppercase}
 .hero h1{font-size:24px;font-weight:800;color:#fff;margin-bottom:6px}
 .hero .sub{color:#94A3B8;font-size:13px;max-width:820px;margin-bottom:14px}
@@ -35,8 +36,8 @@ ul.plist li{margin-bottom:6px}
 .cover-item .k{font-size:9.5px;font-weight:700;color:#94765B;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
 .cover-item .v{font-size:12px;color:#E2E8F0}
 
-.body{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 50px)}
-.toc{background:#26131A;border-right:1px solid rgba(255,255,255,0.06);padding:16px 0;position:sticky;top:50px;height:calc(100vh - 50px);overflow-y:auto}
+.body{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 64px)}
+.toc{background:#26131A;border-right:1px solid rgba(255,255,255,0.06);padding:16px 0;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto}
 .toc-title{font-size:9.5px;font-weight:700;color:#94765B;letter-spacing:1.5px;text-transform:uppercase;padding:0 16px 8px}
 .toc a{display:block;padding:4px 16px;font-size:11px;color:#64748B;border-left:2px solid transparent;transition:all .15s}
 .toc a:hover{color:#F59E0B;border-left-color:#F59E0B;background:rgba(245,158,11,0.06)}
@@ -86,26 +87,28 @@ footer a:hover{color:#F59E0B}
 </head>
 <body>
 
-<nav class="site-nav">
-  <a href="index.html" class="nav-logo">Ai-ME BANK</a>
-  <div class="nav-sep"></div>
-  <div class="nav-links">
-    <a href="index.html#usecases">Use Cases</a>
-    <a href="blueprints.html">Blueprints</a>
-    <a href="architecture.html">Architecture</a>
-    <a href="roi.html">ROI</a>
-    <a href="cost.html">Cost</a>
-    <a href="helicopter.html">Helicopter</a>
-    <a href="timeline.html">Timeline</a>
-    <a href="governance.html">Governance</a>
-    <a href="ai-gpolicy.html" class="active">AI-GPolicy</a>
-    <a href="roadmap.html">AI Roadmap</a>
-    <a href="compliance.html">Compliance</a>
-    <a href="ai-mindmap.html">AI-Readiness</a>
-    <a href="glossary.html">Glossary</a>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="ai-mindmap.html">AI-Readiness</a>
+      <a href="index.html">Use Cases</a>
+      <a href="roi.html">ROI</a>
+      <a href="blueprints.html">Blueprints</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="helicopter.html">Helicopter View</a>
+      <a href="cost.html">Cost</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="ai-gpolicy.html" class="active">AI-GPolicy</a>
+      <a href="roadmap.html">AI Roadmap</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source</a>
+      <a href="deploy-guide/index.html">Deploy</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="https://milindw1612.github.io/#contact" target="_blank" class="nav-cta">Contact Me</a>
+    </div>
   </div>
-  <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank" class="nav-cta">Source</a>
-  <a href="https://milindw1612.github.io/#contact" target="_blank" class="nav-cta" style="margin-left:6px">Contact Me</a>
 </nav>
 
 <div class="hero">

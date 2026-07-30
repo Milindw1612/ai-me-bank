@@ -8,7 +8,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{ --gold:#F59E0B; --neon:#39FF14; }
+  :root{
+    --navy:#4A1420; --bg:#3B0F1A; --surface:#4A1420; --surface2:#551729;
+    --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
+    --text:#E2E8F0; --muted:#8F8676; --mid:#94A3B8;
+    --gold:#F59E0B; --gold-dim:#D97706; --teal:#0D9488; --purple:#A78BFA;
+    --green:#34D399; --red:#F87171; --amber:#FBBF24; --neon:#39FF14;
+  }
   nav{position:sticky;top:0;z-index:1000;background:rgba(59,15,26,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.06);padding:0 10px;display:flex;align-items:center;height:64px;}
   .nav-inner{width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px;}
   .nav-logo{font-size:19px;font-weight:800;letter-spacing:-0.3px;color:var(--neon);text-shadow:0 0 6px rgba(57,255,20,0.85),0 0 14px rgba(57,255,20,0.6),0 0 26px rgba(57,255,20,0.35);flex-shrink:0;text-decoration:none;}
@@ -23,95 +29,86 @@
   .site-footer p{font-size:12px;color:#94765B;margin:0;}
   .site-footer a{color:#94765B;text-decoration:none;transition:color .2s;}
   .site-footer a:hover{color:var(--gold);}
-  :root{
-    --navy:#1B2A4A; --navy-ink:#0F1A30; --paper:#F6F4EE; --card:#FFFFFF;
-    --teal:#0F6E56; --teal-fill:#E1F5EE;
-    --amber:#8A5A0B; --amber-fill:#FBEEDA;
-    --coral:#993C1D; --coral-fill:#FAECE7;
-    --blue:#185FA5; --blue-fill:#E6F1FB;
-    --purple:#3C3489; --purple-fill:#EEEDFE;
-    --line:#D7D2C4; --muted:#5B5A52;
-  }
   *{box-sizing:border-box;}
-  body{margin:0;background:var(--paper);color:var(--navy-ink);font-family:'Inter',sans-serif;line-height:1.6;padding:56px 24px 100px;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;padding:56px 24px 100px;}
   .wrap{max-width:980px;margin:0 auto;}
   .kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px;}
-  h1{font-family:'Fraunces',serif;font-weight:500;font-size:36px;margin:0 0 8px;color:var(--navy);letter-spacing:-.01em;}
+  h1{font-family:'Fraunces',serif;font-weight:500;font-size:36px;margin:0 0 8px;color:var(--text);letter-spacing:-.01em;}
   .sub{color:var(--muted);font-size:15px;max-width:720px;margin-bottom:18px;}
-  .note{background:var(--purple-fill);color:var(--purple);border-radius:10px;padding:12px 16px;font-size:13px;max-width:720px;margin-bottom:40px;}
+  .note{background:rgba(167,139,250,0.16);color:var(--purple);border-radius:10px;padding:12px 16px;font-size:13px;max-width:720px;margin-bottom:40px;}
 
   .scorecard{background:var(--navy);border-radius:16px;padding:30px 32px;margin-bottom:56px;color:#fff;}
   .scorecard h2{font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:0 0 6px;}
-  .scorecard .desc{font-size:13.5px;color:#B9C2D6;margin-bottom:24px;max-width:640px;}
+  .scorecard .desc{font-size:13.5px;color:#C9BCA8;margin-bottom:24px;max-width:640px;}
   .score-row{display:grid;grid-template-columns:200px 1fr;gap:16px;align-items:center;margin-bottom:14px;}
   .score-label{font-size:13.5px;font-weight:500;}
   .score-scale{display:flex;gap:6px;}
   .score-opt{flex:1;text-align:center;}
   .score-opt input{display:none;}
-  .score-opt label{display:block;padding:8px 4px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);font-size:11.5px;cursor:pointer;color:#D9DEEA;transition:all .15s;}
+  .score-opt label{display:block;padding:8px 4px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);font-size:11.5px;cursor:pointer;color:#E7E0D3;transition:all .15s;}
   .score-opt input:checked + label{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:600;}
   .score-total{margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.15);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
   .score-total .num{font-family:'Fraunces',serif;font-size:32px;font-weight:500;}
   .score-total .band{font-size:14px;color:#BFEBDC;font-weight:500;}
-  .legend-scale{display:flex;gap:14px;font-size:11.5px;color:#B9C2D6;flex-wrap:wrap;margin-top:14px;}
+  .legend-scale{display:flex;gap:14px;font-size:11.5px;color:#C9BCA8;flex-wrap:wrap;margin-top:14px;}
 
   .legend{display:flex;gap:22px;margin-bottom:44px;font-size:12.5px;color:var(--muted);flex-wrap:wrap;}
   .legend span{display:inline-flex;align-items:center;gap:6px;}
   .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
 
   .pillar-block{margin-bottom:14px;}
-  .pillar-header{display:flex;align-items:baseline;gap:10px;margin-bottom:16px;padding-top:6px;border-top:2px solid var(--navy);}
+  .pillar-header{display:flex;align-items:baseline;gap:10px;margin-bottom:16px;padding-top:6px;border-top:2px solid var(--gold);}
   .pillar-num{font-family:'Fraunces',serif;font-size:13px;font-weight:600;color:#fff;background:var(--navy);border-radius:6px;padding:3px 9px;letter-spacing:.03em;white-space:nowrap;}
-  .pillar-title{font-family:'Fraunces',serif;font-size:20px;font-weight:500;color:var(--navy);}
+  .pillar-title{font-family:'Fraunces',serif;font-size:20px;font-weight:500;color:var(--gold);}
 
   .gate{position:relative;margin-bottom:6px;}
   .gate-num{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.03em;text-transform:uppercase;margin:0 0 6px;}
   .question{background:var(--navy);color:#fff;border-radius:14px;padding:18px 24px;font-family:'Fraunces',serif;font-size:18px;font-weight:500;line-height:1.4;}
-  .question span{display:block;font-family:'Inter',sans-serif;font-weight:400;font-size:12.5px;color:#B9C2D6;margin-top:6px;letter-spacing:.02em;}
+  .question span{display:block;font-family:'Inter',sans-serif;font-weight:400;font-size:12.5px;color:#C9BCA8;margin-top:6px;letter-spacing:.02em;}
 
-  .branches{display:flex;gap:18px;margin:16px 0 0;padding-left:28px;border-left:2px solid var(--line);}
+  .branches{display:flex;gap:18px;margin:16px 0 0;padding-left:28px;border-left:2px solid rgba(255,255,255,0.14);}
   .branch{min-width:0;}
   .branches > .branch:first-child{flex:0 0 25%;}
   .branches > .branch:last-child{flex:1 1 75%;}
   .tag{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:10px;}
-  .tag.yes{background:var(--teal-fill);color:var(--teal);}
-  .tag.no{background:var(--coral-fill);color:var(--coral);}
+  .tag.yes{background:rgba(13,148,136,0.16);color:var(--teal);}
+  .tag.no{background:rgba(248,113,113,0.16);color:var(--red);}
 
-  .yes-card{background:var(--card);border:1px solid var(--teal-fill);border-left:3px solid var(--teal);border-radius:10px;padding:14px 18px;font-size:14px;color:var(--navy-ink);}
-  .no-card{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--coral);border-radius:10px;padding:16px 18px;}
-  .no-card > .summary-line{font-size:13.5px;color:var(--navy-ink);margin-bottom:12px;}
-  .no-card > .summary-line b{color:var(--coral);}
+  .yes-card{background:rgba(255,255,255,0.04);border:1px solid rgba(13,148,136,0.16);border-left:3px solid var(--teal);border-radius:10px;padding:14px 18px;font-size:14px;color:var(--text);}
+  .no-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.14);border-left:3px solid var(--red);border-radius:10px;padding:16px 18px;}
+  .no-card > .summary-line{font-size:13.5px;color:var(--text);margin-bottom:12px;}
+  .no-card > .summary-line b{color:var(--red);}
 
   details{margin-top:2px;}
-  details summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--navy);list-style:none;padding:8px 0;border-top:1px dashed var(--line);display:flex;align-items:center;gap:6px;}
+  details summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--gold);list-style:none;padding:8px 0;border-top:1px dashed rgba(255,255,255,0.14);display:flex;align-items:center;gap:6px;}
   details summary::-webkit-details-marker{display:none;}
-  details summary::before{content:"▸";color:var(--navy);font-size:11px;transition:transform .15s;}
+  details summary::before{content:"▸";color:var(--gold);font-size:11px;transition:transform .15s;}
   details[open] summary::before{transform:rotate(90deg);}
   details summary:hover{color:var(--teal);}
 
   .deep{padding:6px 4px 14px 4px;}
   .deep-section{margin-bottom:16px;}
   .deep-section .dlabel{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;display:inline-block;padding:2px 9px;border-radius:5px;margin-bottom:8px;}
-  .deep-section.why .dlabel{background:var(--coral-fill);color:var(--coral);}
-  .deep-section.how .dlabel{background:var(--amber-fill);color:var(--amber);}
-  .deep-section.back .dlabel{background:var(--blue-fill);color:var(--blue);}
-  .deep-section.sustain .dlabel{background:var(--teal-fill);color:var(--teal);}
-  .deep-section p{font-size:13.5px;margin:0 0 6px;color:var(--navy-ink);}
-  .deep-section ul{margin:4px 0 0;padding-left:19px;font-size:13.5px;color:var(--navy-ink);}
+  .deep-section.why .dlabel{background:rgba(248,113,113,0.16);color:var(--red);}
+  .deep-section.how .dlabel{background:rgba(251,191,36,0.16);color:var(--amber);}
+  .deep-section.back .dlabel{background:rgba(245,158,11,0.16);color:var(--gold);}
+  .deep-section.sustain .dlabel{background:rgba(13,148,136,0.16);color:var(--teal);}
+  .deep-section p{font-size:13.5px;margin:0 0 6px;color:var(--text);}
+  .deep-section ul{margin:4px 0 0;padding-left:19px;font-size:13.5px;color:var(--text);}
   .deep-section li{margin-bottom:5px;}
-  .why-cat{font-weight:600;color:var(--coral);}
+  .why-cat{font-weight:600;color:var(--red);}
 
   /* action plan table */
   .table-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:6px;}
   .action-table{width:100%;min-width:560px;border-collapse:collapse;table-layout:fixed;font-size:12.5px;}
-  .action-table th{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);font-weight:600;}
+  .action-table th{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:5px 8px;border-bottom:1px solid rgba(255,255,255,0.14);font-weight:600;}
   .action-table th:nth-child(1){width:42%;}
   .action-table th:nth-child(2){width:22%;}
   .action-table th:nth-child(3){width:22%;}
   .action-table th:nth-child(4){width:14%;}
-  .action-table td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--navy-ink);word-wrap:break-word;overflow-wrap:break-word;white-space:normal;}
-  .action-table tr.phase-row td{background:var(--amber-fill);font-weight:600;color:var(--amber);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;}
-  .action-table td.owner{color:var(--blue);font-weight:500;}
+  .action-table td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,0.14);vertical-align:top;color:var(--text);word-wrap:break-word;overflow-wrap:break-word;white-space:normal;}
+  .action-table tr.phase-row td{background:rgba(251,191,36,0.16);font-weight:600;color:var(--amber);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;}
+  .action-table td.owner{color:var(--gold);font-weight:500;}
   .action-table td.timeline{color:var(--muted);font-size:12px;}
   @media (max-width:640px){
     .action-table{min-width:480px;}
@@ -119,43 +116,43 @@
 
   /* checklist */
   .checklist{list-style:none;margin:4px 0 0;padding:0;}
-  .checklist li{font-size:13px;margin-bottom:7px;padding-left:24px;position:relative;color:var(--navy-ink);}
-  .checklist li::before{content:"☐";position:absolute;left:0;top:0;color:var(--blue);font-size:14px;}
+  .checklist li{font-size:13px;margin-bottom:7px;padding-left:24px;position:relative;color:var(--text);}
+  .checklist li::before{content:"☐";position:absolute;left:0;top:0;color:var(--gold);font-size:14px;}
 
   .sustain-grid{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px;}
   .sustain-grid .k{color:var(--muted);font-weight:600;white-space:nowrap;}
-  .sustain-grid .v{color:var(--navy-ink);}
+  .sustain-grid .v{color:var(--text);}
 
   .example-table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0 12px;}
-  .example-table th{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);font-weight:600;}
-  .example-table td{padding:6px 8px;border-bottom:1px solid var(--line);color:var(--navy-ink);vertical-align:top;}
-  .resource-table a{color:var(--teal);font-weight:600;text-decoration:none;border-bottom:1px solid var(--teal-fill);white-space:nowrap;}
+  .example-table th{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);text-align:left;padding:5px 8px;border-bottom:1px solid rgba(255,255,255,0.14);font-weight:600;}
+  .example-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.14);color:var(--text);vertical-align:top;}
+  .resource-table a{color:var(--teal);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(13,148,136,0.16);white-space:nowrap;}
   .resource-table a:hover{border-bottom-color:var(--teal);}
   .resource-table a::after{content:" ↗";font-size:10.5px;}
   .gov-tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:6px 16px;border-radius:6px;background:#000000;color:#39FF14;border:1px solid #39FF14;box-shadow:0 0 10px rgba(57,255,20,0.55);text-shadow:0 0 6px rgba(57,255,20,0.7);margin-bottom:10px;}
   .gov-tag.agentic{color:#FF2ECC;border-color:#FF2ECC;box-shadow:0 0 10px rgba(255,46,204,0.55);text-shadow:0 0 6px rgba(255,46,204,0.7);}
-  .agentic-addendum{margin-top:14px;background:#EEF0FB;border:1px dashed #4B4FA8;border-radius:10px;padding:14px 18px;}
-  .agentic-addendum .alabel{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#4B4FA8;margin-bottom:4px;}
+  .agentic-addendum{margin-top:14px;background:rgba(167,139,250,0.08);border:1px dashed rgba(167,139,250,0.45);border-radius:10px;padding:14px 18px;}
+  .agentic-addendum .alabel{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--purple);margin-bottom:4px;}
   .agentic-addendum .asub{font-size:11.5px;color:var(--muted);margin-bottom:10px;font-style:italic;}
-  .agentic-addendum ul{margin:4px 0 0;padding-left:19px;font-size:13px;color:var(--navy-ink);}
+  .agentic-addendum ul{margin:4px 0 0;padding-left:19px;font-size:13px;color:var(--text);}
   .agentic-addendum li{margin-bottom:6px;}
-  .agentic-addendum li b{color:#4B4FA8;}
-  .agent-addendum{margin-top:14px;background:#EAFBEF;border:1px dashed #128A3E;border-radius:10px;padding:14px 18px;}
-  .agent-addendum .alabel{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#128A3E;margin-bottom:4px;}
+  .agentic-addendum li b{color:var(--purple);}
+  .agent-addendum{margin-top:14px;background:rgba(52,211,153,0.08);border:1px dashed rgba(52,211,153,0.45);border-radius:10px;padding:14px 18px;}
+  .agent-addendum .alabel{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--green);margin-bottom:4px;}
   .agent-addendum .asub{font-size:11.5px;color:var(--muted);margin-bottom:10px;font-style:italic;}
-  .agent-addendum ul{margin:4px 0 0;padding-left:19px;font-size:13px;color:var(--navy-ink);}
+  .agent-addendum ul{margin:4px 0 0;padding-left:19px;font-size:13px;color:var(--text);}
   .agent-addendum li{margin-bottom:6px;}
-  .agent-addendum li b{color:#128A3E;}
-  .industry-lens{margin-top:14px;background:var(--purple-fill);border-radius:10px;padding:12px 16px;}
+  .agent-addendum li b{color:var(--green);}
+  .industry-lens{margin-top:14px;background:rgba(167,139,250,0.16);border-radius:10px;padding:12px 16px;}
   .industry-lens .ilabel{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--purple);margin-bottom:8px;}
-  .industry-lens .irow{display:flex;gap:8px;font-size:12.5px;margin-bottom:6px;color:var(--navy-ink);}
+  .industry-lens .irow{display:flex;gap:8px;font-size:12.5px;margin-bottom:6px;color:var(--text);}
   .industry-lens .irow:last-child{margin-bottom:0;}
   .industry-lens .itag{flex-shrink:0;font-weight:600;color:var(--purple);min-width:78px;}
 
   .connector{display:flex;align-items:center;gap:8px;padding:8px 0 8px 12px;color:var(--muted);font-size:12.5px;font-weight:500;}
-  .connector::before{content:"↓";font-size:18px;color:var(--navy);}
+  .connector::before{content:"↓";font-size:18px;color:var(--gold);}
   .pillar-connector{display:flex;align-items:center;gap:10px;margin:22px 0 30px;color:var(--muted);font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
-  .pillar-connector::before, .pillar-connector::after{content:"";flex:1;height:1px;background:var(--line);}
+  .pillar-connector::before, .pillar-connector::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.14);}
 
   .final{margin-top:16px;background:var(--teal);color:#fff;border-radius:14px;padding:28px 30px;text-align:center;}
   .final .kicker2{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#BFEBDC;font-weight:600;margin-bottom:8px;}
@@ -171,21 +168,21 @@
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">Ai-ME BANK</a>
     <div class="nav-links">
-      <a href="index.html#usecases">Use Cases</a>
+      <a href="ai-mindmap.html" class="active">AI-Readiness</a>
+      <a href="index.html">Use Cases</a>
+      <a href="roi.html">ROI</a>
       <a href="blueprints.html">Blueprints</a>
       <a href="architecture.html">Architecture</a>
-      <a href="roi.html">ROI</a>
+      <a href="helicopter.html">Helicopter View</a>
       <a href="cost.html">Cost</a>
-      <a href="helicopter.html">Helicopter</a>
       <a href="timeline.html">Timeline</a>
       <a href="governance.html">Governance</a>
+      <a href="compliance.html">Compliance</a>
       <a href="ai-gpolicy.html">AI-GPolicy</a>
       <a href="roadmap.html">AI Roadmap</a>
-      <a href="compliance.html">Compliance</a>
-      <a href="ai-mindmap.html" class="active">AI-Readiness</a>
-      <a href="glossary.html">Glossary</a>
       <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source</a>
       <a href="deploy-guide/index.html">Deploy</a>
+      <a href="glossary.html">Glossary</a>
       <a href="https://milindw1612.github.io/#contact" target="_blank" class="nav-cta">Contact Me</a>
     </div>
   </div>
@@ -267,7 +264,7 @@
   <div class="legend">
     <span><span class="dot" style="background:var(--navy)"></span>Gate / question</span>
     <span><span class="dot" style="background:var(--teal)"></span>Yes &mdash; proceed</span>
-    <span><span class="dot" style="background:var(--coral)"></span>No &mdash; expand for the full execution plan</span>
+    <span><span class="dot" style="background:var(--red)"></span>No &mdash; expand for the full execution plan</span>
   </div>
 
   <!-- ============ PILLAR 1 ============ -->
@@ -308,7 +305,7 @@
                     <tr><td>Select 1&ndash;2 use cases for pilot by value-to-effort ratio and regulatory complexity</td><td class="owner">Steering Committee</td><td>Approved pilot charter draft</td><td class="timeline">Week 6</td></tr>
                   </table></div>
                 </div>
-                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                <div class="deep-section example"><span class="dlabel" style="background:rgba(245,158,11,0.16);color:var(--gold);">Worked example, in plain terms</span>
                   <p>Say leadership's starting point was: <i>"Let's use AI somewhere in retail banking, our competitors are doing it."</i> That's not a problem statement, it's a hope. Here's how Q1 turns it into something real.</p>
                   <p><b>Step 1 &mdash; run the workshop.</b> A "value-stream mapping workshop" just means: put 5&ndash;8 people who actually do the work (not just their managers) in a room for half a day, write down every step of one process on sticky notes in order, and time each step. For loan document review, that looks like:</p>
                   <table class="example-table">
@@ -327,7 +324,7 @@
                   <p><b>Step 3 &mdash; write the one-page problem statement.</b> In plain language: <i>"Underwriters spend 3.2 days per loan on manual document review, costing ~$170,000/month in staff time across 2,000 loans. Target: cut review time to 1 day using AI-assisted document extraction and cross-checking, freeing underwriters for judgment calls only."</i></p>
                   <p><b>Step 4 &mdash; get it signed off.</b> The CFO/COO confirms this ties to a real cost line (loan processing cost) or risk line (backlog risk) &mdash; not just "it sounds useful."</p>
                 </div>
-                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                <div class="deep-section resources"><span class="dlabel" style="background:rgba(13,148,136,0.16);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
                   <div class="table-scroll"><table class="action-table resource-table">
                     <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
                     <tr><td>Running a value-stream mapping workshop</td><td><a href="https://creately.com/guides/value-stream-mapping-guide/" target="_blank" rel="noopener noreferrer">Value stream mapping guide</a></td><td>Step-by-step method for Step 1 above</td></tr>
@@ -397,7 +394,7 @@
                     <tr><td>Assign a KPI owner accountable for monthly reporting to steering committee</td><td class="owner">BU Lead</td><td>Monthly KPI report</td><td class="timeline">Recurring monthly</td></tr>
                   </table></div>
                 </div>
-                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                <div class="deep-section example"><span class="dlabel" style="background:rgba(245,158,11,0.16);color:var(--gold);">Worked example, in plain terms</span>
                   <p>Say your Q1 use case is: <i>"Loan underwriters spend too long manually reviewing income documents."</i> Here's exactly how Q2 plays out for that one use case.</p>
                   <p><b>Step 1 &mdash; measure the "before."</b> Before building anything, track the current manual process for 2&ndash;4 weeks:</p>
                   <table class="example-table">
@@ -417,7 +414,7 @@
                   <p><b>Step 3 &mdash; write it down and attach it to the charter.</b> These three rows become a one-page KPI sheet, signed by the business unit lead and finance, and stapled to the pilot's approval documents &mdash; so nobody can later say "we never agreed what success meant."</p>
                   <p><b>Step 4 &mdash; assign one owner.</b> Not IT. Here, the Head of Loan Operations owns these numbers and reports them to the steering committee monthly. If review time hasn't moved, that's a question for the pilot team; if adoption is at 10% instead of 70%, that's a change-management problem (Pillar 6) &mdash; and the dashboard flags it in month one instead of month six.</p>
                 </div>
-                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                <div class="deep-section resources"><span class="dlabel" style="background:rgba(13,148,136,0.16);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
                   <div class="table-scroll"><table class="action-table resource-table">
                     <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
                     <tr><td>Baselining a process before automating it</td><td><a href="https://creately.com/guides/value-stream-mapping-guide/" target="_blank" rel="noopener noreferrer">Value stream mapping guide</a></td><td>Method for measuring the "before" state in Step 1</td></tr>
@@ -506,7 +503,7 @@
                     <tr><td>Stand up a standing AI steering committee (sponsor, CFO, CDO/CAIO, BU heads)</td><td class="owner">Executive Sponsor</td><td>Committee charter, set meeting cadence</td><td class="timeline">2 weeks to establish, then ongoing</td></tr>
                   </table></div>
                 </div>
-                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                <div class="deep-section example"><span class="dlabel" style="background:rgba(245,158,11,0.16);color:var(--gold);">Worked example, in plain terms</span>
                   <p>Continuing the loan-review example: you now have a validated problem (Q1) and target KPIs (Q2). Q3 simply asks: <i>is someone with real budget authority actually going to pay for this, for more than one year?</i></p>
                   <p>Instead of one lump sum, the funding is broken into tranches &mdash; each one released only if the previous stage actually worked:</p>
                   <table class="example-table">
@@ -517,7 +514,7 @@
                   </table>
                   <p>In this example, the COO agrees to be the named sponsor and can approve the Year 1 budget alone. Years 2 and 3 are pre-agreed in principle but need board sign-off &mdash; and only get released if the KPI dashboard from Q2 shows the numbers actually holding, not on a fixed calendar date regardless of results.</p>
                 </div>
-                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                <div class="deep-section resources"><span class="dlabel" style="background:rgba(13,148,136,0.16);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
                   <div class="table-scroll"><table class="action-table resource-table">
                     <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
                     <tr><td>Structuring a business case for the board</td><td><a href="https://www.smartsheet.com/business-case-analysis-examples" target="_blank" rel="noopener noreferrer">Business case templates &amp; examples</a></td><td>Format for the Year 1&ndash;3 investment case document</td></tr>
@@ -588,7 +585,7 @@
                     <tr><td>Stand up an AI ethics board / extend MRM to review new use cases against tiers on an ongoing basis</td><td class="owner">CRO / Ethics Board Chair</td><td>Standing board with published review cadence</td><td class="timeline">3&ndash;4 weeks to establish, then ongoing</td></tr>
                   </table></div>
                 </div>
-                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                <div class="deep-section example"><span class="dlabel" style="background:rgba(245,158,11,0.16);color:var(--gold);">Worked example, in plain terms</span>
                   <p>Say a second use case is on the table: <i>"an AI chatbot that reads a customer's account balance and suggests a savings action."</i> Q4 simply asks: <i>how wrong is this allowed to be, and who decided that?</i></p>
                   <p>Without an answer, every use case gets treated with the same paranoia as the riskiest one, which is exactly why organizations freeze. A simple tier table fixes that:</p>
                   <table class="example-table">
@@ -599,7 +596,7 @@
                   </table>
                   <p>With this table in hand, the loan-review assistant (Tier 2) can move forward quickly, while the autonomous savings chatbot (Tier 3) gets extra scrutiny &mdash; and nobody has to re-argue risk tolerance from scratch for every new idea.</p>
                 </div>
-                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                <div class="deep-section resources"><span class="dlabel" style="background:rgba(13,148,136,0.16);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
                   <div class="table-scroll"><table class="action-table resource-table">
                     <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
                     <tr><td>Structuring AI risk tiers and governance</td><td><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener noreferrer">NIST AI Risk Management Framework</a></td><td>The most widely used public reference for building the tier table above</td></tr>
@@ -609,7 +606,7 @@
                   <div class="gov-tag agentic">Agentic AI Governance</div>
                   <div class="alabel" style="margin-top:0;">The system-level layer</div>
                   <div class="asub">Everything above this box is AI Agent Governance (governs one agent's authority). This box applies only if this use case involves multiple agents that delegate tasks to each other — not a single-shot AI call.</div>
-                  <p style="font-size:13px;margin:0 0 8px;color:var(--navy-ink);">The tier table above governs one agent's authority. It doesn't catch problems that only exist when agents interact with each other. Add these before go-live:</p>
+                  <p style="font-size:13px;margin:0 0 8px;color:var(--text);">The tier table above governs one agent's authority. It doesn't catch problems that only exist when agents interact with each other. Add these before go-live:</p>
                   <ul>
                     <li><b>Permission inheritance rule:</b> when Agent A delegates a subtask to Agent B, does B inherit A's restrictions, or does it use its own? Decide this explicitly per workflow &mdash; don't let it default silently, or a Tier 1 agent can hand sensitive work to a less-restricted Tier 3 agent without anyone approving that.</li>
                     <li><b>Agent-to-agent trust boundary map:</b> a simple diagram of which agents are allowed to call which other agents and tools &mdash; the same way a network diagram shows which systems can talk to which.</li>
@@ -687,7 +684,7 @@
                     <tr><td>Expand stewardship and catalog coverage incrementally as new use cases are prioritized</td><td class="owner">CDO</td><td>Rolling data-domain onboarding roadmap</td><td class="timeline">Ongoing, quarterly review</td></tr>
                   </table></div>
                 </div>
-                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                <div class="deep-section example"><span class="dlabel" style="background:rgba(245,158,11,0.16);color:var(--gold);">Worked example, in plain terms</span>
                   <p>For the loan-review assistant to work, it needs to read income documents and cross-check them against the credit bureau and the core banking system. Q5 simply asks: <i>can it actually get clean, trustworthy data to do that?</i></p>
                   <p>A 3-week audit on just those three sources might turn up:</p>
                   <table class="example-table">
@@ -698,7 +695,7 @@
                   </table>
                   <p>In this example, the bank appoints a "Head of Lending Data" as the named steward &mdash; one person accountable for these three sources being clean and consistent, instead of the fix quietly becoming nobody's job after the audit is filed.</p>
                 </div>
-                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                <div class="deep-section resources"><span class="dlabel" style="background:rgba(13,148,136,0.16);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
                   <div class="table-scroll"><table class="action-table resource-table">
                     <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
                     <tr><td>Setting up data ownership and quality standards</td><td><a href="https://www.informatica.com/resources/articles/master-data-governance-framework.html" target="_blank" rel="noopener noreferrer">Master data governance guide</a></td><td>Step-by-step framework for the steward/MDM work above</td></tr>
@@ -768,7 +765,7 @@
                     <tr><td>Set up continuous DLP/access-logging monitoring specifically for AI data flows</td><td class="owner">CISO/Security team</td><td>DLP/monitoring dashboard for AI data flows</td><td class="timeline">Weeks 8&ndash;13, then ongoing</td></tr>
                   </table></div>
                 </div>
-                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                <div class="deep-section example"><span class="dlabel" style="background:rgba(245,158,11,0.16);color:var(--gold);">Worked example, in plain terms</span>
                   <p>The loan-review assistant will handle income documents &mdash; salary slips, tax returns &mdash; which is sensitive personal and financial data. Q6 simply asks: <i>is that handled the way regulators expect?</i></p>
                   <table class="example-table">
                     <tr><th>Data element</th><th>Sensitivity</th><th>How it's handled</th></tr>
@@ -778,7 +775,7 @@
                   </table>
                   <p>None of this is exotic &mdash; it's the difference between "the AI reads the whole scanned document" and "the AI only ever sees the three numbers it actually needs," which is a much easier conversation to have with a regulator or auditor.</p>
                 </div>
-                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                <div class="deep-section resources"><span class="dlabel" style="background:rgba(13,148,136,0.16);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
                   <div class="table-scroll"><table class="action-table resource-table">
                     <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
                     <tr><td>Running a data protection impact assessment</td><td><a href="https://gdpr.eu/data-protection-impact-assessment-template/" target="_blank" rel="noopener noreferrer">DPIA guide &amp; template</a></td><td>Structure and template for the PIA/DPIA deliverable above</td></tr>
@@ -864,7 +861,7 @@
                     <tr><td>Extend the API gateway pattern to additional core systems as new use cases onboard</td><td class="owner">Enterprise Architecture</td><td>Rolling integration roadmap</td><td class="timeline">Ongoing</td></tr>
                   </table></div>
                 </div>
-                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                <div class="deep-section example"><span class="dlabel" style="background:rgba(245,158,11,0.16);color:var(--gold);">Worked example, in plain terms</span>
                   <p>To read a scanned salary slip and cross-check it against two other systems in under a minute, the AI needs to actually reach those systems. Q7 simply asks: <i>can it, without exposing them?</i></p>
                   <p><b>Before:</b> The core banking system has no API &mdash; the only way to get data out is a nightly file export. An AI tool can't usefully work with data that's up to 24 hours old.</p>
                   <p><b>After:</b> IT builds a lightweight, read-only API gateway in front of the core system, so the AI tool can request just the fields it needs (income, account status) in real time, without ever having open access to the whole database.</p>
@@ -875,7 +872,7 @@
                     <tr><td>GPU-as-a-service</td><td>Rent inference compute instead of buying hardware</td><td>Useful if AI demand spikes, e.g. month-end loan surges</td></tr>
                   </table>
                 </div>
-                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                <div class="deep-section resources"><span class="dlabel" style="background:rgba(13,148,136,0.16);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
                   <div class="table-scroll"><table class="action-table resource-table">
                     <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
                     <tr><td>Choosing a migration/integration approach</td><td><a href="https://aws.amazon.com/what-is/cloud-migration-strategy/" target="_blank" rel="noopener noreferrer">Cloud migration strategy guide</a></td><td>Comparing the options in the table above (the industry-standard "7 Rs")</td></tr>
@@ -956,7 +953,7 @@
                     <tr><td>Extend model validation/revalidation to every deployed model on a fixed schedule</td><td class="owner">Model Risk function</td><td>Revalidation calendar per model</td><td class="timeline">Recurring (e.g. semi-annual)</td></tr>
                   </table></div>
                 </div>
-                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                <div class="deep-section example"><span class="dlabel" style="background:rgba(245,158,11,0.16);color:var(--gold);">Worked example, in plain terms</span>
                   <p>The loan-review AI works well in testing. Q8 simply asks: <i>what happens when it starts getting things wrong in production, and how would anyone know?</i></p>
                   <p><b>Without monitoring:</b> Three months after launch, applicants start submitting a new type of income document (gig-economy pay stubs) the model wasn't trained on. It quietly starts missing more discrepancies than it did at launch. Nobody notices until a customer complains.</p>
                   <p><b>With monitoring:</b> The dashboard flags a rise in the "missed-discrepancy rate" within a week, the model is rolled back to the previous version automatically, and the ML team is alerted to retrain on the new document type.</p>
@@ -967,7 +964,7 @@
                     <tr><td>% of cases needing manual override</td><td>Below 10%</td><td>Flagged for retraining review at the next monthly cycle</td></tr>
                   </table>
                 </div>
-                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                <div class="deep-section resources"><span class="dlabel" style="background:rgba(13,148,136,0.16);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
                   <div class="table-scroll"><table class="action-table resource-table">
                     <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
                     <tr><td>What MLOps covers and why it matters</td><td><a href="https://aws.amazon.com/what-is/mlops/" target="_blank" rel="noopener noreferrer">What is MLOps? guide</a></td><td>Plain-language overview of the monitoring/versioning/rollback setup above</td></tr>
@@ -977,7 +974,7 @@
                   <div class="gov-tag agentic">Agentic AI Governance</div>
                   <div class="alabel" style="margin-top:0;">The system-level layer</div>
                   <div class="asub">Everything above this box is AI Agent Governance (governs one model's monitoring and rollback). This box applies only if this use case involves multiple agents that delegate tasks to each other — not a single-shot AI call.</div>
-                  <p style="font-size:13px;margin:0 0 8px;color:var(--navy-ink);">The monitoring above tracks one model's drift and accuracy. It doesn't reconstruct what happened across a chain of agents, or stop a runaway workflow mid-execution. Add these:</p>
+                  <p style="font-size:13px;margin:0 0 8px;color:var(--text);">The monitoring above tracks one model's drift and accuracy. It doesn't reconstruct what happened across a chain of agents, or stop a runaway workflow mid-execution. Add these:</p>
                   <ul>
                     <li><b>End-to-end trace logging:</b> one log that follows a task across every agent it touched &mdash; not just each agent's own log &mdash; so "why did the workflow do this" can be answered, not just "what did each step do."</li>
                     <li><b>Continuous runtime monitoring, not periodic checks:</b> agents act continuously, so drift checks that run daily or weekly are too slow; use behavioral baselines and anomaly detection that flag unusual agent behavior in real time.</li>
@@ -1054,7 +1051,7 @@
                     <tr><td>Track internal AI capability (% of projects delivered without vendor dependency) as a standing KPI</td><td class="owner">CAIO</td><td>Capability KPI on steering committee dashboard</td><td class="timeline">Ongoing</td></tr>
                   </table></div>
                 </div>
-                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                <div class="deep-section example"><span class="dlabel" style="background:rgba(245,158,11,0.16);color:var(--gold);">Worked example, in plain terms</span>
                   <p>The loan-review pilot needs someone who can fine-tune a document-extraction model and someone who understands the monitoring setup from Q8. Q9 simply asks: <i>does the bank actually have them?</i></p>
                   <p>In this example, the bank has strong data analysts but nobody who has taken an ML model into production before. Rather than waiting 6 months to hire a full team, it takes a blended approach:</p>
                   <table class="example-table">
@@ -1065,7 +1062,7 @@
                   </table>
                   <p>By month 4, the anchor hire and the two upskilled underwriters can run the pilot without leaning on the vendor for day-to-day support &mdash; the vendor's team becomes optional, not load-bearing.</p>
                 </div>
-                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                <div class="deep-section resources"><span class="dlabel" style="background:rgba(13,148,136,0.16);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
                   <div class="table-scroll"><table class="action-table resource-table">
                     <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
                     <tr><td>Building an AI upskilling program</td><td><a href="https://www.techtarget.com/searchenterpriseai/feature/AI-upskilling-strategies-that-center-workers-not-tech" target="_blank" rel="noopener noreferrer">AI upskilling strategy guide</a></td><td>Approaches for the internal training program in the example above</td></tr>
@@ -1151,7 +1148,7 @@
                     <tr><td>Include employee sentiment and adoption rate as a standing metric at the steering committee</td><td class="owner">HR/Change Management</td><td>Adoption metrics on steering committee dashboard</td><td class="timeline">Ongoing, monthly</td></tr>
                   </table></div>
                 </div>
-                <div class="deep-section example"><span class="dlabel" style="background:var(--blue-fill);color:var(--blue);">Worked example, in plain terms</span>
+                <div class="deep-section example"><span class="dlabel" style="background:rgba(245,158,11,0.16);color:var(--gold);">Worked example, in plain terms</span>
                   <p>The underwriting team hears "we're introducing an AI tool for document review" and the unspoken question is: <i>are they replacing us?</i> A well-known 4-step pattern (Awareness &rarr; Desire &rarr; Knowledge &rarr; Reinforcement) handles this in order &mdash; skipping ahead to training before people are on board is the single most common mistake here.</p>
                   <table class="example-table">
                     <tr><th>Step</th><th>What it looks like in this example</th></tr>
@@ -1161,7 +1158,7 @@
                     <tr><td><b>4. Reinforcement</b></td><td>Adoption rate (the Q2 KPI) is reviewed monthly; if usage drops, the change lead talks to the team directly instead of assuming the tool itself failed</td></tr>
                   </table>
                 </div>
-                <div class="deep-section resources"><span class="dlabel" style="background:var(--teal-fill);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
+                <div class="deep-section resources"><span class="dlabel" style="background:rgba(13,148,136,0.16);color:var(--teal);">Learn more &mdash; opens in a new tab</span>
                   <div class="table-scroll"><table class="action-table resource-table">
                     <tr><th>Topic</th><th>Resource</th><th>Useful for</th></tr>
                     <tr><td>Sequencing communication, training, and reinforcement</td><td><a href="https://whatfix.com/blog/adkar-model-what-is-it-and-how-to-use-it/" target="_blank" rel="noopener noreferrer">ADKAR change model guide</a></td><td>The 4-step sequence used in the example above</td></tr>
