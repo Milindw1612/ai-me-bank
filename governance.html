@@ -25,6 +25,11 @@
   .nav-links a:hover { color: var(--gold); }
   .nav-links a.active { color: var(--gold); font-weight: 700; }
   .nav-cta { background: linear-gradient(135deg,#D97706,#F59E0B); color:#000 !important; font-weight:700 !important; padding: 5px 14px; border-radius: 6px; }
+  .nav-cta.brief { background: linear-gradient(135deg,#0D9488,#34D399); }
+  .diff-new { background: rgba(255,235,59,0.14); border: 2px solid #FFEB3B; border-radius: 10px; padding: 16px 18px; margin: 8px 0 24px; position: relative; }
+  .diff-new::before { content: 'NEW'; position: absolute; top: -11px; left: 14px; background: #FFEB3B; color: #1a1a1a; font-size: 9px; font-weight: 800; letter-spacing: 1px; padding: 2px 9px; border-radius: 10px; }
+  .diff-new-tab { background: rgba(255,235,59,0.25) !important; border-radius: 4px; }
+  .review-tag { display: inline-block; font-size: 8.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--teal); background: rgba(13,148,136,.12); border: 1px solid rgba(13,148,136,.35); padding: 1px 7px; border-radius: 10px; margin-left: 4px; vertical-align: middle; }
   @media (max-width: 900px) { .nav-links { display: none; } }
 
   .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
@@ -91,6 +96,7 @@
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">Ai-ME BANK</a>
     <div class="nav-links">
+      <a href="board-brief.html" class="nav-cta brief">Board Brief</a>
       <a href="ai-mindmap.html">AI-Readiness</a>
       <a href="index.html">Use Cases</a>
       <a href="roi.html">ROI</a>
@@ -123,6 +129,7 @@
   <button class="tab-btn" onclick="showTab('pii',this)">Data Protection &amp; PII</button>
   <button class="tab-btn" onclick="showTab('reg',this)">Regulatory Alignment</button>
   <button class="tab-btn" onclick="showTab('risk',this)">Risk Tiers</button>
+  <button class="tab-btn diff-new-tab" onclick="showTab('validation',this)">Validation Gates</button>
   <button class="tab-btn" onclick="showTab('audit',this)">Audit Trail</button>
 </div>
 
@@ -251,6 +258,33 @@
       </table>
     </div>
     <div class="note-box" style="margin-top:8px"><strong>Why no use case is rated "High":</strong> every automation was deliberately scoped so the AI's blast radius is bounded — read-only where money movement is involved, and gated by explicit human sign-off wherever a decision is irreversible or customer-facing.</div>
+  </div>
+
+  <!-- VALIDATION GATES -->
+  <div id="tab-validation" class="tab-panel">
+    <div class="diff-new">
+    <div class="note-box"><strong>Why this tab exists:</strong> none of the 3 pilots have run in live production yet, so there is no real measured accuracy number to show a Board today. Rather than assert one, this page states the concrete, measurable pass/fail thresholds each pilot must clear in shadow-mode/UAT before it is allowed to go live — tied directly to the UAT milestones already on <a href="timeline.html" style="color:var(--gold)">Timeline</a> and the independent validation function on <a href="roadmap.html#risk" style="color:var(--gold)">AI Roadmap → Risk &amp; Model Validation</a>.</div>
+
+    <div class="section-label">Go-Live Validation Gates by Pilot</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Pilot</th><th>Gate Metric</th><th>Pass Threshold</th><th>Measurement Window</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill" style="background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.3)">MSME Credit CAM Prep</span></td><td class="muted">Credit-officer override rate on AI-drafted recommendations</td><td class="muted">≤ 15% overridden in a materially different direction (a healthy rate of minor edits is expected — this gate catches recommendations officers routinely reject outright)</td><td class="muted">4-week shadow run, ≥ 200 applications</td></tr>
+          <tr><td><span class="pill pill-blue">Fraud Detection</span></td><td class="muted">Precision &amp; false-positive rate at the auto-freeze confidence threshold</td><td class="muted">≥ 90% precision, ≤ 10% false-positive rate</td><td class="muted">4-week shadow run against historical + live-labeled cases</td></tr>
+          <tr><td><span class="pill pill-green">Collections Recovery</span></td><td class="muted">Settlement-offer compliance with pre-approved policy bands</td><td class="muted">100% of AI-proposed offers within policy band (zero-tolerance gate — any breach blocks go-live, not just a rate threshold)</td><td class="muted">4-week shadow run, all DPD buckets in pilot scope</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:-16px;margin-bottom:24px">Thresholds are proposed go/no-go criteria for Board and Model Risk Committee sign-off, not yet-measured results — see <a href="roadmap.html#workforce" style="color:var(--gold)">AI Roadmap</a> for how this fits the wider enterprise rollout.</p>
+
+    <div class="section-label">What Happens on a Failed Gate</div>
+    <ul class="checklist">
+      <li>The pilot does not go live; it returns to the build/tune phase for the failing metric only</li>
+      <li>The Model Risk Committee reviews the failure and either approves a re-test window or requires a redesign</li>
+      <li>A gate failure is logged in the Agent Register alongside the pass/fail history for that use case</li>
+    </ul>
+    </div>
   </div>
 
   <!-- AUDIT TRAIL -->

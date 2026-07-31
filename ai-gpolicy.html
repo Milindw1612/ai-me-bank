@@ -25,6 +25,11 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(59,15,26,0.97);backdrop-f
 .nav-links a:hover{color:#F59E0B}
 .nav-links a.active{color:#F59E0B;font-weight:700}
 .nav-cta{background:linear-gradient(135deg,#D97706,#F59E0B);color:#000!important;font-weight:700!important;padding:5px 14px;border-radius:6px}
+.nav-cta.brief{background:linear-gradient(135deg,#0D9488,#34D399)}
+.diff-new{background:rgba(255,235,59,0.12);border:2px solid #FFEB3B;border-radius:10px;padding:16px 18px;margin:10px 0 18px;position:relative}
+.diff-new::before{content:'NEW';position:absolute;top:-11px;left:14px;background:#FFEB3B;color:#1a1a1a;font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 9px;border-radius:10px}
+.diff-new-toc{background:rgba(255,235,59,0.3)!important;border-radius:4px}
+.review-tag{display:inline-block;font-size:8.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#0D9488;background:rgba(13,148,136,.12);border:1px solid rgba(13,148,136,.35);padding:1px 7px;border-radius:10px;margin-left:4px;vertical-align:middle}
 @media(max-width:900px){.nav-links{display:none}}
 
 .hero{padding:40px 32px 24px;background:linear-gradient(135deg,#4A1420,#3B0F1A);border-bottom:1px solid rgba(245,158,11,0.2)}
@@ -69,6 +74,15 @@ tr:last-child td{border-bottom:none}
 .restricted-box ul{margin:0 0 8px 20px;color:#E2E8F0;font-size:13px;line-height:1.85}
 .restricted-box ul li{margin-bottom:8px}
 
+.org-chart{display:flex;flex-direction:column;align-items:center;gap:0;margin:18px 0 8px}
+.org-tier{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;width:100%}
+.org-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 16px;text-align:center;min-width:150px}
+.org-box .role{font-size:12px;font-weight:700;color:#fff}
+.org-box .fte{font-size:10px;color:#94765B;margin-top:3px}
+.org-box.top{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.05)}
+.org-box.caio{border-color:rgba(245,158,11,.55);background:rgba(245,158,11,.1)}
+.org-connector{width:1px;height:16px;background:rgba(255,255,255,.15);margin:0 auto}
+
 .resolution-box{background:rgba(255,255,255,.03);border-left:3px solid #F59E0B;border-radius:0 8px 8px 0;padding:16px 20px;margin:10px 0}
 .resolution-box p{color:#E2E8F0;font-style:italic;font-size:13px;margin-bottom:12px}
 
@@ -91,6 +105,7 @@ footer a:hover{color:#F59E0B}
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">Ai-ME BANK</a>
     <div class="nav-links">
+      <a href="board-brief.html" class="nav-cta brief">Board Brief</a>
       <a href="ai-mindmap.html">AI-Readiness</a>
       <a href="index.html">Use Cases</a>
       <a href="roi.html">ROI</a>
@@ -163,6 +178,7 @@ footer a:hover{color:#F59E0B}
     <a href="#annG">G — Incident Reporting Template</a>
     <a href="#annH">H — KPI / KRI Dashboard</a>
     <a href="#annI">I — Board Adoption Resolution</a>
+    <a href="#annJ" class="diff-new-toc">J — Crisis Communication Protocol</a>
   </div>
 
   <div class="content">
@@ -314,6 +330,30 @@ footer a:hover{color:#F59E0B}
           <tr><td><strong style="color:#fff">Third</strong></td><td>Internal Audit</td><td>Independent assurance this Policy is followed in practice, reported to the Audit Committee</td></tr>
         </tbody>
       </table></div>
+
+      <div class="diff-new">
+      <h3 style="margin-top:0">6.8 Governance Structure at a Glance</h3>
+      <div class="org-chart">
+        <div class="org-tier"><div class="org-box top"><div class="role">Board of Directors</div><div class="fte">Approves Policy, risk appetite, Tier 4 / A4–A5 launches</div></div></div>
+        <div class="org-connector"></div>
+        <div class="org-tier">
+          <div class="org-box"><div class="role">Risk Management Committee of the Board</div><div class="fte">Annual policy review, risk-appetite sign-off</div></div>
+          <div class="org-box"><div class="role">IT Strategy Committee</div><div class="fte">Technical readiness review, Tier 2+ agents</div></div>
+        </div>
+        <div class="org-connector"></div>
+        <div class="org-tier"><div class="org-box"><div class="role">Executive AI Governance Council</div><div class="fte">CRO, CISO, Chief Compliance Officer, Chief Data Officer, Head of Internal Audit (observer) — chaired by the CAIO</div></div></div>
+        <div class="org-connector"></div>
+        <div class="org-tier"><div class="org-box caio"><div class="role">Chief AI Officer</div><div class="fte">Reports to CRO or MD &amp; CEO, dotted line to RMCB</div></div></div>
+        <div class="org-connector"></div>
+        <div class="org-tier">
+          <div class="org-box"><div class="role">AI Risk Lead</div><div class="fte">~1–2 FTE</div></div>
+          <div class="org-box"><div class="role">AI Security Lead</div><div class="fte">~1 FTE, partners with CISO</div></div>
+          <div class="org-box"><div class="role">Policy &amp; Compliance Analyst</div><div class="fte">~1 FTE</div></div>
+          <div class="org-box"><div class="role">Business-Unit AI Champions</div><div class="fte">~1 per business line, part-time</div></div>
+        </div>
+      </div>
+      <p style="font-size:11.5px;color:#94765B;margin-top:4px;margin-bottom:0">Indicative CAIO Office core team of ~4–6 FTE at Year 1, growing with the use-case portfolio — see <a href="roadmap.html#workforce">AI Roadmap → Workforce &amp; Change</a> for the reskilling/redeployment plan and <a href="roadmap.html">AI Roadmap → Enterprise Investment Plan</a> for the associated budget line.</p>
+      </div>
     </div>
 
     <div class="psec" id="s7">
@@ -478,6 +518,16 @@ footer a:hover{color:#F59E0B}
       <p>Performed by a function independent of the build team, per the Model Risk Management Policy, and additionally testing, for Tier 2+ agents: resistance to prompt injection; behaviour under tool-chaining attack scenarios; and, for Agentic Systems, enforceability of permission inheritance rules under adversarial conditions.</p>
       <h3>15.2 Change Management</h3>
       <p>Any material change to scope of authority, data access, underlying model, risk tier, autonomy level, or an Agentic System's topology triggers Stages 3–4 afresh, not a routine configuration change.</p>
+      <div class="diff-new">
+      <h3 style="margin-top:0">15.3 Model Version Change Management</h3>
+      <p>A foundation-model version change (e.g. an upgrade to a newer Claude model release) is explicitly in scope of Section 15.2, even where no other property of the agent changes, and is never treated as a routine configuration update. Before a new model version is promoted to production for any Tier 1+ agent:</p>
+      <ul class="plist">
+        <li>The Model Risk Management function re-runs the accuracy, bias, and security regression tests from Section 15.1 against the new version, using the same test set as the prior validation where possible, to isolate model-driven behaviour change from data drift</li>
+        <li>Any material change in output distribution, refusal behaviour, or tool-use pattern versus the prior version is documented and reviewed by the Executive AI Governance Council before promotion, not discovered after the fact</li>
+        <li>The old and new model versions are both recorded in the AI Agent Register (Section 10.5), with the promotion date, validator, and a rollback path to the prior version retained for at least one validation cycle</li>
+        <li>For Tier 3–4 agents, the new version runs in shadow mode alongside the incumbent for a defined period before full cutover, consistent with the Controlled Pilot stage above</li>
+      </ul>
+      </div>
     </div>
 
     <div class="psec" id="s16">
@@ -840,6 +890,38 @@ footer a:hover{color:#F59E0B}
         <p>"RESOLVED FURTHER THAT the Policy shall be reviewed at least annually and sooner where required by material regulatory, technological, business, or supervisory developments (Section 24.1)."</p>
       </div>
       <div class="warn-box">This is a drafting aid only. Company Secretary and Legal must finalise the resolution's form and ensure it matches the Bank's actual board-minute conventions before use.</div>
+    </div>
+
+    <div class="psec diff-new" id="annJ">
+      <h2 style="margin-top:0">Annexure J — Crisis Communication &amp; Reputational Response Protocol</h2>
+      <span class="new-tag">New in this version</span>
+      <p>Covers the Bank's external-facing response when an AI Agent's action becomes a matter of public, media, or regulatory attention — distinct from Section 19 (Incident Management), which covers internal detection, containment, and regulatory notification. This Annexure governs what the Bank says, to whom, and when.</p>
+
+      <h3>J.1 Trigger Conditions</h3>
+      <ul class="plist">
+        <li>An AI Agent decision or action becomes the subject of media coverage, viral social-media attention, or a public complaint campaign</li>
+        <li>A confirmed AI Agent Incident (Section 19) meets the RBI/CERT-In reportable threshold and disclosure risk extends beyond the affected customer(s)</li>
+        <li>A regulator, ombudsman, or elected official makes a public statement or inquiry referencing the Bank's use of AI</li>
+        <li>A third party (researcher, journalist, competitor) publishes a claim about the Bank's AI systems, whether accurate or not</li>
+      </ul>
+
+      <h3>J.2 Escalation &amp; Spokesperson Chain</h3>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Step</th><th>Action</th><th>Owner</th><th>Timeframe</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Trigger identified and escalated to the CAIO Office and Corporate Communications simultaneously</td><td>Technical/Business Owner, CAIO Office</td><td>Immediate</td></tr>
+          <tr><td>2</td><td>Joint assessment: CAIO Office (what happened, technically), Legal (exposure), Corporate Communications (external framing)</td><td>CAIO, Legal, Corp Comms</td><td>Within 4 hours</td></tr>
+          <tr><td>3</td><td>Single designated spokesperson identified; no other executive or staff member comments externally without sign-off</td><td>Corporate Communications, CEO Office</td><td>Within 4 hours</td></tr>
+          <tr><td>4</td><td>Holding statement issued if the situation is already public (Section J.3); full statement follows once facts are confirmed</td><td>Corporate Communications</td><td>Same business day</td></tr>
+          <tr><td>5</td><td>RBI/CERT-In notification timeline (Section 19) proceeds in parallel and is never delayed by external-communication drafting</td><td>Compliance, CAIO Office</td><td>Per Section 19</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>J.3 Holding Statement Template</h3>
+      <div class="info-box">"We are aware of [the situation]. [The affected system] includes a human review step for exactly this kind of case, and we are giving it priority attention. We will share an update as soon as we have confirmed the facts." — to be adapted, not issued verbatim; Corporate Communications and Legal approve the final wording in every case.</div>
+
+      <h3>J.4 What This Protocol Does Not Cover</h3>
+      <p>Internal incident detection, containment, and regulatory notification remain governed by Section 19. This Annexure governs external communication only, and assumes Section 19's process is already running in parallel, not instead of it.</p>
     </div>
 
   </div>

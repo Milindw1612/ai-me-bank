@@ -25,6 +25,13 @@
   .nav-links a:hover { color: var(--gold); }
   .nav-links a.active { color: var(--gold); font-weight: 700; }
   .nav-cta { background: linear-gradient(135deg,#D97706,#F59E0B); color:#000 !important; font-weight:700 !important; padding: 5px 14px; border-radius: 6px; }
+  .nav-cta.brief { background: linear-gradient(135deg,#0D9488,#34D399); }
+  .diff-new { background: rgba(255,235,59,0.14); border: 2px solid #FFEB3B; border-radius: 10px; padding: 16px 18px; margin: 8px 0 24px; position: relative; }
+  .diff-new::before { content: 'NEW'; position: absolute; top: -11px; left: 14px; background: #FFEB3B; color: #1a1a1a; font-size: 9px; font-weight: 800; letter-spacing: 1px; padding: 2px 9px; border-radius: 10px; }
+  tr.diff-new-row td { background: rgba(255,235,59,0.18) !important; }
+  tr.diff-new-row td:first-child { border-left: 3px solid #FFEB3B; }
+  .diff-new-tab { background: rgba(255,235,59,0.25) !important; border-radius: 4px; }
+  .review-tag { display: inline-block; font-size: 8.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--teal); background: rgba(13,148,136,.12); border: 1px solid rgba(13,148,136,.35); padding: 1px 7px; border-radius: 10px; margin-left: 4px; vertical-align: middle; }
   @media (max-width: 900px) { .nav-links { display: none; } }
 
   .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
@@ -116,6 +123,7 @@
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">Ai-ME BANK</a>
     <div class="nav-links">
+      <a href="board-brief.html" class="nav-cta brief">Board Brief</a>
       <a href="ai-mindmap.html">AI-Readiness</a>
       <a href="index.html">Use Cases</a>
       <a href="roi.html">ROI</a>
@@ -145,6 +153,7 @@
 <div class="tabs-bar" id="tabsBar">
   <button class="tab-btn active" onclick="showTab('overview',this)">Overview &amp; Roadmap-at-a-Glance</button>
   <button class="tab-btn" onclick="showTab('govop',this)">Governance &amp; Operating Model</button>
+  <button class="tab-btn diff-new-tab" onclick="showTab('workforce',this)">Workforce &amp; Change</button>
   <button class="tab-btn" onclick="showTab('responsible',this)">Responsible AI &amp; Ethics</button>
   <button class="tab-btn" onclick="showTab('risk',this)">Risk &amp; Model Validation</button>
   <button class="tab-btn" onclick="showTab('audit',this)">Audit &amp; Assurance</button>
@@ -161,6 +170,17 @@
 
     <div class="note-box"><strong>How to read this page:</strong> the 3 use cases already built (MSME Credit CAM Prep, Fraud Detection, Collections Recovery) are the <em>proof points</em> — real architecture, cost, ROI and per-use-case governance already exist for them (see <a href="cost.html" style="color:var(--gold)">Cost Analysis</a>, <a href="timeline.html" style="color:var(--gold)">Timeline</a>, <a href="governance.html" style="color:var(--gold)">Governance</a>). This page is the layer above them: the enterprise operating model that lets a bank run <em>dozens</em> of agentic systems safely, not just 3.</div>
 
+    <div class="diff-new">
+    <div class="section-label">Industry Context — Where Indian Banking Stands on AI</div>
+    <div class="overview-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:12px">
+      <div class="ov-card" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px"><h3 style="font-size:13px;font-weight:700;margin-bottom:6px;color:var(--gold)">Large Private Banks</h3><p style="font-size:12px;color:var(--mid);line-height:1.6">Several have publicly discussed GenAI/AI initiatives over the past 2 years, mostly in customer service, fraud detection, and internal productivity — largely as point solutions, not a governed enterprise operating model.</p></div>
+      <div class="ov-card" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px"><h3 style="font-size:13px;font-weight:700;margin-bottom:6px;color:var(--purple)">Public Sector Banks</h3><p style="font-size:12px;color:var(--mid);line-height:1.6">Generally earlier-stage, often piloting through IBA-coordinated or vendor-led initiatives rather than in-house agentic builds.</p></div>
+      <div class="ov-card" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px"><h3 style="font-size:13px;font-weight:700;margin-bottom:6px;color:var(--teal)">RBI's Own Framing</h3><p style="font-size:12px;color:var(--mid);line-height:1.6">The FREE-AI committee report (2025) treats the sector as early-innings overall — a call to build responsible AI capability now, not a claim that any bank has already solved it.</p></div>
+      <div class="ov-card" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px"><h3 style="font-size:13px;font-weight:700;margin-bottom:6px;color:var(--green)">The Opportunity Here</h3><p style="font-size:12px;color:var(--mid);line-height:1.6">Most of the sector still sits at "one-off pilot." Moving to a governed, enterprise-scale operating model — the point of this roadmap — is a genuine differentiator, not catch-up.</p></div>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:0">Directional industry framing for Board context, not a competitive-intelligence claim about any named institution's internal capability.</p>
+    </div>
+
     <div class="section-label">Roadmap at a Glance</div>
     <div class="table-scroll">
       <table class="matrix-table">
@@ -172,6 +192,12 @@
             <td>3-lines-of-defense AI operating model fully operational</td>
             <td>AI CoE becomes self-serve platform with a formal intake/approval gate</td>
             <td>Governance is BAU; maturity assessed vs. FREE-AI Framework &amp; ISO 42001</td></tr>
+          <tr class="diff-new-row"><td><a href="#workforce" class="pill" style="background:rgba(167,139,250,.12);color:var(--purple);border:1px solid rgba(167,139,250,.3)">Workforce &amp; Change</a></td>
+            <td>Change-readiness assessment; comms plan for freed-up capacity (no headcount reduction planned)</td>
+            <td>Reskilling curriculum designed with HR; Business-Unit AI Champions network launched</td>
+            <td>First reskilling cohort complete; redeployment plan for freed underwriting/analyst capacity</td>
+            <td>Redeployment into Wave-2 roles; AI capability part of standard L&amp;D curriculum</td>
+            <td>Workforce transition is BAU; annual capability &amp; culture survey to Board</td></tr>
           <tr><td><a href="#responsible" class="pill pill-blue">Responsible AI &amp; Ethics</a></td>
             <td>Human-in-the-loop standard (proven on 3 pilots) mandated enterprise-wide</td>
             <td>Bias/fairness testing standard for credit &amp; lending models</td>
@@ -213,6 +239,35 @@
     </div>
     <p style="font-size:11px;color:var(--muted);margin-top:-16px;margin-bottom:32px">Weeks/milestones for the 3 flagship pilots are drawn directly from the already-built <a href="timeline.html" style="color:var(--gold)">Timeline</a> (AI-accelerated: Shared Platform live Wk 3, MSME live Wk 17, Fraud live Wk 27, Collections live Wk 37) — nothing here contradicts those figures.</p>
 
+    <div class="diff-new">
+    <div class="section-label">Enterprise Investment Plan</div>
+    <div class="note-box"><strong>Indicative planning estimates for Board discussion</strong> — benchmarked against the 3 flagship pilots' actual build costs (see <a href="cost.html" style="color:var(--gold)">Cost Analysis</a>), not a finalised procurement budget. Portfolio &amp; Platform figures for 0–12 Mo are the already-costed Wave 1 spend; Year 2/3 figures use Wave 1's per-use-case build cost as the unit benchmark for Wave 2/3.</div>
+    <div class="table-scroll">
+      <table class="matrix-table">
+        <thead><tr><th>Pillar</th><th>0–3 Months</th><th>3–6 Months</th><th>6–12 Months</th><th>Year 2</th><th>Year 3</th></tr></thead>
+        <tbody>
+          <tr><td>Governance &amp; Operating Model</td><td>₹45L</td><td>₹35L</td><td>₹50L</td><td>₹80L</td><td>₹60L</td></tr>
+          <tr><td>Workforce &amp; Change Management</td><td>₹8L</td><td>₹20L</td><td>₹45L</td><td>₹60L</td><td>₹40L</td></tr>
+          <tr><td>Responsible AI &amp; Ethics</td><td>₹10L</td><td>₹25L</td><td>₹15L</td><td>₹30L</td><td>₹10L</td></tr>
+          <tr><td>Risk &amp; Model Validation</td><td>₹15L</td><td>₹60L</td><td>₹40L</td><td>₹50L</td><td>₹40L</td></tr>
+          <tr><td>Audit &amp; Assurance</td><td>₹10L</td><td>₹20L</td><td>₹35L</td><td>₹50L</td><td>₹60L</td></tr>
+          <tr><td>Data Privacy (DPDP)</td><td>₹15L</td><td>₹30L</td><td>₹35L</td><td>₹20L</td><td>₹15L</td></tr>
+          <tr><td>AI Security</td><td>₹12L</td><td>₹35L</td><td>₹45L</td><td>₹55L</td><td>₹50L</td></tr>
+          <tr><td>Use-Case Portfolio &amp; Platform</td><td colspan="3" style="text-align:center" class="muted">₹4.35 Cr — already costed, Wave 1 (see <a href="cost.html" style="color:var(--gold)">Cost Analysis</a>)</td><td>~₹4.75 Cr — Wave 2 (4 use cases)</td><td>~₹3.00 Cr — Wave 3 (2 use cases)</td></tr>
+          <tr class="total-row" style="background:rgba(217,119,6,0.06)"><td><strong>Horizon Subtotal (excl. Portfolio)</strong></td><td><strong>₹1.15 Cr</strong></td><td><strong>₹2.25 Cr</strong></td><td><strong>₹2.65 Cr</strong></td><td><strong>₹3.45 Cr</strong></td><td><strong>₹2.75 Cr</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="horizon-grid" style="margin-top:16px;margin-bottom:0">
+      <div class="horizon-card" style="grid-column:1/-1;text-align:center;border-top:3px solid var(--gold)">
+        <div class="hz">Total 3-Year Enterprise Investment</div>
+        <div style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:var(--gold);margin:6px 0">≈ ₹24.3 Cr</div>
+        <p>~₹12.25 Cr enterprise governance/risk/audit/security/workforce backbone + ~₹12.10 Cr use-case portfolio (₹4.35 Cr already costed for the 3 proven Wave 1 pilots, ~₹7.75 Cr indicative for Wave 2 &amp; 3)</p>
+      </div>
+    </div>
+    </div>
+
     <div class="section-label">Horizon Themes</div>
     <div class="horizon-grid">
       <div class="horizon-card"><div class="hz">0–3 Months</div><h4>Foundation</h4><p>Governance chartered, policy published, 3 flagship pilots in build. The bank has a named AI accountability structure for the first time.</p></div>
@@ -251,6 +306,7 @@
           <tr><td><strong style="color:#fff">Internal Audit</strong></td><td><span class="pill pill-teal">3rd Line</span></td><td class="muted">Independent audit of the AI governance framework and individual use cases</td><td class="muted">Per audit cycle + annual</td></tr>
           <tr><td><strong style="color:#fff">Business-Unit AI Champions</strong></td><td><span class="pill pill-blue">1st Line (execution)</span></td><td class="muted">Surface new use cases, own business outcomes, escalate policy-band exceptions to a human</td><td class="muted">Ongoing</td></tr>
           <tr><td><strong style="color:#fff">Legal &amp; Compliance</strong></td><td><span class="pill pill-purple">2nd Line</span></td><td class="muted">Regulatory interpretation (RBI, DPDP), disclosure requirements, grievance-redress design</td><td class="muted">Per release + annual</td></tr>
+          <tr class="diff-new-row"><td><strong style="color:#fff">HR / People &amp; Culture</strong></td><td><span class="pill" style="background:rgba(167,139,250,.12);color:var(--purple);border:1px solid rgba(167,139,250,.3)">1st Line (workforce)</span></td><td class="muted">Reskilling curriculum, redeployment of freed-up capacity, union/labor-relations engagement, change communication (see <a href="#workforce" style="color:var(--gold)">Workforce &amp; Change</a>)</td><td class="muted">Quarterly</td></tr>
         </tbody>
       </table>
     </div>
@@ -263,6 +319,42 @@
       <li><strong style="color:#fff">Year 2:</strong> AI CoE matures into a self-serve platform with a formal intake/approval gate for new use cases</li>
       <li><strong style="color:#fff">Year 3:</strong> Governance is business-as-usual; independent maturity assessment against RBI's FREE-AI Framework and ISO/IEC 42001</li>
     </ul>
+  </div>
+
+  <!-- ═══ WORKFORCE & CHANGE MANAGEMENT ═══ -->
+  <div id="tab-workforce" class="tab-panel">
+    <div class="diff-new">
+    <div class="pillar-flow">
+      <div class="pillar-state"><div class="lbl">Current State</div><p>No headcount reduction is planned for any of the 3 pilots — underwriters, fraud analysts and collections officers keep final decision authority (see <a href="governance.html" style="color:var(--gold)">Governance → Human-in-the-Loop</a>). Reassurance messaging exists per-pilot, but there is no formal enterprise workforce transition plan yet.</p></div>
+      <div class="pillar-arrow">→</div>
+      <div class="pillar-state"><div class="lbl">Enterprise Target State</div><p>A funded reskilling and redeployment program that turns freed-up capacity (25–35% on MSME Credit CAM Prep alone) into higher-value work, with HR, union/labor-relations engagement, and change communication built in from day one — not bolted on after concern surfaces.</p></div>
+    </div>
+
+    <div class="section-label">Why This Matters to the Board</div>
+    <div class="note-box">Every pilot on this site reports a capacity gain from automation. A Board approving enterprise-wide scale-up should expect the first question from staff, unions, and the media to be about jobs — not about model architecture. A credible answer here is as important to the initiative's success as the technology itself.</div>
+
+    <div class="section-label">Workforce Transition Plan</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Workstream</th><th>What It Covers</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#fff">Reskilling</strong></td><td class="muted">Structured curriculum for underwriters/analysts/officers whose task mix shifts toward judgment calls and exception handling — funded, not left to informal on-the-job learning</td><td class="muted">HR + Business-Unit AI Champions</td></tr>
+          <tr><td><strong style="color:#fff">Redeployment</strong></td><td class="muted">A named plan for where freed-up capacity goes — Wave 2/3 use-case teams, higher-value underwriting judgment work, or other roles — decided before go-live, not after</td><td class="muted">HR + Business Owners</td></tr>
+          <tr><td><strong style="color:#fff">Union / Labor Relations</strong></td><td class="muted">Early engagement wherever the workforce is unionized or highly tenured; longer engagement timelines built into the rollout schedule where required</td><td class="muted">HR + Legal</td></tr>
+          <tr><td><strong style="color:#fff">Change Communication</strong></td><td class="muted">Plain-language, honest messaging to affected staff ahead of each go-live — what's automated, what isn't, and what happens to their role — not a surprise announcement</td><td class="muted">HR + CAIO Office</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label">Milestones by Horizon</div>
+    <ul class="checklist">
+      <li><strong style="color:#fff">0–3 Mo:</strong> Change-readiness assessment across the 3 pilot business units; initial communication plan drafted with HR</li>
+      <li><strong style="color:#fff">3–6 Mo:</strong> Reskilling curriculum designed jointly with HR; Business-Unit AI Champions network formally launched</li>
+      <li><strong style="color:#fff">6–12 Mo:</strong> First reskilling cohort complete; named redeployment plan for freed underwriting/analyst capacity published</li>
+      <li><strong style="color:#fff">Year 2:</strong> Redeployment into Wave 2 roles underway; AI capability becomes part of the standard L&amp;D curriculum, not a one-off program</li>
+      <li><strong style="color:#fff">Year 3:</strong> Workforce transition is business-as-usual; annual capability &amp; culture survey reported to the Board alongside the AI portfolio update</li>
+    </ul>
+    </div>
   </div>
 
   <!-- ═══ RESPONSIBLE AI & ETHICS ═══ -->

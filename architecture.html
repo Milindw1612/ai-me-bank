@@ -25,6 +25,7 @@
   .nav-links a:hover { color: var(--gold); }
   .nav-links a.active { color: var(--gold); font-weight: 700; }
   .nav-cta { background: linear-gradient(135deg,#D97706,#F59E0B); color:#000 !important; font-weight:700 !important; padding: 5px 14px; border-radius: 6px; }
+  .nav-cta.brief { background: linear-gradient(135deg,#0D9488,#34D399); }
   @media (max-width: 900px) { .nav-links { display: none; } }
 
   .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
@@ -49,6 +50,7 @@
   .note-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 6px; padding: 14px 18px; font-size: 12.5px; color: var(--mid); margin: 28px 0 0; line-height: 1.75; }
   .note-box strong { color: var(--text); }
   .note-box a { color: var(--gold); text-decoration: none; }
+  .note-box.accent-green { border-left-color: var(--green); background: rgba(52,211,153,0.06); }
 
   footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
   footer p { font-size: 12px; color: #94765B; }
@@ -69,6 +71,7 @@
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">Ai-ME BANK</a>
     <div class="nav-links">
+      <a href="board-brief.html" class="nav-cta brief">Board Brief</a>
       <a href="ai-mindmap.html">AI-Readiness</a>
       <a href="index.html">Use Cases</a>
       <a href="roi.html">ROI</a>
@@ -130,6 +133,8 @@
   </div>
 
   <div class="note-box"><strong>Want the full data-flow picture?</strong> See <a href="helicopter.html">Helicopter View</a> for how data moves end-to-end — from external sources, through this shared platform, into each use case's agent cluster, to a human decision-maker, and back to the core banking system of record. For the actual implementation, see the <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">agentic-ai source code</a>.</div>
+
+  <div class="note-box accent-green"><strong>Built to extend beyond these 3 pilots.</strong> This shared platform is designed for multi-tenant use, not a one-off build per use case — see <a href="roadmap.html#portfolio">AI Roadmap → Use-Case Portfolio</a> for the Wave 2/3 business lines (Retail Lending, AML/Transaction Monitoring, Contact-Centre AI, Treasury) planned to run on this same infrastructure.</div>
 </main>
 
 <footer>
