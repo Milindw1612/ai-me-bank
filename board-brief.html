@@ -57,6 +57,14 @@
   .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
 
   .ask-box { background: linear-gradient(135deg, rgba(13,148,136,0.10), rgba(52,211,153,0.05)); border: 1px solid rgba(13,148,136,0.35); border-radius: 14px; padding: 26px 30px; margin-bottom: 40px; }
+  .trust-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-bottom: 40px; }
+  .trust-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border2); border-left: 4px solid var(--green); border-radius: 10px; padding: 20px 22px; }
+  .trust-card.validation { border-left-color: var(--gold); }
+  .trust-card .trust-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
+  .trust-card.validation .trust-eyebrow { color: var(--gold); }
+  .trust-card .trust-statement { font-size: 15px; font-weight: 700; color: #fff; line-height: 1.4; margin-bottom: 8px; }
+  .trust-card p { font-size: 12px; color: var(--mid); line-height: 1.65; }
+  @media (max-width: 700px) { .trust-grid { grid-template-columns: 1fr; } }
   .ask-box h2 { font-family: Georgia, serif; font-size: 20px; color: #fff; margin-bottom: 14px; }
   .ask-list { list-style: none; }
   .ask-list li { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13.5px; color: var(--text); }
@@ -165,6 +173,19 @@
         </div>
       </li>
     </ul>
+  </div>
+
+  <div class="trust-grid">
+    <div class="trust-card">
+      <div class="trust-eyebrow">Why This Is Safe to Approve</div>
+      <div class="trust-statement">No agent holds unilateral authority over money movement, a fraud confirmation, or a lending decision.</div>
+      <p>Every one of the 3 pilots is a draft-and-recommend design — a human credit officer, fraud analyst, or collections officer signs off on every consequential action. See <a href="governance.html#hitl" style="color:var(--green)">Governance → Human-in-the-Loop</a>.</p>
+    </div>
+    <div class="trust-card validation">
+      <div class="trust-eyebrow">Why This Isn't Overselling</div>
+      <div class="trust-statement">None of the 3 pilots have run in production yet — so we're not showing you a measured result we don't have.</div>
+      <p>Instead of an invented accuracy number, the Board is asked to approve concrete, measurable go/no-go thresholds each pilot must clear before launch. See <a href="governance.html#validation" style="color:var(--gold)">Governance → Validation Gates</a>.</p>
+    </div>
   </div>
 
   <div class="section-label">The Proof — 3 Flagship Pilots, Already Built and Costed</div>
