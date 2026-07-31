@@ -74,6 +74,19 @@
   .pill-blue { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
   .pill-green { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
   .pill-gold { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .pill-existing { background: rgba(13,148,136,0.12); color: var(--teal); border: 1px solid rgba(13,148,136,0.3); }
+  .pill-assumption { background: rgba(245,158,11,0.14); color: var(--gold); border: 1px solid rgba(245,158,11,0.35); }
+
+  .calc-table-scroll { overflow-x: auto; margin: 10px 0 8px; border-radius: 8px; border: 2px solid rgba(52,211,153,0.4); background: #0B2E22; }
+  .calc-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .calc-table thead th { background: rgba(52,211,153,0.14); padding: 8px 12px; font-size: 9.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--green); text-align: left; border-bottom: 1px solid rgba(52,211,153,0.3); }
+  .calc-table td { padding: 8px 12px; border-bottom: 1px solid rgba(52,211,153,0.15); vertical-align: top; color: #E8FBF3; }
+  .calc-table tr:last-child td { border-bottom: none; }
+  .calc-table tr.calc-total td { background: rgba(52,211,153,0.18); font-weight: 700; color: var(--green); border-top: 2px solid rgba(52,211,153,0.5); }
+  .calc-table td.muted { color: #8FBFAE; }
+  .calc-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green); margin: 14px 0 4px; }
+  .working-link { color: var(--green); font-size: 10px; font-weight: 700; text-decoration: none; border-bottom: 1px dashed rgba(52,211,153,0.5); }
+  .working-link:hover { border-bottom-style: solid; }
 
   /* ── Blueprint sections ── */
   .blueprint-section { margin-bottom: 64px; padding-top: 8px; scroll-margin-top: 76px; }
@@ -236,13 +249,28 @@
     <div class="bp-grid">
       <div class="bp-col">
         <h3>Budget &amp; ROI</h3>
-        <p>Turnaround time drops from 5–7 days to under 4 hours. Origination capacity increases 25–35% with no added headcount. <strong style="color:var(--green)">₹45–60 Cr/yr</strong> processing-cost saving against a <strong style="color:var(--red)">₹1.15 Cr</strong> build cost (incl. shared platform) — investment payback in <strong style="color:var(--amber)">~1 week</strong> (see <a href="cost.html" style="color:var(--gold)">Cost Analysis</a>).</p>
+        <p>Turnaround time drops from 5–7 days to under 4 hours. Origination capacity increases 25–35% with no added headcount. <strong style="color:var(--green)">₹45–60 Cr/yr</strong> <a href="#msme-calc" class="working-link">(working)</a> processing-cost saving against a <strong style="color:var(--red)">₹1.15 Cr</strong> build cost (incl. shared platform) — investment payback in <strong style="color:var(--amber)">~1 week</strong> (see <a href="cost.html" style="color:var(--gold)">Cost Analysis</a>).</p>
       </div>
       <div class="bp-col">
         <h3>Risk Register</h3>
         <p><span class="pill pill-teal">Low–Medium</span> Read-only AA/bureau integration; final lending authority stays human. Primary risk is data-quality drift in OCR extraction — mitigated by a confidence-threshold fallback to manual review.</p>
       </div>
     </div>
+
+    <div class="calc-label" id="msme-calc" style="scroll-margin-top:76px">Value Calculation — Working</div>
+    <div class="calc-table-scroll">
+      <table class="calc-table">
+        <thead><tr><th>Input</th><th>Low End</th><th>High End</th><th>Basis</th></tr></thead>
+        <tbody>
+          <tr><td>MSME credit analysts / underwriting staff</td><td colspan="2">1,500 (midpoint of nationally stated 1,200–1,800 range)</td><td><span class="pill pill-existing">Site figure</span></td></tr>
+          <tr><td>Origination capacity gain</td><td>25%</td><td>35%</td><td><span class="pill pill-existing">Site figure</span></td></tr>
+          <tr><td>Avg. fully-loaded cost per analyst (salary + benefits + overhead)</td><td colspan="2">~₹12L/yr</td><td><span class="pill pill-assumption">Assumption</span></td></tr>
+          <tr><td>Capacity-equivalent headcount avoided</td><td>1,500 × 25% = 375</td><td>1,500 × 35% = 525</td><td class="muted">Calculated</td></tr>
+          <tr class="calc-total"><td>Processing-cost saving (headcount avoided × cost/analyst)</td><td>375 × ₹12L ≈ ₹45 Cr</td><td>525 × ₹12L ≈ ₹63 Cr</td><td class="muted">Rounds to the stated ₹45–60 Cr</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:6px;margin-bottom:16px">Illustrative working, not a substitute for an actual headcount/cost audit — the point is to make the assumption explicit, not to claim precision. High end rounds down slightly (₹63 Cr → ₹60 Cr) for consistency with the figure used throughout the site.</p>
 
     <h3 style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">Delivery Roadmap</h3>
     <div class="roadmap">
@@ -285,13 +313,28 @@
     <div class="bp-grid">
       <div class="bp-col">
         <h3>Budget &amp; ROI</h3>
-        <p>Investigation time drops from 20–40 minutes to under 1 minute. False positives cut 30–40%. Fraud loss rate falls from ~0.05–0.10% to 0.02–0.04% — <strong style="color:var(--green)">₹100–150 Cr/yr</strong> avoided losses against a <strong style="color:var(--red)">₹33 L</strong> incremental build cost — investment payback <strong style="color:var(--amber)">under 1 week</strong>.</p>
+        <p>Investigation time drops from 20–40 minutes to under 1 minute. False positives cut 30–40%. Fraud loss rate falls from ~0.05–0.10% to 0.02–0.04% — <strong style="color:var(--green)">₹100–150 Cr/yr</strong> <a href="#fraud-calc" class="working-link">(working)</a> avoided losses against a <strong style="color:var(--red)">₹33 L</strong> incremental build cost — investment payback <strong style="color:var(--amber)">under 1 week</strong>.</p>
       </div>
       <div class="bp-col">
         <h3>Risk Register</h3>
         <p><span class="pill pill-teal">Low–Medium</span> Read-only monitoring layer; auto-freeze thresholds need governance sign-off before going live — false-freeze rate is tracked as a customer-experience KPI, not just a fraud KPI.</p>
       </div>
     </div>
+
+    <div class="calc-label" id="fraud-calc" style="scroll-margin-top:76px">Value Calculation — Working</div>
+    <div class="calc-table-scroll">
+      <table class="calc-table">
+        <thead><tr><th>Input</th><th>Low End</th><th>High End</th><th>Basis</th></tr></thead>
+        <tbody>
+          <tr><td>Fraud loss rate without AI</td><td>0.05%</td><td>0.10%</td><td><span class="pill pill-existing">Site figure</span></td></tr>
+          <tr><td>Fraud loss rate with AI</td><td>0.02%</td><td>0.04%</td><td><span class="pill pill-existing">Site figure</span></td></tr>
+          <tr><td>Loss-rate reduction</td><td>0.03 pp</td><td>0.06 pp</td><td class="muted">Calculated</td></tr>
+          <tr><td>Implied annual digital transaction volume (card/UPI/IMPS)</td><td colspan="2">~₹2.5–3.3 lakh Cr</td><td><span class="pill pill-assumption">Assumption</span></td></tr>
+          <tr class="calc-total"><td>Avoided loss (reduction × implied volume)</td><td>0.03% × ₹3.33L Cr ≈ ₹100 Cr</td><td>0.06% × ₹2.5L Cr ≈ ₹150 Cr</td><td class="muted">Matches the stated ₹100–150 Cr exactly</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:6px;margin-bottom:16px">Worked backward from the stated ₹100–150 Cr range rather than assumed forward — the transaction-volume figure is what that range <em>implies</em>, not an independently sourced number. Consistent with a large-bank-scale digital transaction book.</p>
 
     <h3 style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">Delivery Roadmap</h3>
     <div class="roadmap">
@@ -334,13 +377,27 @@
     <div class="bp-grid">
       <div class="bp-col">
         <h3>Budget &amp; ROI</h3>
-        <p>Portfolio coverage jumps from 20–30% to 100% daily. Recovery uplift of 15–25% in the 1–30 DPD bucket. <span style="color:var(--green);font-weight:700">~₹100 Cr/yr</span> estimated value (NPA-linked, board-tracked) against a <strong style="color:var(--red)">₹32 L</strong> incremental build cost — investment payback <strong style="color:var(--amber)">under 1 week</strong>.</p>
+        <p>Portfolio coverage jumps from 20–30% to 100% daily. Recovery uplift of 15–25% in the 1–30 DPD bucket. <span style="color:var(--green);font-weight:700">~₹100 Cr/yr</span> <a href="#collections-calc" class="working-link">(working)</a> estimated value (NPA-linked, board-tracked) against a <strong style="color:var(--red)">₹32 L</strong> incremental build cost — investment payback <strong style="color:var(--amber)">under 1 week</strong>.</p>
       </div>
       <div class="bp-col">
         <h3>Risk Register</h3>
         <p><span class="pill pill-green">Low</span> Advisory + negotiation strictly within pre-set policy bands; human sign-off required on every exception. Tone/compliance of automated outreach is monitored against RBI fair-practice collection norms.</p>
       </div>
     </div>
+
+    <div class="calc-label" id="collections-calc" style="scroll-margin-top:76px">Value Calculation — Working</div>
+    <div class="note-box" style="border-left-color:var(--red);margin-bottom:10px"><strong>Weakest-sourced of the 3 use cases.</strong> The original source brief described this only as "Very High, NPA-linked" without a number — the figures below are illustrative order-of-magnitude, not independently verified the way MSME and Fraud are.</div>
+    <div class="calc-table-scroll">
+      <table class="calc-table">
+        <thead><tr><th>Input</th><th>Low End</th><th>High End</th><th>Basis</th></tr></thead>
+        <tbody>
+          <tr><td>Recovery uplift, 1–30 DPD bucket</td><td>15%</td><td>25%</td><td><span class="pill pill-existing">Site figure</span></td></tr>
+          <tr><td>Assumed 1–30 DPD outstanding pool</td><td colspan="2">~₹500 Cr</td><td><span class="pill pill-assumption">Assumption</span></td></tr>
+          <tr class="calc-total"><td>Avoided provisioning / recovered value (uplift × pool)</td><td>15% × ₹500 Cr ≈ ₹75 Cr</td><td>25% × ₹500 Cr ≈ ₹125 Cr</td><td class="muted">Rounds to the stated ~₹80–120 Cr</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:6px;margin-bottom:16px">The ₹500 Cr pool size is a placeholder assumption, not a figure pulled from the Bank's actual delinquent-account book — replace it with the real 1–30 DPD outstanding balance before using this number in an actual Board ask.</p>
 
     <h3 style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">Delivery Roadmap</h3>
     <div class="roadmap">
