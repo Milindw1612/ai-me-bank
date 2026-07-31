@@ -130,6 +130,7 @@
   <button class="tab-btn" onclick="showTab('reg',this)">Regulatory Alignment</button>
   <button class="tab-btn" onclick="showTab('risk',this)">Risk Tiers</button>
   <button class="tab-btn diff-new-tab" onclick="showTab('validation',this)">Validation Gates</button>
+  <button class="tab-btn" onclick="showTab('outputqa',this)">Output Verification</button>
   <button class="tab-btn" onclick="showTab('audit',this)">Audit Trail</button>
 </div>
 
@@ -285,6 +286,42 @@
       <li>A gate failure is logged in the Agent Register alongside the pass/fail history for that use case</li>
     </ul>
     </div>
+  </div>
+
+  <!-- OUTPUT VERIFICATION -->
+  <div id="tab-outputqa" class="tab-panel">
+    <div class="note-box"><strong>Why this tab exists:</strong> Validation Gates (previous tab) is a one-time pre-launch check; Audit Trail (next tab) is a passive log. Neither one inspects an individual output <em>at the moment it's produced</em>. This tab covers the checks that run on every single agent output, continuously, once a pilot is live.</div>
+
+    <div class="section-label">Explainability — LIME &amp; SHAP</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Tool</th><th>What It Does</th><th>Applied To</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#fff">LIME</strong><br><span class="muted" style="font-size:11px">Local Interpretable Model-agnostic Explanations</span></td><td class="muted">Approximates the model's local decision boundary around one specific output with a simple, interpretable surrogate model — shows which input factors pushed this particular recommendation in each direction</td><td class="muted">MSME Credit CAM Prep's Risk &amp; Cash-Flow Agent — so a credit officer sees <em>why</em> the AI weighed an applicant's cash flow, GST filings, and bureau score the way it did</td></tr>
+          <tr><td><strong style="color:#fff">SHAP</strong><br><span class="muted" style="font-size:11px">SHapley Additive exPlanations</span></td><td class="muted">Game-theory-based feature attribution — assigns each input signal a formal, additive contribution to the final score, consistent across every output from the same model</td><td class="muted">Fraud Detection's Recommendation Agent — so a fraud analyst sees exactly which signal (device fingerprint, behavior anomaly, AML watchlist match) drove a given fraud-probability score</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:-16px;margin-bottom:24px">Explanations are attached to the output shown to the human reviewer — not a separate report generated after the fact — so the "why" is available at the exact moment a credit officer or fraud analyst has to decide whether to accept, edit, or reject the AI's recommendation.</p>
+
+    <div class="section-label">Per-Output Checks</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Check</th><th>What It Catches</th><th>Action on Failure</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#fff">Output Authentication</strong></td><td class="muted">Confirms the output actually came from the expected agent and model version in this run, with an unbroken request-response chain — not injected, replayed, or tampered with in transit</td><td class="muted">Output discarded; request re-run from the last verified checkpoint; incident logged</td></tr>
+          <tr><td><strong style="color:#fff">Durability (Consistency)</strong></td><td class="muted">Re-running the same or a near-identical input should produce a materially consistent output — catches flaky, non-reproducible model behaviour before a human ever sees it</td><td class="muted">Flagged for Model Risk Committee review; output held back from the human reviewer until resolved</td></tr>
+          <tr><td><strong style="color:#fff">Hallucination Detection</strong></td><td class="muted">Every factual claim in the output — a cited bureau score, a policy clause, a transaction amount — is cross-checked against the actual retrieved source data before the output is trusted</td><td class="muted">Output blocked from reaching the human reviewer; agent re-runs with stricter grounding to the source documents</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label">What Happens on a Failed Check</div>
+    <ul class="checklist">
+      <li>The output never reaches the human reviewer — a failed check blocks it before the credit officer, fraud analyst, or collections officer ever sees it</li>
+      <li>Repeated failures on the same agent trigger an automatic hold on that agent pending Model Risk Committee review</li>
+      <li>Every check result — pass or fail — is logged alongside the Langfuse trace for that call, feeding the same <a href="helicopter.html" style="color:var(--gold)">Helicopter View</a> audit path as every other agent call</li>
+    </ul>
   </div>
 
   <!-- AUDIT TRAIL -->

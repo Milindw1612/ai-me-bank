@@ -130,6 +130,13 @@
       <div class="arch-row"><div class="arch-key">ENCRYPT</div><div class="arch-val">AES-256 at rest (KMS), TLS 1.3 in transit</div></div>
       <div class="arch-row"><div class="arch-key">HUMAN GATE</div><div class="arch-val">Credit sign-off, confirmed-fraud calls, and settlement outcomes stay human</div></div>
     </div>
+    <div class="arch-card">
+      <div class="arch-card-title">🔎 Explainability &amp; Output QA</div>
+      <div class="arch-card-sub">Every agent output is explained and checked before a human ever sees it — see <a href="governance.html#outputqa" style="color:var(--gold)">Governance → Output Verification</a></div>
+      <div class="arch-row"><div class="arch-key">TOOLS</div><div class="arch-val">LIME + SHAP — local and formal feature-attribution explanations attached to every risk/fraud score</div></div>
+      <div class="arch-row"><div class="arch-key">HALLUCINATION</div><div class="arch-val">Every factual claim in an output is cross-checked against the actual retrieved source data</div></div>
+      <div class="arch-row"><div class="arch-key">DURABILITY</div><div class="arch-val">Re-run consistency check flags flaky, non-reproducible model behaviour before it reaches a human</div></div>
+    </div>
   </div>
 
   <div class="note-box"><strong>Want the full data-flow picture?</strong> See <a href="helicopter.html">Helicopter View</a> for how data moves end-to-end — from external sources, through this shared platform, into each use case's agent cluster, to a human decision-maker, and back to the core banking system of record. For the actual implementation, see the <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">agentic-ai source code</a>.</div>
