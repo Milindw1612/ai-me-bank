@@ -26,6 +26,24 @@
   .nav-links a.active { color: var(--gold); font-weight: 700; }
   .nav-cta { background: linear-gradient(135deg,#D97706,#F59E0B); color:#000 !important; font-weight:700 !important; padding: 5px 14px; border-radius: 6px; }
   .nav-cta.brief { background: linear-gradient(135deg,#0D9488,#34D399); }
+  .table-scroll { overflow-x: auto; margin-bottom: 18px; border-radius: 10px; border: 1px solid var(--border2); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  thead th { background: rgba(255,255,255,0.04); padding: 10px 14px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-align: left; border-bottom: 1px solid var(--border2); }
+  thead th.right { text-align: right; }
+  tbody td { padding: 10px 14px; font-size: 13px; border-bottom: 1px solid var(--border); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.right { text-align: right; }
+  .total-row td { background: rgba(217,119,6,0.06); font-weight: 700; color: var(--gold); border-top: 2px solid rgba(217,119,6,0.3); }
+  .chart-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin-bottom: 6px; }
+  .chart-box h4 { font-size: 11px; font-weight: 700; letter-spacing: .5px; color: var(--mid); margin-bottom: 10px; text-transform: uppercase; }
+  .mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 12px; margin-bottom: 6px; }
+  .mini-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .mini-card .mc-label { font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--mid); margin-bottom: 10px; }
+  .mini-card .mc-row { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; font-family: Georgia, serif; }
+  .mini-card .mc-before { color: var(--red); }
+  .mini-card .mc-arrow { color: var(--muted); font-size: 13px; }
+  .mini-card .mc-after { color: var(--green); }
+  .mini-card .mc-badge { margin-top: 8px; font-size: 11px; font-weight: 700; color: var(--green); }
   @media (max-width: 900px) { .nav-links { display: none; } }
 
   .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
@@ -162,6 +180,83 @@
     <div class="sum-cell"><div class="sum-label">Payback Period</div><div class="sum-val" style="color:var(--amber)">&lt; 1 week</div></div>
   </div>
   <p style="font-size:11px;color:var(--muted);margin-top:-20px;margin-bottom:32px">Figures from <a href="cost.html" style="color:var(--gold)">Cost Analysis</a> and <a href="roi.html" style="color:var(--gold)">ROI</a> (unchanged, already live) — scoped to the 3 flagship pilots. Wave 2 and Wave 3 (6 additional use cases, Year 2/Year 3) are sequenced on <a href="roadmap.html#portfolio" style="color:var(--gold)">AI Roadmap → Use-Case Portfolio</a>; their cost/benefit will be estimated separately when scoped.</p>
+
+  <div>
+  <div class="section-label">Year-by-Year Financial Impact</div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Year</th><th class="right">Value</th><th class="right">Cost</th><th class="right">Net Benefit</th></tr></thead>
+      <tbody>
+        <tr><td>Year 1</td><td class="right">₹277.5 Cr</td><td class="right" style="color:var(--red)">₹2.65 Cr</td><td class="right" style="color:var(--green)"><strong>₹274.85 Cr</strong></td></tr>
+        <tr><td>Year 2</td><td class="right">₹277.5 Cr</td><td class="right" style="color:var(--red)">₹0.85 Cr</td><td class="right" style="color:var(--green)"><strong>₹276.65 Cr</strong></td></tr>
+        <tr><td>Year 3</td><td class="right">₹277.5 Cr</td><td class="right" style="color:var(--red)">₹0.85 Cr</td><td class="right" style="color:var(--green)"><strong>₹276.65 Cr</strong></td></tr>
+        <tr class="total-row"><td><strong>3-Year Total</strong></td><td class="right"><strong>₹832.5 Cr</strong></td><td class="right"><strong>₹4.35 Cr</strong></td><td class="right"><strong>₹828.15 Cr</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-box">
+    <h4>Cumulative Net Benefit — Builds to ₹828+ Cr by Year 3</h4>
+    <svg viewBox="0 0 400 250" style="width:100%;max-width:520px;display:block;margin:0 auto" role="img" aria-label="Bar chart showing cumulative net benefit climbing from ₹274.85 Cr after Year 1, to ₹551.50 Cr after Year 2, to ₹828.15 Cr after Year 3">
+      <line x1="30" y1="220" x2="380" y2="220" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <line x1="30" y1="120" x2="380" y2="120" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="30" y1="20" x2="380" y2="20" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="24" y="224" text-anchor="end" font-size="9" fill="#64748B">0</text>
+      <text x="24" y="124" text-anchor="end" font-size="9" fill="#64748B">₹414 Cr</text>
+      <text x="24" y="24" text-anchor="end" font-size="9" fill="#64748B">₹828 Cr</text>
+
+      <rect x="55" y="153.6" width="80" height="66.4" rx="4" fill="#34D399" opacity="0.55"/>
+      <text x="95" y="146" text-anchor="middle" font-size="13" font-weight="700" fill="#34D399">₹274.85 Cr</text>
+      <text x="95" y="238" text-anchor="middle" font-size="10.5" fill="#94A3B8">After Year 1</text>
+
+      <rect x="180" y="86.8" width="80" height="133.2" rx="4" fill="#34D399" opacity="0.78"/>
+      <text x="220" y="79" text-anchor="middle" font-size="13" font-weight="700" fill="#34D399">₹551.50 Cr</text>
+      <text x="220" y="238" text-anchor="middle" font-size="10.5" fill="#94A3B8">After Year 2</text>
+
+      <rect x="305" y="20" width="80" height="200" rx="4" fill="#34D399"/>
+      <text x="345" y="13" text-anchor="middle" font-size="13" font-weight="700" fill="#34D399">₹828.15 Cr</text>
+      <text x="345" y="238" text-anchor="middle" font-size="10.5" fill="#94A3B8">After Year 3</text>
+    </svg>
+  </div>
+  <p style="font-size:11px;color:var(--muted);margin-top:8px">Figures from <a href="cost.html" style="color:var(--gold)">Cost Analysis</a> — Year 1 assumes a full year of value even though the 3 pilots go live at staggered weeks within Year 1 (MSME Wk 17, Fraud Wk 27, Collections ~Wk 37 — see <a href="timeline.html" style="color:var(--gold)">Timeline</a>); this simplification is already used consistently across the site, not introduced here.</p>
+  </div>
+
+  <div>
+  <div class="section-label">Productivity &amp; Efficiency Gains</div>
+  <div class="mini-grid">
+    <div class="mini-card">
+      <div class="mc-label">MSME · Turnaround Time</div>
+      <div class="mc-row"><span class="mc-before">5–7 days</span><span class="mc-arrow">→</span><span class="mc-after">&lt;4 hrs</span></div>
+      <div class="mc-badge">~97% faster (midpoint)</div>
+    </div>
+    <div class="mini-card">
+      <div class="mc-label">MSME · Origination Capacity</div>
+      <div class="mc-row"><span class="mc-after">+25–35%</span></div>
+      <div class="mc-badge">No added headcount</div>
+    </div>
+    <div class="mini-card">
+      <div class="mc-label">Fraud · Investigation Time</div>
+      <div class="mc-row"><span class="mc-before">20–40 min</span><span class="mc-arrow">→</span><span class="mc-after">&lt;1 min</span></div>
+      <div class="mc-badge">~97% faster (midpoint)</div>
+    </div>
+    <div class="mini-card">
+      <div class="mc-label">Fraud · False Positives</div>
+      <div class="mc-row"><span class="mc-after">−30–40%</span></div>
+      <div class="mc-badge">Fewer alerts to triage</div>
+    </div>
+    <div class="mini-card">
+      <div class="mc-label">Collections · Portfolio Coverage</div>
+      <div class="mc-row"><span class="mc-before">20–30%</span><span class="mc-arrow">→</span><span class="mc-after">100% daily</span></div>
+      <div class="mc-badge">Every account touched daily</div>
+    </div>
+    <div class="mini-card">
+      <div class="mc-label">Collections · Recovery Uplift</div>
+      <div class="mc-row"><span class="mc-after">+15–25%</span></div>
+      <div class="mc-badge">1–30 DPD bucket</div>
+    </div>
+  </div>
+  <p style="font-size:11px;color:var(--muted);margin-top:8px">Figures from <a href="blueprints.html" style="color:var(--gold)">Blueprints</a> and <a href="roi.html" style="color:var(--gold)">ROI</a> (unchanged, already live). "~97% faster" figures are calculated from the stated before/after midpoints, not an independently sourced number.</p>
+  </div>
 
   <div class="section-label">The Plan — 0 to 36 Months</div>
   <div class="note-box"><strong>Headline:</strong> scale from 3 governed pilots to an enterprise "AI Factory" — every major business line running at least one governed agentic system by Year 3, targeting ISO/IEC 42001 certification, benchmarked against RBI's FREE-AI Framework throughout. Full horizon-by-horizon detail, the Workforce &amp; Change plan, and directional industry context are in <a href="roadmap.html" style="color:var(--gold)">AI Roadmap</a>.</div>
