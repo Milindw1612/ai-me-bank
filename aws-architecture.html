@@ -86,6 +86,27 @@
 
   .account-tree { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 20px; font-size: 13px; }
   .account-node { padding: 6px 0 6px 20px; border-left: 2px solid var(--border2); margin-left: 8px; }
+
+  .plain-box { background: rgba(13,148,136,0.06); border: 1px solid rgba(13,148,136,0.3); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; }
+  .plain-box .plain-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
+  .plain-box p { font-size: 13px; color: var(--text); line-height: 1.75; }
+  .script-row { font-size: 13px; color: var(--text); line-height: 1.75; margin-bottom: 8px; }
+  .script-row:last-child { margin-bottom: 0; }
+  .script-row strong { color: var(--teal); display: inline-block; min-width: 108px; }
+
+  .how-steps { counter-reset: how-step; margin-bottom: 8px; }
+  .how-step { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .how-step:last-child { border-bottom: none; }
+  .how-step::before { counter-increment: how-step; content: counter(how-step); flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: rgba(52,211,153,0.15); border: 1px solid rgba(52,211,153,0.4); color: var(--green); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .how-step-body strong { color: #fff; font-size: 13px; }
+  .how-step-body p { font-size: 12.5px; color: var(--mid); line-height: 1.65; margin-top: 2px; }
+
+  .seq-flow { display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; }
+  .seq-item { display: flex; align-items: center; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; }
+  .seq-num { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); color: var(--gold); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .seq-name { font-size: 13px; font-weight: 700; color: #fff; flex: 1; min-width: 180px; }
+  .seq-why { font-size: 11.5px; color: var(--mid); flex: 2; }
+  @media (max-width: 700px) { .seq-item { flex-wrap: wrap; } }
   .account-node strong { color: #fff; }
 
   footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
@@ -176,11 +197,35 @@
         </tbody>
       </table>
     </div>
+
+    <div class="section-label">How This Works — Vector Database &amp; Retrieval, in Plain English</div>
+    <p style="font-size:13px;color:var(--mid);margin-bottom:12px;line-height:1.75">Several tabs on this page (especially Retrieval &amp; Data Controls) assume you already know what a "vector database" or "embedding" is. Here's the actual mechanics, in order, using the Bank's real <code>credit_policy_chunks</code> table as the example — not a generic explanation.</p>
+    <div class="how-steps">
+      <div class="how-step"><div class="how-step-body"><strong>Start with real documents.</strong><p>The Bank's actual credit policy, RBI Master Directions, and KYC/AML guidelines — ordinary PDFs, nothing special yet.</p></div></div>
+      <div class="how-step"><div class="how-step-body"><strong>Break each document into small pieces ("chunks").</strong><p>A few paragraphs at a time — 400 tokens with 80-token overlap, per <a href="deploy-guide/part2.html" style="color:var(--gold)">Deploy Guide Part 2</a> — not the whole document at once. This is why an agent can pull in one specific clause instead of an entire 200-page policy.</p></div></div>
+      <div class="how-step"><div class="how-step-body"><strong>Convert each chunk into a list of numbers ("embedding").</strong><p>An AI model reads each chunk and produces a fixed-length list of numbers that represents its <em>meaning</em>. Chunks about similar topics end up with similar numbers, even if they don't share a single word in common.</p></div></div>
+      <div class="how-step"><div class="how-step-body"><strong>Store the chunks and their numbers together.</strong><p>That's the "vector database" — in this case, ordinary PostgreSQL with the <code>pgvector</code> extension enabled, not a separate exotic system. The table is literally called <code>credit_policy_chunks</code>.</p></div></div>
+      <div class="how-step"><div class="how-step-body"><strong>Turn the question into the same kind of number-list, and find the closest matches.</strong><p>That's "retrieval." The agent then answers using only those retrieved chunks — not its own general knowledge — so answers stay grounded in the Bank's actual policy text, not an invented approximation of it. This is the "RAG" (Retrieval-Augmented Generation) pattern referenced throughout this site.</p></div></div>
+    </div>
+
+    <div class="section-label">Implementation Sequence — What Order to Build These In</div>
+    <p style="font-size:13px;color:var(--mid);margin-bottom:12px;line-height:1.75">The 7 tabs on this page aren't a flat list — some are needed before the 3 pilots even go live, others only start to matter once Wave 2 introduces a second business line. This is the recommended build order, consistent with the horizons already on <a href="roadmap.html" style="color:var(--gold)">AI Roadmap</a>.</p>
+    <div class="seq-flow">
+      <div class="seq-item"><div class="seq-num">1</div><div class="seq-name">Network Isolation<br><span class="pill pill-gold" style="margin-top:4px">Wave 1</span></div><div class="seq-why">Pure infrastructure change, no dependency on anything else — protects the 3 pilots already in flight, so it goes first.</div></div>
+      <div class="seq-item"><div class="seq-num">2</div><div class="seq-name">Detection &amp; Monitoring<br><span class="pill pill-gold" style="margin-top:4px">Wave 1</span></div><div class="seq-why">You want to already be watching before anything scales — stand this up alongside Network Isolation, not after.</div></div>
+      <div class="seq-item"><div class="seq-num">3</div><div class="seq-name">Threat Modeling<br><span class="pill pill-gold" style="margin-top:4px">Wave 1</span></div><div class="seq-why">A one-time formal review of what's already been informally identified in ai-gpolicy.html — do it once, early, then revisit annually.</div></div>
+      <div class="seq-item"><div class="seq-num">4</div><div class="seq-name">Multi-Account Structure<br><span class="pill pill-purple" style="margin-top:4px">Wave 1 → 2</span></div><div class="seq-why">Bigger lift than the first three — start before Wave 2 scoping begins, but doesn't block the 3 pilots' go-live.</div></div>
+      <div class="seq-item"><div class="seq-num">5</div><div class="seq-name">Retrieval &amp; Data Controls<br><span class="pill pill-blue" style="margin-top:4px">Wave 2</span></div><div class="seq-why">Only becomes load-bearing the moment a second business line's documents enter the same vector database.</div></div>
+      <div class="seq-item"><div class="seq-num">6</div><div class="seq-name">Framework Mapping<br><span class="pill pill-blue" style="margin-top:4px">Wave 2</span></div><div class="seq-why">Certification-style work, naturally paced alongside the ISO/IEC 42001 target already on the Roadmap.</div></div>
+      <div class="seq-item"><div class="seq-num">7</div><div class="seq-name">Disaster Recovery<br><span class="pill pill-red" style="margin-top:4px">Wave 2 → 3</span></div><div class="seq-why">Highest cost of the 7, lowest urgency while the platform still serves one business line on Multi-AZ HA.</div></div>
+    </div>
   </div>
 
   <!-- NETWORK ISOLATION -->
   <div id="tab-network" class="tab-panel">
     <div class="note-box"><strong>Gap closed:</strong> the existing VPC (<code>ai-me-bank-vpc</code>, 10.0.0.0/16, Deploy Guide Step 5) already separates public and private subnets, but every call from the agent platform to Claude currently leaves the VPC over the public AWS API endpoint. PrivateLink removes that public hop entirely.</div>
+
+    <div class="plain-box"><div class="plain-label">In Plain English</div><p>Right now, when an agent asks Claude a question, that request leaves the Bank's private network, travels across the public internet (encrypted, but still public infrastructure), reaches AWS's public Bedrock endpoint, and comes back the same way. PrivateLink creates a dedicated, private tunnel that stays entirely inside AWS's own infrastructure — the request never touches the public internet at all, the same way a bank's ATM network doesn't route your PIN through the open internet even though the ATM itself sits on a public street.</p></div>
 
     <div class="section-label">Adding a Bedrock/Anthropic VPC Endpoint</div>
     <div class="cmd-label">AWS CLI — Extends Deploy Guide Step 5's VPC</div>
@@ -194,6 +239,11 @@ aws ec2 create-vpc-endpoint \
   --private-dns-enabled \
   --profile ai-me-bank-staging \
   --tag-specifications 'ResourceType=vpc-endpoint,Tags=[{Key=Name,Value=ai-me-bank-bedrock-endpoint}]'</pre>
+    <div class="plain-box"><div class="plain-label">Script Breakdown</div>
+      <div class="script-row"><strong>What it does:</strong> Calls the AWS EC2 API to provision a new "Interface Endpoint" inside the existing <code>ai-me-bank-vpc</code>, attached to the same 2 private subnets the EKS cluster already uses, and switches on private DNS so the normal Bedrock web address automatically resolves to this private address instead of the public one.</div>
+      <div class="script-row"><strong>What it creates:</strong> One new AWS resource — a VPC Endpoint tagged <code>ai-me-bank-bedrock-endpoint</code>, visible in the AWS Console under VPC → Endpoints — plus a supporting security group (<code>$SG_BEDROCK_ENDPOINT</code>) controlling exactly which resources inside the VPC may use it.</div>
+      <div class="script-row"><strong>Why it matters:</strong> Every one of the 3 pilots' Claude calls now travels entirely inside AWS's private backbone instead of the public internet, closing off an entire category of network-level interception risk — with zero code changes required in any agent.</div>
+    </div>
     <div class="ok">✓ Once this endpoint exists, every agent — MSME's CAM Drafting Agent, Fraud's Recommendation Agent, Collections' Negotiation Agent — reaches Claude over the AWS private backbone, never the public internet, with no code change required (the SDK resolves the same API hostname to the private endpoint automatically).</div>
 
     <div class="section-label">Updated Network Segmentation</div>
@@ -210,6 +260,8 @@ aws ec2 create-vpc-endpoint \
   <!-- MULTI-ACCOUNT STRUCTURE -->
   <div id="tab-accounts" class="tab-panel">
     <div class="note-box"><strong>Gap closed:</strong> Deploy Guide Part 1 sets up exactly 2 AWS accounts — <code>ai-me-bank-staging</code> and <code>ai-me-bank-prod</code>. That's sufficient for the 3-pilot build, but a Board-level security review will ask where security tooling, log archives, and shared networking live — right now the answer is "inside prod," which is itself a finding. This extends to a standard AWS Organizations structure.</div>
+
+    <div class="plain-box"><div class="plain-label">In Plain English</div><p>Today, security monitoring and audit logs live inside the same AWS account as the production banking agents. That's like storing a bank branch's CCTV footage in the same room it's recording — if that room is ever compromised, the evidence goes with it. Splitting Security, Logs, and Network into their own separate AWS accounts means someone who breaches production still can't reach or delete the record of what they did.</p></div>
 
     <div class="section-label">Extended Account Structure</div>
     <div class="account-tree">
@@ -233,6 +285,8 @@ aws ec2 create-vpc-endpoint \
   <!-- THREAT MODELING -->
   <div id="tab-threat" class="tab-panel">
     <div class="note-box"><strong>Gap closed:</strong> <a href="ai-gpolicy.html" style="color:var(--gold)">AI-GPolicy §16.3</a> already runs a real threat model — prompt injection, tool-chaining exploits, credential exposure through agent logs, delegation escalation. What's missing is mapping those same threats to a named, auditable methodology a Board or regulator recognises.</div>
+
+    <div class="plain-box"><div class="plain-label">In Plain English</div><p>The Bank already has a list of things that could go wrong with its AI agents. STRIDE and MITRE ATLAS are two internationally recognised checklists that banks and auditors use to make sure a threat list like that one is actually complete — STRIDE for general cyber threats, MITRE ATLAS specifically for AI/LLM systems. Mapping to the recognised checklist matters because a regulator or auditor can check the Bank's list against the industry-standard one and see nothing was missed, rather than having to trust a home-grown list on faith.</p></div>
 
     <div class="section-label">STRIDE, Mapped to the Existing Threat List</div>
     <div class="table-scroll">
@@ -268,6 +322,8 @@ aws ec2 create-vpc-endpoint \
   <div id="tab-monitoring" class="tab-panel">
     <div class="note-box"><strong>Gap closed:</strong> Langfuse (already built, Deploy Guide Step 20-ish, referenced throughout Helicopter View) traces every LLM call — prompt, tokens, latency, cost. That's the <em>application layer</em>. GuardDuty and CloudTrail are a different, complementary layer: AWS account and network activity, independent of what the agents themselves are doing.</div>
 
+    <div class="plain-box"><div class="plain-label">In Plain English</div><p>Langfuse already records what each AI agent said and did. But it can't see if someone bypasses the agent entirely and queries the database directly through the AWS console. CloudTrail is the record of every action taken inside the AWS account, by anyone — human or machine. GuardDuty is a service that watches that record and flags anything that looks like an attack, the same way a bank's fraud system flags an unusual transaction pattern automatically rather than requiring someone to read every transaction by hand.</p></div>
+
     <div class="section-label">Three Layers, Not One</div>
     <div class="overview-grid">
       <div class="ov-card"><h3 style="color:var(--purple)">Langfuse (exists)</h3><p>What did the agent say and do? Every prompt, tool call, and human decision — already live, feeds Governance → Audit Trail.</p></div>
@@ -287,12 +343,19 @@ aws guardduty create-detector --enable --profile ai-me-bank-security
 aws guardduty create-members --detector-id $DETECTOR_ID \
   --account-details AccountId=$STAGING_ACCT,Email=... AccountId=$PROD_ACCT,Email=... \
   --profile ai-me-bank-security</pre>
+    <div class="plain-box"><div class="plain-label">Script Breakdown</div>
+      <div class="script-row"><strong>What it does:</strong> Three API calls in sequence — creates one CloudTrail trail scoped to the whole AWS Organization rather than a single account, turns on GuardDuty in the security account, then explicitly registers the staging and prod accounts so that one GuardDuty instance watches both.</div>
+      <div class="script-row"><strong>What it creates:</strong> A permanent, tamper-resistant activity log (<code>ai-me-bank-org-trail</code>) stored in the separate <code>ai-me-bank-logs</code> account, and one centrally-managed GuardDuty detector covering both staging and prod from the security account.</div>
+      <div class="script-row"><strong>Why it matters:</strong> If prod is ever compromised, an attacker cannot delete or alter the evidence of what happened, because the logs live in an account they never had access to — and GuardDuty is already watching for the attack pattern before a human would notice it manually.</div>
+    </div>
     <div class="warn">⚠ GuardDuty and CloudTrail findings should route to the same incident process already defined in <a href="ai-gpolicy.html#s19" style="color:var(--gold)">AI-GPolicy §19, Incident Management</a> — not a separate, parallel process the CISO's team has to remember to check.</div>
   </div>
 
   <!-- RETRIEVAL & DATA CONTROLS -->
   <div id="tab-data" class="tab-panel">
     <div class="note-box"><strong>Gap closed:</strong> today, <code>credit_policy_chunks</code> (Deploy Guide Part 2) has no row-level access control — any query against the table returns any chunk. That's fine at single-pilot scale with one policy corpus, but breaks down the moment Wave 2/3 introduces business-line-specific documents (Retail Lending, Treasury) that shouldn't all be retrievable by every agent.</div>
+
+    <div class="plain-box"><div class="plain-label">In Plain English</div><p>See "How This Works" on the Overview tab for what a vector database actually is. Today, that database has one pile of documents that any agent can search — fine with only MSME's policies in there. The moment a second business line's policies get added, without this control, the MSME agent could accidentally retrieve and act on a Retail Lending document it was never meant to see — the database equivalent of a bank teller being able to open any customer's locked file, not just the ones assigned to their desk.</p></div>
 
     <div class="section-label">Extending the Existing Table</div>
     <div class="cmd-label">Adds Access-Control Columns to credit_policy_chunks</div>
@@ -305,6 +368,11 @@ aws guardduty create-members --detector-id $DETECTOR_ID \
 INSERT INTO credit_policy_chunks (chunk_text, source_ref, source_type, classification, allowed_roles, business_line, embedding)
 VALUES ('...', 'retail_lending_policy_v3', 'internal_credit_policy', 'confidential',
         ARRAY['retail_credit_officer'], 'retail_lending', '...');</pre>
+    <div class="plain-box"><div class="plain-label">Script Breakdown</div>
+      <div class="script-row"><strong>What it does:</strong> The ALTER TABLE adds 3 new columns to the existing <code>credit_policy_chunks</code> table with safe default values, so every row already in the table gets classified automatically — no manual re-tagging needed. The INSERT below it is a worked example, not a required step, showing how a future Retail Lending document would be labelled once Wave 2 adds it.</div>
+      <div class="script-row"><strong>What it creates:</strong> Three new columns — <code>classification</code>, <code>allowed_roles</code>, <code>business_line</code> — on a table that already exists and is already in production use. No new table, no data migration, no downtime.</div>
+      <div class="script-row"><strong>Why it matters:</strong> This is the one change that makes the vector database capable of safely holding more than one business line's documents. Without it, every future business line added to the shared platform would leak its policy documents to every other agent by default.</div>
+    </div>
 
     <div class="cmd-label">Retrieval-Time Filter — Applied in policy_qa()</div>
     <pre>SELECT chunk_text, source_ref FROM credit_policy_chunks
@@ -312,6 +380,11 @@ WHERE business_line = %(requesting_agent_business_line)s
   AND %(requesting_agent_role)s = ANY(allowed_roles)
 ORDER BY embedding <=> %(query_embedding)s
 LIMIT 5;</pre>
+    <div class="plain-box"><div class="plain-label">Script Breakdown</div>
+      <div class="script-row"><strong>What it does:</strong> Adds two WHERE conditions to the query <code>policy_qa()</code> already runs (Step 5 in "How This Works" on the Overview tab) — before ranking chunks by similarity, it first narrows the search to rows matching the requesting agent's business line and role.</div>
+      <div class="script-row"><strong>What it creates:</strong> Nothing new — this changes the shape of an existing query. The document-matching logic itself is untouched; it's now searching a smaller, permitted subset of the table instead of the whole thing.</div>
+      <div class="script-row"><strong>Why it matters:</strong> Access control enforced at the database layer can't be forgotten by a future engineer adding a new agent — every retrieval automatically respects it, the same way a bank's core system won't let a teller pull up an account outside their permissions, regardless of what the teller's own front-end software does.</div>
+    </div>
     <div class="ok">✓ Same pattern the reference document describes as "a UK employee cannot retrieve US-only documents" — here it's "the MSME agent cannot retrieve Retail Lending's confidential policy chunks," enforced at query time, not by trusting the agent to self-filter.</div>
     <p style="font-size:11px;color:var(--muted);margin-top:8px">Not a Wave-1 blocker — with only MSME's policy corpus in the table today, every chunk is already effectively <code>business_line = 'msme'</code>. This becomes load-bearing exactly when Wave 2 introduces a second business line's documents into the same database.</p>
   </div>
@@ -319,6 +392,8 @@ LIMIT 5;</pre>
   <!-- FRAMEWORK MAPPING -->
   <div id="tab-frameworks" class="tab-panel">
     <div class="note-box"><strong>Gap closed:</strong> <a href="compliance.html" style="color:var(--gold)">Compliance</a> maps this platform to RBI FREE-AI, DPDP, CERT-In, and IRDAI — India-specific regulatory frameworks. This tab adds 3 international/industry technical-architecture frameworks the reference document raised, none of which overlap with Compliance's existing scope.</div>
+
+    <div class="plain-box"><div class="plain-label">In Plain English</div><p>RBI FREE-AI, DPDP, and CERT-In (already mapped on Compliance) are India-specific rules. AWS Well-Architected, PCI DSS, and ISO 27001 are internationally recognised technical standards that a global auditor, an international regulator, or an overseas investor would specifically look for — a second, internationally-recognised stamp of approval on top of the domestic one the Bank already has.</p></div>
 
     <div class="section-label">AWS Well-Architected Framework</div>
     <div class="table-scroll">
@@ -345,6 +420,8 @@ LIMIT 5;</pre>
   <!-- DISASTER RECOVERY -->
   <div id="tab-dr" class="tab-panel">
     <div class="note-box"><strong>Gap closed:</strong> RDS is already Multi-AZ (Deploy Guide Part 2) — that protects against a single Availability Zone failure. It does not protect against a full <code>ap-south-1</code> region outage, and no RTO/RPO target has ever been stated for this platform.</div>
+
+    <div class="plain-box"><div class="plain-label">In Plain English</div><p>Multi-AZ (already built) protects against one data centre in Mumbai having a problem — the backup copy is a few kilometres away, in a different building. Cross-region DR protects against a problem affecting all of Mumbai at once — the backup is in an entirely different city. RTO is how long it takes to get back up and running; RPO is how much data, in the worst case, could be lost in the gap between the last backup and the outage.</p></div>
 
     <div class="section-label">Proposed RTO / RPO by Pilot</div>
     <div class="table-scroll">
