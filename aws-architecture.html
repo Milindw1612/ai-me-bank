@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS-Specific Architecture — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 10px; display: flex; align-items: center; height: 64px; }
+  .nav-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.6), 0 0 26px rgba(57,255,20,0.35); flex-shrink: 0; text-decoration: none; }
+  .nav-links { display: flex; gap: 4px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 9.5px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); font-weight: 700; }
+  .nav-cta { background: linear-gradient(135deg,#D97706,#F59E0B); color:#000 !important; font-weight:700 !important; padding: 5px 14px; border-radius: 6px; }
+  .nav-cta.brief { background: linear-gradient(135deg,#0D9488,#34D399); }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
+
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 760px; line-height: 1.7; }
+
+  .draft-banner { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.35); border-radius: 8px; padding: 10px 16px; font-size: 12px; color: var(--gold); margin-top: 14px; max-width: 760px; }
+
+  .tabs-bar { display: flex; background: var(--surface); border-bottom: 1px solid var(--border2); padding: 0 24px; overflow-x: auto; position: sticky; top: 64px; z-index: 90; }
+  .tab-btn { padding: 14px 18px; font-size: 11.5px; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; white-space: nowrap; letter-spacing: 0.3px; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  main { padding: 0; }
+  .tab-panel { display: none; padding: 32px 48px 56px; }
+  .tab-panel.active { display: block; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+  .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px,1fr)); gap: 14px; margin-bottom: 32px; }
+  .ov-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .ov-card h3 { font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
+  .ov-card p { font-size: 11.5px; color: var(--mid); line-height: 1.6; }
+
+  .table-scroll { overflow-x: auto; margin-bottom: 28px; border-radius: 10px; border: 1px solid var(--border2); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  thead th { background: rgba(255,255,255,0.04); padding: 11px 16px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-align: left; white-space: nowrap; border-bottom: 1px solid var(--border2); }
+  tbody td { padding: 11px 16px; font-size: 12.5px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.muted { color: var(--muted); font-size: 12px; }
+
+  .pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .pill-teal { background: rgba(13,148,136,0.12); color: var(--teal); border: 1px solid rgba(13,148,136,0.3); }
+  .pill-blue { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
+  .pill-green { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .pill-purple { background: rgba(167,139,250,0.12); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+  .pill-red { background: rgba(248,113,113,0.12); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+  .pill-gold { background: rgba(245,158,11,0.12); color: var(--gold); border: 1px solid rgba(245,158,11,0.3); }
+
+  .note-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 6px; padding: 14px 18px; font-size: 12.5px; color: var(--mid); margin-bottom: 24px; line-height: 1.75; }
+  .note-box strong { color: var(--text); }
+  .note-box.accent-red { border-left-color: var(--red); background: rgba(248,113,113,0.04); }
+
+  .checklist { list-style: none; margin-bottom: 8px; }
+  .checklist li { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--mid); }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+
+  pre,code { font-family: 'Cascadia Code','Fira Code',Consolas,monospace; }
+  pre { background: #1A0A0F; border: 1px solid rgba(255,255,255,0.08); border-radius: 7px; padding: 14px 16px; font-size: 12px; overflow-x: auto; margin: 10px 0; line-height: 1.75; color: #E2E8F0; }
+  code { background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 3px; font-size: 12px; color: #FCD34D; }
+  .cmd-label { font-size: 10px; font-weight: 700; color: #94765B; letter-spacing: 1.5px; text-transform: uppercase; margin: 14px 0 4px; }
+  .warn { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); border-radius: 7px; padding: 12px 14px; font-size: 12.5px; color: #FCD34D; margin: 10px 0; }
+  .info { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.25); border-radius: 7px; padding: 12px 14px; font-size: 12.5px; color: #93C5FD; margin: 10px 0; }
+  .ok { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); border-radius: 7px; padding: 12px 14px; font-size: 12.5px; color: #6EE7B7; margin: 10px 0; }
+
+  .account-tree { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 20px; font-size: 13px; }
+  .account-node { padding: 6px 0 6px 20px; border-left: 2px solid var(--border2); margin-left: 8px; }
+  .account-node strong { color: #fff; }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; transition: color .2s; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .page-header { padding: 24px 20px; }
+    .tab-panel { padding: 20px; }
+    footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="board-brief.html" class="nav-cta brief">Board Brief</a>
+      <a href="ai-mindmap.html">AI-Readiness</a>
+      <a href="index.html">Use Cases</a>
+      <a href="roi.html">ROI</a>
+      <a href="blueprints.html">Blueprints</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="helicopter.html">Helicopter View</a>
+      <a href="cost.html">Cost</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="ai-gpolicy.html">AI-GPolicy</a>
+      <a href="roadmap.html">AI Roadmap</a>
+      <a href="deploy-guide/index.html">Deploy</a>
+      <a href="deploy-guide/part1.html">AWS Setup</a>
+      <a href="aws-architecture.html" class="active">AWS Architecture</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="contact.html" class="nav-cta">Contact Me</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">Local Draft — Reviewed, Awaiting Push</div>
+  <h1>AWS-Specific Architecture — Security &amp; Compliance Deep-Dive</h1>
+  <p>Extends <a href="architecture.html" style="color:var(--gold)">Architecture</a> and <a href="deploy-guide/index.html" style="color:var(--gold)">Deploy Guide</a> with 8 AWS security patterns not yet covered elsewhere on the site — network isolation, multi-account structure, formal threat modeling, detection tooling, retrieval-time access control, and framework compliance mapping. Every item below is grounded in the actual resources already named in <a href="deploy-guide/part1.html" style="color:var(--gold)">Deploy Guide Part 1</a> and <a href="deploy-guide/part2.html" style="color:var(--gold)">Part 2</a> — no generic examples.</p>
+  <div class="draft-banner">⚠ Now wired into the site nav (after Deploy, alongside AWS Setup) — still not committed or pushed to GitHub.</div>
+</div>
+
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showTab('overview',this)">Overview</button>
+  <button class="tab-btn" onclick="showTab('network',this)">Network Isolation</button>
+  <button class="tab-btn" onclick="showTab('accounts',this)">Multi-Account Structure</button>
+  <button class="tab-btn" onclick="showTab('threat',this)">Threat Modeling</button>
+  <button class="tab-btn" onclick="showTab('monitoring',this)">Detection &amp; Monitoring</button>
+  <button class="tab-btn" onclick="showTab('data',this)">Retrieval &amp; Data Controls</button>
+  <button class="tab-btn" onclick="showTab('frameworks',this)">Framework Mapping</button>
+  <button class="tab-btn" onclick="showTab('dr',this)">Disaster Recovery</button>
+</div>
+
+<main>
+
+  <!-- OVERVIEW -->
+  <div id="tab-overview" class="tab-panel active">
+    <div class="note-box"><strong>Why this page exists:</strong> a critical review of an AWS security reference document surfaced 8 patterns genuinely missing from the site's existing architecture coverage — not duplicates of what's already on <a href="architecture.html" style="color:var(--gold)">Architecture</a> or <a href="deploy-guide/index.html" style="color:var(--gold)">Deploy Guide</a>. Each one below is written against the Bank's actual resources (<code>ai-me-bank-staging</code>, <code>ai-me-bank-prod</code>, the <code>credit_policy_chunks</code> table, the 3 flagship pilots) rather than a generic example.</div>
+
+    <div class="section-label">Zero Trust — Naming What's Already Built, Plus What's New</div>
+    <p style="font-size:13px;color:var(--mid);margin-bottom:16px;line-height:1.75">The platform already implements the individual controls Zero Trust requires — MFA on every human account (<a href="deploy-guide/part1.html" style="color:var(--gold)">Deploy Guide Step 2</a>), least-privilege IAM roles (<code>ai-me-bank-app-role</code>, scoped per-pilot), and encryption everywhere (KMS at rest, TLS 1.3 in transit) — but the site has never named <strong style="color:#fff">Zero Trust</strong> as the organising principle tying them together. Doing so doesn't change any control; it gives the Board and Model Risk Committee a single, recognised framework name to audit against.</p>
+
+    <div class="overview-grid">
+      <div class="ov-card"><h3 style="color:var(--gold)">Never Trust, Always Verify</h3><p>Every agent-to-service call is authenticated per-request via IAM — already true today, since <code>ai-me-bank-app-role</code> is scoped to specific S3 buckets and Secrets Manager paths, not broad access.</p></div>
+      <div class="ov-card"><h3 style="color:var(--purple)">Least Privilege</h3><p>No agent role has <code>s3:*</code> or <code>iam:*</code> — the existing <code>ai-me-bank-app-role</code> policy (Deploy Guide Step 3) already enumerates exact actions and exact ARNs.</p></div>
+      <div class="ov-card"><h3 style="color:var(--red)">Assume Breach</h3><p>New in this page: network isolation (PrivateLink), detection tooling (GuardDuty/CloudTrail), and row-level data access control — assuming a credential or network segment could be compromised, and limiting blast radius accordingly.</p></div>
+    </div>
+
+    <div class="section-label">What's New on This Page vs. What Already Exists</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Area</th><th>Status</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td>PrivateLink (network path to Bedrock)</td><td><span class="pill pill-red">New</span></td><td class="muted">Not on the site before this page — see Network Isolation tab</td></tr>
+          <tr><td>AWS Organizations multi-account structure</td><td><span class="pill pill-red">New</span></td><td class="muted">Site had 2 accounts (staging/prod); this extends to 6 — see Multi-Account tab</td></tr>
+          <tr><td>STRIDE + MITRE ATLAS threat modeling</td><td><span class="pill pill-red">New</span></td><td class="muted">Formal structure applied to the existing threat list in ai-gpolicy.html — see Threat Modeling tab</td></tr>
+          <tr><td>GuardDuty + CloudTrail</td><td><span class="pill pill-red">New</span></td><td class="muted">Complements Langfuse (LLM-layer), doesn't replace it — see Detection &amp; Monitoring tab</td></tr>
+          <tr><td>Row-level vector-DB access control</td><td><span class="pill pill-red">New</span></td><td class="muted"><code>credit_policy_chunks</code> gets new columns — see Retrieval &amp; Data Controls tab</td></tr>
+          <tr><td>AWS Well-Architected / PCI DSS / ISO 27001 mapping</td><td><span class="pill pill-red">New</span></td><td class="muted">Distinct from the existing RBI/DPDP/CERT-In/IRDAI mapping on compliance.html — see Framework Mapping tab</td></tr>
+          <tr><td>Cross-region DR with defined RTO/RPO</td><td><span class="pill pill-red">New</span></td><td class="muted">Site had Multi-AZ HA only, no cross-region failover — see Disaster Recovery tab</td></tr>
+          <tr><td>WAF, MFA, KMS, IAM least-privilege, prompt-injection testing</td><td><span class="pill pill-green">Already exists</span></td><td class="muted">Deploy Guide Part 1 &amp; ai-gpolicy.html — not repeated here</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NETWORK ISOLATION -->
+  <div id="tab-network" class="tab-panel">
+    <div class="note-box"><strong>Gap closed:</strong> the existing VPC (<code>ai-me-bank-vpc</code>, 10.0.0.0/16, Deploy Guide Step 5) already separates public and private subnets, but every call from the agent platform to Claude currently leaves the VPC over the public AWS API endpoint. PrivateLink removes that public hop entirely.</div>
+
+    <div class="section-label">Adding a Bedrock/Anthropic VPC Endpoint</div>
+    <div class="cmd-label">AWS CLI — Extends Deploy Guide Step 5's VPC</div>
+    <pre># Private-subnet interface endpoint for Bedrock, same VPC as the EKS cluster
+aws ec2 create-vpc-endpoint \
+  --vpc-id $VPC_ID \
+  --vpc-endpoint-type Interface \
+  --service-name com.amazonaws.ap-south-1.bedrock-runtime \
+  --subnet-ids $PRIV_A $PRIV_B \
+  --security-group-ids $SG_BEDROCK_ENDPOINT \
+  --private-dns-enabled \
+  --profile ai-me-bank-staging \
+  --tag-specifications 'ResourceType=vpc-endpoint,Tags=[{Key=Name,Value=ai-me-bank-bedrock-endpoint}]'</pre>
+    <div class="ok">✓ Once this endpoint exists, every agent — MSME's CAM Drafting Agent, Fraud's Recommendation Agent, Collections' Negotiation Agent — reaches Claude over the AWS private backbone, never the public internet, with no code change required (the SDK resolves the same API hostname to the private endpoint automatically).</div>
+
+    <div class="section-label">Updated Network Segmentation</div>
+    <div class="account-tree">
+      <div><strong>ai-me-bank-vpc</strong> (10.0.0.0/16, ap-south-1)</div>
+      <div class="account-node">Public Subnet — ALB, <code>ai-me-bank-waf</code> (already built, Deploy Guide Step 12)</div>
+      <div class="account-node">Private App Subnet — EKS pods (all 3 pilots' agent clusters)</div>
+      <div class="account-node">Private Data Subnet — RDS (<code>credit_policy_chunks</code> + audit tables), S3 <code>ai-me-bank-cam-docs</code></div>
+      <div class="account-node"><strong style="color:var(--gold)">NEW:</strong> Private Endpoint Subnet — Bedrock VPC Endpoint (PrivateLink), Secrets Manager VPC Endpoint</div>
+    </div>
+    <p style="font-size:11px;color:var(--muted)">No new subnet CIDR ranges needed for staging-scale traffic — the endpoint can share the existing private data subnet if preferred; a dedicated subnet is shown here for clarity of the security-group boundary.</p>
+  </div>
+
+  <!-- MULTI-ACCOUNT STRUCTURE -->
+  <div id="tab-accounts" class="tab-panel">
+    <div class="note-box"><strong>Gap closed:</strong> Deploy Guide Part 1 sets up exactly 2 AWS accounts — <code>ai-me-bank-staging</code> and <code>ai-me-bank-prod</code>. That's sufficient for the 3-pilot build, but a Board-level security review will ask where security tooling, log archives, and shared networking live — right now the answer is "inside prod," which is itself a finding. This extends to a standard AWS Organizations structure.</div>
+
+    <div class="section-label">Extended Account Structure</div>
+    <div class="account-tree">
+      <div><strong>AWS Organization — Ai-ME BANK</strong></div>
+      <div class="account-node"><strong style="color:var(--gold)">NEW:</strong> <code>ai-me-bank-security</code> — GuardDuty delegated admin, Security Hub, centralised findings</div>
+      <div class="account-node"><strong style="color:var(--gold)">NEW:</strong> <code>ai-me-bank-logs</code> — CloudTrail organization trail, S3 log archive (write-once, cross-account)</div>
+      <div class="account-node"><strong style="color:var(--gold)">NEW:</strong> <code>ai-me-bank-network</code> — Transit Gateway, shared PrivateLink endpoints (if scaling to Wave 2/3 business lines sharing one network hub)</div>
+      <div class="account-node"><code>ai-me-bank-staging</code> — already exists (Deploy Guide Step 1)</div>
+      <div class="account-node"><code>ai-me-bank-prod</code> — already exists (Deploy Guide Step 1)</div>
+    </div>
+
+    <div class="section-label">Why Split Security and Logs Out of Prod</div>
+    <ul class="checklist">
+      <li>CloudTrail logs in a separate account survive even if the production account is ever compromised — an attacker with prod access cannot delete the evidence of what they did</li>
+      <li>GuardDuty findings are visible to the Security team without granting them standing access to production data or the credit/fraud/collections systems themselves</li>
+      <li>This is the same separation-of-duties principle already applied inside prod via the 3 separate KMS keys (Deploy Guide Step 9) — extended from key-level to account-level</li>
+    </ul>
+    <p style="font-size:11px;color:var(--muted);margin-top:8px">Sequencing note: this is a Year-1 governance investment, not a Wave-1 blocker — the 3 pilots can go live on the existing 2-account structure; the security/logs/network accounts should exist before Wave 2 scale-out begins.</p>
+  </div>
+
+  <!-- THREAT MODELING -->
+  <div id="tab-threat" class="tab-panel">
+    <div class="note-box"><strong>Gap closed:</strong> <a href="ai-gpolicy.html" style="color:var(--gold)">AI-GPolicy §16.3</a> already runs a real threat model — prompt injection, tool-chaining exploits, credential exposure through agent logs, delegation escalation. What's missing is mapping those same threats to a named, auditable methodology a Board or regulator recognises.</div>
+
+    <div class="section-label">STRIDE, Mapped to the Existing Threat List</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>STRIDE Category</th><th>Already-Identified Threat (ai-gpolicy.html §16.3)</th><th>Existing Control</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill pill-blue">Spoofing</span></td><td class="muted">A compromised credential impersonates the CAM Drafting Agent or Recommendation Agent</td><td class="muted">IAM role scoping, MFA on human accounts</td></tr>
+          <tr><td><span class="pill pill-purple">Tampering</span></td><td class="muted">Credit policy documents modified before ingestion into <code>credit_policy_chunks</code></td><td class="muted">Document approval workflow (Governance §10)</td></tr>
+          <tr><td><span class="pill pill-teal">Repudiation</span></td><td class="muted">A credit officer or fraud analyst disputes having approved an action</td><td class="muted">Langfuse immutable trace + human-decision logging (Governance → Audit Trail)</td></tr>
+          <tr><td><span class="pill pill-red">Information Disclosure</span></td><td class="muted">Credential exposure through agent logs (explicitly named in §16.3)</td><td class="muted">PII tokenisation middleware, log scrubbing</td></tr>
+          <tr><td><span class="pill pill-gold">Denial of Service</span></td><td class="muted">Prompt flooding against the shared LangGraph platform</td><td class="muted">API Gateway rate limiting, <code>ai-me-bank-waf</code></td></tr>
+          <tr><td><span class="pill pill-green">Elevation of Privilege</span></td><td class="muted">Escalation via delegation (explicitly named in §16.3, Agentic Systems)</td><td class="muted">Permission-inheritance enforceability testing (Governance §16.3)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label">MITRE ATLAS — the Correct Framework Name for AI Threats</div>
+    <div class="note-box accent-red"><strong>Correction from the source document:</strong> the reference material calls this "MITRE ATT&amp;CK for AI." That's not the actual framework name — MITRE ATT&amp;CK is the general enterprise cyber-threat matrix; the AI/ML-specific counterpart is <strong style="color:#fff">MITRE ATLAS</strong> (Adversarial Threat Landscape for AI Systems). Using the correct name matters if this ever goes in front of a technically literate Board member or auditor.</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>ATLAS Tactic</th><th>Relevance to the 3 Pilots</th></tr></thead>
+        <tbody>
+          <tr><td>LLM Prompt Injection</td><td class="muted">Already tested for — Governance §16.3, resistance to prompt injection for Tier 2+ agents</td></tr>
+          <tr><td>RAG Poisoning</td><td class="muted">Applies directly to <code>credit_policy_chunks</code> — mitigated by the document-approval workflow, not yet by content-level anomaly detection</td></tr>
+          <tr><td>LLM Data Leakage</td><td class="muted">Covered by output guardrails (Governance → Output Verification, Hallucination Detection)</td></tr>
+          <tr><td>Model Exfiltration / Extraction</td><td class="muted"><span class="pill pill-red">Gap</span> — not addressed anywhere on the site today; lower priority since Claude is API-consumed, not self-hosted, but worth a Model Risk Committee note</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DETECTION & MONITORING -->
+  <div id="tab-monitoring" class="tab-panel">
+    <div class="note-box"><strong>Gap closed:</strong> Langfuse (already built, Deploy Guide Step 20-ish, referenced throughout Helicopter View) traces every LLM call — prompt, tokens, latency, cost. That's the <em>application layer</em>. GuardDuty and CloudTrail are a different, complementary layer: AWS account and network activity, independent of what the agents themselves are doing.</div>
+
+    <div class="section-label">Three Layers, Not One</div>
+    <div class="overview-grid">
+      <div class="ov-card"><h3 style="color:var(--purple)">Langfuse (exists)</h3><p>What did the agent say and do? Every prompt, tool call, and human decision — already live, feeds Governance → Audit Trail.</p></div>
+      <div class="ov-card"><h3 style="color:var(--gold)">CloudTrail (new)</h3><p>Who called which AWS API, when? Catches a credential being used somewhere Langfuse can't see — e.g. someone querying <code>credit_policy_chunks</code> directly via the RDS console, bypassing the agent entirely.</p></div>
+      <div class="ov-card"><h3 style="color:var(--red)">GuardDuty (new)</h3><p>Is any of this anomalous? Cross-references CloudTrail, VPC Flow Logs, and DNS logs for known attack patterns — flags things neither Langfuse nor a human reviewing CloudTrail manually would catch.</p></div>
+    </div>
+
+    <div class="cmd-label">Enable Both — Delegated to ai-me-bank-security (see Multi-Account tab)</div>
+    <pre># Organization-wide CloudTrail, logs land in ai-me-bank-logs account
+aws cloudtrail create-trail --name ai-me-bank-org-trail \
+  --s3-bucket-name ai-me-bank-cloudtrail-logs \
+  --is-organization-trail --is-multi-region-trail \
+  --profile ai-me-bank-security
+
+# GuardDuty, delegated admin in the security account
+aws guardduty create-detector --enable --profile ai-me-bank-security
+aws guardduty create-members --detector-id $DETECTOR_ID \
+  --account-details AccountId=$STAGING_ACCT,Email=... AccountId=$PROD_ACCT,Email=... \
+  --profile ai-me-bank-security</pre>
+    <div class="warn">⚠ GuardDuty and CloudTrail findings should route to the same incident process already defined in <a href="ai-gpolicy.html#s19" style="color:var(--gold)">AI-GPolicy §19, Incident Management</a> — not a separate, parallel process the CISO's team has to remember to check.</div>
+  </div>
+
+  <!-- RETRIEVAL & DATA CONTROLS -->
+  <div id="tab-data" class="tab-panel">
+    <div class="note-box"><strong>Gap closed:</strong> today, <code>credit_policy_chunks</code> (Deploy Guide Part 2) has no row-level access control — any query against the table returns any chunk. That's fine at single-pilot scale with one policy corpus, but breaks down the moment Wave 2/3 introduces business-line-specific documents (Retail Lending, Treasury) that shouldn't all be retrievable by every agent.</div>
+
+    <div class="section-label">Extending the Existing Table</div>
+    <div class="cmd-label">Adds Access-Control Columns to credit_policy_chunks</div>
+    <pre>ALTER TABLE credit_policy_chunks
+  ADD COLUMN classification VARCHAR(20) NOT NULL DEFAULT 'internal',
+  ADD COLUMN allowed_roles TEXT[] NOT NULL DEFAULT ARRAY['credit_officer'],
+  ADD COLUMN business_line VARCHAR(50) NOT NULL DEFAULT 'msme';
+
+-- Example: a Retail Lending policy chunk (Wave 2), not visible to MSME's agent
+INSERT INTO credit_policy_chunks (chunk_text, source_ref, source_type, classification, allowed_roles, business_line, embedding)
+VALUES ('...', 'retail_lending_policy_v3', 'internal_credit_policy', 'confidential',
+        ARRAY['retail_credit_officer'], 'retail_lending', '...');</pre>
+
+    <div class="cmd-label">Retrieval-Time Filter — Applied in policy_qa()</div>
+    <pre>SELECT chunk_text, source_ref FROM credit_policy_chunks
+WHERE business_line = %(requesting_agent_business_line)s
+  AND %(requesting_agent_role)s = ANY(allowed_roles)
+ORDER BY embedding <=> %(query_embedding)s
+LIMIT 5;</pre>
+    <div class="ok">✓ Same pattern the reference document describes as "a UK employee cannot retrieve US-only documents" — here it's "the MSME agent cannot retrieve Retail Lending's confidential policy chunks," enforced at query time, not by trusting the agent to self-filter.</div>
+    <p style="font-size:11px;color:var(--muted);margin-top:8px">Not a Wave-1 blocker — with only MSME's policy corpus in the table today, every chunk is already effectively <code>business_line = 'msme'</code>. This becomes load-bearing exactly when Wave 2 introduces a second business line's documents into the same database.</p>
+  </div>
+
+  <!-- FRAMEWORK MAPPING -->
+  <div id="tab-frameworks" class="tab-panel">
+    <div class="note-box"><strong>Gap closed:</strong> <a href="compliance.html" style="color:var(--gold)">Compliance</a> maps this platform to RBI FREE-AI, DPDP, CERT-In, and IRDAI — India-specific regulatory frameworks. This tab adds 3 international/industry technical-architecture frameworks the reference document raised, none of which overlap with Compliance's existing scope.</div>
+
+    <div class="section-label">AWS Well-Architected Framework</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Pillar</th><th>Current State</th></tr></thead>
+        <tbody>
+          <tr><td>Security</td><td class="muted">Strong — IAM least-privilege, KMS key separation, WAF, MFA all already built (Deploy Guide Part 1)</td></tr>
+          <tr><td>Reliability</td><td class="muted">Multi-AZ RDS exists; cross-region DR does not — see Disaster Recovery tab</td></tr>
+          <tr><td>Operational Excellence</td><td class="muted">Strong — Langfuse tracing, structured RACI (Deploy Guide → Ownership)</td></tr>
+          <tr><td>Performance Efficiency</td><td class="muted">EKS autoscaling per use case, HNSW vector index tuning already in place</td></tr>
+          <tr><td>Cost Optimization</td><td class="muted">Strong — <a href="cost.html" style="color:var(--gold)">Cost Analysis</a> already tracks this to the rupee</td></tr>
+          <tr><td>Sustainability</td><td class="muted"><span class="pill pill-red">Gap</span> — not addressed anywhere on the site; lowest priority of the 6 pillars for a 3-pilot platform this size</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label">PCI DSS — Relevant to Fraud Detection Specifically</div>
+    <p style="font-size:13px;color:var(--mid);margin-bottom:12px;line-height:1.75">Fraud Detection's Device/IP &amp; Network Agent and Merchant/Beneficiary &amp; AML Agent touch card/UPI/IMPS transaction data directly. <a href="ai-mindmap.html" style="color:var(--gold)">AI-Readiness</a> flags PCI DSS as relevant in passing; it isn't mapped clause-by-clause the way RBI/DPDP are on Compliance today. That mapping exercise is real work, not something to fabricate here — flagging it as an open item for Legal/Compliance to scope.</p>
+
+    <div class="section-label">ISO/IEC 27001 — Distinct from the Existing ISO 42001 Target</div>
+    <p style="font-size:13px;color:var(--mid);line-height:1.75"><a href="ai-gpolicy.html" style="color:var(--gold)">AI-GPolicy</a> targets ISO/IEC <strong style="color:#fff">42001</strong> (AI Management System) by Year 3 on the <a href="roadmap.html" style="color:var(--gold)">AI Roadmap</a>. ISO/IEC <strong style="color:#fff">27001</strong> is a different standard — general information security management, covering exactly the controls in this page (network isolation, access control, incident management) rather than AI-specific governance. Both are relevant; neither is a substitute for the other.</p>
+  </div>
+
+  <!-- DISASTER RECOVERY -->
+  <div id="tab-dr" class="tab-panel">
+    <div class="note-box"><strong>Gap closed:</strong> RDS is already Multi-AZ (Deploy Guide Part 2) — that protects against a single Availability Zone failure. It does not protect against a full <code>ap-south-1</code> region outage, and no RTO/RPO target has ever been stated for this platform.</div>
+
+    <div class="section-label">Proposed RTO / RPO by Pilot</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Pilot</th><th>Recovery Time Objective (RTO)</th><th>Recovery Point Objective (RPO)</th><th>Rationale</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill pill-gold">MSME Credit CAM Prep</span></td><td class="muted">4 hours</td><td class="muted">15 minutes</td><td class="muted">Not real-time critical — credit officers can revert to manual CAM prep temporarily</td></tr>
+          <tr><td><span class="pill pill-blue">Fraud Detection</span></td><td class="muted">30 minutes</td><td class="muted">5 minutes</td><td class="muted">Tightest target — every minute of downtime is a minute of unmonitored fraud exposure</td></tr>
+          <tr><td><span class="pill pill-green">Collections Recovery</span></td><td class="muted">8 hours</td><td class="muted">1 hour</td><td class="muted">Least time-sensitive — outreach can resume same-day with no compliance impact</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:-16px;margin-bottom:24px">Indicative targets for Board/Model Risk Committee discussion, not yet tested — same honesty standard as the Go-Live Validation Gates on <a href="governance.html#validation" style="color:var(--gold)">Governance</a>: a stated target the Bank commits to proving, not a claim it already meets.</p>
+
+    <div class="section-label">Cross-Region Failover — What Would Need to Change</div>
+    <ul class="checklist">
+      <li>RDS: enable cross-region automated backups to <code>ap-south-2</code> (Hyderabad) or <code>ap-southeast-1</code> (Singapore) if a second India region isn't available at build time</li>
+      <li>S3 (<code>ai-me-bank-cam-docs</code>): enable Cross-Region Replication to the same secondary region</li>
+      <li>EKS: a warm-standby cluster in the secondary region, scaled to zero until failover — not a duplicate always-on cluster, to control cost</li>
+      <li>DNS: Route 53 health-check-based failover routing, so a region outage redirects traffic without a manual DNS change under pressure</li>
+    </ul>
+    <div class="info">💡 Sequencing note, consistent with the Multi-Account tab: this is enterprise-scale resilience investment appropriate for Wave 2/3, not a Wave-1 blocker. Ship the 3 pilots on Multi-AZ first; add cross-region DR once the platform is running multiple business lines and an outage's blast radius is bank-wide, not one pilot.</div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+window.addEventListener('DOMContentLoaded', () => {
+  const id = location.hash.replace('#', '');
+  const panel = document.getElementById('tab-' + id);
+  const btn = [...document.querySelectorAll('.tab-btn')].find(b => b.getAttribute('onclick').includes("'" + id + "'"));
+  if (panel && btn) showTab(id, btn);
+});
+</script>
+</body>
+</html>
