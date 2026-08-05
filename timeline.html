@@ -434,6 +434,24 @@
     <div class="milestone-card"><div class="wk" data-traditional="Week 54" data-ai="Week 37">Week 37</div><p>All 3 use cases live — full program in production</p></div>
   </div>
 
+  <div class="section-label" style="margin-top:36px">Why These Timelines Don't Compress Further</div>
+  <p style="font-size:12.5px;color:var(--mid);line-height:1.7;margin-bottom:16px;max-width:820px">AI tooling cuts the coding and test-writing effort inside each task by roughly 30–50% — that's the real driver behind 54 weeks shrinking to 37. But three things sit on the critical path that no code-generation speed touches, and they set the floor for how far any of these numbers can move:</p>
+  <div class="callout-grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-bottom:20px">
+    <div class="callout">
+      <div class="callout-title">🔒 Vendor &amp; Regulatory Gates Are Fixed</div>
+      <p>Core Banking OAuth credential issuance (3 wks) and the Account Aggregator + CIBIL bureau contracts (3–4 wks) run <strong>identically in both scenarios</strong> — they're bank IT-security review and RBI-regulated data-sharing agreements, not engineering tasks. The Shared Platform Gantt says it plainly: no AI tool accelerates this.</p>
+    </div>
+    <div class="callout">
+      <div class="callout-title">🔗 Agents Depend on Each Other</div>
+      <p>MSME's Risk &amp; Cash-Flow Agent can't start until the Financial Ingestion and Bureau/Tax agents finish; CAM Drafting can't start until the Risk Agent finishes. AI compresses <em>each link</em> in that chain — it doesn't remove the chain. A 4-stage dependency still needs 4 stages.</p>
+    </div>
+    <div class="callout">
+      <div class="callout-title">🧑‍💼 Human Validation Needs Real Time</div>
+      <p>Credit-officer UAT (2 wks) and Fraud's shadow-mode run alongside the existing rules engine (1.5 wks) need actual people reviewing actual outcomes over actual days — you can't fast-forward a validation window just by writing the code faster.</p>
+    </div>
+  </div>
+  <div class="note-box">Net effect: once a use case's build hits whichever is longer — the agent dependency chain, or the fixed vendor/regulatory/human-review gates — faster code generation stops moving the total. That's the real ceiling behind 3 / 14 / 10 weeks, not an engineering limitation.</div>
+
 </main>
 
 <footer>
