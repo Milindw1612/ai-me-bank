@@ -76,6 +76,13 @@
   .total-row td { background: rgba(217,119,6,0.06); font-weight: 700; font-size: 13.5px; color: var(--gold); border-top: 2px solid rgba(217,119,6,0.3); }
   .savings-row td { background: rgba(52,211,153,0.05); font-weight: 700; color: var(--green); border-top: 1px solid rgba(52,211,153,0.2); }
 
+  .rate-card-scroll { background: #0B2E22; border: 1px solid rgba(52,211,153,0.35); border-radius: 10px; }
+  .rate-card-scroll table thead th { background: rgba(52,211,153,0.10); color: var(--green); }
+  .rate-card-scroll table tbody td { border-bottom: 1px solid rgba(52,211,153,0.15); color: #D9F5E8; }
+  .rate-card-scroll table tbody td.muted { color: #7FBFA0; }
+  .rate-card-scroll table tbody tr:hover td { background: rgba(52,211,153,0.06); }
+  .rate-card-scroll table tr.total-row td { background: rgba(52,211,153,0.16); color: var(--green); border-top: 2px solid rgba(52,211,153,0.4); }
+
   .pill { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-bottom: 2px; white-space: nowrap; }
   .pill-teal { background: rgba(13,148,136,0.12); color: var(--teal); border: 1px solid rgba(13,148,136,0.3); }
   .pill-blue { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
@@ -399,7 +406,7 @@
   <p style="font-size:11.5px;color:var(--muted);margin-top:8px">Per-use-case ranges and methodology as originally documented — click through to <a href="roi.html" style="color:var(--gold)">ROI</a> or <a href="blueprints.html" style="color:var(--gold)">Blueprints</a> for the underlying detail during a walkthrough.</p>
 
   <div class="section-label" style="margin-top:28px">Resource Rate Card — Monthly &amp; Yearly</div>
-  <div class="table-scroll">
+  <div class="table-scroll rate-card-scroll">
     <table>
       <thead><tr><th>Resource</th><th>Category</th><th class="right">Monthly (₹)</th><th class="right">Yearly (₹)</th></tr></thead>
       <tbody>
@@ -422,7 +429,7 @@
   <p style="font-size:11.5px;color:var(--muted);margin-top:8px">Flat one-row-per-resource view of the same figures shown in the <a href="#tab-running" onclick="document.querySelector('.tab-btn').nextElementSibling.click();return false;" style="color:var(--gold)">Running Cost</a> tab — grouped there by category with subtotals, listed here as a single quick-reference rate card.</p>
 
   <div class="section-label" style="margin-top:28px">Team Rate Card — Role-wise Monthly &amp; Annual Package</div>
-  <div class="table-scroll">
+  <div class="table-scroll rate-card-scroll">
     <table>
       <thead><tr><th>Role</th><th class="right">Monthly Rate (₹)</th><th class="right">Annual Package (₹)</th><th>Derived From</th></tr></thead>
       <tbody>
