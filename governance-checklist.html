@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Governance &amp; Compliance Checklist — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 10px; display: flex; align-items: center; height: 64px; }
+  .nav-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.6), 0 0 26px rgba(57,255,20,0.35); flex-shrink: 0; text-decoration: none; }
+  .nav-links { display: flex; gap: 4px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 9.5px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); font-weight: 700; }
+  .nav-cta { background: linear-gradient(135deg,#D97706,#F59E0B); color:#000 !important; font-weight:700 !important; padding: 5px 14px; border-radius: 6px; }
+  .nav-cta.brief { background: linear-gradient(135deg,#0D9488,#34D399); }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
+
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 780px; line-height: 1.7; }
+
+  .progress-bar-wrap { display: flex; align-items: center; gap: 16px; padding: 14px 48px; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border2); position: sticky; top: 64px; z-index: 90; }
+  .progress-track { flex: 1; height: 7px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; max-width: 480px; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--green)); border-radius: 4px; width: 0%; transition: width .25s; }
+  .progress-count { font-size: 11.5px; font-weight: 700; color: var(--green); white-space: nowrap; }
+  .progress-note { font-size: 10.5px; color: var(--muted); white-space: nowrap; }
+
+  .tabs-bar { display: flex; background: var(--surface); border-bottom: 1px solid var(--border2); padding: 0 24px; overflow-x: auto; position: sticky; top: 111px; z-index: 89; }
+  .tab-btn { padding: 14px 18px; font-size: 11.5px; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; white-space: nowrap; letter-spacing: 0.3px; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  main { padding: 0; }
+  .tab-panel { display: none; padding: 32px 48px 56px; }
+  .tab-panel.active { display: block; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-top: 26px; }
+  .section-label:first-child { margin-top: 0; }
+
+  .note-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 6px; padding: 14px 18px; font-size: 12.5px; color: var(--mid); margin-bottom: 24px; line-height: 1.75; }
+  .note-box strong { color: var(--text); }
+
+  .gc-item { display: flex; gap: 12px; align-items: flex-start; padding: 11px 4px; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .gc-item:last-child { border-bottom: none; }
+  .gc-item:hover { background: rgba(255,255,255,0.015); }
+  .gc-item input[type=checkbox] { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--green); flex-shrink: 0; cursor: pointer; }
+  .gc-item .gc-text { flex: 1; font-size: 13px; color: var(--text); line-height: 1.5; }
+  .gc-item.gc-checked .gc-text { color: var(--muted); text-decoration: line-through; text-decoration-color: rgba(148,163,184,0.4); }
+  .gc-tags { margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+  .pill { display: inline-block; font-size: 9.5px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .pill-teal { background: rgba(13,148,136,0.12); color: var(--teal); border: 1px solid rgba(13,148,136,0.3); }
+  .pill-blue { background: rgba(45,107,228,0.12); color: #5B8DEF; border: 1px solid rgba(45,107,228,0.3); }
+  .pill-green { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .pill-gold { background: rgba(245,158,11,0.12); color: var(--gold); border: 1px solid rgba(245,158,11,0.3); }
+  .pill-purple { background: rgba(167,139,250,0.12); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+  .pill-red { background: rgba(248,113,113,0.12); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+  .pill-amber { background: rgba(251,191,36,0.12); color: var(--amber); border: 1px solid rgba(251,191,36,0.3); }
+  .gc-src { font-size: 9.5px; font-weight: 700; color: var(--gold); text-decoration: none; }
+  .gc-src:hover { text-decoration: underline; }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; transition: color .2s; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .page-header { padding: 24px 20px; }
+    .progress-bar-wrap { padding: 12px 20px; top: 64px; }
+    .tabs-bar { top: 105px; }
+    .tab-panel { padding: 20px; }
+    footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="board-brief.html" class="nav-cta brief">Board Brief</a>
+      <a href="ai-mindmap.html">AI-Readiness</a>
+      <a href="index.html">Use Cases</a>
+      <a href="roi.html">ROI</a>
+      <a href="blueprints.html">Blueprints</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="helicopter.html">Helicopter View</a>
+      <a href="cost.html">Cost</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="ai-gpolicy.html">AI-GPolicy</a>
+      <a href="roadmap.html">AI Roadmap</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source</a>
+      <a href="deploy-guide/index.html">Deploy</a>
+      <a href="aws-architecture.html">AWS Architecture</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="governance-checklist.html" class="active">Checklist</a>
+      <a href="contact.html" class="nav-cta">Contact Me</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">AI-GPolicy · Governance · Responsible AI · RBI Compliance</div>
+  <h1>Governance &amp; Compliance Checklist — Day 0 to Year 3</h1>
+  <p>Every governance, Responsible AI and regulatory-compliance obligation already documented across <a href="ai-gpolicy.html" style="color:var(--gold)">AI-GPolicy</a>, <a href="governance.html" style="color:var(--gold)">Governance</a>, and <a href="compliance.html" style="color:var(--gold)">RBI &amp; National AI Compliance</a> — re-sequenced chronologically from the day the Board approves the policy through Year 3 of the <a href="roadmap.html" style="color:var(--gold)">Enterprise Roadmap</a>. Each item links back to its full source detail. Nothing here is invented — it's the same commitments already made elsewhere on this site, just ordered by when they need to happen.</p>
+</div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-count" id="progressCount">0 of 0 checked</div>
+  <div class="progress-note">Your own reading progress — saved in this browser, not a claim that anything is actually complete</div>
+</div>
+
+<div class="tabs-bar" id="tabsBar">
+  <button class="tab-btn active" onclick="showTab('day0',this)">Day 0</button>
+  <button class="tab-btn" onclick="showTab('h1',this)">0–3 Months</button>
+  <button class="tab-btn" onclick="showTab('h2',this)">3–6 Months</button>
+  <button class="tab-btn" onclick="showTab('h3',this)">6–12 Months</button>
+  <button class="tab-btn" onclick="showTab('h4',this)">Year 2</button>
+  <button class="tab-btn" onclick="showTab('h5',this)">Year 3</button>
+</div>
+
+<main>
+
+  <!-- ═══ DAY 0 ═══ -->
+  <div id="tab-day0" class="tab-panel active">
+    <div class="note-box"><strong>Day 0 = the day the Board signs off.</strong> Everything on this tab is what the Board is actually being asked to approve on <a href="board-brief.html" style="color:var(--gold)">Board Brief</a> — the four decisions that unlock every horizon that follows.</div>
+
+    <div class="section-label">Board Approval &amp; Charter</div>
+    <label class="gc-item"><input type="checkbox" data-id="d0-1"><div class="gc-text">Board approves the Agentic AI Governance Policy v1<div class="gc-tags"><span class="pill pill-gold">AI-GPolicy §24</span><span class="pill pill-gold">RBI Sutra 5 — Accountability</span><a href="ai-gpolicy.html" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="d0-2"><div class="gc-text">Charter the Board AI &amp; Technology Committee<div class="gc-tags"><span class="pill pill-purple">Governance</span><a href="board-brief.html" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="d0-3"><div class="gc-text">Appoint the Chief AI Officer as the accountable executive for AI<div class="gc-tags"><span class="pill pill-gold">RBI 90-day checklist</span><a href="compliance.html#rbi" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="d0-4"><div class="gc-text">Approve the Phase-1 budget — 3 flagship pilots, ₹4.35 Cr 3-year investment<div class="gc-tags"><span class="pill pill-amber">Budget</span><a href="cost.html" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="d0-5"><div class="gc-text">Approve Wave 2 scoping for Year 2<div class="gc-tags"><span class="pill pill-amber">Roadmap</span><a href="roadmap.html#portfolio" class="gc-src">view source →</a></div></div></label>
+  </div>
+
+  <!-- ═══ 0-3 MONTHS ═══ -->
+  <div id="tab-h1" class="tab-panel">
+    <div class="note-box"><strong>Horizon theme: Foundation.</strong> Governance chartered, policy published, 3 flagship pilots in build. The bank has a named AI accountability structure for the first time. See <a href="roadmap.html#overview" style="color:var(--gold)">Roadmap → Overview</a>.</div>
+
+    <div class="section-label">RBI FREE-AI 90-Day Checklist</div>
+    <label class="gc-item"><input type="checkbox" data-id="h1-1"><div class="gc-text">Inventory all AI use cases — the 3 flagship pilots, 12 agent instances<div class="gc-tags"><span class="pill pill-gold">RBI Pillar: Governance</span><span class="pill pill-blue">Responsible AI</span><a href="compliance.html#rbi" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="h1-2"><div class="gc-text">Conduct initial fairness testing on customer-facing models<div class="gc-tags"><span class="pill pill-gold">RBI Pillar: Protection</span><a href="compliance.html#rbi" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Governance &amp; Operating Model</div>
+    <label class="gc-item"><input type="checkbox" data-id="h1-3"><div class="gc-text">Stand up the Enterprise AI Operating Model RACI — CAIO, Model Risk Committee, CISO/DPO, Internal Audit, Business-Unit Champions<div class="gc-tags"><span class="pill pill-purple">Governance</span><span class="pill pill-gold">RBI Pillar: Governance</span><a href="roadmap.html#govop" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="h1-4"><div class="gc-text">Non-Negotiable Agent Restrictions formally adopted<div class="gc-tags"><span class="pill pill-purple">Governance</span><a href="ai-gpolicy.html" class="gc-src">AI-GPolicy §9 →</a></div></div></label>
+
+    <div class="section-label">Platform &amp; Infrastructure</div>
+    <label class="gc-item"><input type="checkbox" data-id="h1-5"><div class="gc-text">Shared AWS EKS + LangGraph platform provisioned — PII middleware, Langfuse tracing<div class="gc-tags"><span class="pill pill-gold">RBI Pillar: Infrastructure</span><a href="architecture.html" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Risk &amp; Model Validation</div>
+    <label class="gc-item"><input type="checkbox" data-id="h1-6"><div class="gc-text">Model inventory + risk-tiering register built for the 3 pilots before build starts<div class="gc-tags"><span class="pill pill-teal">International MRM</span><a href="roadmap.html#risk" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="h1-7"><div class="gc-text">Independent model validation function stood up, separate from the build team<div class="gc-tags"><span class="pill pill-teal">Audit</span><a href="roadmap.html#risk" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="h1-8"><div class="gc-text">Go-Live Validation Gates defined per pilot — precision/recall/false-positive thresholds<div class="gc-tags"><span class="pill pill-purple">Governance</span><a href="governance.html#validation" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Data Privacy (DPDP)</div>
+    <label class="gc-item"><input type="checkbox" data-id="h1-9"><div class="gc-text">Data-flow mapping and DPO sign-off on consent architecture, per pilot<div class="gc-tags"><span class="pill pill-green">DPDP</span><a href="roadmap.html#privacy" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">AI Security</div>
+    <label class="gc-item"><input type="checkbox" data-id="h1-10"><div class="gc-text">CERT-In Phase 1 (0–7 days): MFA on critical access, vulnerability baseline, patch known exploited CVEs first, incident reporting established<div class="gc-tags"><span class="pill pill-red">AI Security</span><a href="compliance.html#certin" class="gc-src">view source →</a></div></div></label>
+  </div>
+
+  <!-- ═══ 3-6 MONTHS ═══ -->
+  <div id="tab-h2" class="tab-panel">
+    <div class="note-box"><strong>Horizon theme: First Production, First Assurance.</strong> MSME Credit CAM Prep live. Independent model validation and the first internal audit of AI governance both stand up in parallel. See <a href="roadmap.html#overview" style="color:var(--gold)">Roadmap → Overview</a>.</div>
+
+    <div class="section-label">Go-Live</div>
+    <label class="gc-item"><input type="checkbox" data-id="h2-1"><div class="gc-text">MSME Credit CAM Prep live — first flagship pilot in production<div class="gc-tags"><span class="pill pill-teal">Timeline Wk 17</span><a href="timeline.html" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Capacity &amp; Workforce</div>
+    <label class="gc-item"><input type="checkbox" data-id="h2-2"><div class="gc-text">AI CoE training and awareness program launched for Business-Unit AI Champions and control functions<div class="gc-tags"><span class="pill pill-gold">RBI Pillar: Capacity</span><a href="roadmap.html#workforce" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="h2-3"><div class="gc-text">Reskilling budget line and redeployment plan for freed-up capacity confirmed<div class="gc-tags"><span class="pill pill-amber">Workforce</span><a href="roadmap.html#workforce" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Responsible AI &amp; Protection</div>
+    <label class="gc-item"><input type="checkbox" data-id="h2-4"><div class="gc-text">Consumer disclosures, consent, recourse and fairness testing embedded at every AI touchpoint<div class="gc-tags"><span class="pill pill-gold">RBI Pillar: Protection</span><span class="pill pill-blue">Responsible AI</span><a href="governance.html#hitl" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">AI Security</div>
+    <label class="gc-item"><input type="checkbox" data-id="h2-5"><div class="gc-text">AI Red-Team Test Catalogue in active use ahead of each pilot's security audit<div class="gc-tags"><span class="pill pill-red">AI Security</span><a href="ai-gpolicy.html" class="gc-src">AI-GPolicy Annexure F →</a></div></div></label>
+  </div>
+
+  <!-- ═══ 6-12 MONTHS ═══ -->
+  <div id="tab-h3" class="tab-panel">
+    <div class="note-box"><strong>Horizon theme: Full Pilot Wave + Readiness.</strong> All 3 flagship pilots in production. 3-lines-of-defense model operational. Regulatory-readiness dry-run completed before scaling further. See <a href="roadmap.html#overview" style="color:var(--gold)">Roadmap → Overview</a>.</div>
+
+    <div class="section-label">Go-Live</div>
+    <label class="gc-item"><input type="checkbox" data-id="h3-1"><div class="gc-text">Fraud Detection live<div class="gc-tags"><span class="pill pill-teal">Timeline Wk 27</span><a href="timeline.html" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="h3-2"><div class="gc-text">Collections Recovery live — all 3 flagship pilots now in production<div class="gc-tags"><span class="pill pill-teal">Timeline Wk 37</span><a href="timeline.html" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Audit &amp; Assurance</div>
+    <label class="gc-item"><input type="checkbox" data-id="h3-3"><div class="gc-text">3-lines-of-defense model fully operational across all 3 pilots<div class="gc-tags"><span class="pill pill-teal">Audit</span><a href="roadmap.html#audit" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="h3-4"><div class="gc-text">Internal Audit AI-audit-universe scoping completed<div class="gc-tags"><span class="pill pill-teal">RBI Pillar: Assurance</span><a href="roadmap.html#audit" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="h3-5"><div class="gc-text">Regulatory-readiness dry-run of a simulated RBI supervisory review completed<div class="gc-tags"><span class="pill pill-gold">RBI Pillar: Assurance</span><a href="compliance.html#stages" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Workforce &amp; Culture</div>
+    <label class="gc-item"><input type="checkbox" data-id="h3-6"><div class="gc-text">First annual capability &amp; culture survey reported to the Board</div><div class="gc-tags"><span class="pill pill-amber">Workforce</span><a href="roadmap.html#workforce" class="gc-src">view source →</a></div></label>
+  </div>
+
+  <!-- ═══ YEAR 2 ═══ -->
+  <div id="tab-h4" class="tab-panel">
+    <div class="note-box"><strong>Horizon theme: Enterprise Scale-Up.</strong> Wave 2 use cases live on the same governed platform. AI CoE becomes a self-serve capability, not a project team. See <a href="roadmap.html#overview" style="color:var(--gold)">Roadmap → Overview</a>.</div>
+
+    <div class="section-label">Use-Case Portfolio</div>
+    <label class="gc-item"><input type="checkbox" data-id="h4-1"><div class="gc-text">Wave 2 use cases live — Retail Lending, AML, Contact-Centre AI, Treasury — on the same governed platform<div class="gc-tags"><span class="pill pill-amber">Portfolio</span><a href="roadmap.html#portfolio" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="h4-2"><div class="gc-text">AI CoE matures into a self-serve platform with a formal intake/approval gate for new use cases<div class="gc-tags"><span class="pill pill-purple">Governance</span><a href="roadmap.html#govop" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Data Privacy</div>
+    <label class="gc-item"><input type="checkbox" data-id="h4-3"><div class="gc-text">Privacy-by-design gate added to use-case intake — no new agent reaches build without a data-flow and consent review<div class="gc-tags"><span class="pill pill-green">DPDP</span><a href="roadmap.html#privacy" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Audit &amp; Assurance</div>
+    <label class="gc-item"><input type="checkbox" data-id="h4-4"><div class="gc-text">First external assurance review of AI controls by an independent third party<div class="gc-tags"><span class="pill pill-teal">Audit</span><a href="roadmap.html#audit" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Responsible AI</div>
+    <label class="gc-item"><input type="checkbox" data-id="h4-5"><div class="gc-text">Explainability tiering standardised by risk tier across all business lines<div class="gc-tags"><span class="pill pill-blue">Responsible AI</span><a href="roadmap.html#responsible" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">AI Security</div>
+    <label class="gc-item"><input type="checkbox" data-id="h4-6"><div class="gc-text">Secure LLMOps pipeline enterprise-wide — model/prompt version control, supply-chain checks on third-party models and tools<div class="gc-tags"><span class="pill pill-red">AI Security</span><a href="roadmap.html#security" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Other Regulatory Frameworks (Monitor)</div>
+    <label class="gc-item"><input type="checkbox" data-id="h4-7"><div class="gc-text">SEBI AI/ML guidelines reviewed if the Wealth/Investment-Advisory candidate (Wave 3) is scoped<div class="gc-tags"><span class="pill pill-gold">SEBI (consultation)</span><a href="compliance.html#sebi" class="gc-src">view source →</a></div></div></label>
+  </div>
+
+  <!-- ═══ YEAR 3 ═══ -->
+  <div id="tab-h5" class="tab-panel">
+    <div class="note-box"><strong>Horizon theme: Enterprise AI Maturity.</strong> Every major business line runs at least one governed agentic system. External certification (ISO/IEC 42001) targeted. Governance, audit and reporting are business-as-usual. See <a href="roadmap.html#overview" style="color:var(--gold)">Roadmap → Overview</a>.</div>
+
+    <div class="section-label">Use-Case Portfolio</div>
+    <label class="gc-item"><input type="checkbox" data-id="h5-1"><div class="gc-text">Wave 3 use cases live — every major business line has at least one governed agentic system<div class="gc-tags"><span class="pill pill-amber">Portfolio</span><a href="roadmap.html#portfolio" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Audit &amp; External Certification</div>
+    <label class="gc-item"><input type="checkbox" data-id="h5-2"><div class="gc-text">ISO/IEC 42001 external certification targeted, validated by Internal Audit + an external assessor<div class="gc-tags"><span class="pill pill-teal">Audit</span><a href="roadmap.html#audit" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="h5-3"><div class="gc-text">Independent maturity assessment against RBI's FREE-AI Framework and ISO/IEC 42001<div class="gc-tags"><span class="pill pill-gold">RBI FREE-AI</span><a href="roadmap.html#audit" class="gc-src">view source →</a></div></div></label>
+    <label class="gc-item"><input type="checkbox" data-id="h5-4"><div class="gc-text">Annual Board model-risk deep-dive established as business-as-usual<div class="gc-tags"><span class="pill pill-teal">International MRM</span><a href="roadmap.html#risk" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Responsible AI</div>
+    <label class="gc-item"><input type="checkbox" data-id="h5-5"><div class="gc-text">First annual enterprise Responsible AI transparency report published<div class="gc-tags"><span class="pill pill-blue">Responsible AI</span><a href="roadmap.html#responsible" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Data Privacy</div>
+    <label class="gc-item"><input type="checkbox" data-id="h5-6"><div class="gc-text">Enterprise data-fiduciary maturity audit completed under the DPDP Act<div class="gc-tags"><span class="pill pill-green">DPDP</span><a href="roadmap.html#privacy" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">AI Security</div>
+    <label class="gc-item"><input type="checkbox" data-id="h5-7"><div class="gc-text">Continuous AI red-teaming and a CERT-In-aligned incident response runbook for AI systems, business-as-usual<div class="gc-tags"><span class="pill pill-red">AI Security</span><a href="roadmap.html#security" class="gc-src">view source →</a></div></div></label>
+
+    <div class="section-label">Workforce &amp; Culture</div>
+    <label class="gc-item"><input type="checkbox" data-id="h5-8"><div class="gc-text">Workforce transition fully business-as-usual; AI capability part of the standard learning &amp; development curriculum<div class="gc-tags"><span class="pill pill-amber">Workforce</span><a href="roadmap.html#workforce" class="gc-src">view source →</a></div></div></label>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+const STORAGE_KEY = 'aimebank-gc-checklist';
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { return {}; }
+}
+
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function updateProgress() {
+  const boxes = document.querySelectorAll('.gc-item input[type=checkbox]');
+  const total = boxes.length;
+  const checked = document.querySelectorAll('.gc-item input[type=checkbox]:checked').length;
+  document.getElementById('progressCount').textContent = checked + ' of ' + total + ' checked';
+  document.getElementById('progressFill').style.width = (total ? (checked / total * 100) : 0) + '%';
+}
+
+function initChecklist() {
+  const state = loadState();
+  document.querySelectorAll('.gc-item input[type=checkbox]').forEach(box => {
+    const id = box.dataset.id;
+    if (state[id]) {
+      box.checked = true;
+      box.closest('.gc-item').classList.add('gc-checked');
+    }
+    box.addEventListener('change', () => {
+      const s = loadState();
+      s[id] = box.checked;
+      saveState(s);
+      box.closest('.gc-item').classList.toggle('gc-checked', box.checked);
+      updateProgress();
+    });
+  });
+  updateProgress();
+}
+
+document.addEventListener('DOMContentLoaded', initChecklist);
+</script>
+</body>
+</html>
