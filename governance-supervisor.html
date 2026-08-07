@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Governance Supervisor — Ai-ME BANK</title>
+<title>AI Watchdog Council — Ai-ME BANK</title>
 <style>
   :root {
     --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
@@ -198,7 +198,7 @@
       <a href="aws-architecture.html">AWS Architecture</a>
       <a href="glossary.html">Glossary</a>
       <a href="governance-checklist.html">Checklist</a>
-      <a href="governance-supervisor.html" class="active">Supervisor</a>
+      <a href="governance-supervisor.html" class="active">Watchdog Council</a>
       <a href="contact.html" class="nav-cta">Contact Me</a>
     </div>
   </div>
@@ -206,7 +206,7 @@
 
 <div class="page-header">
   <div class="eyebrow">Concept Design · Program Governance</div>
-  <h1>AI Governance Supervisor — an orchestrator over 6 specialist agents</h1>
+  <h1>AI Watchdog Council — an orchestrator over 6 specialist agents</h1>
   <p>A standing agent system that watches the entire Day 0 → Year 3 initiative the way a strict PMO and compliance officer would — tracking, mapping, flagging and briefing — so the CAIO, Board AI Committee and CEO get one continuously-updated picture instead of quarterly slide decks. It surfaces everything a human needs to decide, in time to decide it. It never decides on its own.</p>
 </div>
 
@@ -217,7 +217,7 @@
   <button class="tab-btn" onclick="showTab('routing',this)">Escalation &amp; Notification</button>
   <button class="tab-btn" onclick="showTab('reporting',this)">Reporting</button>
   <button class="tab-btn" onclick="showTab('dashboard',this)">Dashboard Preview</button>
-  <button class="tab-btn" onclick="showTab('govgov',this)">Build, Timing &amp; Governing the Supervisor</button>
+  <button class="tab-btn" onclick="showTab('govgov',this)">Build, Timing &amp; Governing the Watchdog Council</button>
 </div>
 
 <main>
@@ -269,28 +269,28 @@
         <text x="378" y="216" font-size="10" fill="var(--muted)">structured findings</text>
 
         <rect x="20" y="244" width="160" height="66" rx="10" fill="rgba(245,158,11,0.14)" stroke="var(--agent-compliance)"></rect>
-        <text x="100" y="270" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-compliance)">Compliance Mapping</text>
+        <text x="100" y="270" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-compliance)">🐕 Compliance Mapping</text>
         <text x="100" y="286" text-anchor="middle" font-size="9.5" fill="var(--mid)">RBI Sutras, Pillars, policy</text>
 
         <rect x="190" y="244" width="160" height="66" rx="10" fill="rgba(91,141,239,0.14)" stroke="var(--agent-tracking)"></rect>
-        <text x="270" y="270" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-tracking)">Program Tracking</text>
+        <text x="270" y="270" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-tracking)">🐕 Program Tracking</text>
         <text x="270" y="286" text-anchor="middle" font-size="9.5" fill="var(--mid)">milestones, budget, hiring</text>
 
         <rect x="360" y="244" width="160" height="66" rx="10" fill="rgba(13,148,136,0.14)" stroke="var(--agent-fleet)"></rect>
-        <text x="440" y="270" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-fleet)">Agent Fleet Monitor</text>
+        <text x="440" y="270" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-fleet)">🐕 Agent Fleet Monitor</text>
         <text x="440" y="286" text-anchor="middle" font-size="9.5" fill="var(--mid)">the 12 pilot agents</text>
 
         <rect x="530" y="244" width="170" height="66" rx="10" fill="rgba(52,211,153,0.14)" stroke="var(--agent-audit)"></rect>
-        <text x="615" y="270" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-audit)">Audit &amp; Assurance</text>
+        <text x="615" y="270" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-audit)">🐕 Audit &amp; Assurance</text>
         <text x="615" y="286" text-anchor="middle" font-size="9.5" fill="var(--mid)">NCs, process compliance</text>
 
         <rect x="110" y="336" width="230" height="60" rx="10" fill="rgba(251,191,36,0.10)" stroke="var(--agent-intake)" stroke-dasharray="5,4"></rect>
-        <text x="225" y="358" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-intake)">Intake &amp; Integration</text>
+        <text x="225" y="358" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-intake)">🐕 Intake &amp; Integration</text>
         <text x="225" y="374" text-anchor="middle" font-size="9.5" fill="var(--mid)">dormant — wakes for new scope</text>
         <text x="225" y="388" text-anchor="middle" font-size="8.5" fill="var(--muted)">event-triggered (dashed)</text>
 
         <rect x="380" y="336" width="230" height="60" rx="10" fill="rgba(248,113,113,0.10)" stroke="var(--agent-regwatch)" stroke-dasharray="2,3"></rect>
-        <text x="495" y="358" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-regwatch)">Regulatory Watch</text>
+        <text x="495" y="358" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-regwatch)">🐕 Regulatory Watch</text>
         <text x="495" y="374" text-anchor="middle" font-size="9.5" fill="var(--mid)">polls daily, hands off findings</text>
         <text x="495" y="388" text-anchor="middle" font-size="8.5" fill="var(--muted)">scheduled (dotted)</text>
 
@@ -392,22 +392,22 @@
         </defs>
 
         <rect x="10" y="20" width="200" height="50" rx="9" fill="rgba(245,158,11,0.14)" stroke="var(--agent-compliance)"></rect>
-        <text x="110" y="49" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-compliance)">1. Compliance Mapping</text>
+        <text x="110" y="49" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-compliance)">🐕 1. Compliance Mapping</text>
 
         <rect x="10" y="82" width="200" height="50" rx="9" fill="rgba(91,141,239,0.14)" stroke="var(--agent-tracking)"></rect>
-        <text x="110" y="111" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-tracking)">2. Program Tracking</text>
+        <text x="110" y="111" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-tracking)">🐕 2. Program Tracking</text>
 
         <rect x="10" y="144" width="200" height="50" rx="9" fill="rgba(13,148,136,0.14)" stroke="var(--agent-fleet)"></rect>
-        <text x="110" y="173" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-fleet)">3. Agent Fleet Monitor</text>
+        <text x="110" y="173" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-fleet)">🐕 3. Agent Fleet Monitor</text>
 
         <rect x="10" y="206" width="200" height="50" rx="9" fill="rgba(52,211,153,0.14)" stroke="var(--agent-audit)"></rect>
-        <text x="110" y="235" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-audit)">4. Audit &amp; Assurance</text>
+        <text x="110" y="235" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-audit)">🐕 4. Audit &amp; Assurance</text>
 
         <rect x="10" y="268" width="200" height="50" rx="9" fill="rgba(251,191,36,0.10)" stroke="var(--agent-intake)" stroke-dasharray="5,4"></rect>
-        <text x="110" y="297" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-intake)">5. Intake &amp; Integration</text>
+        <text x="110" y="297" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-intake)">🐕 5. Intake &amp; Integration</text>
 
         <rect x="10" y="330" width="200" height="50" rx="9" fill="rgba(248,113,113,0.10)" stroke="var(--agent-regwatch)" stroke-dasharray="2,3"></rect>
-        <text x="110" y="359" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-regwatch)">6. Regulatory Watch</text>
+        <text x="110" y="359" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-regwatch)">🐕 6. Regulatory Watch</text>
 
         <path d="M210,342 C 250,342 250,45 210,45" fill="none" stroke="var(--agent-regwatch)" stroke-width="1.5" marker-end="url(#arrow2)"></path>
         <text x="256" y="197" font-size="9.5" fill="var(--agent-regwatch)" transform="rotate(90 256 197)" text-anchor="middle">hands off findings</text>
@@ -683,7 +683,7 @@
     <div class="section-label">Who Builds It, and When</div>
     <p style="font-size:12.5px;color:var(--mid);line-height:1.7;margin-bottom:20px">Built by the same core team already defined in <a href="cost.html" style="color:var(--gold)">cost.html's Team &amp; Resource Rate Cards</a> — AI/ML Engineers, Backend Engineers, DevOps — not a new hiring line. It cannot start at Day 0: there is nothing to supervise until the checklist, the policy, and at least one live pilot exist. Recommended sequencing: scope and start the build at the <strong style="color:#fff">3–6 Month horizon</strong> (once MSME Credit CAM Prep is live and generating real data), reaching full operation across all 4 continuous agents by the <strong style="color:#fff">6–12 Month horizon</strong>, once all 3 flagship pilots are live and there's a complete data surface to monitor.</p>
 
-    <div class="section-label">Quality Control on the Supervisor's Own Output</div>
+    <div class="section-label">Quality Control on the Watchdog Council's Own Output</div>
     <ul style="list-style:none;margin-bottom:20px">
       <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid)"><span style="color:var(--green)">✓</span> <strong style="color:#fff">Pre-launch:</strong> runs its own shadow-mode validation period, its flags compared against what a human PMO/compliance officer actually caught, must clear a Validation Gate before being trusted operationally — same discipline as Fraud Detection's shadow-mode</li>
       <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid)"><span style="color:var(--green)">✓</span> <strong style="color:#fff">Post-launch:</strong> the Model Risk Committee — the existing 2nd-line function in the <a href="roadmap.html#govop" style="color:var(--gold)">Roadmap's Operating Model RACI</a> — periodically reviews its flagging accuracy</li>

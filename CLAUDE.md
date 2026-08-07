@@ -11,7 +11,7 @@ Ai-ME BANK is an illustrative agentic AI platform for a regulated Indian bank �
 
 None of the 3 pilots have actually gone live — the site is explicit about this everywhere (see Governance → Validation Gates). Don't let new content imply otherwise.
 
-**The AI Governance Supervisor** (`governance-supervisor.html`) is a *design proposal*, not a built system — an orchestrator + 5 specialist agents (Compliance Mapping, Program Tracking, Agent Fleet Monitor, Audit & Assurance, and an event-triggered Intake & Integration agent) that would supervise the whole Day 0 → Year 3 program. It is explicitly never called "accountable" — RBI FREE-AI Sutra 5 requires named human accountability, so this system is framed as responsible for *visibility* only; the CAIO/Board/CEO always take the call.
+**The AI Watchdog Council** (`governance-supervisor.html` — filename unchanged from an earlier working name, page branding renamed) is a *design proposal*, not a built system — an orchestrator + 6 specialist agents (Compliance Mapping, Program Tracking, Agent Fleet Monitor, Audit & Assurance, an event-triggered Intake & Integration agent, and a scheduled Regulatory Watch agent) that would supervise the whole Day 0 → Year 3 program. It is explicitly never called "accountable" — RBI FREE-AI Sutra 5 requires named human accountability, so this system is framed as responsible for *visibility* only; the CAIO/Board/CEO always take the call.
 
 ## Site map
 
@@ -30,7 +30,7 @@ None of the 3 pilots have actually gone live — the site is explicit about this
 | `ai-gpolicy.html` | Full 24-section board-level AI Governance Policy + Annexures A–J |
 | `roadmap.html` | 0–36 month enterprise roadmap, 8 pillars, operating model RACI |
 | `governance-checklist.html` | Day 0 → Year 3 tickable compliance checklist (consolidates the above) |
-| `governance-supervisor.html` | AI Governance Supervisor design proposal (orchestrator + 5 agents) |
+| `governance-supervisor.html` | AI Watchdog Council design proposal (orchestrator + 6 agents) |
 | `deploy-guide/*.html` | 7-part AWS deployment runbook + ownership RACI |
 | `helicopter.html` | High-level architecture flyover |
 | `ai-mindmap.html` | AI-readiness decision tree |
