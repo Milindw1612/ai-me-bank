@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Governance Supervisor — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+    --agent-compliance: #F59E0B; --agent-tracking: #5B8DEF; --agent-fleet: #0D9488;
+    --agent-audit: #34D399; --agent-intake: #FBBF24; --agent-orch: #A78BFA; --agent-regwatch: #F87171;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  nav { position: sticky; top: 0; z-index: 1000; background: rgba(59,15,26,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 10px; display: flex; align-items: center; height: 64px; }
+  .nav-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo { font-size: 19px; font-weight: 800; letter-spacing: -0.3px; color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.6), 0 0 26px rgba(57,255,20,0.35); flex-shrink: 0; text-decoration: none; }
+  .nav-links { display: flex; gap: 4px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 9.5px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); font-weight: 700; }
+  .nav-cta { background: linear-gradient(135deg,#D97706,#F59E0B); color:#000 !important; font-weight:700 !important; padding: 5px 14px; border-radius: 6px; }
+  .nav-cta.brief { background: linear-gradient(135deg,#0D9488,#34D399); }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  .neon-brand { color: var(--neon); text-shadow: 0 0 6px rgba(57,255,20,0.85), 0 0 14px rgba(57,255,20,0.65), 0 0 28px rgba(57,255,20,0.4); }
+
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 780px; line-height: 1.7; }
+
+  .tabs-bar { display: flex; background: var(--surface); border-bottom: 1px solid var(--border2); padding: 0 24px; overflow-x: auto; position: sticky; top: 64px; z-index: 90; }
+  .tab-btn { padding: 14px 18px; font-size: 11.5px; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; white-space: nowrap; letter-spacing: 0.3px; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  main { padding: 0; }
+  .tab-panel { display: none; padding: 32px 48px 56px; }
+  .tab-panel.active { display: block; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-top: 28px; }
+  .section-label:first-child { margin-top: 0; }
+
+  .note-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); border-radius: 6px; padding: 14px 18px; font-size: 12.5px; color: var(--mid); margin-bottom: 24px; line-height: 1.75; }
+  .note-box strong { color: var(--text); }
+  .note-box.warn { border-left-color: var(--red); }
+  .note-box.warn strong { color: var(--red); }
+
+  .plain-box { background: rgba(13,148,136,0.06); border: 1px solid rgba(13,148,136,0.3); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; }
+  .plain-box .plain-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
+  .plain-box p { font-size: 13px; color: var(--text); line-height: 1.75; }
+
+  /* ── Architecture diagram ── */
+  .arch-wrap { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 28px 24px; margin-bottom: 24px; overflow-x: auto; }
+  .arch-caption { text-align: center; font-size: 10.5px; color: var(--muted); margin-top: 10px; }
+
+  /* ── Legend ── */
+  .agent-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+  .agent-chip { display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 20px; }
+  .agent-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── Per-agent color system: background tint + left border, reused everywhere ── */
+  .ag-row td:first-child { border-left: 3px solid transparent; }
+  .ag-compliance { background: rgba(245,158,11,0.05); } .ag-compliance td:first-child { border-left-color: var(--agent-compliance); }
+  .ag-tracking { background: rgba(91,141,239,0.06); } .ag-tracking td:first-child { border-left-color: var(--agent-tracking); }
+  .ag-fleet { background: rgba(13,148,136,0.06); } .ag-fleet td:first-child { border-left-color: var(--agent-fleet); }
+  .ag-audit { background: rgba(52,211,153,0.05); } .ag-audit td:first-child { border-left-color: var(--agent-audit); }
+  .ag-intake { background: rgba(251,191,36,0.05); } .ag-intake td:first-child { border-left-color: var(--agent-intake); }
+  .ag-orch { background: rgba(167,139,250,0.06); } .ag-orch td:first-child { border-left-color: var(--agent-orch); }
+  .ag-regwatch { background: rgba(248,113,113,0.05); } .ag-regwatch td:first-child { border-left-color: var(--agent-regwatch); }
+
+  .pill { display: inline-block; font-size: 9.5px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .pill-compliance { background: rgba(245,158,11,0.14); color: var(--agent-compliance); border: 1px solid rgba(245,158,11,0.35); }
+  .pill-tracking { background: rgba(91,141,239,0.14); color: var(--agent-tracking); border: 1px solid rgba(91,141,239,0.35); }
+  .pill-fleet { background: rgba(13,148,136,0.14); color: var(--agent-fleet); border: 1px solid rgba(13,148,136,0.35); }
+  .pill-audit { background: rgba(52,211,153,0.14); color: var(--agent-audit); border: 1px solid rgba(52,211,153,0.35); }
+  .pill-intake { background: rgba(251,191,36,0.14); color: var(--agent-intake); border: 1px solid rgba(251,191,36,0.35); }
+  .pill-orch { background: rgba(167,139,250,0.14); color: var(--agent-orch); border: 1px solid rgba(167,139,250,0.35); }
+  .pill-regwatch { background: rgba(248,113,113,0.14); color: var(--agent-regwatch); border: 1px solid rgba(248,113,113,0.35); }
+  .pill-red { background: rgba(248,113,113,0.12); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+  .pill-mid { background: rgba(148,163,184,0.12); color: var(--mid); border: 1px solid rgba(148,163,184,0.3); }
+  .pill-amber-sev { background: rgba(251,191,36,0.12); color: var(--amber); border: 1px solid rgba(251,191,36,0.3); }
+
+  .table-scroll { overflow-x: auto; margin-bottom: 24px; border-radius: 10px; border: 1px solid var(--border2); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  thead th { background: rgba(255,255,255,0.04); padding: 11px 16px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-align: left; white-space: nowrap; border-bottom: 1px solid var(--border2); }
+  tbody td { padding: 11px 16px; font-size: 12.5px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(255,255,255,0.025); }
+  td.muted { color: var(--muted); font-size: 12px; }
+  td.never { color: var(--red); font-size: 12px; }
+
+  /* ── Dashboard mockup ── */
+  .dash-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+  .dash-tab { padding: 7px 16px; border-radius: 6px; border: 1px solid var(--border2); background: rgba(255,255,255,0.03); color: var(--muted); font-size: 11.5px; font-weight: 600; cursor: pointer; }
+  .dash-tab.active { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.4); color: var(--gold); }
+  .dash-panel { display: none; }
+  .dash-panel.active { display: block; }
+  .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 12px; margin-bottom: 18px; }
+  .dash-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .dash-card .lbl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .dash-card .val { font-family: Georgia, serif; font-size: 24px; font-weight: 700; }
+  .dash-feed { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .dash-row { display: flex; gap: 12px; align-items: flex-start; padding: 12px 18px; border-bottom: 1px solid var(--border); border-left: 3px solid transparent; }
+  .dash-row:last-child { border-bottom: none; }
+  .dash-sev { flex-shrink: 0; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; margin-top: 2px; }
+  .dash-sev.high { background: rgba(248,113,113,0.15); color: var(--red); border: 1px solid rgba(248,113,113,0.4); }
+  .dash-sev.med { background: rgba(251,191,36,0.15); color: var(--amber); border: 1px solid rgba(251,191,36,0.4); }
+  .dash-sev.low { background: rgba(148,163,184,0.15); color: var(--mid); border: 1px solid rgba(148,163,184,0.3); }
+  .dash-text { font-size: 12.5px; color: var(--text); flex: 1; }
+  .dash-meta { font-size: 10.5px; color: var(--muted); margin-top: 3px; }
+
+  /* ── Report structure / flow ── */
+  .report-sections { list-style: none; counter-reset: rsec; margin-bottom: 20px; }
+  .report-sections li { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .report-sections li:last-child { border-bottom: none; }
+  .report-sections li::before { counter-increment: rsec; content: counter(rsec); flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); color: var(--gold); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .flow-steps { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 20px; }
+  .flow-step { background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 10px 16px; font-size: 12px; font-weight: 700; color: #fff; }
+  .flow-step.gate { border-color: var(--gold); color: var(--gold); background: rgba(245,158,11,0.08); }
+  .flow-arrow { color: var(--muted); font-size: 14px; }
+  .cadence-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 12px; margin-bottom: 20px; }
+  .cadence-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .cadence-card .lbl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .cadence-card p { font-size: 12px; color: var(--mid); line-height: 1.6; }
+
+  .report-doc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px,1fr)); gap: 14px; margin-bottom: 20px; }
+  .report-doc-card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 22px 16px; text-decoration: none; transition: transform .15s, border-color .15s; }
+  .report-doc-card:hover { transform: translateY(-3px); border-color: var(--gold); }
+  .report-doc-icon { font-size: 34px; line-height: 1; }
+  .report-doc-name { font-size: 13px; font-weight: 700; color: #fff; }
+  .report-doc-meta { font-size: 10.5px; color: var(--muted); }
+  .report-doc-open { font-size: 10.5px; font-weight: 700; color: var(--gold); margin-top: 4px; }
+
+  /* ── Infographic summary block ── */
+  .info-flex { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+  .donut-wrap { display: flex; align-items: center; gap: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; flex: 1; min-width: 260px; }
+  .donut-legend { display: flex; flex-direction: column; gap: 6px; font-size: 11px; color: var(--mid); }
+  .donut-legend span.sw { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 6px; }
+  .hbar-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; flex: 1.4; min-width: 280px; }
+  .hbar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .hbar-label { width: 58px; flex-shrink: 0; font-size: 10.5px; color: var(--mid); }
+  .hbar-track { flex: 1; height: 12px; background: rgba(255,255,255,0.06); border-radius: 6px; overflow: hidden; }
+  .hbar-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold)); border-radius: 6px; }
+  .hbar-pct { width: 34px; flex-shrink: 0; font-size: 10.5px; color: var(--muted); text-align: right; }
+  .mini-chart-wrap { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 16px; }
+  .mini-chart-title { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .sev-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .sev-bar-label { width: 60px; flex-shrink: 0; font-size: 10.5px; color: var(--mid); }
+  .sev-bar-track { flex: 1; height: 12px; background: rgba(255,255,255,0.06); border-radius: 6px; overflow: hidden; }
+  .sev-bar-fill { height: 100%; border-radius: 6px; }
+  .sev-bar-count { width: 18px; flex-shrink: 0; font-size: 10.5px; color: var(--text); text-align: right; font-weight: 700; }
+  .timeline-track { height: 16px; background: rgba(255,255,255,0.06); border-radius: 8px; overflow: hidden; position: relative; margin-bottom: 6px; }
+  .timeline-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--green)); border-radius: 8px; }
+  .mini-donut-flex { display: flex; align-items: center; gap: 16px; }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+  footer a { color: #94765B; text-decoration: none; transition: color .2s; }
+  footer a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .page-header { padding: 24px 20px; }
+    .tab-panel { padding: 20px; }
+    footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Ai-ME BANK</a>
+    <div class="nav-links">
+      <a href="board-brief.html" class="nav-cta brief">Board Brief</a>
+      <a href="ai-mindmap.html">AI-Readiness</a>
+      <a href="index.html">Use Cases</a>
+      <a href="roi.html">ROI</a>
+      <a href="blueprints.html">Blueprints</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="helicopter.html">Helicopter View</a>
+      <a href="cost.html">Cost</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="governance.html">Governance</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="ai-gpolicy.html">AI-GPolicy</a>
+      <a href="roadmap.html">AI Roadmap</a>
+      <a href="https://github.com/Milindw1612/ai-me-bank/tree/main/agentic-ai" target="_blank">Source</a>
+      <a href="deploy-guide/index.html">Deploy</a>
+      <a href="aws-architecture.html">AWS Architecture</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="governance-checklist.html">Checklist</a>
+      <a href="governance-supervisor.html" class="active">Supervisor</a>
+      <a href="contact.html" class="nav-cta">Contact Me</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">Concept Design · Program Governance</div>
+  <h1>AI Governance Supervisor — an orchestrator over 6 specialist agents</h1>
+  <p>A standing agent system that watches the entire Day 0 → Year 3 initiative the way a strict PMO and compliance officer would — tracking, mapping, flagging and briefing — so the CAIO, Board AI Committee and CEO get one continuously-updated picture instead of quarterly slide decks. It surfaces everything a human needs to decide, in time to decide it. It never decides on its own.</p>
+</div>
+
+<div class="tabs-bar" id="tabsBar">
+  <button class="tab-btn active" onclick="showTab('overview',this)">Overview</button>
+  <button class="tab-btn" onclick="showTab('agents',this)">The 6 Agents</button>
+  <button class="tab-btn" onclick="showTab('coord',this)">Agent Coordination (Helicopter View)</button>
+  <button class="tab-btn" onclick="showTab('routing',this)">Escalation &amp; Notification</button>
+  <button class="tab-btn" onclick="showTab('reporting',this)">Reporting</button>
+  <button class="tab-btn" onclick="showTab('dashboard',this)">Dashboard Preview</button>
+  <button class="tab-btn" onclick="showTab('govgov',this)">Build, Timing &amp; Governing the Supervisor</button>
+</div>
+
+<main>
+
+  <!-- ═══ OVERVIEW ═══ -->
+  <div id="tab-overview" class="tab-panel active">
+    <div class="note-box warn"><strong>On the word "accountable."</strong> This system is deliberately not called accountable. RBI FREE-AI's Sutra 5 defines accountability as clear, named human responsibility for a decision — an entity that cannot decide cannot be accountable. This agent system is responsible for <em>visibility</em>: it watches, maps, tracks and suggests. The CAIO, the Board AI &amp; Technology Committee, and the CEO remain the accountable humans, exactly as defined in <a href="ai-gpolicy.html" style="color:var(--gold)">AI-GPolicy §6</a> and the <a href="roadmap.html#govop" style="color:var(--gold)">Roadmap's Operating Model RACI</a>.</div>
+
+    <div class="section-label">Color Key — Same Agent, Same Color, Everywhere on This Page</div>
+    <div class="agent-legend">
+      <div class="agent-chip pill-orch"><span class="agent-dot" style="background:var(--agent-orch)"></span>Orchestrator</div>
+      <div class="agent-chip pill-compliance"><span class="agent-dot" style="background:var(--agent-compliance)"></span>1. Compliance Mapping</div>
+      <div class="agent-chip pill-tracking"><span class="agent-dot" style="background:var(--agent-tracking)"></span>2. Program Tracking</div>
+      <div class="agent-chip pill-fleet"><span class="agent-dot" style="background:var(--agent-fleet)"></span>3. Agent Fleet Monitor</div>
+      <div class="agent-chip pill-audit"><span class="agent-dot" style="background:var(--agent-audit)"></span>4. Audit &amp; Assurance</div>
+      <div class="agent-chip pill-intake"><span class="agent-dot" style="background:var(--agent-intake)"></span>5. Intake &amp; Integration</div>
+      <div class="agent-chip pill-regwatch"><span class="agent-dot" style="background:var(--agent-regwatch)"></span>6. Regulatory Watch</div>
+    </div>
+
+    <div class="section-label">Architecture at a Glance</div>
+    <div class="arch-wrap">
+      <svg viewBox="0 0 720 600" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%;height:auto;min-width:640px" aria-label="Three humans receive routed alerts from the Orchestrator, which aggregates findings from four continuous specialist agents, one dormant Intake agent, and one scheduled Regulatory Watch agent, all reading from existing program data sources and external regulatory sites.">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--mid)"></path>
+          </marker>
+        </defs>
+
+        <rect x="20" y="20" width="200" height="56" rx="10" fill="rgba(255,255,255,0.04)" stroke="var(--border2)"></rect>
+        <text x="120" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Board AI Committee</text>
+        <text x="120" y="60" text-anchor="middle" font-size="10" fill="var(--muted)">policy and escalation</text>
+
+        <rect x="260" y="20" width="200" height="56" rx="10" fill="rgba(255,255,255,0.04)" stroke="var(--border2)"></rect>
+        <text x="360" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Chief AI Officer</text>
+        <text x="360" y="60" text-anchor="middle" font-size="10" fill="var(--muted)">day-to-day owner</text>
+
+        <rect x="500" y="20" width="200" height="56" rx="10" fill="rgba(255,255,255,0.04)" stroke="var(--border2)"></rect>
+        <text x="600" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">CEO</text>
+        <text x="600" y="60" text-anchor="middle" font-size="10" fill="var(--muted)">business-impact briefing</text>
+
+        <line x1="360" y1="130" x2="360" y2="82" stroke="var(--mid)" stroke-width="1.5" marker-end="url(#arrow)"></line>
+        <text x="378" y="102" font-size="10" fill="var(--muted)">routed alerts and briefings</text>
+
+        <rect x="210" y="130" width="300" height="60" rx="10" fill="rgba(167,139,250,0.14)" stroke="var(--agent-orch)"></rect>
+        <text x="360" y="155" text-anchor="middle" font-size="12" font-weight="700" fill="var(--agent-orch)">Orchestrator</text>
+        <text x="360" y="172" text-anchor="middle" font-size="10" fill="var(--mid)">aggregates, routes, detects patterns</text>
+
+        <line x1="360" y1="244" x2="360" y2="192" stroke="var(--mid)" stroke-width="1.5" marker-end="url(#arrow)"></line>
+        <text x="378" y="216" font-size="10" fill="var(--muted)">structured findings</text>
+
+        <rect x="20" y="244" width="160" height="66" rx="10" fill="rgba(245,158,11,0.14)" stroke="var(--agent-compliance)"></rect>
+        <text x="100" y="270" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-compliance)">Compliance Mapping</text>
+        <text x="100" y="286" text-anchor="middle" font-size="9.5" fill="var(--mid)">RBI Sutras, Pillars, policy</text>
+
+        <rect x="190" y="244" width="160" height="66" rx="10" fill="rgba(91,141,239,0.14)" stroke="var(--agent-tracking)"></rect>
+        <text x="270" y="270" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-tracking)">Program Tracking</text>
+        <text x="270" y="286" text-anchor="middle" font-size="9.5" fill="var(--mid)">milestones, budget, hiring</text>
+
+        <rect x="360" y="244" width="160" height="66" rx="10" fill="rgba(13,148,136,0.14)" stroke="var(--agent-fleet)"></rect>
+        <text x="440" y="270" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-fleet)">Agent Fleet Monitor</text>
+        <text x="440" y="286" text-anchor="middle" font-size="9.5" fill="var(--mid)">the 12 pilot agents</text>
+
+        <rect x="530" y="244" width="170" height="66" rx="10" fill="rgba(52,211,153,0.14)" stroke="var(--agent-audit)"></rect>
+        <text x="615" y="270" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-audit)">Audit &amp; Assurance</text>
+        <text x="615" y="286" text-anchor="middle" font-size="9.5" fill="var(--mid)">NCs, process compliance</text>
+
+        <rect x="110" y="336" width="230" height="60" rx="10" fill="rgba(251,191,36,0.10)" stroke="var(--agent-intake)" stroke-dasharray="5,4"></rect>
+        <text x="225" y="358" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-intake)">Intake &amp; Integration</text>
+        <text x="225" y="374" text-anchor="middle" font-size="9.5" fill="var(--mid)">dormant — wakes for new scope</text>
+        <text x="225" y="388" text-anchor="middle" font-size="8.5" fill="var(--muted)">event-triggered (dashed)</text>
+
+        <rect x="380" y="336" width="230" height="60" rx="10" fill="rgba(248,113,113,0.10)" stroke="var(--agent-regwatch)" stroke-dasharray="2,3"></rect>
+        <text x="495" y="358" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--agent-regwatch)">Regulatory Watch</text>
+        <text x="495" y="374" text-anchor="middle" font-size="9.5" fill="var(--mid)">polls daily, hands off findings</text>
+        <text x="495" y="388" text-anchor="middle" font-size="8.5" fill="var(--muted)">scheduled (dotted)</text>
+
+        <line x1="360" y1="440" x2="360" y2="398" stroke="var(--mid)" stroke-width="1.5" marker-end="url(#arrow)"></line>
+        <text x="378" y="422" font-size="10" fill="var(--muted)">reads</text>
+
+        <rect x="10" y="440" width="165" height="56" rx="10" fill="rgba(255,255,255,0.03)" stroke="var(--border2)"></rect>
+        <text x="92" y="462" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">AI-GPolicy and KPIs</text>
+        <text x="92" y="478" text-anchor="middle" font-size="9" fill="var(--muted)">policy source</text>
+
+        <rect x="185" y="440" width="165" height="56" rx="10" fill="rgba(255,255,255,0.03)" stroke="var(--border2)"></rect>
+        <text x="267" y="462" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">Day 0–Year 3 checklist</text>
+        <text x="267" y="478" text-anchor="middle" font-size="9" fill="var(--muted)">task and milestone list</text>
+
+        <rect x="360" y="440" width="165" height="56" rx="10" fill="rgba(255,255,255,0.03)" stroke="var(--border2)"></rect>
+        <text x="442" y="462" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">12 pilot agent instances</text>
+        <text x="442" y="478" text-anchor="middle" font-size="9" fill="var(--muted)">Langfuse and Validation Gates</text>
+
+        <rect x="535" y="440" width="165" height="56" rx="10" fill="rgba(248,113,113,0.06)" stroke="var(--agent-regwatch)" stroke-opacity="0.4"></rect>
+        <text x="617" y="462" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">External regulatory sites</text>
+        <text x="617" y="478" text-anchor="middle" font-size="9" fill="var(--muted)">RBI, CERT-In, MeitY, SEBI, IRDAI</text>
+
+        <text x="360" y="530" text-anchor="middle" font-size="10.5" fill="var(--muted)">Every agent flags and suggests within its own lane. Nothing decides on its own — every finding reaches a named human.</text>
+      </svg>
+      <div class="arch-caption">Same pattern already proven inside Fraud Detection — 3 parallel signal agents feeding 1 Recommendation Agent — applied one level up, at the program-governance layer. Dashed border = event-triggered; dotted border = scheduled daily poll.</div>
+    </div>
+
+    <div class="plain-box"><div class="plain-label">In Plain English</div><p>Think of it as a very attentive chief-of-staff who reads every policy document, every deadline, and every pilot agent's logs every single day, then hands the CAIO a one-page briefing: "these three things need your decision this week; everything else is on track." It never signs anything, hires anyone, or overrides a human — it just makes sure nothing falls through the cracks between now and Year 3.</p></div>
+  </div>
+
+  <!-- ═══ THE 6 AGENTS ═══ -->
+  <div id="tab-agents" class="tab-panel">
+    <div class="note-box">Each agent has one narrow job, its own data sources, and an explicit list of what it may never do — this separation is what makes each one independently auditable and risk-tierable, rather than one undifferentiated system a Model Risk Committee can't cleanly validate. Row color matches the legend and diagram above. Three trigger types exist: <strong style="color:#fff">Continuous</strong> (always watching), <strong style="color:#fff">Event-triggered</strong> (dormant until invoked), and <strong style="color:#fff">Scheduled</strong> (runs on a fixed daily cadence).</div>
+
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Agent</th><th>Type</th><th>Reads</th><th>Flags &amp; Suggests</th><th>Never Does</th></tr></thead>
+        <tbody>
+          <tr class="ag-row ag-compliance">
+            <td><span class="pill pill-compliance">1. Compliance Mapping</span></td>
+            <td class="muted">Continuous</td>
+            <td class="muted">RBI FREE-AI 7 Sutras / 6 Pillars, <a href="ai-gpolicy.html" style="color:var(--gold)">AI-GPolicy</a>, Responsible AI policy, Governance KPIs</td>
+            <td class="muted">Gap reports — "this decision touches Pillar: Protection, no fairness-testing evidence attached"; suggests the specific policy/clause action to close it</td>
+            <td class="never">Never issues a compliance sign-off itself</td>
+          </tr>
+          <tr class="ag-row ag-tracking">
+            <td><span class="pill pill-tracking">2. Program Tracking</span></td>
+            <td class="muted">Continuous</td>
+            <td class="muted"><a href="governance-checklist.html" style="color:var(--gold)">Day 0 → Year 3 checklist</a>, <a href="roadmap.html" style="color:var(--gold)">Roadmap</a> horizons, workforce/hiring plan, budget</td>
+            <td class="muted">Delay, budget-overrun and hiring-gap alerts; suggests schedule/resourcing options with impact analysis</td>
+            <td class="never">Never reprioritises the roadmap or reassigns owners on its own</td>
+          </tr>
+          <tr class="ag-row ag-fleet">
+            <td><span class="pill pill-fleet">3. Agent Fleet Monitor</span></td>
+            <td class="muted">Continuous</td>
+            <td class="muted">Langfuse traces and Validation Gate results for the 12 pilot agent instances</td>
+            <td class="muted">Drift and policy-violation flags; suggests remediation — retrain, pause, re-validate</td>
+            <td class="never">Never pauses or modifies a pilot agent directly</td>
+          </tr>
+          <tr class="ag-row ag-audit">
+            <td><span class="pill pill-audit">4. Audit &amp; Assurance</span></td>
+            <td class="muted">Continuous</td>
+            <td class="muted">Audit findings, open non-conformities (NCs), governance-step completion by people</td>
+            <td class="muted">Open-NC and process-non-compliance flags; suggests closure actions and owners</td>
+            <td class="never">Never closes an NC itself</td>
+          </tr>
+          <tr class="ag-row ag-intake">
+            <td><span class="pill pill-intake">5. Intake &amp; Integration</span></td>
+            <td class="muted">Event-triggered — dormant otherwise</td>
+            <td class="muted">New use-case proposals; the 3 live pilots' actual cost (<a href="cost.html" style="color:var(--gold)">Team &amp; Resource Rate Cards</a>) and timeline data</td>
+            <td class="muted">A draft integration plan — budget, timeline, risk tier, roadmap slot, RACI owner, required gates</td>
+            <td class="never">Never self-approves or allocates budget</td>
+          </tr>
+          <tr class="ag-row ag-regwatch">
+            <td><span class="pill pill-regwatch">6. Regulatory Watch</span></td>
+            <td class="muted">Scheduled — daily</td>
+            <td class="muted">RBI, CERT-In, MeitY, SEBI, IRDAI and DPDP-related official sites</td>
+            <td class="muted">Point-wise summary of new/amended rules, tagged High/Medium/Low relevance; hands off to Compliance Mapping for internal gap-assessment</td>
+            <td class="never">Never determines the bank's compliance status itself — legal interpretation is confirmed by Legal/Compliance + CAIO first</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note-box ag-orch" style="border-left-color:var(--agent-orch)"><strong style="color:var(--agent-orch)">The Orchestrator's job stays deliberately thin:</strong> synthesise the 6 agents' structured findings into one feed, detect cross-domain patterns none of them could see alone, compile the periodic report (see Reporting), and route each item to the correct human by severity (see Escalation &amp; Notification). It performs no independent domain reasoning — giving it that would recreate the "one undifferentiated system" problem the 6-agent split exists to avoid.</div>
+  </div>
+
+  <!-- ═══ AGENT COORDINATION — HELICOPTER VIEW ═══ -->
+  <div id="tab-coord" class="tab-panel">
+    <div class="note-box">The Overview tab shows the reporting hierarchy. This one shows how the pieces actually hand work to each other — the flows and handoffs, not just who reports to whom.</div>
+
+    <div class="section-label">How the 6 Agents Coordinate</div>
+    <div class="arch-wrap">
+      <svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%;height:auto;min-width:640px" aria-label="The Regulatory Watch agent hands off findings directly to the Compliance Mapping agent. All 6 agents send structured findings to the Orchestrator, which either routes severity-based alerts to the CAIO, Board, and CEO, or compiles a draft report that the CAIO signs off before it reaches the Board, Audit Committee, or RBI.">
+        <defs>
+          <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--mid)"></path>
+          </marker>
+        </defs>
+
+        <rect x="10" y="20" width="200" height="50" rx="9" fill="rgba(245,158,11,0.14)" stroke="var(--agent-compliance)"></rect>
+        <text x="110" y="49" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-compliance)">1. Compliance Mapping</text>
+
+        <rect x="10" y="82" width="200" height="50" rx="9" fill="rgba(91,141,239,0.14)" stroke="var(--agent-tracking)"></rect>
+        <text x="110" y="111" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-tracking)">2. Program Tracking</text>
+
+        <rect x="10" y="144" width="200" height="50" rx="9" fill="rgba(13,148,136,0.14)" stroke="var(--agent-fleet)"></rect>
+        <text x="110" y="173" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-fleet)">3. Agent Fleet Monitor</text>
+
+        <rect x="10" y="206" width="200" height="50" rx="9" fill="rgba(52,211,153,0.14)" stroke="var(--agent-audit)"></rect>
+        <text x="110" y="235" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-audit)">4. Audit &amp; Assurance</text>
+
+        <rect x="10" y="268" width="200" height="50" rx="9" fill="rgba(251,191,36,0.10)" stroke="var(--agent-intake)" stroke-dasharray="5,4"></rect>
+        <text x="110" y="297" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-intake)">5. Intake &amp; Integration</text>
+
+        <rect x="10" y="330" width="200" height="50" rx="9" fill="rgba(248,113,113,0.10)" stroke="var(--agent-regwatch)" stroke-dasharray="2,3"></rect>
+        <text x="110" y="359" text-anchor="middle" font-size="11" font-weight="700" fill="var(--agent-regwatch)">6. Regulatory Watch</text>
+
+        <path d="M210,342 C 250,342 250,45 210,45" fill="none" stroke="var(--agent-regwatch)" stroke-width="1.5" marker-end="url(#arrow2)"></path>
+        <text x="256" y="197" font-size="9.5" fill="var(--agent-regwatch)" transform="rotate(90 256 197)" text-anchor="middle">hands off findings</text>
+
+        <line x1="215" y1="190" x2="296" y2="215" stroke="var(--mid)" stroke-width="1.5" marker-end="url(#arrow2)"></line>
+        <text x="220" y="180" font-size="9.5" fill="var(--muted)">structured findings, all 6 agents</text>
+
+        <rect x="300" y="190" width="190" height="60" rx="10" fill="rgba(167,139,250,0.14)" stroke="var(--agent-orch)"></rect>
+        <text x="395" y="215" text-anchor="middle" font-size="12" font-weight="700" fill="var(--agent-orch)">Orchestrator</text>
+        <text x="395" y="232" text-anchor="middle" font-size="9.5" fill="var(--mid)">aggregate · route · compile report</text>
+
+        <line x1="490" y1="205" x2="558" y2="130" stroke="var(--mid)" stroke-width="1.5" marker-end="url(#arrow2)"></line>
+        <text x="497" y="165" font-size="9.5" fill="var(--muted)">severity-routed alerts</text>
+
+        <rect x="560" y="80" width="150" height="70" rx="10" fill="rgba(255,255,255,0.04)" stroke="var(--border2)"></rect>
+        <text x="635" y="106" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">CAIO · Board AI</text>
+        <text x="635" y="120" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">Committee · CEO</text>
+        <text x="635" y="136" text-anchor="middle" font-size="9" fill="var(--muted)">same-day for High severity</text>
+
+        <line x1="490" y1="235" x2="558" y2="290" stroke="var(--mid)" stroke-width="1.5" marker-end="url(#arrow2)"></line>
+        <text x="497" y="270" font-size="9.5" fill="var(--muted)">scheduled compile</text>
+
+        <rect x="560" y="270" width="150" height="40" rx="9" fill="rgba(255,255,255,0.04)" stroke="var(--border2)"></rect>
+        <text x="635" y="294" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">Draft Report</text>
+
+        <line x1="635" y1="310" x2="635" y2="330" stroke="var(--mid)" stroke-width="1.5" marker-end="url(#arrow2)"></line>
+
+        <rect x="560" y="332" width="150" height="40" rx="9" fill="rgba(245,158,11,0.10)" stroke="var(--gold)"></rect>
+        <text x="635" y="356" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--gold)">CAIO Sign-Off</text>
+
+        <line x1="635" y1="372" x2="635" y2="392" stroke="var(--mid)" stroke-width="1.5" marker-end="url(#arrow2)"></line>
+
+        <rect x="560" y="394" width="150" height="60" rx="10" fill="rgba(255,255,255,0.04)" stroke="var(--border2)"></rect>
+        <text x="635" y="416" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Board · Audit Ctte</text>
+        <text x="635" y="430" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">RBI (if requested)</text>
+        <text x="635" y="446" text-anchor="middle" font-size="8.5" fill="var(--muted)">only after sign-off</text>
+
+        <text x="360" y="480" text-anchor="middle" font-size="10.5" fill="var(--muted)">The only agent-to-agent handoff in the system: Regulatory Watch never assesses compliance itself — it always routes through Compliance Mapping.</text>
+      </svg>
+    </div>
+
+    <div class="plain-box"><div class="plain-label">In Plain English</div><p>Think of Regulatory Watch as a scout who reads every new RBI circular and flags "this might matter" — but it's the Compliance Mapping Agent, the actual domain expert, who decides whether it's really a gap in what the bank already does. Everything else flows through the Orchestrator, which either interrupts the CAIO immediately (for anything urgent) or quietly builds up the next scheduled report — and even that report only leaves the building once the CAIO has personally signed it.</p></div>
+  </div>
+
+  <!-- ═══ ESCALATION & NOTIFICATION ═══ -->
+  <div id="tab-routing" class="tab-panel">
+    <div class="note-box">Severity-gated, not blanket. High-severity items reach a named human immediately through two channels at once; nothing interrupts anyone for a Low-severity item.</div>
+
+    <div class="section-label">Routing Table</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Trigger Example</th><th>Source Agent</th><th>Severity</th><th>Routed To</th></tr></thead>
+        <tbody>
+          <tr class="ag-row ag-fleet"><td class="muted">Validation Gate breach on a live pilot (e.g. Fraud false-positive rate exceeds threshold)</td><td><span class="pill pill-fleet">Fleet Monitor</span></td><td><span class="pill pill-red">High</span></td><td class="muted">Chief AI Officer — same day</td></tr>
+          <tr class="ag-row ag-tracking"><td class="muted">A go-live milestone is 2+ weeks overdue with no updated ETA</td><td><span class="pill pill-tracking">Program Tracking</span></td><td><span class="pill pill-red">High</span></td><td class="muted">Chief AI Officer + Board AI Committee — next standing meeting</td></tr>
+          <tr class="ag-row ag-compliance"><td class="muted">New AI-GPolicy clause has no mapped roadmap milestone or owner</td><td><span class="pill pill-compliance">Compliance Mapping</span></td><td><span class="pill pill-amber-sev">Medium</span></td><td class="muted">Chief AI Officer — weekly briefing</td></tr>
+          <tr class="ag-row ag-audit"><td class="muted">An audit non-conformity has been open past its remediation window</td><td><span class="pill pill-audit">Audit &amp; Assurance</span></td><td><span class="pill pill-amber-sev">Medium</span></td><td class="muted">Chief AI Officer — weekly briefing</td></tr>
+          <tr class="ag-row ag-intake"><td class="muted">A new Wave 2 use-case proposal has a completed draft integration plan awaiting sign-off</td><td><span class="pill pill-intake">Intake &amp; Integration</span></td><td><span class="pill pill-amber-sev">Medium</span></td><td class="muted">Chief AI Officer, for Board recommendation</td></tr>
+          <tr class="ag-row ag-regwatch"><td class="muted">New RBI circular detected with High relevance to AI-driven lending decisions</td><td><span class="pill pill-regwatch">Regulatory Watch</span></td><td><span class="pill pill-red">High</span></td><td class="muted">Compliance Mapping (for gap-assessment) + CAIO flash alert, same day</td></tr>
+          <tr class="ag-row ag-orch"><td class="muted">Program-level KPI trending off-target, or a cross-domain pattern detected across 2+ agents on the same root cause</td><td class="muted">Orchestrator synthesis</td><td><span class="pill pill-red">High</span></td><td class="muted">CEO briefing + Board AI Committee</td></tr>
+          <tr><td class="muted">On-track confirmation, no action needed</td><td class="muted">Any</td><td><span class="pill pill-mid">Low</span></td><td class="muted">Dashboard only — no push alert</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label">Notification Channels</div>
+    <ul style="list-style:none">
+      <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid)"><span style="color:var(--green)">✓</span> <strong style="color:#fff">High severity → CAIO:</strong> high-importance email + the bank's existing enterprise messaging tool (e.g. Teams), sent together, plus logged to the dashboard simultaneously — carrying the finding and the source agent's suggested options inline, not just "check the dashboard"</li>
+      <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid)"><span style="color:var(--green)">✓</span> <strong style="color:#fff">High severity → Board:</strong> formal high-importance email routed through the Company Secretary's office / the bank's existing board-portal software — never a direct ping to an individual director</li>
+      <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid)"><span style="color:var(--red)">✕</span> <strong style="color:#fff">No WhatsApp or consumer messaging apps</strong> — official bank business stays inside governed, auditable, retainable enterprise channels; using a personal app for compliance or fraud-adjacent alerts would contradict the DPDP/PII rigor built into the rest of this program</li>
+      <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid)"><span style="color:var(--green)">✓</span> <strong style="color:#fff">Escalation ladder:</strong> an unacknowledged High-severity item escalates to a phone call after a defined window (e.g. 2–4 hours) as the last resort</li>
+      <li style="display:flex;gap:10px;padding:8px 0;font-size:13px;color:var(--mid)"><span style="color:var(--green)">✓</span> <strong style="color:#fff">Medium/Low severity:</strong> dashboard only — surfaced at the CAIO's normal review cadence, no interruption, to keep the High-severity channel credible and not desensitised by over-alerting</li>
+    </ul>
+  </div>
+
+  <!-- ═══ REPORTING ═══ -->
+  <div id="tab-reporting" class="tab-panel">
+    <div class="note-box warn"><strong>The report is drafted, never sent, by the system.</strong> The Orchestrator compiles it — every agent contributing its own section — but it always stops at "Draft Report." Nothing reaches the Board, the Audit Committee, or RBI until the CAIO has personally reviewed and signed it. Same principle as every other output on this page: this system surfaces, a named human decides.</div>
+
+    <div class="section-label">Report Structure — Compiled by the Orchestrator, One Section per Agent</div>
+    <ol class="report-sections">
+      <li><div><strong style="color:#fff">Executive Summary</strong> — the Orchestrator's own synthesis: overall program health, headline items</div></li>
+      <li><div><strong style="color:var(--agent-compliance)">Compliance Mapping status</strong> — gaps opened and closed this period</div></li>
+      <li><div><strong style="color:var(--agent-tracking)">Program Progress</strong> — checklist and milestone status, delays, budget</div></li>
+      <li><div><strong style="color:var(--agent-fleet)">Agent Fleet Status</strong> — Validation Gate results per pilot, drift or violations this period</div></li>
+      <li><div><strong style="color:var(--agent-audit)">Audit &amp; Assurance</strong> — open and closed non-conformities, process-compliance status</div></li>
+      <li><div><strong style="color:var(--agent-regwatch)">Regulatory Watch highlights</strong> — new or amended rules detected this period, and their relevance</div></li>
+      <li><div><strong style="color:var(--agent-intake)">New Initiatives</strong> — anything the Intake &amp; Integration Agent processed this period, if applicable</div></li>
+      <li><div><strong style="color:#fff">Sign-Off Block</strong> — reviewed and approved by the named Chief AI Officer, dated</div></li>
+    </ol>
+
+    <div class="section-label">Draft → Sign-Off → Distribution Flow</div>
+    <div class="flow-steps">
+      <div class="flow-step">Orchestrator compiles draft</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step gate">CAIO reviews &amp; signs</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">Distributed to intended audience</div>
+    </div>
+
+    <div class="section-label">Cadence &amp; Audience</div>
+    <div class="cadence-grid">
+      <div class="cadence-card"><div class="lbl">Weekly</div><p>Lighter, operational — CAIO and Board AI Committee, close to what's already in the dashboard.</p></div>
+      <div class="cadence-card"><div class="lbl">Monthly</div><p>The comprehensive version — Audit Committee and full Board, and RBI-submission-ready if a regulator requests it.</p></div>
+      <div class="cadence-card"><div class="lbl">On-Demand</div><p>The CAIO can trigger a report for a custom date range if a regulator specifically asks.</p></div>
+      <div class="cadence-card" style="border-color:var(--agent-regwatch)"><div class="lbl" style="color:var(--agent-regwatch)">Regulatory Amendment Alert</div><p>Its own flash notification, independent of the weekly/monthly cadence — a new circular doesn't wait for the next scheduled report.</p></div>
+    </div>
+
+    <div class="section-label">Infographic Summary — At a Glance</div>
+    <div class="note-box">Built for how a CEO or Board member actually reads a status update — figures and charts, not paragraphs. Same underlying data as the Dashboard Preview and the PDF reports below; this is the visual layer so a walkthrough doesn't require opening a file.</div>
+    <div class="dash-grid">
+      <div class="dash-card"><div class="lbl">Program Health</div><div class="val" style="color:var(--amber)">Amber</div></div>
+      <div class="dash-card"><div class="lbl">Pilots Live</div><div class="val" style="color:var(--green)">1 of 3</div></div>
+      <div class="dash-card"><div class="lbl">Checklist Progress</div><div class="val" style="color:var(--gold)">14/41</div></div>
+      <div class="dash-card"><div class="lbl">Open High-Severity</div><div class="val" style="color:var(--red)">1</div></div>
+    </div>
+
+    <div class="info-flex">
+      <div class="donut-wrap">
+        <svg viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="Pilot status: 1 live, 1 in shadow-mode, 1 in build">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="16"></circle>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="var(--green)" stroke-width="16" stroke-dasharray="104.7 209.4" stroke-dashoffset="0" transform="rotate(-90 60 60)"></circle>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="var(--amber)" stroke-width="16" stroke-dasharray="104.7 209.4" stroke-dashoffset="-104.7" transform="rotate(-90 60 60)"></circle>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="var(--muted)" stroke-width="16" stroke-dasharray="104.7 209.4" stroke-dashoffset="-209.4" transform="rotate(-90 60 60)"></circle>
+          <text x="60" y="56" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">3</text>
+          <text x="60" y="72" text-anchor="middle" font-size="8" fill="var(--muted)">pilots</text>
+        </svg>
+        <div class="donut-legend">
+          <div><span class="sw" style="background:var(--green)"></span>Live (1)</div>
+          <div><span class="sw" style="background:var(--amber)"></span>Shadow-Mode (1)</div>
+          <div><span class="sw" style="background:var(--muted)"></span>In Build (1)</div>
+        </div>
+      </div>
+
+      <div class="hbar-wrap">
+        <div class="hbar-row"><div class="hbar-label">Day 0</div><div class="hbar-track"><div class="hbar-fill" style="width:100%"></div></div><div class="hbar-pct">100%</div></div>
+        <div class="hbar-row"><div class="hbar-label">0–3 Mo</div><div class="hbar-track"><div class="hbar-fill" style="width:82%"></div></div><div class="hbar-pct">82%</div></div>
+        <div class="hbar-row"><div class="hbar-label">3–6 Mo</div><div class="hbar-track"><div class="hbar-fill" style="width:0%"></div></div><div class="hbar-pct">0%</div></div>
+        <div class="hbar-row"><div class="hbar-label">6–12 Mo</div><div class="hbar-track"><div class="hbar-fill" style="width:0%"></div></div><div class="hbar-pct">0%</div></div>
+        <div class="hbar-row"><div class="hbar-label">Year 2</div><div class="hbar-track"><div class="hbar-fill" style="width:0%"></div></div><div class="hbar-pct">0%</div></div>
+        <div class="hbar-row"><div class="hbar-label">Year 3</div><div class="hbar-track"><div class="hbar-fill" style="width:0%"></div></div><div class="hbar-pct">0%</div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Sample Reports — Click to Open</div>
+    <div class="note-box">Illustrative PDFs generated to show the actual report format each cadence would produce — same 8-section structure, same sample data as the Dashboard Preview tab. Each carries its own "illustrative sample" banner; none of this reflects a real filing.</div>
+    <div class="report-doc-grid">
+      <a href="reports/weekly-sample-report.pdf" target="_blank" class="report-doc-card">
+        <div class="report-doc-icon">📄</div>
+        <div class="report-doc-name">Weekly Governance Briefing</div>
+        <div class="report-doc-meta">Sample period: 29 Jun – 5 Jul 2026</div>
+        <div class="report-doc-open">Open PDF ↗</div>
+      </a>
+      <a href="reports/monthly-sample-report.pdf" target="_blank" class="report-doc-card" style="border-color:rgba(245,158,11,0.4)">
+        <div class="report-doc-icon">📕</div>
+        <div class="report-doc-name">Monthly Comprehensive Report</div>
+        <div class="report-doc-meta">Sample period: June 2026 · RBI-ready</div>
+        <div class="report-doc-open">Open PDF ↗</div>
+      </a>
+      <a href="reports/on-demand-sample-report.pdf" target="_blank" class="report-doc-card">
+        <div class="report-doc-icon">📃</div>
+        <div class="report-doc-name">On-Demand — Custom Range</div>
+        <div class="report-doc-meta">Sample: 24 Jun – 7 Jul 2026, CAIO-requested</div>
+        <div class="report-doc-open">Open PDF ↗</div>
+      </a>
+      <a href="reports/board-infographic-sample-report.pdf" target="_blank" class="report-doc-card" style="border-color:var(--agent-orch)">
+        <div class="report-doc-icon">📊</div>
+        <div class="report-doc-name">Board &amp; CEO Infographic</div>
+        <div class="report-doc-meta">Charts and KPI tiles, one-page visual</div>
+        <div class="report-doc-open">Open PDF ↗</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══ DASHBOARD PREVIEW ═══ -->
+  <div id="tab-dashboard" class="tab-panel">
+    <div class="note-box">Illustrative sample data — this is a design preview of what each role would see, not a live feed. Three infographic views of the same underlying findings, each with a chart suited to that role and filtered to what they actually need to act on. The colored left edge on each alert shows which agent raised it.</div>
+
+    <div class="dash-tabs">
+      <button class="dash-tab active" onclick="showDash('caio',this)">CAIO View</button>
+      <button class="dash-tab" onclick="showDash('board',this)">Board View</button>
+      <button class="dash-tab" onclick="showDash('ceo',this)">CEO View</button>
+    </div>
+
+    <div id="dash-caio" class="dash-panel active">
+      <div class="dash-grid">
+        <div class="dash-card"><div class="lbl">Checklist Progress</div><div class="val" style="color:var(--green)">14/41</div></div>
+        <div class="dash-card"><div class="lbl">Open High-Severity</div><div class="val" style="color:var(--red)">1</div></div>
+        <div class="dash-card"><div class="lbl">Agents in Shadow-Mode</div><div class="val" style="color:var(--amber)">4</div></div>
+        <div class="dash-card"><div class="lbl">Compliance Gaps Open</div><div class="val" style="color:var(--gold)">2</div></div>
+      </div>
+      <div class="mini-chart-wrap">
+        <div class="mini-chart-title">Open Alerts by Severity</div>
+        <div class="sev-bar-row"><div class="sev-bar-label">High</div><div class="sev-bar-track"><div class="sev-bar-fill" style="width:9%;background:var(--red)"></div></div><div class="sev-bar-count">1</div></div>
+        <div class="sev-bar-row"><div class="sev-bar-label">Medium</div><div class="sev-bar-track"><div class="sev-bar-fill" style="width:36%;background:var(--amber)"></div></div><div class="sev-bar-count">4</div></div>
+        <div class="sev-bar-row"><div class="sev-bar-label">Low</div><div class="sev-bar-track"><div class="sev-bar-fill" style="width:55%;background:var(--muted)"></div></div><div class="sev-bar-count">6</div></div>
+      </div>
+      <div class="dash-feed">
+        <div class="dash-row" style="border-left-color:var(--agent-fleet)"><span class="dash-sev high">High</span><div><div class="dash-text">Fraud Detection shadow-mode false-positive rate at 12%, above the 10% Validation Gate threshold</div><div class="dash-meta"><span class="pill pill-fleet">Fleet Monitor</span> · 2 hours ago · governance.html#validation</div></div></div>
+        <div class="dash-row" style="border-left-color:var(--agent-tracking)"><span class="dash-sev med">Medium</span><div><div class="dash-text">Backend Engineer hiring for Year-2 Retail Lending build has no shortlisted candidate at horizon midpoint</div><div class="dash-meta"><span class="pill pill-tracking">Program Tracking</span> · yesterday · roadmap.html#workforce</div></div></div>
+        <div class="dash-row" style="border-left-color:var(--agent-compliance)"><span class="dash-sev med">Medium</span><div><div class="dash-text">Annexure J (Crisis Communication Protocol) has no mapped roadmap milestone</div><div class="dash-meta"><span class="pill pill-compliance">Compliance Mapping</span> · 3 days ago · ai-gpolicy.html</div></div></div>
+        <div class="dash-row" style="border-left-color:var(--agent-audit)"><span class="dash-sev low">Low</span><div><div class="dash-text">MSME Credit CAM Prep — all Validation Gate metrics within threshold this week</div><div class="dash-meta"><span class="pill pill-audit">Audit &amp; Assurance</span> · today</div></div></div>
+      </div>
+    </div>
+
+    <div id="dash-board" class="dash-panel">
+      <div class="dash-grid">
+        <div class="dash-card"><div class="lbl">Decisions Needing Board Input</div><div class="val" style="color:var(--red)">1</div></div>
+        <div class="dash-card"><div class="lbl">Policy Gaps Open</div><div class="val" style="color:var(--gold)">2</div></div>
+        <div class="dash-card"><div class="lbl">Horizon On-Track</div><div class="val" style="color:var(--green)">0–3 Mo</div></div>
+      </div>
+      <div class="mini-chart-wrap">
+        <div class="mini-chart-title">Pilot Portfolio Status</div>
+        <div class="mini-donut-flex">
+          <svg viewBox="0 0 120 120" width="90" height="90" role="img" aria-label="Pilot status: 1 live, 1 in shadow-mode, 1 in build">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="16"></circle>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--green)" stroke-width="16" stroke-dasharray="104.7 209.4" stroke-dashoffset="0" transform="rotate(-90 60 60)"></circle>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--amber)" stroke-width="16" stroke-dasharray="104.7 209.4" stroke-dashoffset="-104.7" transform="rotate(-90 60 60)"></circle>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--muted)" stroke-width="16" stroke-dasharray="104.7 209.4" stroke-dashoffset="-209.4" transform="rotate(-90 60 60)"></circle>
+            <text x="60" y="66" text-anchor="middle" font-size="24" font-weight="700" fill="#fff">3</text>
+          </svg>
+          <div class="donut-legend">
+            <div><span class="sw" style="background:var(--green)"></span>Live (1)</div>
+            <div><span class="sw" style="background:var(--amber)"></span>Shadow-Mode (1)</div>
+            <div><span class="sw" style="background:var(--muted)"></span>In Build (1)</div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-feed">
+        <div class="dash-row" style="border-left-color:var(--agent-fleet)"><span class="dash-sev high">High</span><div><div class="dash-text">Fraud Detection's go-live gate is at risk — CAIO recommends a 2-week shadow-mode extension before go/no-go</div><div class="dash-meta"><span class="pill pill-fleet">Escalated from Fleet Monitor</span> · next Committee meeting</div></div></div>
+        <div class="dash-row" style="border-left-color:var(--agent-compliance)"><span class="dash-sev med">Medium</span><div><div class="dash-text">Crisis Communication Protocol (Annexure J) has no owner or milestone — recommend assigning at next session</div><div class="dash-meta"><span class="pill pill-compliance">Compliance Mapping</span></div></div></div>
+        <div class="dash-row" style="border-left-color:var(--agent-tracking)"><span class="dash-sev low">Low</span><div><div class="dash-text">0–3 Month horizon: 9 of 11 checklist items complete, on track for Month 3 review</div><div class="dash-meta"><span class="pill pill-tracking">Program Tracking</span></div></div></div>
+      </div>
+    </div>
+
+    <div id="dash-ceo" class="dash-panel">
+      <div class="dash-grid">
+        <div class="dash-card"><div class="lbl">Program Health</div><div class="val" style="color:var(--amber)">Amber</div></div>
+        <div class="dash-card"><div class="lbl">Pilots Live</div><div class="val" style="color:var(--green)">1 of 3</div></div>
+        <div class="dash-card"><div class="lbl">Budget Utilisation</div><div class="val" style="color:var(--text)">On Plan</div></div>
+        <div class="dash-card"><div class="lbl">3-Yr Net Benefit</div><div class="val" style="color:var(--green)">₹828+ Cr</div></div>
+      </div>
+
+      <div class="mini-chart-wrap">
+        <div class="mini-chart-title">Annual Value Contribution by Pilot — <a href="cost.html" style="color:var(--gold);text-transform:none;letter-spacing:0;font-weight:600">source: cost.html</a></div>
+        <div class="hbar-row"><div class="hbar-label" style="width:80px">Fraud</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:linear-gradient(90deg,#5B8DEF,#5B8DEF)"></div></div><div class="hbar-pct" style="width:60px">₹125 Cr</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="width:80px">Collections</div><div class="hbar-track"><div class="hbar-fill" style="width:80%;background:linear-gradient(90deg,var(--green),var(--green))"></div></div><div class="hbar-pct" style="width:60px">~₹100 Cr</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="width:80px">MSME</div><div class="hbar-track"><div class="hbar-fill" style="width:42%;background:linear-gradient(90deg,var(--teal),var(--teal))"></div></div><div class="hbar-pct" style="width:60px">₹52.5 Cr</div></div>
+        <div style="font-size:10.5px;color:var(--muted);margin-top:4px">Combined ₹277.5 Cr/yr midpoint — full ranges and derivation on <a href="roi.html" style="color:var(--gold)">ROI</a> / <a href="blueprints.html" style="color:var(--gold)">Blueprints</a></div>
+      </div>
+
+      <div class="mini-chart-wrap">
+        <div class="mini-chart-title">3-Year Investment vs. Net Value — <a href="cost.html" style="color:var(--gold);text-transform:none;letter-spacing:0;font-weight:600">source: cost.html</a></div>
+        <div class="hbar-row"><div class="hbar-label" style="width:80px">Invested</div><div class="hbar-track"><div class="hbar-fill" style="width:1%;background:var(--red)"></div></div><div class="hbar-pct" style="width:60px">₹4.38 Cr</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="width:80px">Value</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold))"></div></div><div class="hbar-pct" style="width:60px">₹832.5 Cr</div></div>
+        <div style="font-size:10.5px;color:var(--muted);margin-top:4px">Bars scaled to the larger figure so the gap reads honestly — this is the AI-accelerated scenario TCO</div>
+      </div>
+
+      <div class="mini-chart-wrap">
+        <div class="mini-chart-title">Overall Program Timeline — Week 20 of 37</div>
+        <div class="timeline-track"><div class="timeline-fill" style="width:54%"></div></div>
+        <div style="font-size:10.5px;color:var(--muted)">54% elapsed against the AI-accelerated 37-week build schedule — see <a href="timeline.html" style="color:var(--gold)">Timeline</a></div>
+      </div>
+      <div class="dash-feed">
+        <div class="dash-row" style="border-left-color:var(--agent-orch)"><span class="dash-sev high">High</span><div><div class="dash-text">Fraud Detection go-live likely to slip ~2 weeks pending shadow-mode extension — no impact to overall 37-week program timeline</div><div class="dash-meta"><span class="pill pill-orch">Orchestrator briefing</span></div></div></div>
+        <div class="dash-row" style="border-left-color:var(--agent-orch)"><span class="dash-sev low">Low</span><div><div class="dash-text">MSME Credit CAM Prep live and stable; tracking to stated ROI range</div><div class="dash-meta"><span class="pill pill-orch">Orchestrator briefing</span></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ BUILD, TIMING & GOVERNING THE SUPERVISOR ═══ -->
+  <div id="tab-govgov" class="tab-panel">
+    <div class="section-label">Who Builds It, and When</div>
+    <p style="font-size:12.5px;color:var(--mid);line-height:1.7;margin-bottom:20px">Built by the same core team already defined in <a href="cost.html" style="color:var(--gold)">cost.html's Team &amp; Resource Rate Cards</a> — AI/ML Engineers, Backend Engineers, DevOps — not a new hiring line. It cannot start at Day 0: there is nothing to supervise until the checklist, the policy, and at least one live pilot exist. Recommended sequencing: scope and start the build at the <strong style="color:#fff">3–6 Month horizon</strong> (once MSME Credit CAM Prep is live and generating real data), reaching full operation across all 4 continuous agents by the <strong style="color:#fff">6–12 Month horizon</strong>, once all 3 flagship pilots are live and there's a complete data surface to monitor.</p>
+
+    <div class="section-label">Quality Control on the Supervisor's Own Output</div>
+    <ul style="list-style:none;margin-bottom:20px">
+      <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid)"><span style="color:var(--green)">✓</span> <strong style="color:#fff">Pre-launch:</strong> runs its own shadow-mode validation period, its flags compared against what a human PMO/compliance officer actually caught, must clear a Validation Gate before being trusted operationally — same discipline as Fraud Detection's shadow-mode</li>
+      <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid)"><span style="color:var(--green)">✓</span> <strong style="color:#fff">Post-launch:</strong> the Model Risk Committee — the existing 2nd-line function in the <a href="roadmap.html#govop" style="color:var(--gold)">Roadmap's Operating Model RACI</a> — periodically reviews its flagging accuracy</li>
+      <li style="display:flex;gap:10px;padding:8px 0;font-size:13px;color:var(--mid)"><span style="color:var(--green)">✓</span> Internal Audit folds it into the AI-audit-universe scoping already planned for <a href="roadmap.html#audit" style="color:var(--gold)">6–12 Months</a></li>
+    </ul>
+
+    <div class="section-label">Risk Classification &amp; Access</div>
+    <p style="font-size:12.5px;color:var(--mid);line-height:1.7;margin-bottom:16px">Classified as <strong style="color:#fff">Tier 0</strong> under the existing <a href="ai-gpolicy.html" style="color:var(--gold)">Risk Classification Framework (Section 7)</a> — the highest tier, given its read access across every pilot's audit trail and every governance artifact — even though its Autonomy Level is <strong style="color:#fff">A0–A1</strong> (observation and recommendation only, per <a href="ai-gpolicy.html" style="color:var(--gold)">Section 8</a>).</p>
+    <ul style="list-style:none">
+      <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid)"><span style="color:var(--green)">✓</span> Named human owner: the Chief AI Officer, who reviews its outputs — not the agent itself</li>
+      <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--mid)"><span style="color:var(--green)">✓</span> Every finding and every routing decision is logged to the audit trail — an auditor can ask "why did this get flagged Medium and not High"</li>
+      <li style="display:flex;gap:10px;padding:8px 0;font-size:13px;color:var(--mid)"><span style="color:var(--green)">✓</span> Read-only access everywhere — no write access to production systems, HR systems, or the pilot agents it monitors</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 <span class="neon-brand" style="text-shadow:none">Ai-ME BANK</span> · Agentic AI Strategy Brief</p>
+  <p>Built by <a href="https://milindw1612.github.io/" target="_blank">Milind W · Global Delivery Head &amp; Agentic AI Builder</a></p>
+</footer>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('main > .tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tabs-bar .tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function showDash(id, btn) {
+  document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.dash-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('dash-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
