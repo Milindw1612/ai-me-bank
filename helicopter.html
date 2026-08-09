@@ -66,7 +66,8 @@
   .uc-agents { font-size: 10.5px; color: var(--muted); text-align: center; line-height: 1.7; }
 
   .human-band { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 8px; }
-  .human-node { background: rgba(52,211,153,0.05); border: 1px solid rgba(52,211,153,0.35); border-radius: 20px; padding: 8px 18px; font-size: 11.5px; font-weight: 700; color: var(--green); }
+  .human-node { background: rgba(52,211,153,0.05); border: 1px solid rgba(52,211,153,0.35); border-radius: 10px; padding: 8px 18px; font-size: 11.5px; font-weight: 700; color: var(--green); text-align: center; }
+  .human-node .hn-portal { display: block; font-size: 9px; font-weight: 400; color: var(--mid); margin-top: 3px; }
   .qa-band { display: flex; gap: 14px; background: rgba(167,139,250,0.05); border: 1px solid rgba(167,139,250,0.3); border-radius: 12px; padding: 18px 22px; margin-bottom: 8px; }
   .qa-node { text-align: center; padding: 8px 18px; flex: 1; }
   .qa-node .pn-title { font-size: 12.5px; font-weight: 700; color: var(--purple); }
@@ -101,6 +102,17 @@
     .side-branch { flex-direction: column; align-items: flex-start; }
     footer { padding: 20px; flex-direction: column; align-items: flex-start; gap: 6px; }
   }
+
+  /* ── Comprehensive Helicopter View ── */
+  .comprehensive-badge { display: inline-block; background: linear-gradient(135deg,#D97706,#F59E0B); color: #000; font-size: 10px; font-weight: 800; letter-spacing: 1px; padding: 3px 10px; border-radius: 20px; margin-right: 8px; vertical-align: middle; }
+  .comprehensive-intro { font-size: 12.5px; color: var(--mid); max-width: 900px; margin: -4px 0 18px; line-height: 1.7; }
+  .chart-wrap { overflow-x: auto; border: 1px solid var(--border2); border-radius: 12px; background: rgba(0,0,0,0.15); padding: 10px; }
+  .chart-wrap svg { min-width: 1300px; width: 100%; display: block; }
+  .legend-row { display: flex; flex-wrap: wrap; gap: 14px 22px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 11px; color: var(--mid); }
+  .legend-row .legend-item { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .legend-row .legend-swatch { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+  .legend-row .legend-swatch.dashed { background: none; border-top: 2px dashed currentColor; height: 0; }
+  .legend-row .legend-diamond { width: 9px; height: 9px; background: rgba(248,113,113,0.4); border: 1.4px solid var(--red); transform: rotate(45deg); display: inline-block; }
 </style>
 </head>
 <body>
@@ -146,6 +158,14 @@
 <main>
   <div class="section-label">End-to-End Data Flow</div>
   <div class="flow-diagram">
+
+    <div class="layer-label">How It Starts — Entry Points (parallel input — feeds the Gateway directly)</div>
+    <div class="chip-row">
+      <div class="src-chip" style="border-color:rgba(245,158,11,.35);color:var(--amber)">Relationship Manager — new loan application via Internal LOS Portal</div>
+      <div class="src-chip" style="border-color:rgba(45,107,228,.35);color:#5B8DEF">Transaction Stream — real-time event, automatic</div>
+      <div class="src-chip" style="border-color:rgba(52,211,153,.35);color:var(--green)">Scheduled Batch — daily DPD portfolio scan, automatic</div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);text-align:center;margin:2px 0 6px;">+ pulled in parallel from the data sources below — both feed the Gateway independently</div>
 
     <div class="layer-label">External Data Sources</div>
     <div class="chip-row">
@@ -216,9 +236,9 @@
 
     <div class="layer-label">Human Decision Layer</div>
     <div class="human-band">
-      <div class="human-node">Credit Officer Sign-off</div>
-      <div class="human-node">Fraud Analyst / Level-2 Review</div>
-      <div class="human-node">Collections Officer (exceptions only)</div>
+      <div class="human-node">Credit Officer Sign-off<span class="hn-portal">via Credit Ops Portal (VPN intranet)</span></div>
+      <div class="human-node">Fraud Analyst / Level-2 Review<span class="hn-portal">via Fraud Ops Console (VPN intranet)</span></div>
+      <div class="human-node">Collections Officer (exceptions only)<span class="hn-portal">via Collections Ops Dashboard (VPN intranet)</span></div>
     </div>
     <div class="flow-arrow-down">↓</div>
 
@@ -227,6 +247,243 @@
       <div class="src-chip" style="border-color:rgba(245,158,11,.35);color:var(--amber)">Core Banking System — Write-Back</div>
     </div>
 
+  </div>
+
+  <div class="section-label" style="margin-top:56px"><span class="comprehensive-badge">COMPREHENSIVE</span>Full-System Architecture &amp; Governance View</div>
+  <p class="comprehensive-intro">One diagram covering all 15 pilot agents across the 3 use cases, the shared platform, AWS infrastructure, and the Watchdog Council governance layer watching all of it. Solid arrows are data/control flow; dashed arrows are the Watchdog Council observing.</p>
+  <div class="chart-wrap">
+<svg viewBox="0 -90 1450 890" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="arrow-mid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#94A3B8"/></marker>
+<marker id="arrow-gold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#F59E0B"/></marker>
+<marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#5B8DEF"/></marker>
+<marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#34D399"/></marker>
+<marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#F87171"/></marker>
+<marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#A78BFA"/></marker>
+<marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#0D9488"/></marker>
+<marker id="arrow-yellow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#FBBF24"/></marker>
+</defs>
+<text x="20" y="-78" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">HOW IT STARTS — ENTRY POINTS  (parallel input — feeds the Gateway directly)</text>
+<rect x="14.0" y="-70" width="378.6666666666667" height="46" rx="8" fill="rgba(255,255,255,0.04)" stroke="#F59E0B" stroke-width="1.3"/>
+<text x="203.33333333333334" y="-52" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="middle" style="">Relationship Manager</text>
+<text x="203.33333333333334" y="-38" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">New loan application — Internal LOS Portal</text>
+<line x1="203.33333333333334" y1="-24" x2="203.33333333333334" y2="-12" stroke="#F59E0B" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<text x="203.33333333333334" y="-3" font-size="6.8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#F59E0B" text-anchor="middle" style="font-style:italic">↓ triggers Gateway</text>
+<rect x="400.6666666666667" y="-70" width="378.6666666666667" height="46" rx="8" fill="rgba(255,255,255,0.04)" stroke="#5B8DEF" stroke-width="1.3"/>
+<text x="590.0" y="-52" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#5B8DEF" text-anchor="middle" style="">Transaction Stream</text>
+<text x="590.0" y="-38" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">Real-time event — automatic, no human trigger</text>
+<line x1="590.0" y1="-24" x2="590.0" y2="-12" stroke="#5B8DEF" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<text x="590.0" y="-3" font-size="6.8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#5B8DEF" text-anchor="middle" style="font-style:italic">↓ triggers Gateway</text>
+<rect x="787.3333333333334" y="-70" width="378.6666666666667" height="46" rx="8" fill="rgba(255,255,255,0.04)" stroke="#34D399" stroke-width="1.3"/>
+<text x="976.6666666666667" y="-52" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#34D399" text-anchor="middle" style="">Scheduled Batch</text>
+<text x="976.6666666666667" y="-38" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">Daily DPD portfolio scan — automatic</text>
+<line x1="976.6666666666667" y1="-24" x2="976.6666666666667" y2="-12" stroke="#34D399" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<text x="976.6666666666667" y="-3" font-size="6.8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#34D399" text-anchor="middle" style="font-style:italic">↓ triggers Gateway</text>
+<text x="20" y="14" font-size="10" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">EXTERNAL DATA SOURCES</text>
+<rect x="20.0" y="20" width="154.28571428571428" height="34" rx="17" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.16)" stroke-width="1.3"/>
+<text x="97.14285714285714" y="41" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">Core Banking</text>
+<rect x="184.28571428571428" y="20" width="154.28571428571428" height="34" rx="17" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.16)" stroke-width="1.3"/>
+<text x="261.42857142857144" y="41" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">CIBIL</text>
+<rect x="348.57142857142856" y="20" width="154.28571428571428" height="34" rx="17" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.16)" stroke-width="1.3"/>
+<text x="425.71428571428567" y="34" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">Account</text>
+<text x="425.71428571428567" y="46" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">Aggregator</text>
+<rect x="512.8571428571429" y="20" width="154.28571428571428" height="34" rx="17" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.16)" stroke-width="1.3"/>
+<text x="590.0" y="34" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">GST / Tax</text>
+<text x="590.0" y="46" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">Portal</text>
+<rect x="677.1428571428571" y="20" width="154.28571428571428" height="34" rx="17" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.16)" stroke-width="1.3"/>
+<text x="754.2857142857142" y="34" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">Device/IP</text>
+<text x="754.2857142857142" y="46" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">Intel</text>
+<rect x="841.4285714285713" y="20" width="154.28571428571428" height="34" rx="17" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.16)" stroke-width="1.3"/>
+<text x="918.5714285714284" y="34" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">AML</text>
+<text x="918.5714285714284" y="46" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">Watchlist</text>
+<rect x="1005.7142857142857" y="20" width="154.28571428571428" height="34" rx="17" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.16)" stroke-width="1.3"/>
+<text x="1082.857142857143" y="34" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">Payment</text>
+<text x="1082.857142857143" y="46" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">History</text>
+<line x1="590.0" y1="54" x2="590.0" y2="72" stroke="#94A3B8" stroke-width="1.3" marker-end="url(#arrow-mid)"/>
+<rect x="20" y="76" width="1140" height="34" rx="7" fill="rgba(245,158,11,0.05)" stroke="rgba(245,158,11,0.35)" stroke-width="1.3"/>
+<text x="34" y="97" font-size="11" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">COMMON API GATEWAY</text>
+<text x="240" y="97" font-size="10" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">OAuth2 / mTLS Authentication  ·  Rate Limiting  ·  Single entry point for all 3 pilots</text>
+<line x1="590.0" y1="110" x2="590.0" y2="128" stroke="#94A3B8" stroke-width="1.3" marker-end="url(#arrow-mid)"/>
+<rect x="20" y="132" width="1140" height="46" rx="7" fill="rgba(255,255,255,0.035)" stroke="rgba(255,255,255,0.16)" stroke-width="1.3"/>
+<text x="34" y="150" font-size="10" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">SHARED AGENT PLATFORM</text>
+<text x="162.5" y="158" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="middle" style="">LangGraph Orchestration</text>
+<text x="162.5" y="170" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">Fan-out/fan-in state graphs, PostgreSQL checkpointing</text>
+<line x1="305.0" y1="140" x2="305.0" y2="172" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="447.5" y="158" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="middle" style="">PII Tokenisation Middleware</text>
+<text x="447.5" y="170" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">Tokenise at the boundary, before any prompt</text>
+<line x1="590.0" y1="140" x2="590.0" y2="172" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="732.5" y="158" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="middle" style="">Langfuse Observability</text>
+<text x="732.5" y="170" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">Every LLM call traced — tokens, latency, cost</text>
+<line x1="875.0" y1="140" x2="875.0" y2="172" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="1017.5" y="158" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="middle" style="">Policy RAG — policy_qa()</text>
+<text x="1017.5" y="170" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">Hybrid pgvector + BM25 · RRF · grounds MSME Risk Agent</text>
+<line x1="590.0" y1="178" x2="590.0" y2="196" stroke="#94A3B8" stroke-width="1.3" marker-end="url(#arrow-mid)"/>
+<rect x="20.0" y="200" width="560.0" height="40" rx="7" fill="rgba(167,139,250,0.06)" stroke="rgba(167,139,250,0.35)" stroke-width="1.3"/>
+<text x="34.0" y="218" font-size="10.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#A78BFA" text-anchor="start" style="">Claude Sonnet 4.5</text>
+<text x="34.0" y="232" font-size="8.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">Complex reasoning — CAM drafting, risk assessment</text>
+<rect x="600.0" y="200" width="560.0" height="40" rx="7" fill="rgba(167,139,250,0.06)" stroke="rgba(167,139,250,0.35)" stroke-width="1.3"/>
+<text x="614.0" y="218" font-size="10.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#A78BFA" text-anchor="start" style="">Claude Haiku 4.5</text>
+<text x="614.0" y="232" font-size="8.5" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">Fast scoring/classification — fraud scoring, channel routing</text>
+<line x1="590.0" y1="240" x2="590.0" y2="258" stroke="#94A3B8" stroke-width="1.3" marker-end="url(#arrow-mid)"/>
+<text x="20" y="272" font-size="10" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">USE CASE AGENT CLUSTERS</text>
+<rect x="14.0" y="280" width="378.6666666666667" height="300" rx="10" fill="rgba(245,158,11,0.07)" stroke="rgba(245,158,11,0.4)" stroke-width="1"/>
+<text x="203.33333333333334" y="296" font-size="10.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="middle" style="">MSME Credit CAM Prep</text>
+<rect x="20.0" y="304" width="366.6666666666667" height="30" rx="6" fill="rgba(255,255,255,0.05)" stroke="#F59E0B" stroke-width="1.3"/>
+<text x="203.33333333333334" y="323" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="middle" style="">Credit Orchestrator Agent</text>
+<line x1="203.33333333333334" y1="334" x2="203.33333333333334" y2="344" stroke="#F59E0B" stroke-width="1.1" marker-end="url(#arrow-mid)"/>
+<rect x="20.0" y="344" width="366.6666666666667" height="30" rx="5" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="28.0" y="363" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">Financial Ingestion Agent</text>
+<rect x="20.0" y="380" width="366.6666666666667" height="30" rx="5" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="28.0" y="399" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">Bureau &amp; Tax Verification Agent</text>
+<rect x="20.0" y="416" width="366.6666666666667" height="30" rx="5" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="28.0" y="435" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">Risk &amp; Cash-Flow Agent  (RAG-grounded)</text>
+<rect x="20.0" y="452" width="366.6666666666667" height="30" rx="5" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="28.0" y="471" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">CAM Drafting Agent</text>
+<line x1="203.33333333333334" y1="482" x2="203.33333333333334" y2="496" stroke="#F59E0B" stroke-width="1.1" marker-end="url(#arrow-mid)"/>
+<rect x="400.6666666666667" y="280" width="378.6666666666667" height="300" rx="10" fill="rgba(45,107,228,0.07)" stroke="rgba(45,107,228,0.4)" stroke-width="1"/>
+<text x="590.0" y="296" font-size="10.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#5B8DEF" text-anchor="middle" style="">Fraud Detection</text>
+<rect x="406.6666666666667" y="304" width="366.6666666666667" height="30" rx="6" fill="rgba(255,255,255,0.05)" stroke="#5B8DEF" stroke-width="1.3"/>
+<text x="590.0" y="323" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="middle" style="">Coordinator Agent</text>
+<line x1="590.0" y1="334" x2="590.0" y2="344" stroke="#5B8DEF" stroke-width="1.1" marker-end="url(#arrow-mid)"/>
+<rect x="406.6666666666667" y="344" width="366.6666666666667" height="30" rx="5" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="414.6666666666667" y="363" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">Device/IP &amp; Network Agent</text>
+<rect x="406.6666666666667" y="380" width="366.6666666666667" height="30" rx="5" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="414.6666666666667" y="399" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">Behavior Pattern Agent</text>
+<rect x="406.6666666666667" y="416" width="366.6666666666667" height="30" rx="5" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="414.6666666666667" y="435" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">Merchant/Beneficiary &amp; AML Agent</text>
+<rect x="406.6666666666667" y="452" width="366.6666666666667" height="30" rx="5" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="414.6666666666667" y="471" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">Recommendation Agent</text>
+<line x1="590.0" y1="482" x2="590.0" y2="496" stroke="#5B8DEF" stroke-width="1.1" marker-end="url(#arrow-mid)"/>
+<rect x="787.3333333333334" y="280" width="378.6666666666667" height="300" rx="10" fill="rgba(52,211,153,0.07)" stroke="rgba(52,211,153,0.4)" stroke-width="1"/>
+<text x="976.6666666666667" y="296" font-size="10.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#34D399" text-anchor="middle" style="">Collections Recovery</text>
+<rect x="793.3333333333334" y="304" width="366.6666666666667" height="30" rx="6" fill="rgba(255,255,255,0.05)" stroke="#34D399" stroke-width="1.3"/>
+<text x="976.6666666666667" y="323" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="middle" style="">Coordinator Agent</text>
+<line x1="976.6666666666667" y1="334" x2="976.6666666666667" y2="344" stroke="#34D399" stroke-width="1.1" marker-end="url(#arrow-mid)"/>
+<rect x="793.3333333333334" y="344" width="366.6666666666667" height="30" rx="5" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="801.3333333333334" y="363" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">Risk/Behavior Agent</text>
+<rect x="793.3333333333334" y="380" width="366.6666666666667" height="30" rx="5" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="801.3333333333334" y="399" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">Channel Agent</text>
+<rect x="793.3333333333334" y="416" width="366.6666666666667" height="30" rx="5" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="801.3333333333334" y="435" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">Negotiation Agent</text>
+<rect x="793.3333333333334" y="452" width="366.6666666666667" height="30" rx="5" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="801.3333333333334" y="471" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">Escalation Agent</text>
+<line x1="976.6666666666667" y1="482" x2="976.6666666666667" y2="496" stroke="#34D399" stroke-width="1.1" marker-end="url(#arrow-mid)"/>
+<rect x="20" y="532" width="1140" height="40" rx="7" fill="rgba(167,139,250,0.05)" stroke="rgba(167,139,250,0.3)" stroke-width="1.3"/>
+<text x="34" y="547" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#A78BFA" text-anchor="start" style="">OUTPUT VERIFICATION LAYER</text>
+<text x="162.5" y="564" font-size="8.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">Output Authentication</text>
+<line x1="305.0" y1="538" x2="305.0" y2="566" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="447.5" y="564" font-size="8.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">Durability / Consistency Check</text>
+<line x1="590.0" y1="538" x2="590.0" y2="566" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="732.5" y="564" font-size="8.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">Hallucination Detection</text>
+<line x1="875.0" y1="538" x2="875.0" y2="566" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="1017.5" y="564" font-size="8.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">LIME + SHAP Explainability</text>
+<line x1="203.33333333333334" y1="572" x2="203.33333333333334" y2="582" stroke="#F59E0B" stroke-width="1.1" marker-end="url(#arrow-mid)"/>
+<polygon points="203.33333333333334,584 231.33333333333334,612 203.33333333333334,640 175.33333333333334,612" fill="rgba(245,158,11,0.07)" stroke="#F59E0B" stroke-width="1.6"/>
+<text x="203.33333333333334" y="608" font-size="7" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="middle" style="">HUMAN</text>
+<text x="203.33333333333334" y="619" font-size="7" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="middle" style="">GATE</text>
+<text x="203.33333333333334" y="656" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#E2E8F0" text-anchor="middle" style="">Credit Officer Sign-off</text>
+<text x="203.33333333333334" y="668" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="font-style:italic">via Credit Ops Portal  (VPN intranet)</text>
+<line x1="590.0" y1="572" x2="590.0" y2="582" stroke="#5B8DEF" stroke-width="1.1" marker-end="url(#arrow-mid)"/>
+<polygon points="590.0,584 618.0,612 590.0,640 562.0,612" fill="rgba(45,107,228,0.07)" stroke="#5B8DEF" stroke-width="1.6"/>
+<text x="590.0" y="608" font-size="7" font-family="Segoe UI, sans-serif" font-weight="700" fill="#5B8DEF" text-anchor="middle" style="">HUMAN</text>
+<text x="590.0" y="619" font-size="7" font-family="Segoe UI, sans-serif" font-weight="700" fill="#5B8DEF" text-anchor="middle" style="">GATE</text>
+<text x="590.0" y="656" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#E2E8F0" text-anchor="middle" style="">Fraud Analyst / Level-2 Review</text>
+<text x="590.0" y="668" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="font-style:italic">via Fraud Ops Console  (VPN intranet)</text>
+<line x1="976.6666666666667" y1="572" x2="976.6666666666667" y2="582" stroke="#34D399" stroke-width="1.1" marker-end="url(#arrow-mid)"/>
+<polygon points="976.6666666666667,584 1004.6666666666667,612 976.6666666666667,640 948.6666666666667,612" fill="rgba(52,211,153,0.07)" stroke="#34D399" stroke-width="1.6"/>
+<text x="976.6666666666667" y="608" font-size="7" font-family="Segoe UI, sans-serif" font-weight="700" fill="#34D399" text-anchor="middle" style="">HUMAN</text>
+<text x="976.6666666666667" y="619" font-size="7" font-family="Segoe UI, sans-serif" font-weight="700" fill="#34D399" text-anchor="middle" style="">GATE</text>
+<text x="976.6666666666667" y="656" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#E2E8F0" text-anchor="middle" style="">Collections Officer  (exceptions only)</text>
+<text x="976.6666666666667" y="668" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="font-style:italic">via Collections Ops Dashboard  (VPN intranet)</text>
+<rect x="410.0" y="690" width="360" height="30" rx="15" fill="rgba(245,158,11,0.06)" stroke="rgba(245,158,11,0.35)" stroke-width="1.3"/>
+<text x="590.0" y="709" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="middle" style="">CORE BANKING SYSTEM — WRITE-BACK</text>
+<line x1="203.33333333333334" y1="674" x2="470" y2="690" stroke="#F59E0B" stroke-width="1.3" marker-end="url(#arrow-gold)"/>
+<line x1="590.0" y1="674" x2="590" y2="690" stroke="#5B8DEF" stroke-width="1.3" marker-end="url(#arrow-blue)"/>
+<line x1="976.6666666666667" y1="674" x2="710" y2="690" stroke="#34D399" stroke-width="1.3" marker-end="url(#arrow-green)"/>
+<rect x="20" y="736" width="1140" height="46" rx="7" fill="rgba(251,146,60,0.06)" stroke="rgba(251,146,60,0.35)" stroke-width="1.3"/>
+<text x="34" y="752" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#FB923C" text-anchor="start" style="">AWS INFRASTRUCTURE &amp; SECURITY  —  underlies every layer above</text>
+<text x="115.0" y="766" font-size="8" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="middle" style="">EKS</text>
+<text x="115.0" y="777" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">(autoscaling pods)</text>
+<line x1="210.0" y1="756" x2="210.0" y2="778" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="305.0" y="766" font-size="8" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="middle" style="">RDS + pgvector</text>
+<text x="305.0" y="777" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">(credit_policy_chunks)</text>
+<line x1="400.0" y1="756" x2="400.0" y2="778" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="495.0" y="770" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">Secrets Manager</text>
+<line x1="590.0" y1="756" x2="590.0" y2="778" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="685.0" y="770" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">WAF</text>
+<line x1="780.0" y1="756" x2="780.0" y2="778" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="875.0" y="766" font-size="8" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="middle" style="">KMS Encryption</text>
+<text x="875.0" y="777" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">(AES-256 / TLS 1.3)</text>
+<line x1="970.0" y1="756" x2="970.0" y2="778" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="1065.0" y="770" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="middle" style="">Bedrock PrivateLink</text>
+<rect x="1180" y="6" width="250" height="776" rx="10" fill="rgba(167,139,250,0.03)" stroke="rgba(167,139,250,0.4)" stroke-width="1.4" stroke-dasharray="6,4"/>
+<text x="1305.0" y="26" font-size="11" font-family="Segoe UI, sans-serif" font-weight="700" fill="#A78BFA" text-anchor="middle" style="">WATCHDOG COUNCIL</text>
+<text x="1305.0" y="39" font-size="8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="font-style:italic">visibility, not authority</text>
+<rect x="1192" y="48" width="226" height="36" rx="6" fill="rgba(167,139,250,0.1)" stroke="#A78BFA" stroke-width="1.3"/>
+<text x="1305.0" y="63" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#A78BFA" text-anchor="middle" style="">Orchestrator</text>
+<text x="1305.0" y="76" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">aggregates · routes by severity</text>
+<rect x="1192" y="98" width="226" height="62" rx="6" fill="rgba(255,255,255,0.03)" stroke="#F59E0B" stroke-width="1.3"/>
+<text x="1202" y="114" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">Compliance Mapping</text>
+<text x="1202" y="127" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">AI-GPolicy, RBI Sutras/Pillars</text>
+<text x="1202" y="140" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#F59E0B" text-anchor="start" style="font-style:italic">→ Gateway &amp; Platform</text>
+<line x1="1190" y1="129.0" x2="1158" y2="129.0" stroke="#F59E0B" stroke-width="1.1" stroke-dasharray="4,3"/>
+<path d="M1158,125.0 L1150,129.0 L1158,133.0 z" fill="#F59E0B"/>
+<rect x="1192" y="170" width="226" height="62" rx="6" fill="rgba(255,255,255,0.03)" stroke="#5B8DEF" stroke-width="1.3"/>
+<text x="1202" y="186" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#5B8DEF" text-anchor="start" style="">Program Tracking</text>
+<text x="1202" y="199" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">Roadmap, checklist, budget</text>
+<text x="1202" y="212" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#5B8DEF" text-anchor="start" style="font-style:italic">→ All 3 Pilots</text>
+<line x1="1190" y1="201.0" x2="1158" y2="201.0" stroke="#5B8DEF" stroke-width="1.1" stroke-dasharray="4,3"/>
+<path d="M1158,197.0 L1150,201.0 L1158,205.0 z" fill="#5B8DEF"/>
+<rect x="1192" y="242" width="226" height="62" rx="6" fill="rgba(255,255,255,0.03)" stroke="#0D9488" stroke-width="1.3"/>
+<text x="1202" y="258" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#0D9488" text-anchor="start" style="">Agent Fleet Monitor</text>
+<text x="1202" y="271" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">Langfuse traces, Validation Gates</text>
+<text x="1202" y="284" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#0D9488" text-anchor="start" style="font-style:italic">→ Agent Fleet &amp; Traces</text>
+<line x1="1190" y1="273.0" x2="1158" y2="273.0" stroke="#0D9488" stroke-width="1.1" stroke-dasharray="4,3"/>
+<path d="M1158,269.0 L1150,273.0 L1158,277.0 z" fill="#0D9488"/>
+<rect x="1192" y="314" width="226" height="62" rx="6" fill="rgba(255,255,255,0.03)" stroke="#34D399" stroke-width="1.3"/>
+<text x="1202" y="330" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#34D399" text-anchor="start" style="">Audit &amp; Assurance</text>
+<text x="1202" y="343" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">Audit findings, open NCs</text>
+<text x="1202" y="356" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#34D399" text-anchor="start" style="font-style:italic">→ Human Gates &amp; Audit Trail</text>
+<line x1="1190" y1="345.0" x2="1158" y2="345.0" stroke="#34D399" stroke-width="1.1" stroke-dasharray="4,3"/>
+<path d="M1158,341.0 L1150,345.0 L1158,349.0 z" fill="#34D399"/>
+<rect x="1192" y="386" width="226" height="62" rx="6" fill="rgba(255,255,255,0.03)" stroke="#FBBF24" stroke-width="1.3" stroke-dasharray="5,3"/>
+<text x="1202" y="402" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#FBBF24" text-anchor="start" style="">Intake &amp; Integration</text>
+<text x="1202" y="415" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">New use-case proposals</text>
+<text x="1202" y="428" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="font-style:italic">(dormant — event-triggered)</text>
+<rect x="1192" y="458" width="226" height="62" rx="6" fill="rgba(255,255,255,0.03)" stroke="#F87171" stroke-width="1.3"/>
+<text x="1202" y="474" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F87171" text-anchor="start" style="">Regulatory Watch</text>
+<text x="1202" y="487" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">RBI / CERT-In / MeitY / SEBI / IRDAI / DPDP</text>
+<text x="1202" y="500" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#F87171" text-anchor="start" style="font-style:italic">→ External Sources</text>
+<line x1="1190" y1="489.0" x2="1158" y2="489.0" stroke="#F87171" stroke-width="1.1" stroke-dasharray="4,3"/>
+<path d="M1158,485.0 L1150,489.0 L1158,493.0 z" fill="#F87171"/>
+<rect x="1192" y="536" width="226" height="54" rx="6" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.16)" stroke-width="1"/>
+<text x="1202" y="551" font-size="8.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="start" style="">Severity Routing</text>
+<text x="1202" y="564" font-size="7.2" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">High → CAIO same-day + Board/CEO</text>
+<text x="1202" y="575" font-size="7.2" font-family="Segoe UI, sans-serif" font-weight="400" fill="#94A3B8" text-anchor="start" style="">Medium/Low → Dashboard only</text>
+<rect x="1192" y="602" width="226" height="30" rx="15" fill="rgba(245,158,11,0.08)" stroke="#F59E0B" stroke-width="1.3"/>
+<text x="1305.0" y="621" font-size="8.3" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="middle" style="">CAIO · Board AI Committee · CEO</text>
+</svg>
+  </div>
+  <div class="legend-row">
+    <span class="legend-item"><span class="legend-swatch" style="background:#94A3B8"></span>Data / control flow</span>
+    <span class="legend-item"><span class="legend-swatch dashed" style="color:#A78BFA"></span>Watchdog Council monitoring</span>
+    <span class="legend-item"><span class="legend-diamond"></span>Human approval gate</span>
+    <span class="legend-item"><span class="legend-swatch dashed" style="color:#FBBF24"></span>Dormant / event-triggered</span>
+    <span class="legend-item" style="color:#F59E0B">● MSME Credit</span>
+    <span class="legend-item" style="color:#5B8DEF">● Fraud Detection</span>
+    <span class="legend-item" style="color:#34D399">● Collections</span>
+    <span class="legend-item" style="color:#A78BFA">● Watchdog Orchestrator</span>
+    <span class="legend-item" style="color:#0D9488">● Agent Fleet Monitor</span>
+    <span class="legend-item" style="color:#FBBF24">● Intake &amp; Integration</span>
+    <span class="legend-item" style="color:#F87171">● Regulatory Watch</span>
   </div>
 </main>
 
