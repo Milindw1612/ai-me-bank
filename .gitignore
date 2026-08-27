@@ -1,0 +1,8 @@
+# Local runtime artifacts -- regeneratable, not meant for version control
+__pycache__/
+*.pyc
+rag-policies/chroma_db/
+rag-policies/bm25_indexes.pkl
+rag-policies/server.log
+rag-policies/audit_log.jsonl
+fraud_demo/*.log

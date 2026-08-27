@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Application Demo — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, serif; font-size: 26px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 780px; line-height: 1.7; }
+
+  main { padding: 32px 48px 60px; display: grid; grid-template-columns: 380px 1fr; gap: 28px; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+
+  .card { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 22px; }
+  .card h2 { font-size: 13px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+
+  label { display: block; font-size: 11px; color: var(--mid); margin: 12px 0 4px; }
+  label.pii-label::after { content: " (PII — dropped by Input Guard)"; color: var(--red); font-size: 9px; }
+  input, select { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border2); border-radius: 6px; padding: 8px 10px; color: var(--text); font-size: 13px; }
+  input:focus, select:focus { outline: none; border-color: var(--gold); }
+
+  .btn { margin-top: 20px; width: 100%; background: linear-gradient(135deg,#D97706,#F59E0B); color: #000; font-weight: 700; border: none; border-radius: 8px; padding: 12px; font-size: 13px; cursor: pointer; }
+  .btn:hover { filter: brightness(1.08); }
+  .btn.secondary { background: rgba(167,139,250,0.15); color: var(--purple); border: 1px solid var(--purple); margin-top: 8px; }
+
+  .result-card { min-height: 200px; }
+  .verdict-pill { display: inline-block; font-size: 13px; font-weight: 700; padding: 6px 16px; border-radius: 20px; margin-bottom: 14px; }
+  .verdict-eligible { background: rgba(52,211,153,0.15); color: var(--green); border: 1px solid var(--green); }
+  .verdict-review { background: rgba(245,158,11,0.15); color: var(--gold); border: 1px solid var(--gold); }
+  .verdict-not-eligible { background: rgba(248,113,113,0.15); color: var(--red); border: 1px solid var(--red); }
+  .verdict-escalated { background: rgba(167,139,250,0.15); color: var(--purple); border: 1px solid var(--purple); }
+
+  .explanation { font-size: 13px; color: var(--text); line-height: 1.7; background: rgba(255,255,255,0.03); border-left: 3px solid var(--gold-dim); border-radius: 6px; padding: 14px 16px; margin-bottom: 14px; white-space: pre-wrap; }
+  .clause-chip { display: inline-block; font-size: 10.5px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); color: var(--gold); padding: 3px 10px; border-radius: 12px; margin: 2px 4px 2px 0; }
+  .watchdog-flag { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.35); border-radius: 8px; padding: 10px 14px; margin-top: 10px; font-size: 12px; color: var(--red); }
+  .human-note { font-size: 11px; color: var(--mid); font-style: italic; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border2); }
+  .empty-state { color: var(--muted); font-size: 12.5px; text-align: center; padding: 60px 20px; }
+  .backend-warning { background: rgba(248,113,113,0.1); border: 1px solid var(--red); color: var(--red); padding: 10px 14px; border-radius: 8px; font-size: 12px; margin-bottom: 16px; display: none; }
+  .loading { color: var(--mid); font-size: 12.5px; text-align: center; padding: 40px; display: none; }
+
+  .demo-row { display: flex; gap: 8px; margin-top: 10px; }
+  .demo-row button { flex: 1; font-size: 10.5px; padding: 6px; background: rgba(255,255,255,0.04); border: 1px solid var(--border2); color: var(--mid); border-radius: 6px; cursor: pointer; }
+  .demo-row button:hover { border-color: var(--gold); color: var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="eyebrow">Local Agentic RAG Demo · requires Langflow/Flask backend running on localhost</div>
+  <h1>Loan Application — Personal Loan Eligibility</h1>
+  <p>Fill in the form and submit. The identifying fields (name, PAN, Aadhaar) never leave your browser tab in any prompt — only the derived numbers below are used by the Rule Engine, Hybrid RAG, and Gemini.</p>
+</div>
+
+<main>
+  <div class="card">
+    <h2>Application Form</h2>
+    <div id="backendWarning" class="backend-warning">Backend not reachable at localhost:5001 — start the local server first (see local-rag-architecture.html for setup).</div>
+
+    <label class="pii-label">Applicant Name</label>
+    <input id="applicant_name" value="Anil Kumar">
+    <label class="pii-label">PAN</label>
+    <input id="pan" value="ABCDE1234F">
+    <label class="pii-label">Aadhaar</label>
+    <input id="aadhaar" value="1234 5678 9012">
+
+    <label>Age</label>
+    <input id="age" type="number" value="26">
+    <label>Employment Type</label>
+    <select id="employment_type">
+      <option value="salaried" selected>Salaried</option>
+      <option value="self_employed">Self-Employed</option>
+      <option value="pensioner">Pensioner</option>
+    </select>
+    <label>Years with Current Employer</label>
+    <input id="years_current_employer" type="number" value="2" step="0.5">
+    <label>Total Years Experience</label>
+    <input id="years_total_experience" type="number" value="3" step="0.5">
+    <label>CIBIL Score</label>
+    <input id="cibil_score" type="number" value="620">
+    <label>Monthly Income (Rs.)</label>
+    <input id="monthly_income" type="number" value="35000">
+    <label>Existing Monthly EMIs (Rs.)</label>
+    <input id="existing_emis" type="number" value="8000">
+    <label>Credit Card Outstanding (Rs.)</label>
+    <input id="credit_card_outstanding" type="number" value="15000">
+    <label>Proposed EMI (Rs.)</label>
+    <input id="proposed_emi" type="number" value="9000">
+    <label>Requested Amount (Rs.)</label>
+    <input id="requested_amount" type="number" value="300000">
+    <label>Requested Tenure (months)</label>
+    <input id="requested_tenure_months" type="number" value="36">
+
+    <button class="btn" onclick="submitApplication(null)">Check Eligibility</button>
+    <div class="demo-row">
+      <button onclick="loadSample('strong')">Load Strong Profile</button>
+      <button onclick="loadSample('weak')">Load Weak (CIBIL 620) Profile</button>
+    </div>
+    <button class="btn secondary" onclick="submitApplication('scenario2')">Run Scripted Demo: Scenario 2 (Watchdog catches scope drift)</button>
+  </div>
+
+  <div class="card result-card">
+    <h2>Result</h2>
+    <div id="loading" class="loading">Running: Input Guard &rarr; Hybrid RAG &rarr; Rule Engine &rarr; Gemini &rarr; Watchdog...</div>
+    <div id="emptyState" class="empty-state">Submit an application to see the pipeline's output here.</div>
+    <div id="resultBody" style="display:none"></div>
+  </div>
+</main>
+
+<script>
+const API_BASE = "http://127.0.0.1:5001";
+
+function loadSample(profile) {
+  if (profile === "strong") {
+    document.getElementById("age").value = 34;
+    document.getElementById("employment_type").value = "salaried";
+    document.getElementById("years_current_employer").value = 4;
+    document.getElementById("years_total_experience").value = 8;
+    document.getElementById("cibil_score").value = 780;
+    document.getElementById("monthly_income").value = 90000;
+    document.getElementById("existing_emis").value = 8000;
+    document.getElementById("credit_card_outstanding").value = 20000;
+    document.getElementById("proposed_emi").value = 12000;
+    document.getElementById("requested_amount").value = 500000;
+    document.getElementById("requested_tenure_months").value = 48;
+  } else {
+    document.getElementById("age").value = 26;
+    document.getElementById("employment_type").value = "salaried";
+    document.getElementById("years_current_employer").value = 2;
+    document.getElementById("years_total_experience").value = 3;
+    document.getElementById("cibil_score").value = 620;
+    document.getElementById("monthly_income").value = 35000;
+    document.getElementById("existing_emis").value = 8000;
+    document.getElementById("credit_card_outstanding").value = 15000;
+    document.getElementById("proposed_emi").value = 9000;
+    document.getElementById("requested_amount").value = 300000;
+    document.getElementById("requested_tenure_months").value = 36;
+  }
+}
+
+async function submitApplication(demoMode) {
+  const payload = {
+    request_id: "gui-" + Date.now(),
+    demo_mode: demoMode,
+    applicant_name: document.getElementById("applicant_name").value,
+    pan: document.getElementById("pan").value,
+    aadhaar: document.getElementById("aadhaar").value,
+    age: Number(document.getElementById("age").value),
+    employment_type: document.getElementById("employment_type").value,
+    years_current_employer: Number(document.getElementById("years_current_employer").value),
+    years_total_experience: Number(document.getElementById("years_total_experience").value),
+    cibil_score: Number(document.getElementById("cibil_score").value),
+    monthly_income: Number(document.getElementById("monthly_income").value),
+    existing_emis: Number(document.getElementById("existing_emis").value),
+    credit_card_outstanding: Number(document.getElementById("credit_card_outstanding").value),
+    proposed_emi: Number(document.getElementById("proposed_emi").value),
+    requested_amount: Number(document.getElementById("requested_amount").value),
+    requested_tenure_months: Number(document.getElementById("requested_tenure_months").value),
+  };
+
+  document.getElementById("emptyState").style.display = "none";
+  document.getElementById("resultBody").style.display = "none";
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("backendWarning").style.display = "none";
+
+  try {
+    const resp = await fetch(`${API_BASE}/api/loan-eligibility`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await resp.json();
+    renderResult(data);
+  } catch (e) {
+    document.getElementById("backendWarning").style.display = "block";
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("emptyState").style.display = "block";
+  }
+}
+
+function renderResult(data) {
+  document.getElementById("loading").style.display = "none";
+  const body = document.getElementById("resultBody");
+  body.style.display = "block";
+
+  if (data.error) {
+    body.innerHTML = `<div class="watchdog-flag">${data.error}</div>`;
+    return;
+  }
+
+  if (data.escalated) {
+    body.innerHTML = `
+      <span class="verdict-pill verdict-escalated">ESCALATED</span>
+      <div class="explanation">${data.reason}</div>
+      ${(data.watchdog_flags || []).map(f => `<div class="watchdog-flag"><strong>${f.check}</strong>: ${f.detail}</div>`).join("")}
+      <div class="human-note">This request was blocked before an unreliable answer could be shown -- a human reviews it directly.</div>
+    `;
+    return;
+  }
+
+  const verdictClass = data.verdict === "Eligible" ? "verdict-eligible"
+    : data.verdict === "Needs Manual Review" ? "verdict-review" : "verdict-not-eligible";
+
+  body.innerHTML = `
+    <span class="verdict-pill ${verdictClass}">${data.verdict.toUpperCase()}</span>
+    <div class="explanation">${data.llm_explanation}</div>
+    <div><strong style="font-size:11px;color:var(--mid)">Retrieved policy clauses:</strong><br>
+      ${data.retrieved_clauses.map(c => `<span class="clause-chip">${c.doc_code} &sect;${c.clause}</span>`).join("")}
+    </div>
+    ${(data.watchdog_flags || []).length ? data.watchdog_flags.map(f => `<div class="watchdog-flag"><strong>${f.check}</strong>: ${f.detail}</div>`).join("") : ""}
+    <div class="human-note">${data.human_review_note}</div>
+  `;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Local RAG Architecture — Ai-ME BANK</title>
+<style>
+  :root {
+    --navy: #4A1420; --bg: #3B0F1A; --surface: #4A1420; --surface2: #551729;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+    --text: #E2E8F0; --muted: #64748B; --mid: #94A3B8;
+    --gold: #F59E0B; --gold-dim: #D97706; --teal: #0D9488; --purple: #A78BFA;
+    --green: #34D399; --red: #F87171; --amber: #FBBF24; --blue: #2D6BE4; --neon: #39FF14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 14px; }
+
+  .page-header { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(190,30,60,0.20) 0%, transparent 60%), linear-gradient(135deg, #4A1420 0%, #3B0F1A 100%); border-bottom: 1px solid var(--border2); padding: 40px 48px 32px; }
+  .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .page-header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); max-width: 780px; line-height: 1.7; }
+
+  main { padding: 32px 48px 60px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .chart-wrap { overflow-x: auto; border: 1px solid var(--border2); border-radius: 12px; background: rgba(0,0,0,0.15); padding: 10px; }
+  .chart-wrap svg { min-width: 1150px; width: 100%; display: block; }
+
+  .legend-row { display: flex; flex-wrap: wrap; gap: 14px 22px; margin: 16px 0 40px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 11px; color: var(--mid); }
+
+  .notes-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-radius: 10px; padding: 24px 28px; }
+  .notes-box h2 { font-size: 15px; color: #fff; margin-bottom: 14px; font-family: Georgia, serif; }
+  .notes-box ol { padding-left: 22px; }
+  .notes-box li { font-size: 12.5px; color: var(--mid); margin-bottom: 12px; line-height: 1.7; }
+  .notes-box li strong { color: var(--text); }
+  .notes-box code { background: rgba(0,0,0,0.3); padding: 1px 5px; border-radius: 4px; font-size: 11px; color: var(--gold); }
+  .notes-box .lane-tag { display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 0.5px; padding: 1px 7px; border-radius: 10px; margin-left: 6px; }
+  .lane-loan { background: rgba(245,158,11,0.15); color: var(--gold); }
+  .lane-fraud { background: rgba(45,107,228,0.15); color: #5B8DEF; }
+  .lane-shared { background: rgba(167,139,250,0.15); color: var(--purple); }
+
+  footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
+  footer p { font-size: 12px; color: #94765B; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="eyebrow">Local Agentic RAG Framework · DRAFT FOR REVIEW</div>
+  <h1>Helicopter View — Loan &amp; Fraud RAG System (Data-Trace Version)</h1>
+  <p>Every stage below shows the actual sample data flowing through it, for one worked example per lane — not just component names. The Fraud lane starts from an explicit transaction database (simulated today as local JSON standing in for a Google Sheet; a real SQL/PostgreSQL/Oracle database in production).</p>
+</div>
+
+<main>
+  <div class="section-label">System Overview — worked example traced end-to-end</div>
+  <div class="chart-wrap">
+<svg viewBox="0 0 1360 832" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="arrow-mid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#94A3B8"/></marker>
+<marker id="arrow-gold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#F59E0B"/></marker>
+<marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#5B8DEF"/></marker>
+<marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#A78BFA"/></marker>
+<marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#F87171"/></marker>
+<marker id="arrow-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#38BDF8"/></marker>
+</defs>
+<text x="20" y="14" font-size="10" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">① WHERE THE DATA COMES FROM</text>
+<rect x="20" y="22" width="460.0" height="40" rx="8" fill="rgba(245,158,11,0.06)" stroke="#F59E0B" stroke-width="1.3" stroke-dasharray="5,3"/>
+<text x="250.0" y="39" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="middle" style="">Applicant fills the Loan GUI form directly</text>
+<text x="250.0" y="52" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">(no pre-existing database record -- a new application)</text>
+<path d="M520.0,32 L520.0,52 A65.0,10 0 0 0 650.0,52 L650.0,32 A65.0,10 0 0 0 520.0,32 Z" fill="rgba(45,107,228,0.08)" stroke="#5B8DEF" stroke-width="1.3"/>
+<path d="M520.0,32 A65.0,10 0 0 0 650.0,32" fill="none" stroke="#5B8DEF" stroke-width="1.3"/>
+<ellipse cx="585.0" cy="32" rx="65.0" ry="10" fill="rgba(45,107,228,0.08)" stroke="#5B8DEF" stroke-width="1.3"/>
+<text x="585.0" y="38" font-size="8.3" font-family="Segoe UI, sans-serif" font-weight="700" fill="#5B8DEF" text-anchor="middle" style="">Transaction DB</text>
+<text x="585.0" y="49" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">10,000 records</text>
+<text x="655.0" y="34" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">today: local JSON</text>
+<text x="655.0" y="44" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">(simulating a Google Sheet)</text>
+<text x="655.0" y="55" font-size="7" font-family="Segoe UI, sans-serif" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">production: SQL / Postgres / Oracle</text>
+<text x="530.0" y="77" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">TXN-004521 | Rs 2,45,000 | UPI | device: NEW | 02:14 AM</text>
+<line x1="250.0" y1="66" x2="250.0" y2="82" stroke="#F59E0B" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<line x1="585.0" y1="66" x2="585.0" y2="82" stroke="#5B8DEF" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<text x="20" y="86" font-size="10" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">② INPUT CAPTURED</text>
+<rect x="20" y="92" width="460.0" height="56" rx="8" fill="rgba(245,158,11,0.08)" stroke="#F59E0B" stroke-width="1.3"/>
+<text x="250.0" y="108" font-size="10" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="middle" style="">Loan Application GUI</text>
+<text x="36" y="122" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">name: "Anil Kumar", pan: "ABCDE1234F",</text>
+<text x="36" y="132" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">aadhaar: "1234 5678 9012", cibil: 620,</text>
+<text x="36" y="142" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">income: 35000, requested: 300000, tenure: 36</text>
+<rect x="500.0" y="92" width="460.0" height="56" rx="8" fill="rgba(45,107,228,0.08)" stroke="#5B8DEF" stroke-width="1.3"/>
+<text x="730.0" y="108" font-size="10" font-family="Segoe UI, sans-serif" font-weight="700" fill="#5B8DEF" text-anchor="middle" style="">Fraud Transaction Tracker GUI</text>
+<text x="516.0" y="122" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">analyst selects TXN-004521 from the 10k-row table</text>
+<text x="516.0" y="132" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">account_id "ACC001247", customer_name "Anil Kumar",</text>
+<text x="516.0" y="142" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">address "Andheri West..." (all identifying, none safe yet)</text>
+<line x1="250.0" y1="152" x2="250.0" y2="170" stroke="#F59E0B" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<line x1="730.0" y1="152" x2="730.0" y2="170" stroke="#5B8DEF" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<text x="20" y="174" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">③ INPUT GUARD -- de-identify before anything else runs</text>
+<rect x="20" y="180" width="940" height="58" rx="8" fill="rgba(255,255,255,0.035)" stroke="rgba(255,255,255,0.16)" stroke-width="1.3"/>
+<text x="34" y="195" font-size="8.3" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="start" style="">Schema-based strip:</text>
+<text x="34" y="207" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">DROPPED: name, pan, aadhaar (never leave this step)</text>
+<text x="34" y="217" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">KEPT:    cibil=620, income=35000, requested=300000,</text>
+<text x="34" y="227" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">         tenure=36  &lt;- these 4 numbers only</text>
+<line x1="500.0" y1="184" x2="500.0" y2="234" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="514.0" y="195" font-size="8.3" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="start" style="">Reference-token substitution:</text>
+<text x="514.0" y="207" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">account_id "ACC001247" -&gt; token "REF-88291"</text>
+<text x="514.0" y="217" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">REF-88291 is what travels forward from here on --</text>
+<text x="514.0" y="227" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">the real account_id is never sent to the LLM.</text>
+<line x1="490.0" y1="242" x2="490.0" y2="258" stroke="#94A3B8" stroke-width="1.3" marker-end="url(#arrow-mid)"/>
+<rect x="230.0" y="262" width="520" height="34" rx="17" fill="rgba(255,255,255,0.03)" stroke="#94A3B8" stroke-width="1.3"/>
+<text x="490.0" y="277" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="middle" style="">④ INTENT ROUTER</text>
+<text x="490.0" y="289" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">Loan GUI -&gt; loan_policies  |  Fraud GUI -&gt; fraud_policies</text>
+<line x1="250.0" y1="300" x2="250.0" y2="316" stroke="#F59E0B" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<line x1="730.0" y1="300" x2="730.0" y2="316" stroke="#5B8DEF" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<text x="20" y="320" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">⑤ HYBRID RAG -- retrieves the policy clauses that actually apply</text>
+<rect x="20" y="326" width="460.0" height="76" rx="8" fill="rgba(245,158,11,0.06)" stroke="#F59E0B" stroke-width="1.3"/>
+<text x="250.0" y="341" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="middle" style="">Loan Policies Collection (23 clauses)</text>
+<text x="34" y="355" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">query (built from the numbers above):</text>
+<text x="34" y="365" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">"CIBIL 620 below minimum threshold"</text>
+<text x="34" y="375" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">-&gt; retrieves LOAN-001 clause 4, LOAN-005 clause 3</text>
+<rect x="500.0" y="326" width="460.0" height="76" rx="8" fill="rgba(45,107,228,0.06)" stroke="#5B8DEF" stroke-width="1.3"/>
+<text x="730.0" y="341" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#5B8DEF" text-anchor="middle" style="">Fraud Policies Collection (5 docs)</text>
+<text x="514.0" y="355" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">query (built from the signals below):</text>
+<text x="514.0" y="365" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">"new device + high amount + odd hour"</text>
+<text x="514.0" y="375" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">-&gt; retrieves FRAUD-001 cl.1 (velocity), FRAUD-003 cl.2</text>
+<text x="514.0" y="385" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">   (auto-freeze threshold)</text>
+<line x1="250.0" y1="406" x2="250.0" y2="422" stroke="#F59E0B" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<line x1="730.0" y1="406" x2="730.0" y2="422" stroke="#5B8DEF" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<text x="20" y="426" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">⑥ DETERMINISTIC ENGINE (pure Python, no LLM) -- THIS decides</text>
+<rect x="20" y="432" width="460.0" height="62" rx="8" fill="rgba(245,158,11,0.1)" stroke="#F59E0B" stroke-width="1.3"/>
+<text x="250.0" y="447" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="middle" style="">Loan Rule Engine</text>
+<text x="34" y="461" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">if cibil &lt; 650: verdict = "Not Eligible"</text>
+<text x="34" y="471" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">cibil=620 -&gt; 620 &lt; 650 == True</text>
+<text x="34" y="481" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">=&gt; VERDICT: "Not Eligible"  (reason: CIBIL below 650)</text>
+<rect x="500.0" y="432" width="460.0" height="62" rx="8" fill="rgba(45,107,228,0.1)" stroke="#5B8DEF" stroke-width="1.3"/>
+<text x="730.0" y="447" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#5B8DEF" text-anchor="middle" style="">Fraud Risk Scoring</text>
+<text x="514.0" y="461" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">new_device(+30) + odd_hour(+20) + amount_9x(+35)</text>
+<text x="514.0" y="471" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">= risk_score 85  (threshold to flag: 45)</text>
+<text x="514.0" y="481" font-size="7.2" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">=&gt; FLAGGED  (score 85 &gt;= 45)</text>
+<line x1="250.0" y1="498" x2="250.0" y2="514" stroke="#F59E0B" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<line x1="730.0" y1="498" x2="730.0" y2="514" stroke="#5B8DEF" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<text x="20" y="518" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#A78BFA" text-anchor="start" style="">⑦ PROMPT ASSEMBLY -- verdict + clauses merge into ONE prompt (still no PII)</text>
+<rect x="20" y="524" width="940" height="74" rx="8" fill="rgba(167,139,250,0.06)" stroke="#A78BFA" stroke-width="1.3"/>
+<text x="34" y="539" font-size="8" font-family="Segoe UI, sans-serif" font-weight="700" fill="#A78BFA" text-anchor="start" style="">Loan prompt sent to the LLM:</text>
+<text x="34" y="551" font-size="7" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">"VERDICT: Not Eligible. REASON: CIBIL 620 below 650.</text>
+<text x="34" y="561" font-size="7" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic"> CLAUSES: [LOAN-001 §4 text] [LOAN-005 §3 text].</text>
+<text x="34" y="571" font-size="7" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic"> Explain this verdict citing the clauses. Do not change it."</text>
+<line x1="500.0" y1="528" x2="500.0" y2="594" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+<text x="514.0" y="539" font-size="8" font-family="Segoe UI, sans-serif" font-weight="700" fill="#A78BFA" text-anchor="start" style="">Fraud prompt sent to the LLM:</text>
+<text x="514.0" y="551" font-size="7" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">"REF: REF-88291. RISK SCORE: 85 (FLAGGED).</text>
+<text x="514.0" y="561" font-size="7" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic"> SIGNALS: new device, odd hour, 9x amount.</text>
+<text x="514.0" y="571" font-size="7" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic"> CLAUSES: [FRAUD-001 §1] [FRAUD-003 §2]. Explain."</text>
+<line x1="490.0" y1="602" x2="490.0" y2="618" stroke="#94A3B8" stroke-width="1.3" marker-end="url(#arrow-mid)"/>
+<rect x="320.0" y="622" width="340" height="30" rx="15" fill="rgba(167,139,250,0.1)" stroke="#A78BFA" stroke-width="1.3"/>
+<text x="490.0" y="642" font-size="9" font-family="Segoe UI, sans-serif" font-weight="700" fill="#A78BFA" text-anchor="middle" style="">⑧ Gemini 3.5 Flash -- explains only, never re-decides</text>
+<line x1="250.0" y1="656" x2="250.0" y2="672" stroke="#F59E0B" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<line x1="730.0" y1="656" x2="730.0" y2="672" stroke="#5B8DEF" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<text x="20" y="676" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">⑨ OUTPUT -- Watchdog-checked, de-tokenized, returned to the same GUI</text>
+<rect x="20" y="682" width="460.0" height="60" rx="8" fill="rgba(245,158,11,0.08)" stroke="#F59E0B" stroke-width="1.3"/>
+<text x="34" y="698" font-size="6.9" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">{ "verdict": "Not Eligible",</text>
+<text x="34" y="708" font-size="6.9" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">  "explanation": "...CIBIL 620 is below the required</text>
+<text x="34" y="718" font-size="6.9" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">    650 per LOAN-001 clause 4...",</text>
+<text x="34" y="728" font-size="6.9" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">  "human_review_note": "Draft - Pending Officer Review" }</text>
+<rect x="500.0" y="682" width="460.0" height="60" rx="8" fill="rgba(45,107,228,0.08)" stroke="#5B8DEF" stroke-width="1.3"/>
+<text x="514.0" y="698" font-size="6.9" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">{ "account_ref": "REF-88291"  &lt;- REAL id restored here,</text>
+<text x="514.0" y="708" font-size="6.9" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">  "risk_score": 85, "flagged": true,</text>
+<text x="514.0" y="718" font-size="6.9" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">  "explanation": "...new device + unusual amount and</text>
+<text x="514.0" y="728" font-size="6.9" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#38BDF8" text-anchor="start" style="font-style:italic">    hour exceeds the auto-freeze threshold (FRAUD-003 §2)" }</text>
+<line x1="250.0" y1="746" x2="250.0" y2="762" stroke="#F59E0B" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<line x1="730.0" y1="746" x2="730.0" y2="762" stroke="#5B8DEF" stroke-width="1.2" marker-end="url(#arrow-mid)"/>
+<text x="20" y="766" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">HUMAN-IN-THE-LOOP -- always a draft, never a final decision</text>
+<rect x="20" y="772" width="460.0" height="40" rx="20" fill="rgba(245,158,11,0.08)" stroke="#F59E0B" stroke-width="1.3"/>
+<text x="250.0" y="790" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="middle" style="">Credit Officer Sign-off</text>
+<text x="250.0" y="803" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">sees verdict + explanation, decides for real</text>
+<rect x="500.0" y="772" width="460.0" height="40" rx="20" fill="rgba(45,107,228,0.08)" stroke="#5B8DEF" stroke-width="1.3"/>
+<text x="730.0" y="790" font-size="9.5" font-family="Segoe UI, sans-serif" font-weight="700" fill="#5B8DEF" text-anchor="middle" style="">Fraud Analyst Review</text>
+<text x="730.0" y="803" font-size="7.3" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">sees real account, risk score + explanation</text>
+<rect x="1000" y="300" width="340" height="522" rx="10" fill="rgba(167,139,250,0.03)" stroke="rgba(167,139,250,0.4)" stroke-width="1.4" stroke-dasharray="6,4"/>
+<text x="1170.0" y="320" font-size="11" font-family="Segoe UI, sans-serif" font-weight="700" fill="#A78BFA" text-anchor="middle" style="">WATCHDOG / GUARDRAIL AGENT</text>
+<text x="1170.0" y="333" font-size="7.4" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="middle" style="">runs on every request -- visibility, not decision authority</text>
+<rect x="1014" y="348" width="312" height="76" rx="6" fill="rgba(255,255,255,0.03)" stroke="#F87171" stroke-width="1.3"/>
+<text x="1024" y="365" font-size="8.8" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F87171" text-anchor="start" style="">Outgoing-Prompt PII Re-scan</text>
+<text x="1024" y="378" font-size="6.8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">Independent, broader regex pass on the merged prompt (step ⑦),</text>
+<text x="1024" y="389" font-size="6.8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">right before the LLM call. Catches anything step ③ missed.</text>
+<text x="1024" y="401" font-size="6.6" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#F87171" text-anchor="start" style="font-style:italic">e.g. Aadhaar "1234-5678-9012" (hyphens) slips past ③,</text>
+<text x="1024" y="411" font-size="6.6" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#F87171" text-anchor="start" style="font-style:italic">-&gt; re-scan catches it, request BLOCKED.</text>
+<line x1="1012" y1="386.0" x2="984" y2="386.0" stroke="#F87171" stroke-width="1.1" stroke-dasharray="4,3"/>
+<path d="M984,382.0 L976,386.0 L984,390.0 z" fill="#F87171"/>
+<rect x="1014" y="434" width="312" height="62" rx="6" fill="rgba(255,255,255,0.03)" stroke="#5B8DEF" stroke-width="1.3"/>
+<text x="1024" y="451" font-size="8.8" font-family="Segoe UI, sans-serif" font-weight="700" fill="#5B8DEF" text-anchor="start" style="">Retrieval-Confidence Check</text>
+<text x="1024" y="464" font-size="6.8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">If step ⑤'s top clause match is weak, flags it instead of</text>
+<text x="1024" y="475" font-size="6.8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">letting the LLM answer from thin grounding.</text>
+<line x1="1012" y1="465.0" x2="984" y2="465.0" stroke="#5B8DEF" stroke-width="1.1" stroke-dasharray="4,3"/>
+<path d="M984,461.0 L976,465.0 L984,469.0 z" fill="#5B8DEF"/>
+<rect x="1014" y="506" width="312" height="76" rx="6" fill="rgba(255,255,255,0.03)" stroke="#F59E0B" stroke-width="1.3"/>
+<text x="1024" y="523" font-size="8.8" font-family="Segoe UI, sans-serif" font-weight="700" fill="#F59E0B" text-anchor="start" style="">Rule/LLM Consistency Check</text>
+<text x="1024" y="536" font-size="6.8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">Compares step ⑧'s explanation against step ⑥'s verdict --</text>
+<text x="1024" y="547" font-size="6.8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">catches the LLM softening a "Not Eligible" into a maybe.</text>
+<text x="1024" y="559" font-size="6.6" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#F59E0B" text-anchor="start" style="font-style:italic">e.g. explanation says "silver lining, could still qualify"</text>
+<text x="1024" y="569" font-size="6.6" font-family="Consolas, 'Courier New', monospace" font-weight="400" fill="#F59E0B" text-anchor="start" style="font-style:italic">-&gt; re-scan catches it, request BLOCKED.</text>
+<line x1="1012" y1="544.0" x2="984" y2="544.0" stroke="#F59E0B" stroke-width="1.1" stroke-dasharray="4,3"/>
+<path d="M984,540.0 L976,544.0 L984,548.0 z" fill="#F59E0B"/>
+<rect x="1014" y="592" width="312" height="40" rx="6" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.16)" stroke-width="1"/>
+<text x="1024" y="608" font-size="8.3" font-family="Segoe UI, sans-serif" font-weight="700" fill="#E2E8F0" text-anchor="start" style="">Local Audit Log</text>
+<text x="1024" y="621" font-size="6.8" font-family="Segoe UI, sans-serif" font-weight="400" fill="#64748B" text-anchor="start" style="">Every request + every flag, tokens masked, never raw PII.</text>
+</svg>
+  </div>
+  <div class="legend-row">
+    <span>&#8594; solid arrow = data/control flow</span>
+    <span>&#8594; dashed arrow = Watchdog observing</span>
+    <span style="color:#F59E0B">&#9679; Loan pathway</span>
+    <span style="color:#5B8DEF">&#9679; Fraud pathway</span>
+    <span style="color:#A78BFA">&#9679; Shared / Watchdog</span>
+    <span style="color:#38BDF8">&#9679; italic monospace = actual data at that step</span>
+  </div>
+
+  <div class="section-label">Reading the Diagram — Notes</div>
+  <div class="notes-box">
+    <h2>The flow, in brief</h2>
+    <ol>
+      <li><strong>Where the data comes from.</strong> The Loan lane starts fresh — an applicant fills out a form, there's no pre-existing record. The Fraud lane starts from an actual <strong>transaction database</strong><span class="lane-tag lane-fraud">FRAUD</span> — 10,000 records, sitting in a local JSON file today (simulating a Google Sheet), but in a real deployment this is a proper SQL/PostgreSQL/Oracle table. The architecture doesn't change either way — only where the rows physically live.</li>
+      <li><strong>Input captured.</strong> The Loan GUI collects the applicant's raw fields, including identifying ones (name, PAN, Aadhaar). The Fraud GUI just selects an existing row from the database, e.g. <code>TXN-004521</code>.</li>
+      <li><strong>Input Guard — the critical safety step.</strong><span class="lane-tag lane-shared">SHARED</span> Before anything else runs, identifying data is removed. On Loan, name/PAN/Aadhaar are simply dropped — only <code>cibil</code>, <code>income</code>, <code>requested amount</code>, <code>tenure</code> continue forward. On Fraud, the real <code>account_id</code> is swapped for a reference token (<code>ACC001247 &rarr; REF-88291</code>) — the real ID never travels past this point.</li>
+      <li><strong>Router.</strong> A simple check decides which policy collection applies — <code>loan_policies</code> or <code>fraud_policies</code>. Nothing clever here, just which GUI the request came from.</li>
+      <li><strong>Hybrid RAG.</strong><span class="lane-tag lane-shared">SHARED</span> The system builds a search query out of the numbers/signals already known (not out of any PII), and retrieves the actual policy clauses that apply — e.g. Loan retrieves <code>LOAN-001 clause 4</code> (CIBIL threshold); Fraud retrieves <code>FRAUD-001 clause 1</code> (velocity) and <code>FRAUD-003 clause 2</code> (auto-freeze threshold). This is real hybrid dense+sparse search, not a keyword lookup.</li>
+      <li><strong>Deterministic Engine — this is what actually decides.</strong><span class="lane-tag lane-shared">SHARED</span> Plain Python, no LLM involved. Loan: <code>if cibil &lt; 650 &rarr; Not Eligible</code>. Fraud: signal scores sum to a risk score, compared against a flag threshold. The LLM downstream is never allowed to change this verdict — only explain it.</li>
+      <li><strong>Prompt Assembly — the merge point.</strong> This is where the verdict/score, the reasons, and the retrieved clause text all get combined into one prompt for the LLM. Nothing identifying is in this prompt — Loan's prompt never had PII to begin with (step 3 dropped it); Fraud's prompt carries the reference token <code>REF-88291</code>, never the real account ID.</li>
+      <li><strong>Gemini 3.5 Flash.</strong> Given that merged, PII-free prompt, the model's only job is to explain the already-made decision in plain language, citing the actual clause numbers. It is explicitly instructed not to change the verdict.</li>
+      <li><strong>Output, Watchdog-checked, then de-tokenized.</strong> Before the response leaves the server, the Watchdog re-checks the outgoing prompt for anything the Input Guard missed, checks the retrieval was actually confident, and checks the LLM's explanation didn't quietly contradict the verdict. Only then does <code>REF-88291</code> get swapped back to the real account reference for the analyst's screen.</li>
+      <li><strong>Human-in-the-loop.</strong> Every result is labeled a draft. The Credit Officer or Fraud Analyst makes the real call — the system never auto-approves a loan or auto-confirms fraud on its own.</li>
+    </ol>
+  </div>
+</main>
+
+<footer>
+  <p>DRAFT — not yet linked in site navigation, pending your review.</p>
+</footer>
+
+</body>
+</html>

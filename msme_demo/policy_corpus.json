@@ -1,0 +1,37 @@
+[
+  {
+    "clause": "3.1",
+    "title": "Working Capital Assessment",
+    "text": "Net working capital must be positive for at least 2 of the last 3 fiscal years for any MSME working capital facility. A negative trend across all 3 years requires a documented turnaround plan before the application proceeds."
+  },
+  {
+    "clause": "4.2",
+    "title": "Debt Service Coverage Ratio",
+    "text": "A minimum Debt Service Coverage Ratio (DSCR) of 1.25x is required for term loans. Applications with DSCR between 1.00x and 1.25x require additional collateral cover of at least 25% of the loan amount. DSCR below 1.00x is not eligible without Risk Committee override."
+  },
+  {
+    "clause": "5.4",
+    "title": "Turnover Reconciliation",
+    "text": "GST-declared turnover (GSTR-1/3B) and ITR-declared turnover must not diverge by more than 15% without a documented explanation from the applicant. Divergence above 25% triggers mandatory escalation to the Risk & Compliance desk regardless of other ratios."
+  },
+  {
+    "clause": "6.1",
+    "title": "Credit Bureau Threshold",
+    "text": "A CIBIL score below 650 requires Risk Committee escalation regardless of financial ratios. Scores between 650-699 may proceed on the standard track only if DSCR exceeds 1.5x and turnover reconciliation shows less than 10% divergence."
+  },
+  {
+    "clause": "7.3",
+    "title": "Sector Concentration & Watchlist",
+    "text": "Loans to sectors on the current Sector Risk Watchlist (currently: commercial real estate leasing, unregistered gems & jewellery trading, crypto-adjacent services) require enhanced due diligence and cannot be auto-priced on the standard grid."
+  },
+  {
+    "clause": "8.2",
+    "title": "Risk-Based Pricing Grid",
+    "text": "Pricing bands: (a) CIBIL >=750 and DSCR >=1.5x -> MCLR + 2.0%. (b) CIBIL 700-749 or DSCR 1.25x-1.5x -> MCLR + 3.5%. (c) CIBIL 650-699 or DSCR 1.00x-1.25x -> MCLR + 5.5%, additional collateral required per clause 4.2. (d) CIBIL <650 or DSCR <1.00x -> no standard-grid pricing; refer to Risk Committee."
+  },
+  {
+    "clause": "9.1",
+    "title": "Loan Tenure vs. Business Vintage",
+    "text": "Requested loan tenure should not exceed 2x the operating vintage of the business for term loans, unless secured by collateral covering at least 100% of the outstanding balance in years beyond that threshold."
+  }
+]
