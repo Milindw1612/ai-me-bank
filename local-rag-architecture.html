@@ -56,6 +56,23 @@
 
   footer { background: #2A0A12; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 8px; }
   footer p { font-size: 12px; color: #94765B; }
+
+  .howitworks { margin: 0 0 24px; border: 1px solid var(--border2); border-radius: 10px; background: var(--surface); overflow: hidden; }
+  .howitworks summary { cursor: pointer; list-style: none; padding: 12px 18px; font-size: 12.5px; font-weight: 700; color: var(--gold); display: flex; align-items: center; gap: 8px; }
+  .howitworks summary::-webkit-details-marker { display: none; }
+  .howitworks summary::before { content: "▸"; transition: transform .15s; }
+  .howitworks[open] summary::before { transform: rotate(90deg); }
+  .howitworks-body { padding: 4px 18px 18px; }
+  .cmd-block { background: rgba(0,0,0,0.35); border: 1px solid var(--border2); border-radius: 8px; padding: 12px 16px; margin: 8px 0 14px; font-family: Consolas, 'Courier New', monospace; font-size: 11.5px; color: #A7F3D0; line-height: 1.8; overflow-x: auto; white-space: pre; }
+  .cmd-block .comment { color: var(--muted); }
+  .howitworks-body p, .howitworks-body li { font-size: 12px; color: var(--text); line-height: 1.7; }
+  .howitworks-body ol, .howitworks-body ul { margin: 0 0 14px 18px; }
+  .howitworks-body strong { color: var(--gold); }
+  .spec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 4px; }
+  .spec-cell { background: rgba(255,255,255,0.03); border: 1px solid var(--border2); border-radius: 8px; padding: 10px 14px; }
+  .spec-cell .k { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--mid); margin-bottom: 4px; }
+  .spec-cell .v { font-size: 12px; color: var(--text); font-weight: 600; }
+  .spec-cell .v code { font-size: 11px; color: var(--gold); background: rgba(0,0,0,0.3); padding: 1px 5px; border-radius: 4px; }
 </style>
 </head>
 <body>
@@ -102,6 +119,47 @@
 </div>
 
 <main>
+
+  <details class="howitworks" open>
+    <summary>How to start the local RAG server (do this before any demo)</summary>
+    <div class="howitworks-body">
+      <p>This whole system runs on your laptop — nothing is hosted publicly. Open PowerShell and run:</p>
+      <div class="cmd-block"><span class="comment"># one-time setup, only needed once</span>
+cd "C:\Users\milin\Downloads\ai-me-bank\rag-policies"
+pip install flask flask-cors chromadb sentence-transformers rank_bm25 pdfplumber
+
+<span class="comment"># every time you want to run the demo</span>
+cd "C:\Users\milin\Downloads\ai-me-bank\rag-policies"
+$env:GEMINI_API_KEY = "your-gemini-api-key-here"
+python server.py</div>
+      <p>Wait for <code style="background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:4px;color:var(--gold)">Running on http://127.0.0.1:5001</code> — takes 10-15 seconds (loading the embedding model, Chroma, and the fraud dataset into memory). Leave that PowerShell window open for the whole walkthrough; closing it or Ctrl+C stops the server. Then open <code style="background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:4px;color:var(--gold)">loan-application-demo.html</code> or <code style="background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:4px;color:var(--gold)">fraud-transaction-demo.html</code> directly (double-click, no separate web server needed).</p>
+      <p><strong>Proving it's local, not a public API, if the interviewer asks:</strong></p>
+      <ul>
+        <li>Point at the URL bar — it reads <code style="background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:4px;color:var(--gold)">file://...</code> or <code style="background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:4px;color:var(--gold)">127.0.0.1</code>, never a public domain.</li>
+        <li>Show the open PowerShell window — that terminal <em>is</em> the server, running as your own OS process, visibly printing each request as you click.</li>
+        <li>Close the PowerShell window on purpose — the page immediately shows a red "backend not reachable" banner. Reopen it and it works again. That live before/after is the clearest proof there's no hidden cloud service behind it.</li>
+        <li>127.0.0.1 (localhost) is not routable from outside your machine — nobody outside the room could reach this even if they tried.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="howitworks">
+    <summary>Technical specs — embeddings, chunking, indexing, hybrid RAG, PDF count</summary>
+    <div class="howitworks-body">
+      <div class="spec-grid">
+        <div class="spec-cell"><div class="k">Embedding model</div><div class="v"><code>BAAI/bge-base-en-v1.5</code> · 768-dim, local, offline after first download</div></div>
+        <div class="spec-cell"><div class="k">Chunking strategy</div><div class="v">Structure-aware — split by each PDF's own numbered section headings, not fixed-size windows</div></div>
+        <div class="spec-cell"><div class="k">Dense index</div><div class="v"><code>Chroma</code> — persistent local vector store, one collection per domain</div></div>
+        <div class="spec-cell"><div class="k">Sparse index</div><div class="v"><code>BM25Okapi</code> (rank_bm25) — keyword/exact-term matching, same chunks</div></div>
+        <div class="spec-cell"><div class="k">Fusion method</div><div class="v">Reciprocal Rank Fusion (RRF, k=60) — merges dense + sparse rankings</div></div>
+        <div class="spec-cell"><div class="k">Collections</div><div class="v"><code>loan_policies</code> (23 chunks) &amp; <code>fraud_policies</code> (21 chunks)</div></div>
+        <div class="spec-cell"><div class="k">Policy PDFs</div><div class="v">10 total — 5 Loan (LOAN_001&ndash;005) + 5 Fraud (FRAUD_001&ndash;005)</div></div>
+        <div class="spec-cell"><div class="k">LLM</div><div class="v"><code>Gemini 3.5 Flash</code> — explanation only, never the decision</div></div>
+      </div>
+      <p style="margin-top:14px">Why hybrid, not just one: dense/semantic search catches paraphrased questions ("what's the max debt burden allowed" &rarr; finds the FOIR clause even without that exact word), while sparse/keyword search catches exact figures and clause numbers dense embeddings can blur (a specific "45" threshold, a document code). RRF combines both rankings without needing to tune a blend weight by hand.</p>
+    </div>
+  </details>
+
   <div class="section-label">System Overview — worked example traced end-to-end</div>
   <div class="chart-wrap">
 <svg viewBox="0 0 1360 832" xmlns="http://www.w3.org/2000/svg">
@@ -285,7 +343,7 @@
 </main>
 
 <footer>
-  <p>DRAFT — not yet linked in site navigation, pending your review.</p>
+  <p>Local Agentic RAG Framework — runs entirely on localhost, screen-share only, no public deployment.</p>
 </footer>
 
 </body>
