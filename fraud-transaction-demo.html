@@ -78,6 +78,17 @@
   .btn-live:disabled { opacity: 0.5; cursor: default; }
   .backend-warning { background: rgba(248,113,113,0.1); border: 1px solid var(--red); color: var(--red); padding: 10px 14px; border-radius: 8px; font-size: 12px; margin: 0 48px 16px; display: none; }
   .human-note { font-size: 10.5px; color: var(--mid); font-style: italic; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border2); }
+
+  .howitworks { margin: 0 48px 20px; border: 1px solid var(--border2); border-radius: 10px; background: var(--surface); overflow: hidden; }
+  .howitworks summary { cursor: pointer; list-style: none; padding: 12px 18px; font-size: 12.5px; font-weight: 700; color: var(--blue); display: flex; align-items: center; gap: 8px; }
+  .howitworks summary::-webkit-details-marker { display: none; }
+  .howitworks summary::before { content: "▸"; transition: transform .15s; }
+  .howitworks[open] summary::before { transform: rotate(90deg); }
+  .howitworks-body { padding: 4px 18px 18px; }
+  .howitworks-body ol { margin: 0 0 14px 18px; font-size: 12px; line-height: 1.8; color: var(--text); }
+  .howitworks-body ol li strong { color: var(--gold); }
+  .howitworks-oneliner { font-size: 12.5px; font-style: italic; color: var(--mid); border-top: 1px dashed var(--border2); padding-top: 12px; line-height: 1.6; }
+  .howitworks-oneliner b { color: var(--text); font-style: normal; }
 </style>
 </head>
 <body>
@@ -122,6 +133,22 @@
   <h1>Fraud Transaction Tracker</h1>
   <p>10,000 synthetic transactions, scored deterministically by a rule-based risk engine. Click any flagged row to see why it was flagged, grounded in the actual fraud policy clauses — instantly, from pre-computed analysis, with no API cost. Only account_id is de-identified before reaching any LLM; customer_name and address never leave this de-identification step at all.</p>
 </div>
+
+<details class="howitworks" open>
+  <summary>How this fraud check actually works — quick reference</summary>
+  <div class="howitworks-body">
+    <ol>
+      <li><strong>Score</strong> — deterministic rules (amount spike, odd-hour timing, new device, geo-mismatch, risky merchant) produce a risk score; flags at &ge;45. Rules decide, not AI.</li>
+      <li><strong>Retrieve</strong> — the flagged signals become a query; hybrid RAG pulls the exact matching clauses from the fraud policy PDFs.</li>
+      <li><strong>De-identify</strong> — real account ID, name and address are swapped for a reference token before anything reaches the LLM.</li>
+      <li><strong>Explain</strong> — Gemini writes why it's suspicious, citing the real clauses — never allowed to change the verdict.</li>
+      <li><strong>Guard &amp; review</strong> — a Watchdog re-checks for leaked PII and verdict-contradicting language, blocking/escalating on any violation; every result stays "Draft &mdash; Pending Analyst Review" until a human signs off.</li>
+    </ol>
+    <div class="howitworks-oneliner">
+      <b>Rules decide, RAG grounds the explanation in real policy text, the LLM only explains — never decides — and a Watchdog plus a human always sit before any action is taken.</b>
+    </div>
+  </div>
+</details>
 
 <div id="backendWarning" class="backend-warning">Backend not reachable at localhost:5001 — start the local server first.</div>
 
