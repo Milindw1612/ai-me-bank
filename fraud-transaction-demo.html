@@ -138,11 +138,13 @@
   <summary>How this fraud check actually works — quick reference</summary>
   <div class="howitworks-body">
     <ol>
-      <li><strong>Score</strong> — deterministic rules (amount spike, odd-hour timing, new device, geo-mismatch, risky merchant) produce a risk score; flags at &ge;45. Rules decide, not AI.</li>
-      <li><strong>Retrieve</strong> — the flagged signals become a query; hybrid RAG pulls the exact matching clauses from the fraud policy PDFs.</li>
-      <li><strong>De-identify</strong> — real account ID, name and address are swapped for a reference token before anything reaches the LLM.</li>
-      <li><strong>Explain</strong> — Gemini writes why it's suspicious, citing the real clauses — never allowed to change the verdict.</li>
-      <li><strong>Guard &amp; review</strong> — a Watchdog re-checks for leaked PII and verdict-contradicting language, blocking/escalating on any violation; every result stays "Draft &mdash; Pending Analyst Review" until a human signs off.</li>
+      <li><strong>Transaction scored</strong> — a deterministic rule engine checks amount spikes, odd-hour timing, new device, geo-mismatch, risky merchant &rarr; risk score (0&ndash;100), flagged if &ge;45. This is the real decision-maker, not AI.</li>
+      <li><strong>Signals become the query</strong> — a flagged transaction's own signals (why it scored high) feed straight into the next step as a search query.</li>
+      <li><strong>RAG retrieval</strong> — hybrid search (keyword + semantic) over the bank's actual fraud policy PDFs pulls the exact clauses relevant to this transaction.</li>
+      <li><strong>PII stripped</strong> — real account ID, name and address are replaced with a de-identified reference token before anything reaches the LLM.</li>
+      <li><strong>LLM explains, doesn't decide</strong> — Gemini writes a short explanation of why it's suspicious, citing the real policy clause numbers. Explicitly instructed never to change the verdict.</li>
+      <li><strong>Watchdog double-checks</strong> — re-scans for any leaked PII before the call, and after the call verifies the explanation didn't soften or contradict the flagged verdict. Any violation blocks it and escalates to a human instead of showing it.</li>
+      <li><strong>Human decides</strong> — every result is labeled "Draft &mdash; Pending Analyst Review." Real data is restored only here, for the analyst, who makes the actual call.</li>
     </ol>
     <div class="howitworks-oneliner">
       <b>Rules decide, RAG grounds the explanation in real policy text, the LLM only explains — never decides — and a Watchdog plus a human always sit before any action is taken.</b>
